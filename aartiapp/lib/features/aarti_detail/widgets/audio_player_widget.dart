@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -11,6 +12,10 @@ class AudioPlayerWidget extends StatelessWidget {
   final VoidCallback onPlayPause;
   final ValueChanged<double> onScrub;
   final String? verseLabel;
+  final VoidCallback? onSkipPrevious;
+  final VoidCallback? onSkipNext;
+  final VoidCallback? onRepeatToggle;
+  final bool isRepeatOn;
 
   const AudioPlayerWidget({
     super.key,
@@ -21,6 +26,10 @@ class AudioPlayerWidget extends StatelessWidget {
     required this.onPlayPause,
     required this.onScrub,
     this.verseLabel,
+    this.onSkipPrevious,
+    this.onSkipNext,
+    this.onRepeatToggle,
+    this.isRepeatOn = false,
   });
 
   String _formatDuration(Duration d) {
@@ -32,90 +41,133 @@ class AudioPlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 14, 24, 28),
-        decoration: BoxDecoration(
-          color: AppColors.stone.withValues(alpha: 0.92),
-          border: const Border(
-            top: BorderSide(color: AppColors.stone3, width: 1),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 14, 24, 28),
+          decoration: BoxDecoration(
+            // Glassmorphic: translucent background with blurred backdrop
+            color: AppColors.stone.withValues(alpha: 0.78),
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(24)),
+            border: Border(
+              top: BorderSide(
+                color: AppColors.saffron.withValues(alpha: 0.15),
+                width: 1,
+              ),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.ink.withValues(alpha: 0.08),
+                blurRadius: 20,
+                offset: const Offset(0, -4),
+              ),
+            ],
           ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Progress
-            Row(
-              children: [
-                Text(_formatDuration(position),
-                    style: AppTextStyles.body(size: 11, color: AppColors.ink3)),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      activeTrackColor: AppColors.saffron,
-                      inactiveTrackColor: AppColors.stone3,
-                      thumbColor: AppColors.saffron,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 5),
-                      trackHeight: 2.5,
-                      overlayShape: SliderComponentShape.noOverlay,
-                    ),
-                    child: Slider(
-                      value: duration.inMilliseconds > 0
-                          ? (position.inMilliseconds /
-                                  duration.inMilliseconds)
-                              .clamp(0.0, 1.0)
-                          : 0.0,
-                      onChanged: onScrub,
-                      min: 0,
-                      max: 1,
-                    ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.stone3.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(width: 10),
-                Text(_formatDuration(duration),
-                    style: AppTextStyles.body(size: 11, color: AppColors.ink3)),
-              ],
-            ),
-            const SizedBox(height: 8),
+              ),
 
-            // Controls
-            Row(
-              children: [
-                // Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        aarti.title,
-                        style: AppTextStyles.serifBody(
-                          size: 16,
-                          color: AppColors.ink,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+              // Progress bar
+              Row(
+                children: [
+                  Text(_formatDuration(position),
+                      style:
+                          AppTextStyles.body(size: 11, color: AppColors.ink3)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: AppColors.saffron,
+                        inactiveTrackColor:
+                            AppColors.stone3.withValues(alpha: 0.5),
+                        thumbColor: AppColors.saffron,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 5),
+                        trackHeight: 2.5,
+                        overlayShape: SliderComponentShape.noOverlay,
                       ),
-                      if (verseLabel != null)
-                        Text(verseLabel!,
-                            style: AppTextStyles.body(
-                                size: 11, color: AppColors.ink3)),
-                    ],
+                      child: Slider(
+                        value: duration.inMilliseconds > 0
+                            ? (position.inMilliseconds /
+                                    duration.inMilliseconds)
+                                .clamp(0.0, 1.0)
+                            : 0.0,
+                        onChanged: onScrub,
+                        min: 0,
+                        max: 1,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 10),
+                  Text(_formatDuration(duration),
+                      style:
+                          AppTextStyles.body(size: 11, color: AppColors.ink3)),
+                ],
+              ),
+              const SizedBox(height: 8),
 
-                // Buttons
-                _CtrlBtn(icon: Icons.skip_previous_rounded, onTap: () {}),
-                const SizedBox(width: 4),
-                PlayPauseBtn(isPlaying: isPlaying, onTap: onPlayPause),
-                const SizedBox(width: 4),
-                _CtrlBtn(icon: Icons.skip_next_rounded, onTap: () {}),
-                const SizedBox(width: 8),
-                _CtrlBtn(icon: Icons.repeat_rounded, onTap: () {}),
-                _CtrlBtn(icon: Icons.volume_up_outlined, onTap: () {}),
-              ],
-            ),
-          ],
+              // Controls
+              Row(
+                children: [
+                  // Info
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          aarti.title,
+                          style: AppTextStyles.serifBody(
+                            size: 16,
+                            color: AppColors.ink,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (verseLabel != null)
+                          Text(verseLabel!,
+                              style: AppTextStyles.body(
+                                  size: 11, color: AppColors.ink3)),
+                      ],
+                    ),
+                  ),
+
+                  // Buttons
+                  _CtrlBtn(
+                    icon: Icons.skip_previous_rounded,
+                    onTap: onSkipPrevious ?? () {},
+                  ),
+                  const SizedBox(width: 4),
+                  PlayPauseBtn(
+                      isPlaying: isPlaying, onTap: onPlayPause),
+                  const SizedBox(width: 4),
+                  _CtrlBtn(
+                    icon: Icons.skip_next_rounded,
+                    onTap: onSkipNext ?? () {},
+                  ),
+                  const SizedBox(width: 8),
+                  _CtrlBtn(
+                    icon: Icons.repeat_rounded,
+                    onTap: onRepeatToggle ?? () {},
+                    isActive: isRepeatOn,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -125,13 +177,22 @@ class AudioPlayerWidget extends StatelessWidget {
 class _CtrlBtn extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
+  final bool isActive;
 
-  const _CtrlBtn({required this.icon, required this.onTap});
+  const _CtrlBtn({
+    required this.icon,
+    required this.onTap,
+    this.isActive = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(icon, size: 20, color: AppColors.ink2),
+      icon: Icon(
+        icon,
+        size: 20,
+        color: isActive ? AppColors.saffron : AppColors.ink2,
+      ),
       onPressed: onTap,
       padding: EdgeInsets.zero,
       visualDensity: VisualDensity.compact,
@@ -180,9 +241,16 @@ class _PlayPauseBtnState extends State<PlayPauseBtn>
       child: Container(
         width: 48,
         height: 48,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.ink,
           shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.ink.withValues(alpha: 0.25),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: AnimatedIcon(
           icon: AnimatedIcons.play_pause,

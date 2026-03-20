@@ -7,6 +7,12 @@ class SettingsRepository {
   static const _keyTextScale = 'text_scale';
   static const _keyScriptMode = 'script_mode'; // 0=devanagari, 1=roman
   static const _keyUserName = 'user_name';
+  static const _keyCrossfadeDuration = 'crossfade_duration'; // 0–3 seconds
+  static const _keyAutoPlay = 'auto_play'; // puja session auto-play
+  static const _keyRepeatCurrent = 'repeat_current'; // repeat current aarti
+  static const _keyNotificationHour = 'notification_hour';
+  static const _keyNotificationMinute = 'notification_minute';
+  static const _keyNotificationEnabled = 'notification_enabled';
 
   final SharedPreferences _prefs;
 
@@ -51,4 +57,40 @@ class SettingsRepository {
 
   Future<void> setUserName(String name) =>
       _prefs.setString(_keyUserName, name);
+
+  // --- Crossfade Duration (v1.5) ---
+  int getCrossfadeDuration() => _prefs.getInt(_keyCrossfadeDuration) ?? 1;
+
+  Future<void> setCrossfadeDuration(int seconds) =>
+      _prefs.setInt(_keyCrossfadeDuration, seconds.clamp(0, 3));
+
+  // --- Auto-play (v1.5) ---
+  bool getAutoPlay() => _prefs.getBool(_keyAutoPlay) ?? true;
+
+  Future<void> setAutoPlay(bool value) =>
+      _prefs.setBool(_keyAutoPlay, value);
+
+  // --- Repeat Current (v1.5) ---
+  bool getRepeatCurrent() => _prefs.getBool(_keyRepeatCurrent) ?? false;
+
+  Future<void> setRepeatCurrent(bool value) =>
+      _prefs.setBool(_keyRepeatCurrent, value);
+
+  // --- Notification Time (v1.5) ---
+  bool getNotificationEnabled() =>
+      _prefs.getBool(_keyNotificationEnabled) ?? false;
+
+  Future<void> setNotificationEnabled(bool value) =>
+      _prefs.setBool(_keyNotificationEnabled, value);
+
+  TimeOfDay getNotificationTime() {
+    final hour = _prefs.getInt(_keyNotificationHour) ?? 6;
+    final minute = _prefs.getInt(_keyNotificationMinute) ?? 0;
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
+  Future<void> setNotificationTime(TimeOfDay time) async {
+    await _prefs.setInt(_keyNotificationHour, time.hour);
+    await _prefs.setInt(_keyNotificationMinute, time.minute);
+  }
 }

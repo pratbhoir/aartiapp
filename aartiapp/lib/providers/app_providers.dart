@@ -231,3 +231,97 @@ class UserNameNotifier extends StateNotifier<String> {
     _repo.setUserName(name);
   }
 }
+
+// ─── v1.5: Crossfade Duration ───────────────────────────────────────────────
+
+final crossfadeProvider =
+    StateNotifierProvider<CrossfadeNotifier, int>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return CrossfadeNotifier(repo);
+});
+
+class CrossfadeNotifier extends StateNotifier<int> {
+  final SettingsRepository _repo;
+  CrossfadeNotifier(this._repo) : super(_repo.getCrossfadeDuration());
+
+  void set(int seconds) {
+    state = seconds.clamp(0, 3);
+    _repo.setCrossfadeDuration(state);
+  }
+}
+
+// ─── v1.5: Auto-Play ────────────────────────────────────────────────────────
+
+final autoPlayProvider =
+    StateNotifierProvider<AutoPlayNotifier, bool>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return AutoPlayNotifier(repo);
+});
+
+class AutoPlayNotifier extends StateNotifier<bool> {
+  final SettingsRepository _repo;
+  AutoPlayNotifier(this._repo) : super(_repo.getAutoPlay());
+
+  void toggle() {
+    state = !state;
+    _repo.setAutoPlay(state);
+  }
+
+  void set(bool value) {
+    state = value;
+    _repo.setAutoPlay(value);
+  }
+}
+
+// ─── v1.5: Repeat Current ──────────────────────────────────────────────────
+
+final repeatCurrentProvider =
+    StateNotifierProvider<RepeatCurrentNotifier, bool>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return RepeatCurrentNotifier(repo);
+});
+
+class RepeatCurrentNotifier extends StateNotifier<bool> {
+  final SettingsRepository _repo;
+  RepeatCurrentNotifier(this._repo) : super(_repo.getRepeatCurrent());
+
+  void toggle() {
+    state = !state;
+    _repo.setRepeatCurrent(state);
+  }
+}
+
+// ─── v1.5: Notification Settings ────────────────────────────────────────────
+
+final notificationEnabledProvider =
+    StateNotifierProvider<NotificationEnabledNotifier, bool>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return NotificationEnabledNotifier(repo);
+});
+
+class NotificationEnabledNotifier extends StateNotifier<bool> {
+  final SettingsRepository _repo;
+  NotificationEnabledNotifier(this._repo)
+      : super(_repo.getNotificationEnabled());
+
+  void set(bool value) {
+    state = value;
+    _repo.setNotificationEnabled(value);
+  }
+}
+
+final notificationTimeProvider =
+    StateNotifierProvider<NotificationTimeNotifier, TimeOfDay>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return NotificationTimeNotifier(repo);
+});
+
+class NotificationTimeNotifier extends StateNotifier<TimeOfDay> {
+  final SettingsRepository _repo;
+  NotificationTimeNotifier(this._repo) : super(_repo.getNotificationTime());
+
+  void set(TimeOfDay time) {
+    state = time;
+    _repo.setNotificationTime(time);
+  }
+}

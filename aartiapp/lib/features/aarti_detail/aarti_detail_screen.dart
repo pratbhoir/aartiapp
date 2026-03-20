@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../core/constants/haptics.dart';
+import '../../core/services/sharing_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/theme_aware_colors.dart';
@@ -30,18 +31,23 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
   bool _showCounter = false;
   final ScrollController _scrollController = ScrollController();
   int _currentVerse = 0;
+  bool _showNextFab = false;
+  bool _repeatOn = false;
 
   late final AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
 
+  // For share-as-image
+  final GlobalKey _lyricsRepaintKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
     _initAudio();
-    _scrollController.addListener(_updateVerseProgress);
+    _scrollController.addListener(_onScroll);
   }
 
   Future<void> _initAudio() async {
@@ -55,7 +61,12 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     }
 
     _audioPlayer.positionStream.listen((pos) {
-      if (mounted) setState(() => _position = pos);
+      if (mounted) {
+        setState(() {
+          _position = pos;
+          _checkNextFabTrigger();
+        });
+      }
     });
 
     _audioPlayer.durationStream.listen((dur) {
@@ -66,8 +77,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
       if (mounted) {
         setState(() => _isPlaying = state.playing);
         if (state.processingState == ProcessingState.completed) {
-          _audioPlayer.seek(Duration.zero);
-          _audioPlayer.pause();
+          if (_repeatOn) {
+            _audioPlayer.seek(Duration.zero);
+            _audioPlayer.play();
+          } else {
+            _audioPlayer.seek(Duration.zero);
+            _audioPlayer.pause();
+            setState(() => _showNextFab = true);
+          }
         }
       }
     });
@@ -78,6 +95,11 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     _audioPlayer.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    _updateVerseProgress();
+    _checkScrollToBottom();
   }
 
   void _updateVerseProgress() {
@@ -93,12 +115,51 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     }
   }
 
+  /// Check if user has scrolled to bottom → trigger Next FAB
+  void _checkScrollToBottom() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    if (maxScroll <= 0) return;
+    final fraction =
+        (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
+    if (fraction >= 0.95 && !_showNextFab) {
+      setState(() => _showNextFab = true);
+    }
+  }
+
+  /// Check if audio progress ≥ 90% → trigger Next FAB
+  void _checkNextFabTrigger() {
+    if (_duration.inMilliseconds <= 0) return;
+    final progress =
+        _position.inMilliseconds / _duration.inMilliseconds;
+    if (progress >= 0.9 && !_showNextFab) {
+      setState(() => _showNextFab = true);
+    }
+  }
+
   void _togglePlay() {
     if (_isPlaying) {
       _audioPlayer.pause();
     } else {
       _audioPlayer.play();
     }
+  }
+
+  void _toggleRepeat() {
+    setState(() => _repeatOn = !_repeatOn);
+    _audioPlayer.setLoopMode(_repeatOn ? LoopMode.one : LoopMode.off);
+  }
+
+  void _seekBackward() {
+    final newPos = _position - const Duration(seconds: 10);
+    _audioPlayer
+        .seek(newPos < Duration.zero ? Duration.zero : newPos);
+  }
+
+  void _seekForward() {
+    final newPos = _position + const Duration(seconds: 10);
+    _audioPlayer.seek(
+        newPos > _duration ? _duration : newPos);
   }
 
   @override
@@ -320,7 +381,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     app.ActionChip(
                                       icon: Icons.share_outlined,
                                       label: 'Share',
-                                      onTap: () {},
+                                      onTap: () => _showShareOptions(context),
                                     ),
                                   ],
                                 ),
@@ -395,6 +456,10 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               position: _position,
               duration: _duration,
               onPlayPause: _togglePlay,
+              onSkipPrevious: _seekBackward,
+              onSkipNext: _seekForward,
+              onRepeatToggle: _toggleRepeat,
+              isRepeatOn: _repeatOn,
               onScrub: (v) {
                 final newPos = Duration(
                     milliseconds:
@@ -406,6 +471,19 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                   : null,
             ),
           ),
+
+          // "Next" FAB — triggered at 90% audio OR scroll-to-bottom
+          if (_showNextFab)
+            Positioned(
+              bottom: 140,
+              right: 24,
+              child: _NextFab(
+                onTap: () {
+                  setState(() => _showNextFab = false);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
 
           // Focus mode overlay
           if (_focusMode)
@@ -421,6 +499,138 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               onClose: () => setState(() => _showCounter = false),
             ),
         ],
+      ),
+    );
+  }
+
+  void _showShareOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: context.surface,
+          borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.stone3,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text('Share Aarti',
+                style: AppTextStyles.serifBody(
+                    size: 18, color: context.textPrimary)),
+            const SizedBox(height: 4),
+            Text(widget.aarti.title,
+                style: AppTextStyles.body(
+                    size: 13, color: AppColors.ink3)),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: _ShareOption(
+                    icon: Icons.text_snippet_outlined,
+                    label: 'As Text',
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      SharingService.instance
+                          .shareAsText(widget.aarti);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _ShareOption(
+                    icon: Icons.image_outlined,
+                    label: 'As Image',
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      SharingService.instance
+                          .shareAsImage(_lyricsRepaintKey);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// "Next" Floating Action Button — appears at 90% audio progress
+/// or when user scrolls to the bottom.
+class _NextFab extends StatelessWidget {
+  final VoidCallback onTap;
+  const _NextFab({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutBack,
+      builder: (_, value, child) => Transform.scale(
+        scale: value,
+        child: child,
+      ),
+      child: FloatingActionButton.extended(
+        onPressed: onTap,
+        backgroundColor: AppColors.saffron,
+        foregroundColor: AppColors.white,
+        icon: const Icon(Icons.skip_next_rounded, size: 20),
+        label: const Text('Next'),
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+    );
+  }
+}
+
+class _ShareOption extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _ShareOption({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        decoration: BoxDecoration(
+          color: AppColors.stone2,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.stone3),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 28, color: AppColors.saffron),
+            const SizedBox(height: 8),
+            Text(label,
+                style: AppTextStyles.body(
+                    size: 13, color: AppColors.ink2)),
+          ],
+        ),
       ),
     );
   }

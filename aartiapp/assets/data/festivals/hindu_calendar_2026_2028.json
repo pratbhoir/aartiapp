@@ -1,0 +1,292 @@
+{
+  "version": 1,
+  "description": "Hindu festival calendar for 2026–2028 with Aarti associations",
+  "festivals": [
+    {
+      "id": "makar_sankranti_2026",
+      "name": "Makar Sankranti",
+      "nameDevanagari": "मकर संक्रांति",
+      "date": "2026-01-14",
+      "deity": "Surya",
+      "description": "The harvest festival celebrating the sun's northward journey.",
+      "aartiTag": "Makar Sankranti",
+      "emoji": "☀️"
+    },
+    {
+      "id": "vasant_panchami_2026",
+      "name": "Vasant Panchami",
+      "nameDevanagari": "वसंत पंचमी",
+      "date": "2026-02-01",
+      "deity": "Saraswati",
+      "description": "Celebration of spring and worship of Goddess Saraswati.",
+      "aartiTag": "Vasant Panchami",
+      "emoji": "🌸"
+    },
+    {
+      "id": "maha_shivaratri_2026",
+      "name": "Maha Shivaratri",
+      "nameDevanagari": "महा शिवरात्रि",
+      "date": "2026-02-15",
+      "deity": "Shiva",
+      "description": "The great night of Lord Shiva — fasting and night-long worship.",
+      "aartiTag": "Maha Shivaratri",
+      "emoji": "🌙"
+    },
+    {
+      "id": "holi_2026",
+      "name": "Holi",
+      "nameDevanagari": "होली",
+      "date": "2026-03-10",
+      "deity": "Krishna",
+      "description": "Festival of colors celebrating the divine love of Radha-Krishna.",
+      "aartiTag": "Holi",
+      "emoji": "🎨"
+    },
+    {
+      "id": "ram_navami_2026",
+      "name": "Ram Navami",
+      "nameDevanagari": "राम नवमी",
+      "date": "2026-04-04",
+      "deity": "Rama",
+      "description": "Birthday celebration of Lord Rama.",
+      "aartiTag": "Ram Navami",
+      "emoji": "☀️"
+    },
+    {
+      "id": "hanuman_jayanti_2026",
+      "name": "Hanuman Jayanti",
+      "nameDevanagari": "हनुमान जयंती",
+      "date": "2026-04-13",
+      "deity": "Hanuman",
+      "description": "Birthday of Lord Hanuman — devotion and strength.",
+      "aartiTag": "Hanuman Jayanti",
+      "emoji": "🌟"
+    },
+    {
+      "id": "guru_purnima_2026",
+      "name": "Guru Purnima",
+      "nameDevanagari": "गुरु पूर्णिमा",
+      "date": "2026-07-11",
+      "deity": "Vishnu",
+      "description": "Day honoring spiritual teachers and Sage Vyasa.",
+      "aartiTag": "Guru Purnima",
+      "emoji": "🙏"
+    },
+    {
+      "id": "raksha_bandhan_2026",
+      "name": "Raksha Bandhan",
+      "nameDevanagari": "रक्षा बंधन",
+      "date": "2026-08-12",
+      "deity": "Lakshmi",
+      "description": "Festival celebrating the bond of protection between siblings.",
+      "aartiTag": "Raksha Bandhan",
+      "emoji": "🪷"
+    },
+    {
+      "id": "janmashtami_2026",
+      "name": "Janmashtami",
+      "nameDevanagari": "जन्माष्टमी",
+      "date": "2026-08-21",
+      "deity": "Krishna",
+      "description": "Birthday of Lord Krishna — midnight celebration.",
+      "aartiTag": "Janmashtami",
+      "emoji": "🦚"
+    },
+    {
+      "id": "ganesh_chaturthi_2026",
+      "name": "Ganesh Chaturthi",
+      "nameDevanagari": "गणेश चतुर्थी",
+      "date": "2026-09-01",
+      "deity": "Ganesha",
+      "description": "Birthday of Lord Ganesha — 10-day celebration.",
+      "aartiTag": "Ganesh Chaturthi",
+      "emoji": "🐘"
+    },
+    {
+      "id": "navratri_2026",
+      "name": "Navratri",
+      "nameDevanagari": "नवरात्रि",
+      "date": "2026-10-08",
+      "endDate": "2026-10-17",
+      "deity": "Durga",
+      "description": "Nine nights of Goddess Durga worship.",
+      "aartiTag": "Navratri",
+      "emoji": "🌺"
+    },
+    {
+      "id": "dussehra_2026",
+      "name": "Dussehra",
+      "nameDevanagari": "दशहरा",
+      "date": "2026-10-17",
+      "deity": "Rama",
+      "description": "Victory of good over evil — Lord Rama's triumph.",
+      "aartiTag": "Dussehra",
+      "emoji": "☀️"
+    },
+    {
+      "id": "diwali_2026",
+      "name": "Diwali",
+      "nameDevanagari": "दीवाली",
+      "date": "2026-11-05",
+      "endDate": "2026-11-09",
+      "deity": "Lakshmi",
+      "description": "Festival of lights — worship of Goddess Lakshmi.",
+      "aartiTag": "Diwali",
+      "emoji": "🪔"
+    },
+    {
+      "id": "makar_sankranti_2027",
+      "name": "Makar Sankranti",
+      "nameDevanagari": "मकर संक्रांति",
+      "date": "2027-01-14",
+      "deity": "Surya",
+      "description": "The harvest festival celebrating the sun's northward journey.",
+      "aartiTag": "Makar Sankranti",
+      "emoji": "☀️"
+    },
+    {
+      "id": "maha_shivaratri_2027",
+      "name": "Maha Shivaratri",
+      "nameDevanagari": "महा शिवरात्रि",
+      "date": "2027-03-06",
+      "deity": "Shiva",
+      "description": "The great night of Lord Shiva.",
+      "aartiTag": "Maha Shivaratri",
+      "emoji": "🌙"
+    },
+    {
+      "id": "holi_2027",
+      "name": "Holi",
+      "nameDevanagari": "होली",
+      "date": "2027-03-29",
+      "deity": "Krishna",
+      "description": "Festival of colors.",
+      "aartiTag": "Holi",
+      "emoji": "🎨"
+    },
+    {
+      "id": "ram_navami_2027",
+      "name": "Ram Navami",
+      "nameDevanagari": "राम नवमी",
+      "date": "2027-04-24",
+      "deity": "Rama",
+      "description": "Birthday of Lord Rama.",
+      "aartiTag": "Ram Navami",
+      "emoji": "☀️"
+    },
+    {
+      "id": "janmashtami_2027",
+      "name": "Janmashtami",
+      "nameDevanagari": "जन्माष्टमी",
+      "date": "2027-08-11",
+      "deity": "Krishna",
+      "description": "Birthday of Lord Krishna.",
+      "aartiTag": "Janmashtami",
+      "emoji": "🦚"
+    },
+    {
+      "id": "ganesh_chaturthi_2027",
+      "name": "Ganesh Chaturthi",
+      "nameDevanagari": "गणेश चतुर्थी",
+      "date": "2027-09-21",
+      "deity": "Ganesha",
+      "description": "Birthday of Lord Ganesha.",
+      "aartiTag": "Ganesh Chaturthi",
+      "emoji": "🐘"
+    },
+    {
+      "id": "navratri_2027",
+      "name": "Navratri",
+      "nameDevanagari": "नवरात्रि",
+      "date": "2027-09-27",
+      "endDate": "2027-10-06",
+      "deity": "Durga",
+      "description": "Nine nights of Goddess Durga worship.",
+      "aartiTag": "Navratri",
+      "emoji": "🌺"
+    },
+    {
+      "id": "diwali_2027",
+      "name": "Diwali",
+      "nameDevanagari": "दीवाली",
+      "date": "2027-10-25",
+      "endDate": "2027-10-29",
+      "deity": "Lakshmi",
+      "description": "Festival of lights.",
+      "aartiTag": "Diwali",
+      "emoji": "🪔"
+    },
+    {
+      "id": "maha_shivaratri_2028",
+      "name": "Maha Shivaratri",
+      "nameDevanagari": "महा शिवरात्रि",
+      "date": "2028-02-23",
+      "deity": "Shiva",
+      "description": "The great night of Lord Shiva.",
+      "aartiTag": "Maha Shivaratri",
+      "emoji": "🌙"
+    },
+    {
+      "id": "holi_2028",
+      "name": "Holi",
+      "nameDevanagari": "होली",
+      "date": "2028-03-17",
+      "deity": "Krishna",
+      "description": "Festival of colors.",
+      "aartiTag": "Holi",
+      "emoji": "🎨"
+    },
+    {
+      "id": "ram_navami_2028",
+      "name": "Ram Navami",
+      "nameDevanagari": "राम नवमी",
+      "date": "2028-04-12",
+      "deity": "Rama",
+      "description": "Birthday of Lord Rama.",
+      "aartiTag": "Ram Navami",
+      "emoji": "☀️"
+    },
+    {
+      "id": "janmashtami_2028",
+      "name": "Janmashtami",
+      "nameDevanagari": "जन्माष्टमी",
+      "date": "2028-08-30",
+      "deity": "Krishna",
+      "description": "Birthday of Lord Krishna.",
+      "aartiTag": "Janmashtami",
+      "emoji": "🦚"
+    },
+    {
+      "id": "ganesh_chaturthi_2028",
+      "name": "Ganesh Chaturthi",
+      "nameDevanagari": "गणेश चतुर्थी",
+      "date": "2028-09-10",
+      "deity": "Ganesha",
+      "description": "Birthday of Lord Ganesha.",
+      "aartiTag": "Ganesh Chaturthi",
+      "emoji": "🐘"
+    },
+    {
+      "id": "navratri_2028",
+      "name": "Navratri",
+      "nameDevanagari": "नवरात्रि",
+      "date": "2028-10-16",
+      "endDate": "2028-10-25",
+      "deity": "Durga",
+      "description": "Nine nights of Goddess Durga worship.",
+      "aartiTag": "Navratri",
+      "emoji": "🌺"
+    },
+    {
+      "id": "diwali_2028",
+      "name": "Diwali",
+      "nameDevanagari": "दीवाली",
+      "date": "2028-11-13",
+      "endDate": "2028-11-17",
+      "deity": "Lakshmi",
+      "description": "Festival of lights.",
+      "aartiTag": "Diwali",
+      "emoji": "🪔"
+    }
+  ]
+}

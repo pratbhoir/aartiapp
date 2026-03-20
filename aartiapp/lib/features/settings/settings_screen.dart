@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../data/repositories/aarti_repository.dart';
 import '../../providers/app_providers.dart';
 import '../../widgets/aarti_app_bar.dart';
 
@@ -131,19 +133,159 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24),
 
+                // --- Notifications (v1.5) ---
+                _SectionHeader('Notifications'),
+                const SizedBox(height: 12),
+                Builder(builder: (context) {
+                  final notifEnabled = ref.watch(notificationEnabledProvider);
+                  final notifTime = ref.watch(notificationTimeProvider);
+                  return Column(
+                    children: [
+                      _SettingsTile(
+                        icon: Icons.notifications_outlined,
+                        title: 'Daily Puja Reminder',
+                        subtitle: notifEnabled
+                            ? 'Reminder at ${notifTime.format(context)}'
+                            : 'Disabled',
+                        trailing: Switch.adaptive(
+                          value: notifEnabled,
+                          activeTrackColor: AppColors.saffron,
+                          onChanged: (v) async {
+                            if (v) {
+                              await NotificationService.instance.init();
+                              final granted =
+                                  await NotificationService.instance
+                                      .requestPermission();
+                              if (granted) {
+                                ref
+                                    .read(notificationEnabledProvider
+                                        .notifier)
+                                    .set(true);
+                                await NotificationService.instance
+                                    .scheduleDailyReminder(time: notifTime);
+                              }
+                            } else {
+                              ref
+                                  .read(notificationEnabledProvider
+                                      .notifier)
+                                  .set(false);
+                              await NotificationService.instance
+                                  .cancelAll();
+                            }
+                          },
+                        ),
+                      ),
+                      if (notifEnabled) ...[
+                        const SizedBox(height: 12),
+                        _SettingsTile(
+                          icon: Icons.schedule_outlined,
+                          title: 'Reminder Time',
+                          subtitle: notifTime.format(context),
+                          onTap: () async {
+                            final picked = await showTimePicker(
+                              context: context,
+                              initialTime: notifTime,
+                            );
+                            if (picked != null) {
+                              ref
+                                  .read(notificationTimeProvider
+                                      .notifier)
+                                  .set(picked);
+                              await NotificationService.instance
+                                  .scheduleDailyReminder(time: picked);
+                            }
+                          },
+                        ),
+                      ],
+                    ],
+                  );
+                }),
+                const SizedBox(height: 24),
+
+                // --- Puja Session (v1.5) ---
+                _SectionHeader('Puja Session'),
+                const SizedBox(height: 12),
+                Builder(builder: (context) {
+                  final crossfade = ref.watch(crossfadeProvider);
+                  final autoPlay = ref.watch(autoPlayProvider);
+                  return Column(
+                    children: [
+                      _SettingsTile(
+                        icon: Icons.playlist_play_rounded,
+                        title: 'Auto-play',
+                        subtitle: 'Play next aarti in puja session',
+                        trailing: Switch.adaptive(
+                          value: autoPlay,
+                          activeTrackColor: AppColors.saffron,
+                          onChanged: (v) =>
+                              ref.read(autoPlayProvider.notifier).set(v),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _SettingsTile(
+                        icon: Icons.tune_outlined,
+                        title: 'Crossfade Duration',
+                        subtitle: '${crossfade}s between aartis',
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(4, (i) {
+                            final isActive = crossfade == i;
+                            return GestureDetector(
+                              onTap: () =>
+                                  ref.read(crossfadeProvider.notifier).set(i),
+                              child: AnimatedContainer(
+                                duration:
+                                    const Duration(milliseconds: 200),
+                                width: 32,
+                                height: 28,
+                                margin: const EdgeInsets.only(left: 4),
+                                decoration: BoxDecoration(
+                                  color: isActive
+                                      ? AppColors.saffronGlow
+                                      : AppColors.stone2,
+                                  borderRadius:
+                                      BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: isActive
+                                        ? AppColors.saffron
+                                        : AppColors.stone3,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${i}s',
+                                    style: AppTextStyles.body(
+                                      size: 10,
+                                      color: isActive
+                                          ? AppColors.saffronDark
+                                          : AppColors.ink3,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+                const SizedBox(height: 24),
+
                 // --- About ---
                 _SectionHeader('About'),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.info_outline,
                   title: 'Aarti Sangrah',
-                  subtitle: 'Version 1.0.0 · Made with devotion',
+                  subtitle: 'Version 1.5.0 · Made with devotion',
                 ),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.storage_outlined,
                   title: 'Content',
-                  subtitle: '12 Aartis · All bundled offline',
+                  subtitle:
+                      '${AartiRepository.instance.aartis.length} Aartis · All bundled offline',
                 ),
               ]),
             ),

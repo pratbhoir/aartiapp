@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../data/repositories/aarti_repository.dart';
+import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
 import '../../widgets/aarti_app_bar.dart';
 import '../../widgets/section_label.dart';
@@ -12,6 +13,7 @@ import 'widgets/search_bar.dart' as app;
 import 'widgets/today_hero_card.dart';
 import 'widgets/deity_chip.dart';
 import 'widgets/aarti_card.dart';
+import 'widgets/festive_banner.dart';
 
 class DiscoverScreen extends ConsumerWidget {
   final VoidCallback onOpenDrawer;
@@ -93,6 +95,34 @@ class DiscoverScreen extends ConsumerWidget {
                 ],
               ),
             ),
+          ),
+
+          // Festive banner (v1.5)
+          Builder(
+            builder: (context) {
+              final festival =
+                  FestivalRepository.instance.todayOrUpcoming();
+              if (festival == null) return const SliverToBoxAdapter();
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                  child: FestiveBanner(
+                    festival: festival,
+                    onTap: () {
+                      // Filter by the festival's deity
+                      final deityIdx = deities.indexWhere(
+                          (d) =>
+                              d['label']!.toLowerCase() ==
+                              festival.deity.toLowerCase());
+                      if (deityIdx >= 0) {
+                        ref.read(activeDeityProvider.notifier).state =
+                            deityIdx;
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
           ),
 
           // Deity chips
