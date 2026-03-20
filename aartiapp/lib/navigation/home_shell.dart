@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../core/constants/haptics.dart';
 import '../core/theme/app_colors.dart';
 import '../features/discover/discover_screen.dart';
 import '../features/my_puja/my_puja_screen.dart';
 import '../features/contribute/contribute_screen.dart';
+import '../features/settings/settings_screen.dart';
 import 'app_drawer.dart';
 
 class HomeShell extends StatefulWidget {
@@ -30,7 +32,11 @@ class _HomeShellState extends State<HomeShell>
     NavItem(
         icon: Icons.add_circle_outline,
         activeIcon: Icons.add_circle,
-        label: 'Contribute'),
+        label: 'My Collection'),
+    NavItem(
+        icon: Icons.settings_outlined,
+        activeIcon: Icons.settings,
+        label: 'Settings'),
   ];
 
   @override
@@ -60,6 +66,8 @@ class _HomeShellState extends State<HomeShell>
         return MyPujaScreen(onOpenDrawer: _openDrawer);
       case 2:
         return ContributeScreen(onOpenDrawer: _openDrawer);
+      case 3:
+        return SettingsScreen(onOpenDrawer: _openDrawer);
       default:
         return DiscoverScreen(onOpenDrawer: _openDrawer);
     }
@@ -74,6 +82,7 @@ class _HomeShellState extends State<HomeShell>
         currentIndex: _currentIndex,
         navItems: _navItems,
         onSelect: (i) {
+          AppHaptics.pageTransition();
           setState(() => _currentIndex = i);
           Navigator.of(context).pop();
         },

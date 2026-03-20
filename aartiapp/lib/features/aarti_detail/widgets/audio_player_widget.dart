@@ -9,6 +9,7 @@ class AudioPlayerWidget extends StatelessWidget {
   final double progress;
   final VoidCallback onPlayPause;
   final ValueChanged<double> onScrub;
+  final String? verseLabel;
 
   const AudioPlayerWidget({
     super.key,
@@ -17,6 +18,7 @@ class AudioPlayerWidget extends StatelessWidget {
     required this.progress,
     required this.onPlayPause,
     required this.onScrub,
+    this.verseLabel,
   });
 
   String _formatTime(double progress, int totalSec) {
@@ -82,18 +84,17 @@ class AudioPlayerWidget extends StatelessWidget {
                     children: [
                       Text(
                         aarti.title,
-                        style: const TextStyle(
-                          fontFamily: 'Georgia',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                        style: AppTextStyles.serifBody(
+                          size: 16,
                           color: AppColors.ink,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Text('Verse 1 of 6',
-                          style: AppTextStyles.body(
-                              size: 11, color: AppColors.ink3)),
+                      if (verseLabel != null)
+                        Text(verseLabel!,
+                            style: AppTextStyles.body(
+                                size: 11, color: AppColors.ink3)),
                     ],
                   ),
                 ),

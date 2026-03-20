@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../data/sample_data.dart';
+import '../../core/utils/day_deity_mapper.dart';
+import '../../data/repositories/aarti_repository.dart';
+import '../../providers/app_providers.dart';
 import '../../widgets/aarti_app_bar.dart';
 import '../../widgets/section_label.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
@@ -10,20 +13,21 @@ import 'widgets/today_hero_card.dart';
 import 'widgets/deity_chip.dart';
 import 'widgets/aarti_card.dart';
 
-class DiscoverScreen extends StatefulWidget {
+class DiscoverScreen extends ConsumerWidget {
   final VoidCallback onOpenDrawer;
   const DiscoverScreen({super.key, required this.onOpenDrawer});
 
   @override
-  State<DiscoverScreen> createState() => _DiscoverScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeDeity = ref.watch(activeDeityProvider);
+    final filteredIndices = ref.watch(filteredAartisProvider);
+    final bookmarks = ref.watch(bookmarkProvider);
+    final userName = ref.watch(userNameProvider);
+    final todayIdx = DayDeityMapper.todayAartiIndex();
+    final catalog = AartiRepository.instance;
+    final aartis = catalog.aartis;
+    final deities = catalog.deities;
 
-class _DiscoverScreenState extends State<DiscoverScreen> {
-  int _activeDeity = 0;
-  final Set<int> _bookmarked = {0, 1};
-
-  @override
-  Widget build(BuildContext context) {
     return SafeArea(
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -31,7 +35,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           // App bar
           SliverToBoxAdapter(
             child: AartiAppBar(
-              onMenuTap: widget.onOpenDrawer,
+              onMenuTap: onOpenDrawer,
               trailing: Container(
                 width: 38,
                 height: 38,
@@ -43,12 +47,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   ),
                   borderRadius: BorderRadius.circular(19),
                 ),
-                child: const Center(
-                  child: Text('P',
-                      style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14)),
+                child: Center(
+                  child: Text(
+                    userName.isNotEmpty ? userName[0].toUpperCase() : 'B',
+                    style: const TextStyle(
+                      color: AppColors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -62,17 +69,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
-                        fontFamily: 'Georgia',
+                    text: TextSpan(
+                      style: AppTextStyles.displayLarge(context).copyWith(
                         fontSize: 34,
-                        fontWeight: FontWeight.w300,
-                        color: AppColors.ink,
-                        height: 1.2,
-                        letterSpacing: -0.5,
                       ),
                       children: [
-                        TextSpan(text: 'Jai '),
+                        const TextSpan(text: 'Jai '),
                         TextSpan(
                           text: 'Shri Krishna,',
                           style: TextStyle(
@@ -80,13 +82,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             color: AppColors.saffron,
                           ),
                         ),
-                        TextSpan(text: '\nPratik'),
+                        TextSpan(text: '\n$userName'),
                       ],
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Monday · Somvar · Begin with Shiva',
+                    DayDeityMapper.todaySubtitle(),
                     style: AppTextStyles.body(size: 13, color: AppColors.ink3),
                   ),
                 ],
@@ -98,7 +100,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: app.SearchBar(),
+              child: app.SearchBar(
+                onChanged: (query) {
+                  ref.read(searchQueryProvider.notifier).state = query;
+                },
+              ),
             ),
           ),
 
@@ -112,11 +118,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   const SectionLabel('Aarti of the Day'),
                   const SizedBox(height: 12),
                   TodayHeroCard(
+                    aarti: aartis[todayIdx],
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) =>
-                              AartiDetailScreen(aarti: kAartis[0])),
+                        builder: (_) =>
+                            AartiDetailScreen(aarti: aartis[todayIdx]),
+                      ),
                     ),
                   ),
                 ],
@@ -142,13 +150,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.only(right: 24),
                       physics: const BouncingScrollPhysics(),
-                      itemCount: kDeities.length,
+                      itemCount: deities.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 10),
                       itemBuilder: (_, i) => DeityChip(
-                        emoji: kDeities[i]['emoji']!,
-                        label: kDeities[i]['label']!,
-                        isActive: _activeDeity == i,
-                        onTap: () => setState(() => _activeDeity = i),
+                        emoji: deities[i]['emoji']!,
+                        label: deities[i]['label']!,
+                        isActive: activeDeity == i,
+                        onTap: () {
+                          ref.read(activeDeityProvider.notifier).state = i;
+                        },
                       ),
                     ),
                   ),
@@ -158,46 +168,74 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           ),
 
           // Grid label
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(24, 28, 24, 12),
-              child: SectionLabel('Popular Aartis'),
+              padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
+              child: Row(
+                children: [
+                  const SectionLabel('Popular Aartis'),
+                  const Spacer(),
+                  Text(
+                    '${filteredIndices.length} found',
+                    style: AppTextStyles.body(size: 11, color: AppColors.ink3),
+                  ),
+                ],
+              ),
             ),
           ),
 
-          // Aarti grid
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
-            sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (ctx, i) => AartiCard(
-                  aarti: kAartis[i],
-                  isBookmarked: _bookmarked.contains(i),
-                  delay: Duration(milliseconds: i * 60),
-                  onBookmark: () => setState(() {
-                    if (_bookmarked.contains(i)) {
-                      _bookmarked.remove(i);
-                    } else {
-                      _bookmarked.add(i);
-                    }
-                  }),
-                  onTap: () => Navigator.push(
-                    ctx,
-                    MaterialPageRoute(
-                        builder: (_) =>
-                            AartiDetailScreen(aarti: kAartis[i])),
+          // Aarti grid — filtered
+          filteredIndices.isEmpty
+              ? SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(48),
+                    child: Column(
+                      children: [
+                        Icon(Icons.search_off_rounded,
+                            size: 48, color: AppColors.ink3.withValues(alpha: 0.4)),
+                        const SizedBox(height: 12),
+                        Text(
+                          'No Aartis found',
+                          style: AppTextStyles.body(
+                              size: 14, color: AppColors.ink3),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (ctx, i) {
+                        final aartiIdx = filteredIndices[i];
+                        final aarti = aartis[aartiIdx];
+                        return AartiCard(
+                          aarti: aarti,
+                          isBookmarked: bookmarks.contains(aarti.id),
+                          delay: Duration(milliseconds: i * 60),
+                          onBookmark: () {
+                            ref.read(bookmarkProvider.notifier).toggle(aarti.id);
+                          },
+                          onTap: () => Navigator.push(
+                            ctx,
+                            MaterialPageRoute(
+                              builder: (_) => AartiDetailScreen(aarti: aarti),
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: filteredIndices.length,
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 260,
+                      mainAxisExtent: 168,
+                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 14,
+                    ),
                   ),
                 ),
-                childCount: kAartis.length,
-              ),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 260,
-                mainAxisExtent: 168,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-              ),
-            ),
-          ),
         ],
       ),
     );

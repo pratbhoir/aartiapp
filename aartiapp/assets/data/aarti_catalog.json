@@ -1,0 +1,1171 @@
+{
+  "version": 1,
+  "deities": [
+    { "emoji": "🕉️", "label": "All" },
+    { "emoji": "🐘", "label": "Ganesha" },
+    { "emoji": "🌙", "label": "Shiva" },
+    { "emoji": "🪷", "label": "Lakshmi" },
+    { "emoji": "🦚", "label": "Krishna" },
+    { "emoji": "☀️", "label": "Rama" },
+    { "emoji": "🌺", "label": "Durga" },
+    { "emoji": "🌟", "label": "Hanuman" },
+    { "emoji": "🙏", "label": "Vishnu" }
+  ],
+  "aartis": [
+    {
+      "id": "om_jai_shiv_omkara",
+      "title": "Om Jai Shiv Omkara",
+      "devanagari": "ॐ जय शिव ओंकारा",
+      "deity": "Shiva",
+      "duration": "7:32",
+      "tags": ["Somvar", "Maha Shivaratri", "Shravan"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "ॐ जय शिव ओंकारा, स्वामी जय शिव ओंकारा।",
+            "ब्रह्मा, विष्णु, सदाशिव, अर्द्धांगी धारा॥"
+          ],
+          "transliteration": [
+            "Om Jai Shiv Omkara, Swami Jai Shiv Omkara.",
+            "Brahma, Vishnu, Sadashiv, Ardhangee Dhara."
+          ],
+          "meanings": [
+            "Praise be to Lord Shiva, the embodiment of the sacred syllable Om.",
+            "Brahma, Vishnu and Sada Shiva — the one who holds his half-body as the divine feminine."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "एकानन चतुरानन पञ्चानन राजे।",
+            "हंसानन गरुड़ासन वृषवाहन साजे॥"
+          ],
+          "transliteration": [
+            "Ekaanan Chaturaanan Panchaanan Raaje.",
+            "Hansaanan Garudaasan Vrishavaahan Saaje."
+          ],
+          "meanings": [
+            "The one-faced, four-faced, and five-faced lord reigns supreme.",
+            "Riding upon the swan, the eagle and the bull — each form adorned magnificently."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "दो भुज चार चतुर्भुज दस भुज अति सोहे।",
+            "तीनों रूप निरखते त्रिभुवन जन मोहे॥"
+          ],
+          "transliteration": [
+            "Do Bhuj Char Chaturbhuj Das Bhuj Ati Sohe.",
+            "Teeno Roop Nirakhte Tribhuvan Jan Mohe."
+          ],
+          "meanings": [
+            "Two-armed, four-armed, ten-armed — each form resplendent in its glory.",
+            "Beholding these three forms, all beings of the three worlds are enchanted."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "अक्षमाला वनमाला मुंडमाला धारी।",
+            "चंदन मृगमद सोहे भाले शशिधारी॥"
+          ],
+          "transliteration": [
+            "Akshamala Vanamala Mundamala Dhari.",
+            "Chandan Mrigmad Sohe Bhale Shashidhari."
+          ],
+          "meanings": [
+            "Adorned with a rosary of beads, a garland of forest flowers, and a garland of skulls.",
+            "Sandalwood and musk adorn his forehead, the one who wears the crescent moon."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "श्वेताम्बर पीताम्बर बाघम्बर अंगे।",
+            "सनकादिक गरुणादिक भूतादिक संगे॥"
+          ],
+          "transliteration": [
+            "Shvetambar Pitambar Baaghambar Ange.",
+            "Sanakadik Garunadik Bhutadik Sange."
+          ],
+          "meanings": [
+            "Wearing white robes, yellow robes, and tiger skin on his body.",
+            "Accompanied by Sanaka and other sages, Garuda and others, and spirits."
+          ]
+        },
+        {
+          "label": "Verse 5",
+          "lines": [
+            "कर के मध्य कमंडलु चक्र त्रिशूलधारी।",
+            "सुखकारी दुखहारी जगपालन कारी॥"
+          ],
+          "transliteration": [
+            "Kar Ke Madhya Kamandalu Chakra Trishuldhari.",
+            "Sukhkari Dukhahari Jagpalan Kari."
+          ],
+          "meanings": [
+            "In his hands he holds a water pot, a discus, and a trident.",
+            "He brings happiness, removes sorrow, and sustains the world."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jai_ganesh_deva",
+      "title": "Jai Ganesh Deva",
+      "devanagari": "जय गणेश देव",
+      "deity": "Ganesha",
+      "duration": "5:14",
+      "tags": ["Ganesh Chaturthi", "Budhvar", "Mangal Murti"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "जय गणेश जय गणेश जय गणेश देवा।",
+            "माता जाकी पार्वती पिता महादेवा॥"
+          ],
+          "transliteration": [
+            "Jai Ganesh Jai Ganesh Jai Ganesh Deva.",
+            "Mata Jaki Parvati Pita Mahadeva."
+          ],
+          "meanings": [
+            "Glory to Lord Ganesha, the divine one.",
+            "Whose mother is Parvati and father is the great Lord Shiva."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "एक दंत दयावंत चार भुजा धारी।",
+            "माथे पर तिलक सोहे मूसे की सवारी॥"
+          ],
+          "transliteration": [
+            "Ek Dant Dayavant Char Bhuja Dhari.",
+            "Mathe Par Tilak Sohe Muse Ki Savari."
+          ],
+          "meanings": [
+            "The single-tusked compassionate one, bearing four arms.",
+            "A tilak adorns his forehead, and a mouse is his mount."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "पान चढ़े फूल चढ़े और चढ़े मेवा।",
+            "लड्डुअन का भोग लगे संत करें सेवा॥"
+          ],
+          "transliteration": [
+            "Paan Chadhe Phool Chadhe Aur Chadhe Meva.",
+            "Ladduan Ka Bhog Lage Sant Karein Seva."
+          ],
+          "meanings": [
+            "Betel leaves, flowers and dry fruits are offered to him.",
+            "Laddoos are offered as food, and saints serve him devotionally."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "अंधन को आंख देत कोढ़िन को काया।",
+            "बांझन को पुत्र देत निर्धन को माया॥"
+          ],
+          "transliteration": [
+            "Andhan Ko Aankh Det Kodhin Ko Kaya.",
+            "Banjhan Ko Putra Det Nirdhan Ko Maya."
+          ],
+          "meanings": [
+            "He gives sight to the blind and health to the lepers.",
+            "He blesses the childless with sons and the poor with wealth."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "सूर श्याम शरण आये सफल कीजे सेवा।",
+            "माता जाकी पार्वती पिता महादेवा॥"
+          ],
+          "transliteration": [
+            "Soor Shyam Sharan Aaye Safal Kije Seva.",
+            "Mata Jaki Parvati Pita Mahadeva."
+          ],
+          "meanings": [
+            "Surdas and Shyam have come to your refuge, make their devotion fruitful.",
+            "Whose mother is Parvati and father is the great Lord Shiva."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "om_jai_lakshmi_mata",
+      "title": "Om Jai Lakshmi Mata",
+      "devanagari": "ॐ जय लक्ष्मी माता",
+      "deity": "Lakshmi",
+      "duration": "6:02",
+      "tags": ["Diwali", "Shukravar", "Dhanteras"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "ॐ जय लक्ष्मी माता, मैया जय लक्ष्मी माता।",
+            "तुमको निशदिन सेवत, हरि विष्णु विधाता॥"
+          ],
+          "transliteration": [
+            "Om Jai Lakshmi Mata, Maiya Jai Lakshmi Mata.",
+            "Tumko Nishdin Sevat, Hari Vishnu Vidhata."
+          ],
+          "meanings": [
+            "Glory to Mother Lakshmi, O divine mother.",
+            "Day and night, Lord Vishnu the creator serves you."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "उमा रमा ब्रह्माणी, तुम ही जग माता।",
+            "सूर्य चन्द्रमा ध्यावत, नारद ऋषि गाता॥"
+          ],
+          "transliteration": [
+            "Uma Rama Brahmani, Tum Hi Jag Mata.",
+            "Surya Chandrama Dhyavat, Narad Rishi Gata."
+          ],
+          "meanings": [
+            "As Uma, Rama, and Brahmani — you alone are the mother of the world.",
+            "The sun and moon meditate upon you, sage Narada sings your glory."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "दुर्गा रूप निरंजनी, सुख सम्पत्ति दाता।",
+            "जो कोई तुमको ध्यावत, ऋद्धि सिद्धि धन पाता॥"
+          ],
+          "transliteration": [
+            "Durga Roop Niranjani, Sukh Sampatti Data.",
+            "Jo Koi Tumko Dhyavat, Riddhi Siddhi Dhan Pata."
+          ],
+          "meanings": [
+            "In the form of Durga, the pure one, you bestow happiness and wealth.",
+            "Whoever meditates upon you gains prosperity, powers and riches."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "तुम पाताल निवासिनी, तुम ही शुभदाता।",
+            "कर्म प्रभाव प्रकाशिनी, भवनिधि की त्राता॥"
+          ],
+          "transliteration": [
+            "Tum Patal Nivasini, Tum Hi Shubhdata.",
+            "Karma Prabhav Prakashini, Bhavnidhi Ki Trata."
+          ],
+          "meanings": [
+            "You dwell in the netherworld, you alone are the bestower of good fortune.",
+            "You illuminate the power of karma and are the saviour from the ocean of existence."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "जिस घर में तुम रहती, सब सद्गुण आता।",
+            "सब सम्भव हो जाता, मन नहीं घबराता॥"
+          ],
+          "transliteration": [
+            "Jis Ghar Mein Tum Rahti, Sab Sadgun Aata.",
+            "Sab Sambhav Ho Jata, Man Nahin Ghabrata."
+          ],
+          "meanings": [
+            "In the home where you reside, all virtues arrive.",
+            "Everything becomes possible, the mind fears not."
+          ]
+        },
+        {
+          "label": "Verse 5",
+          "lines": [
+            "तुम बिन यज्ञ न होवे, वस्त्र न कोई पाता।",
+            "खान पान का वैभव, सब तुमसे आता॥"
+          ],
+          "transliteration": [
+            "Tum Bin Yagya Na Hove, Vastra Na Koi Pata.",
+            "Khan Pan Ka Vaibhav, Sab Tumse Aata."
+          ],
+          "meanings": [
+            "Without you, no sacred fire can be lit, no one receives clothing.",
+            "The splendour of food and drink — all comes from you."
+          ]
+        },
+        {
+          "label": "Verse 6",
+          "lines": [
+            "शुभ गुण मन्दिर सुन्दर, क्षीरोदधि जाता।",
+            "रत्न चतुर्दश तुम बिन, कोई नहीं पाता॥"
+          ],
+          "transliteration": [
+            "Shubh Gun Mandir Sundar, Kshirodadhi Jata.",
+            "Ratna Chaturdash Tum Bin, Koi Nahin Pata."
+          ],
+          "meanings": [
+            "Beautiful temple of auspicious virtues, born from the ocean of milk.",
+            "Without you, no one can obtain the fourteen jewels."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aarti_hanuman",
+      "title": "Aarti Kije Hanuman Lala Ki",
+      "devanagari": "आरती कीजे हनुमान लला की",
+      "deity": "Hanuman",
+      "duration": "4:45",
+      "tags": ["Mangalvar", "Shanivar", "Hanuman Jayanti"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "आरती कीजै हनुमान लला की।",
+            "दुष्ट दलन रघुनाथ कला की॥"
+          ],
+          "transliteration": [
+            "Aarti Kijai Hanuman Lala Ki.",
+            "Dusht Dalan Raghunath Kala Ki."
+          ],
+          "meanings": [
+            "Let us perform the aarti of dear Hanuman.",
+            "The destroyer of evil, an embodiment of Lord Rama's power."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "जाके बल से गिरिवर कांपे।",
+            "रोग दोष जाके निकट न झांके॥"
+          ],
+          "transliteration": [
+            "Jake Bal Se Girivar Kampe.",
+            "Rog Dosh Jake Nikat Na Jhanke."
+          ],
+          "meanings": [
+            "By whose strength even great mountains tremble.",
+            "Diseases and faults dare not look near him."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "अंजनि पुत्र महा बलदाई।",
+            "संतन के प्रभु सदा सहाई॥"
+          ],
+          "transliteration": [
+            "Anjani Putra Maha Baldai.",
+            "Santan Ke Prabhu Sada Sahai."
+          ],
+          "meanings": [
+            "Son of Anjani, of immense strength.",
+            "Always the helper and lord of the devotees."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "दे बीरा रघुनाथ पठाये।",
+            "लंका जारि सिया सुधि लाये॥"
+          ],
+          "transliteration": [
+            "De Bira Raghunath Pathaaye.",
+            "Lanka Jari Siya Sudhi Laye."
+          ],
+          "meanings": [
+            "The brave one, sent by Lord Rama.",
+            "Burned Lanka and brought news of Sita."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "लंका सो कोट समुद्र सी खाई।",
+            "जात पवनसुत बार न लाई॥"
+          ],
+          "transliteration": [
+            "Lanka So Kot Samudra Si Khai.",
+            "Jat Pawansut Bar Na Lai."
+          ],
+          "meanings": [
+            "Lanka's fort was surrounded by an ocean-like moat.",
+            "Yet the son of the Wind crossed it without delay."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aarti_kunj_bihari",
+      "title": "Aarti Kunj Bihari Ki",
+      "devanagari": "आरती कुंज बिहारी की",
+      "deity": "Krishna",
+      "duration": "6:30",
+      "tags": ["Janmashtami", "Krishna Janmashtami"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "आरती कुंजबिहारी की।",
+            "श्री गिरिधर कृष्णमुरारी की॥"
+          ],
+          "transliteration": [
+            "Aarti Kunj Bihari Ki.",
+            "Shri Giridhar Krishna Murari Ki."
+          ],
+          "meanings": [
+            "Let us sing the aarti of Kunj Bihari (Krishna who plays in the groves).",
+            "Of Shri Giridhar, Krishna, the enemy of demon Mura."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "गले में बैजंती माला, बजावै मुरली मधुर बाला।",
+            "श्रवण में कुण्डल झलकाला, नन्द के आनंद नन्दलाला॥"
+          ],
+          "transliteration": [
+            "Gale Mein Baijanti Mala, Bajave Murli Madhur Bala.",
+            "Shravan Mein Kundal Jhalakala, Nand Ke Anand Nandlala."
+          ],
+          "meanings": [
+            "With a Vaijayanti garland around his neck, the divine child plays his sweet flute.",
+            "Earrings glitter in his ears — the blissful child of Nanda."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "गगन सम अंग कान्ति काली, राधिका चमक रही आली।",
+            "लतन में ठाढ़े बनमाली, भ्रमर सी अलक कस्तूरी तिलक लाली॥"
+          ],
+          "transliteration": [
+            "Gagan Sam Ang Kanti Kali, Radhika Chamak Rahi Aali.",
+            "Latan Mein Thaadhe Banmali, Bhramar Si Alak Kasturi Tilak Lali."
+          ],
+          "meanings": [
+            "His dark-hued body shines like the sky, Radhika gleams beside him.",
+            "Banmali stands among the creepers, with bee-like curly locks and a musk tilak."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "कनकमय मोर मुकुट बिलसै, देवता दरसन को तरसै।",
+            "गगन सों सुमन रासि बरसै, हाथन में वेणु बिराजै॥"
+          ],
+          "transliteration": [
+            "Kanakmay Mor Mukut Bilase, Devta Darshan Ko Tarse.",
+            "Gagan Son Suman Raasi Barse, Hathan Mein Venu Biraje."
+          ],
+          "meanings": [
+            "A golden peacock-feathered crown shines on his head, even gods long for his sight.",
+            "From the sky, showers of flowers rain down; a flute graces his hands."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "छांड़ थई गोपिन यह लीला, चमके चन्द ही जैसी लीला।",
+            "काटि कुब्जा हृदय की पीला, आरती कुंजबिहारी की॥"
+          ],
+          "transliteration": [
+            "Chhand Thai Gopin Yeh Leela, Chamke Chand Hi Jaisi Leela.",
+            "Kati Kubja Hriday Ki Peela, Aarti Kunj Bihari Ki."
+          ],
+          "meanings": [
+            "Leaving behind the gopis in this divine play, shining like the radiant moon.",
+            "He removed the sorrow from Kubja's heart — sing the aarti of Kunj Bihari."
+          ]
+        },
+        {
+          "label": "Verse 5",
+          "lines": [
+            "जहां ते प्रकट भई गंगा, सकल मनुवांछित फल पंगा।",
+            "करें भजन जे अनुरागा, आरती कुंजबिहारी की॥"
+          ],
+          "transliteration": [
+            "Jahan Te Prakat Bhai Ganga, Sakal Manuvanchhit Phal Panga.",
+            "Karein Bhajan Je Anuraga, Aarti Kunj Bihari Ki."
+          ],
+          "meanings": [
+            "From where the holy Ganga manifested, granting all desired fruits.",
+            "Those who sing devotional hymns with love — let us sing the aarti of Kunj Bihari."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "om_jai_jagdish_hare",
+      "title": "Om Jai Jagdish Hare",
+      "devanagari": "ॐ जय जगदीश हरे",
+      "deity": "Vishnu",
+      "duration": "8:15",
+      "tags": ["Guruvar", "Ekadashi", "Dev Uthani Ekadashi"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "ॐ जय जगदीश हरे, स्वामी जय जगदीश हरे।",
+            "भक्त जनों के संकट, दास जनों के संकट, क्षण में दूर करे॥"
+          ],
+          "transliteration": [
+            "Om Jai Jagdish Hare, Swami Jai Jagdish Hare.",
+            "Bhakt Janon Ke Sankat, Das Janon Ke Sankat, Kshan Mein Door Kare."
+          ],
+          "meanings": [
+            "Glory to the Lord of the universe, O Lord Hari.",
+            "The troubles of devotees and servants — you remove in an instant."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "जो ध्यावे फल पावे, दुख बिनसे मन का।",
+            "स्वामी दुख बिनसे मन का, सुख सम्पत्ति घर आवे, कष्ट मिटे तन का॥"
+          ],
+          "transliteration": [
+            "Jo Dhyave Phal Pave, Dukh Binse Man Ka.",
+            "Swami Dukh Binse Man Ka, Sukh Sampatti Ghar Aave, Kasht Mite Tan Ka."
+          ],
+          "meanings": [
+            "He who meditates obtains the fruit, sorrows of the mind vanish.",
+            "O Lord, sorrows vanish, happiness and wealth enter the home, bodily suffering ends."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "मात पिता तुम मेरे, शरण गहूं मैं किसकी।",
+            "स्वामी शरण गहूं मैं किसकी, तुम बिन और न दूजा, आस करूं मैं जिसकी॥"
+          ],
+          "transliteration": [
+            "Mat Pita Tum Mere, Sharan Gahun Main Kiski.",
+            "Swami Sharan Gahun Main Kiski, Tum Bin Aur Na Dooja, Aas Karun Main Jiski."
+          ],
+          "meanings": [
+            "You are my mother and father, whose refuge shall I seek?",
+            "O Lord, whose refuge shall I seek? There is no other but you in whom I place my hope."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "तुम पूरण परमात्मा, तुम अन्तर्यामी।",
+            "स्वामी तुम अन्तर्यामी, पारब्रह्म परमेश्वर, तुम सबके स्वामी॥"
+          ],
+          "transliteration": [
+            "Tum Puran Parmatma, Tum Antaryami.",
+            "Swami Tum Antaryami, Parbrahm Parmeshwar, Tum Sabke Swami."
+          ],
+          "meanings": [
+            "You are the complete Supreme Soul, you are the inner knower.",
+            "O Lord, the inner knower, the Supreme Brahman, the highest God — you are everyone's master."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "तुम करुणा के सागर, तुम पालनकर्ता।",
+            "स्वामी तुम पालनकर्ता, मैं मूरख खल कामी, कृपा करो भर्ता॥"
+          ],
+          "transliteration": [
+            "Tum Karuna Ke Sagar, Tum Palankarta.",
+            "Swami Tum Palankarta, Main Murakh Khal Kami, Kripa Karo Bharta."
+          ],
+          "meanings": [
+            "You are the ocean of compassion, you are the sustainer.",
+            "O Lord, I am a foolish, wicked, lustful being — shower your grace, O protector."
+          ]
+        },
+        {
+          "label": "Verse 5",
+          "lines": [
+            "तुम हो एक अगोचर, सबके प्राणपति।",
+            "स्वामी सबके प्राणपति, किस विधि मिलूं दयामय, तुमको मैं कुमति॥"
+          ],
+          "transliteration": [
+            "Tum Ho Ek Agochar, Sabke Pranpati.",
+            "Swami Sabke Pranpati, Kis Vidhi Milun Dayamay, Tumko Main Kumati."
+          ],
+          "meanings": [
+            "You are the one unseen, the lord of all life.",
+            "O Lord of all life, how shall I, with my weak mind, meet you, O compassionate one?"
+          ]
+        },
+        {
+          "label": "Verse 6",
+          "lines": [
+            "दीनबन्धु दुख हर्ता, ठाकुर तुम मेरे।",
+            "स्वामी रक्षक तुम मेरे, अपने हाथ उठाओ, अपनी शरण लगाओ॥"
+          ],
+          "transliteration": [
+            "Deenbandhu Dukh Harta, Thakur Tum Mere.",
+            "Swami Rakshak Tum Mere, Apne Hath Uthao, Apni Sharan Lagao."
+          ],
+          "meanings": [
+            "Friend of the humble, remover of sorrows — you are my Lord.",
+            "O Lord, you are my protector, raise your hands and grant me your shelter."
+          ]
+        },
+        {
+          "label": "Verse 7",
+          "lines": [
+            "विषय विकार मिटाओ, पाप हरो देवा।",
+            "स्वामी पाप हरो देवा, श्रद्धा भक्ति बढ़ाओ, सन्तन की सेवा॥"
+          ],
+          "transliteration": [
+            "Vishay Vikar Mitao, Paap Haro Deva.",
+            "Swami Paap Haro Deva, Shraddha Bhakti Badhao, Santan Ki Seva."
+          ],
+          "meanings": [
+            "Remove the worldly afflictions, take away sins O Lord.",
+            "O Lord, remove our sins, increase our faith and devotion in service to the saints."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "durga_aarti",
+      "title": "Jai Ambe Gauri",
+      "devanagari": "जय अम्बे गौरी",
+      "deity": "Durga",
+      "duration": "5:48",
+      "tags": ["Navratri", "Durga Puja", "Shukravar"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "जय अम्बे गौरी, मैया जय श्यामा गौरी।",
+            "तुमको निशदिन ध्यावत, हरि ब्रह्मा शिवरी॥"
+          ],
+          "transliteration": [
+            "Jai Ambe Gauri, Maiya Jai Shyama Gauri.",
+            "Tumko Nishdin Dhyavat, Hari Brahma Shivri."
+          ],
+          "meanings": [
+            "Glory to Mother Ambe Gauri, of fair and dark complexion.",
+            "Day and night, Hari, Brahma and Shiva meditate upon you."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "मांग सिन्दूर विराजत, टीको मृगमद को।",
+            "उज्ज्वल से दोउ नैना, चन्द्रवदन नीको॥"
+          ],
+          "transliteration": [
+            "Maang Sindoor Virajat, Tiko Mrigmad Ko.",
+            "Ujjwal Se Dou Naina, Chandravadan Niko."
+          ],
+          "meanings": [
+            "Vermillion adorns your parting, with a musk tilak on your forehead.",
+            "Your two eyes shine brightly, your moon-like face is beautiful."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "कनक समान कलेवर, रक्ताम्बर राजै।",
+            "रक्तपुष्प गल माला, कंठन पर साजै॥"
+          ],
+          "transliteration": [
+            "Kanak Saman Kalevar, Raktambar Rajai.",
+            "Raktpushp Gal Mala, Kanthan Par Sajai."
+          ],
+          "meanings": [
+            "Your body gleams like gold, draped in red cloth.",
+            "A garland of red flowers adorns your neck."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "केहरि वाहन राजत, खड्ग खप्पर धारी।",
+            "सुर नर मुनिजन सेवत, तिनके दुखहारी॥"
+          ],
+          "transliteration": [
+            "Kehari Vahan Rajat, Khadg Khappar Dhari.",
+            "Sur Nar Munijan Sevat, Tinke Dukhahari."
+          ],
+          "meanings": [
+            "You ride majestically on a lion, holding a sword and skull-cup.",
+            "Gods, humans and sages serve you, you remove their sorrows."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "कानन कुण्डल शोभित, नासाग्रे मोती।",
+            "कोटिक चन्द्र दिवाकर, सम राजत ज्योति॥"
+          ],
+          "transliteration": [
+            "Kanan Kundal Shobhit, Nasagre Moti.",
+            "Kotik Chandra Divakar, Sam Rajat Jyoti."
+          ],
+          "meanings": [
+            "Earrings adorn your ears, a pearl graces the tip of your nose.",
+            "Your radiance shines like millions of moons and suns."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ram_aarti",
+      "title": "Shri Ramchandra Kripalu Bhaj Man",
+      "devanagari": "श्री रामचन्द्र कृपालु भज मन",
+      "deity": "Rama",
+      "duration": "7:10",
+      "tags": ["Ram Navami", "Ravivar", "Dussehra"],
+      "verses": [
+        {
+          "label": "Verse 1",
+          "lines": [
+            "श्री रामचन्द्र कृपालु भजु मन हरण भवभय दारुणम्।",
+            "नवकंज लोचन कंजमुख कर कंज पद कंजारुणम्॥"
+          ],
+          "transliteration": [
+            "Shri Ramchandra Kripalu Bhaju Man Haran Bhavbhay Darunam.",
+            "Navkanj Lochan Kanjmukh Kar Kanj Pad Kanjarunam."
+          ],
+          "meanings": [
+            "O mind, worship the compassionate Shri Ramchandra who destroys the terrible fear of worldly existence.",
+            "His eyes are like fresh lotuses, his face like a lotus, his hands and feet like reddish lotuses."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "कंदर्प अगणित अमित छवि नव नील नीरद सुन्दरम्।",
+            "पट पीत मानहुं तड़ित रुचि शुचि नौमि जनक सुतावरम्॥"
+          ],
+          "transliteration": [
+            "Kandarp Aganit Amit Chhavi Nav Neel Neerad Sundaram.",
+            "Pat Peet Manahun Tadit Ruchi Shuchi Naumi Janak Sutavaram."
+          ],
+          "meanings": [
+            "His beauty surpasses countless Cupids, beautiful as a fresh blue rain cloud.",
+            "His yellow garments shimmer like lightning — I bow to the bridegroom of Janaka's daughter."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "भजु दीनबन्धु दिनेश दानव दैत्यवंशनिकन्दनम्।",
+            "रघुनन्द आनन्दकन्द कोशलचन्द दशरथनन्दनम्॥"
+          ],
+          "transliteration": [
+            "Bhaju Deenbandhu Dinesh Danav Daityavansh Nikandanam.",
+            "Raghunand Anandkand Koshalachand Dasharathnandanam."
+          ],
+          "meanings": [
+            "Worship the friend of the humble, the sun god, destroyer of demons and their lineage.",
+            "He is the joy of the Raghu clan, the root of bliss, the moon of Kosala, son of Dasharatha."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "शिर मुकुट कुण्डल तिलक चारु उदारु अंग विभूषणम्।",
+            "आजानुभुज शर चापधर संग्राम जित खरदूषणम्॥"
+          ],
+          "transliteration": [
+            "Shir Mukut Kundal Tilak Charu Udaru Ang Vibhushanam.",
+            "Ajanubhuj Shar Chapdhar Sangram Jit Khardushanam."
+          ],
+          "meanings": [
+            "Crown on head, earrings, beautiful tilak — his body adorned with gracious ornaments.",
+            "With arms reaching to his knees, bearing bow and arrows — he conquered Khara and Dushana in battle."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "saraswati_aarti",
+      "title": "Jai Saraswati Mata",
+      "devanagari": "जय सरस्वती माता",
+      "deity": "Durga",
+      "duration": "5:20",
+      "tags": ["Vasant Panchami", "Saraswati Puja"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "जय सरस्वती माता, मैया जय सरस्वती माता।",
+            "सदगुण वैभव शालिनी, त्रिभुवन विख्याता॥"
+          ],
+          "transliteration": [
+            "Jai Saraswati Mata, Maiya Jai Saraswati Mata.",
+            "Sadgun Vaibhav Shalini, Tribhuvan Vikhyata."
+          ],
+          "meanings": [
+            "Glory to Mother Saraswati, O divine mother.",
+            "Adorned with virtues and splendour, renowned across the three worlds."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "चन्द्रवदनी पद्मासनी, ध्यान धरूं मन लाई।",
+            "हम पे कृपा करो माता, बुद्धि दो न्याईं॥"
+          ],
+          "transliteration": [
+            "Chandravadni Padmasani, Dhyan Dharun Man Lai.",
+            "Ham Pe Kripa Karo Mata, Buddhi Do Nyai."
+          ],
+          "meanings": [
+            "Moon-faced one, seated on a lotus — I meditate upon you with a focused mind.",
+            "Bestow your grace upon us, O Mother, grant us righteous intelligence."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "तुम्हीं हो सब जग की आधार, जगती सब तेरी शरण।",
+            "विद्या दायिनी कृपा कीजिए, गुणवन्ती तेरी चरण॥"
+          ],
+          "transliteration": [
+            "Tumhi Ho Sab Jag Ki Aadhar, Jagti Sab Teri Sharan.",
+            "Vidya Dayini Kripa Kijiye, Gunvanti Teri Charan."
+          ],
+          "meanings": [
+            "You are the foundation of the whole world, all creation takes your shelter.",
+            "O bestower of knowledge, shower your grace — your feet are adorned with virtues."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "कठिन समय में शरण तेरी, तुम सबकी तारिणी।",
+            "हंसवाहिनी ज्ञानदायिनी, माँ कालरात्रि के नाशिनी॥"
+          ],
+          "transliteration": [
+            "Kathin Samay Mein Sharan Teri, Tum Sabki Tarini.",
+            "Hansvahini Gyandayini, Maa Kalratri Ke Nashini."
+          ],
+          "meanings": [
+            "In difficult times we seek your refuge, you are the saviour of all.",
+            "Riding the swan, bestower of wisdom, O Mother, destroyer of the dark night."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "संकट को मिटावो माता, करुणा की छाया।",
+            "श्वेत वस्त्र धारिणी माँ, वीणा कर में साजे माया॥"
+          ],
+          "transliteration": [
+            "Sankat Ko Mitavo Mata, Karuna Ki Chhaya.",
+            "Shvet Vastra Dharini Maa, Veena Kar Mein Saje Maya."
+          ],
+          "meanings": [
+            "Remove our troubles, O Mother, under the shade of your compassion.",
+            "Dressed in white garments, O Mother, the mystical Veena graces your hands."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shani_aarti",
+      "title": "Jai Jai Shani Dev Maharaj",
+      "devanagari": "जय जय शनि देव महाराज",
+      "deity": "Hanuman",
+      "duration": "4:30",
+      "tags": ["Shanivar", "Shani Jayanti"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "जय जय श्री शनिदेव भक्तन हितकारी।",
+            "सूरज के पुत्र प्रभु छाया महतारी॥"
+          ],
+          "transliteration": [
+            "Jai Jai Shri Shanidev Bhaktan Hitkari.",
+            "Suraj Ke Putra Prabhu Chhaya Mahtari."
+          ],
+          "meanings": [
+            "Glory to Shri Shani Dev, benefactor of devotees.",
+            "Son of the Sun god, born of Mother Chhaya."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "श्याम शरीर विशाल, अंग निराला है।",
+            "नील अम्बर उज्ज्वल शिर पर मुकुट धारी॥"
+          ],
+          "transliteration": [
+            "Shyam Sharir Vishal, Ang Nirala Hai.",
+            "Neel Ambar Ujjwal Shir Par Mukut Dhari."
+          ],
+          "meanings": [
+            "His dark body is large and his form unique.",
+            "Wearing a shining blue robe and a crown upon his head."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "दण्डकर्ता शनिदेव, न्याय प्रिय स्वामी।",
+            "कर्म फल दाता सबके, अन्तर्यामी॥"
+          ],
+          "transliteration": [
+            "Dandkarta Shanidev, Nyay Priya Swami.",
+            "Karm Phal Data Sabke, Antaryami."
+          ],
+          "meanings": [
+            "Lord Shani, the punisher and deliverer of justice, lover of righteousness.",
+            "The giver of fruits of karma to all, the inner knower."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "जो जन शनि गुण गावे, कष्ट सबै मिट जावे।",
+            "जय जय श्री शनिदेव भक्तन हितकारी॥"
+          ],
+          "transliteration": [
+            "Jo Jan Shani Gun Gaave, Kasht Sabai Mit Jave.",
+            "Jai Jai Shri Shanidev Bhaktan Hitkari."
+          ],
+          "meanings": [
+            "Those who sing the virtues of Shani, all their troubles vanish.",
+            "Glory to Shri Shani Dev, benefactor of devotees."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vishnu_aarti",
+      "title": "Aarti Shri Vishnu Ji Ki",
+      "devanagari": "आरती श्री विष्णु जी की",
+      "deity": "Vishnu",
+      "duration": "5:55",
+      "tags": ["Guruvar", "Ekadashi"],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "ॐ जय जगदीश हरे, स्वामी जय जगदीश हरे।",
+            "भक्तजनों के संकट, क्षण में दूर करे॥"
+          ],
+          "transliteration": [
+            "Om Jai Jagdish Hare, Swami Jai Jagdish Hare.",
+            "Bhaktjanon Ke Sankat, Kshan Mein Door Kare."
+          ],
+          "meanings": [
+            "Glory to Lord Vishnu, the Lord of the universe.",
+            "He removes the troubles of devotees in an instant."
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "शंख चक्र गदा पद्म, श्री वनमाला विराजे।",
+            "गरुड़ वाहन नागरि, नयनन शोभा साजे॥"
+          ],
+          "transliteration": [
+            "Shankh Chakra Gada Padm, Shri Vanmala Viraje.",
+            "Garud Vahan Nagari, Naynan Shobha Saje."
+          ],
+          "meanings": [
+            "Adorned with conch, discus, mace, lotus and the Vaijayanti garland.",
+            "With Garuda as his mount, the beauty of his eyes is splendid."
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "क्षीरसागर में विराजत, शेषनाग पर सोहे।",
+            "लक्ष्मी के संग रहत, तीनों लोक मोहे॥"
+          ],
+          "transliteration": [
+            "Kshirsagar Mein Virajat, Sheshnag Par Sohe.",
+            "Lakshmi Ke Sang Rahat, Teenon Lok Mohe."
+          ],
+          "meanings": [
+            "He resides in the ocean of milk, reclining splendidly on Shesha Naga.",
+            "With Lakshmi by his side, he enchants all three worlds."
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "दशावतार लीला किन्हीं, भक्तन का उद्धारा।",
+            "कलि में श्री जगदीश, करत सबका सहारा॥"
+          ],
+          "transliteration": [
+            "Dashavatar Leela Kinhi, Bhaktan Ka Uddhara.",
+            "Kali Mein Shri Jagdish, Karat Sabka Sahara."
+          ],
+          "meanings": [
+            "He performed the divine play of ten incarnations to uplift the devotees.",
+            "In the age of Kali, Lord Jagdish is the support of everyone."
+          ]
+        },
+        {
+          "label": "Verse 4",
+          "lines": [
+            "नीलकमल से नैना, शुभ लक्षण हैं भारी।",
+            "पीताम्बर मुकुट कुण्डल, छवि अति प्यारी॥"
+          ],
+          "transliteration": [
+            "Neelkamal Se Naina, Shubh Lakshan Hain Bhari.",
+            "Pitambar Mukut Kundal, Chhavi Ati Pyari."
+          ],
+          "meanings": [
+            "His eyes are like blue lotuses, filled with auspicious marks.",
+            "In yellow garments, crown and earrings — his form is most lovely."
+          ]
+        },
+        {
+          "label": "Verse 5",
+          "lines": [
+            "तुलसी श्याम प्रसन्न हों, जग में सुख भारी।",
+            "विष्णु जी की आरती जो कोई नर गावे, कहत शिवानन्द स्वामी सुख सम्पत्ति पावे॥"
+          ],
+          "transliteration": [
+            "Tulsi Shyam Prasann Hon, Jag Mein Sukh Bhari.",
+            "Vishnu Ji Ki Aarti Jo Koi Nar Gave, Kahat Shivanand Swami Sukh Sampatti Pave."
+          ],
+          "meanings": [
+            "May Lord Tulsi Shyam be pleased, filling the world with joy.",
+            "Whoever sings the aarti of Lord Vishnu — says Swami Shivanand — shall obtain happiness and prosperity."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shiv_chalisa",
+      "title": "Shiv Chalisa",
+      "devanagari": "शिव चालीसा",
+      "deity": "Shiva",
+      "duration": "12:30",
+      "tags": ["Somvar", "Maha Shivaratri", "Shravan"],
+      "verses": [
+        {
+          "label": "Doha 1",
+          "lines": [
+            "जय गणेश गिरिजा सुवन, मंगल मूल सुजान।",
+            "कहत अयोध्यादास तुम, देहु अभय वरदान॥"
+          ],
+          "transliteration": [
+            "Jai Ganesh Girija Suvan, Mangal Mool Sujan.",
+            "Kahat Ayodhyadas Tum, Dehu Abhay Vardaan."
+          ],
+          "meanings": [
+            "Glory to Ganesha, son of Girija (Parvati), the wise root of auspiciousness.",
+            "Says Ayodhyadas — grant me the boon of fearlessness."
+          ]
+        },
+        {
+          "label": "Doha 2",
+          "lines": [
+            "जय गिरिजा पति दीनदयाला।",
+            "सदा करत सन्तन प्रतिपाला॥"
+          ],
+          "transliteration": [
+            "Jai Girija Pati Deendayala.",
+            "Sada Karat Santan Pratipala."
+          ],
+          "meanings": [
+            "Glory to the merciful Lord of Girija (Parvati).",
+            "Who always protects and nurtures the saints."
+          ]
+        },
+        {
+          "label": "Chaupai 1",
+          "lines": [
+            "भाल चन्द्रमा सोहत नीके।",
+            "कानन कुण्डल नागफनी के॥"
+          ],
+          "transliteration": [
+            "Bhal Chandrama Sohat Nike.",
+            "Kanan Kundal Nagphani Ke."
+          ],
+          "meanings": [
+            "The crescent moon shines beautifully on his forehead.",
+            "Serpent-hooded earrings adorn his ears."
+          ]
+        },
+        {
+          "label": "Chaupai 2",
+          "lines": [
+            "अंग गौर शिर गंग बहाये।",
+            "मुण्डमाल तन क्षार लगाये॥"
+          ],
+          "transliteration": [
+            "Ang Gaur Shir Gang Bahaye.",
+            "Mundmal Tan Kshar Lagaye."
+          ],
+          "meanings": [
+            "His fair body with the Ganga flowing from his head.",
+            "A garland of skulls on his body, smeared with ash."
+          ]
+        },
+        {
+          "label": "Chaupai 3",
+          "lines": [
+            "वस्त्र खाल बाघम्बर सोहे।",
+            "छवि को देख नाग मुनि मोहे॥"
+          ],
+          "transliteration": [
+            "Vastra Khal Baaghambar Sohe.",
+            "Chhavi Ko Dekh Naag Muni Mohe."
+          ],
+          "meanings": [
+            "He is adorned with a tiger skin garment.",
+            "Seeing his beauty, even serpents and sages are enchanted."
+          ]
+        },
+        {
+          "label": "Chaupai 4",
+          "lines": [
+            "मैना मातु की हवसि दुलारी।",
+            "वाम अंग सोहत छवि न्यारी॥"
+          ],
+          "transliteration": [
+            "Maina Matu Ki Havsi Dulari.",
+            "Vam Ang Sohat Chhavi Nyari."
+          ],
+          "meanings": [
+            "Mother Maina's beloved daughter (Parvati).",
+            "Adorns his left side with a unique radiance."
+          ]
+        },
+        {
+          "label": "Chaupai 5",
+          "lines": [
+            "कर त्रिशूल सोहत छवि भारी।",
+            "करत सदा भक्तन हितकारी॥"
+          ],
+          "transliteration": [
+            "Kar Trishul Sohat Chhavi Bhari.",
+            "Karat Sada Bhaktan Hitkari."
+          ],
+          "meanings": [
+            "The trident in his hand shines with mighty splendour.",
+            "He always acts for the welfare of his devotees."
+          ]
+        },
+        {
+          "label": "Chaupai 6",
+          "lines": [
+            "नन्दि गणेश सोहत तहं कैसे।",
+            "सागर मध्य कमल है जैसे॥"
+          ],
+          "transliteration": [
+            "Nandi Ganesh Sohat Tahan Kaise.",
+            "Sagar Madhya Kamal Hai Jaise."
+          ],
+          "meanings": [
+            "Nandi and Ganesha look beautiful beside him.",
+            "Like lotuses in the middle of the ocean."
+          ]
+        }
+      ]
+    }
+  ]
+}

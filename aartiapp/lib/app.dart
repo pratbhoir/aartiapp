@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
-import 'core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/theme/app_theme.dart';
 import 'navigation/home_shell.dart';
+import 'providers/app_providers.dart';
 
-class AartiSangrahApp extends StatelessWidget {
+class AartiSangrahApp extends ConsumerWidget {
   const AartiSangrahApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+
     return MaterialApp(
       title: 'Aarti Sangrah',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.stone,
-        colorScheme: const ColorScheme.light(
-          primary: AppColors.saffron,
-          surface: AppColors.white,
-        ),
-        fontFamily: 'Georgia',
-        splashColor: AppColors.saffronGlow,
-        highlightColor: Colors.transparent,
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          },
-        ),
-      ),
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: themeMode,
       home: const HomeShell(),
     );
   }

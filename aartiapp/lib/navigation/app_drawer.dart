@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
-import '../../widgets/gradient_divider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
+import '../providers/app_providers.dart';
+import '../widgets/gradient_divider.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends ConsumerWidget {
   final int currentIndex;
   final List<NavItem> navItems;
   final ValueChanged<int> onSelect;
@@ -16,7 +18,8 @@ class AppDrawer extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userName = ref.watch(userNameProvider);
     return Drawer(
       width: 280,
       backgroundColor: AppColors.ink,
@@ -113,10 +116,10 @@ class AppDrawer extends StatelessWidget {
                         width: 2,
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'P',
-                        style: TextStyle(
+                        userName.isNotEmpty ? userName[0].toUpperCase() : 'B',
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                           color: AppColors.white,
@@ -129,7 +132,7 @@ class AppDrawer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pratik',
+                        userName,
                         style: AppTextStyles.body(
                           size: 14,
                           color: AppColors.white,
@@ -144,8 +147,11 @@ class AppDrawer extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  const Icon(Icons.settings_outlined,
-                      size: 18, color: AppColors.ink3),
+                  GestureDetector(
+                    onTap: () => onSelect(3), // Navigate to Settings
+                    child: const Icon(Icons.settings_outlined,
+                        size: 18, color: AppColors.ink3),
+                  ),
                 ],
               ),
             ),

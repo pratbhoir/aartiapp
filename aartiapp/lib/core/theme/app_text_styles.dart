@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
+/// Typography system using Google Fonts.
+/// - Noto Serif Devanagari for Devanagari lyrics
+/// - Lora for English serif text (titles, headings)
+/// - Default sans-serif for UI labels and body
 class AppTextStyles {
   AppTextStyles._();
 
-  static TextStyle displayLarge(BuildContext ctx) => const TextStyle(
-        fontFamily: 'Georgia',
+  /// Large display heading (e.g., greeting)
+  static TextStyle displayLarge(BuildContext ctx) => GoogleFonts.lora(
         fontSize: 36,
         fontWeight: FontWeight.w300,
         color: AppColors.ink,
@@ -13,21 +18,33 @@ class AppTextStyles {
         letterSpacing: -0.5,
       );
 
-  static TextStyle scriptTitle(BuildContext ctx) => const TextStyle(
-        fontFamily: 'Georgia',
+  /// Aarti title on detail screen
+  static TextStyle scriptTitle(BuildContext ctx) => GoogleFonts.lora(
         fontSize: 28,
         fontWeight: FontWeight.w400,
         color: AppColors.ink,
         height: 1.2,
       );
 
-  static TextStyle devanagari({double size = 17, Color? color}) => TextStyle(
+  /// Devanagari lyrics — uses Noto Serif Devanagari
+  static TextStyle devanagari({double size = 17, Color? color}) =>
+      GoogleFonts.notoSerifDevanagari(
         fontSize: size,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w400,
         color: color ?? AppColors.ink3,
         height: 1.9,
       );
 
+  /// Transliteration text — Lora italic
+  static TextStyle transliteration({double size = 14, Color? color}) =>
+      GoogleFonts.lora(
+        fontSize: size,
+        fontStyle: FontStyle.italic,
+        color: color ?? AppColors.ink3,
+        height: 1.6,
+      );
+
+  /// Section labels and metadata
   static TextStyle label({double size = 10, Color? color}) => TextStyle(
         fontSize: size,
         fontWeight: FontWeight.w500,
@@ -35,10 +52,20 @@ class AppTextStyles {
         color: color ?? AppColors.ink3,
       );
 
+  /// General body text
   static TextStyle body({double size = 13, Color? color, FontWeight? weight}) =>
       TextStyle(
         fontSize: size,
         fontWeight: weight ?? FontWeight.w300,
         color: color ?? AppColors.ink,
+      );
+
+  /// Serif body text using Lora
+  static TextStyle serifBody({double size = 16, Color? color}) =>
+      GoogleFonts.lora(
+        fontSize: size,
+        fontWeight: FontWeight.w400,
+        color: color ?? AppColors.ink,
+        height: 1.3,
       );
 }

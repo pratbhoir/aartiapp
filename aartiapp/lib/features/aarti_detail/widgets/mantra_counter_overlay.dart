@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../../../core/constants/haptics.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../painters/mala_painter.dart';
@@ -16,8 +16,10 @@ class MantraCounterOverlay extends StatefulWidget {
 class _MantraCounterOverlayState extends State<MantraCounterOverlay>
     with SingleTickerProviderStateMixin {
   int _count = 0;
-  static const int _total = 108;
+  int _total = 108;
   static const int _beads = 27;
+  static const List<int> _presets = [11, 21, 27, 108, 1008];
+  bool _completed = false;
   late AnimationController _tapCtrl;
   late Animation<double> _tapScale;
 
@@ -37,11 +39,17 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
     super.dispose();
   }
 
-  void _tap() async {
+  void _tap() {
     if (_count < _total) {
       _tapCtrl.forward().then((_) => _tapCtrl.reverse());
-      HapticFeedback.lightImpact();
-      setState(() => _count++);
+      AppHaptics.mantraTap();
+      setState(() {
+        _count++;
+        if (_count >= _total && !_completed) {
+          _completed = true;
+          AppHaptics.completion();
+        }
+      });
     }
   }
 
@@ -68,12 +76,10 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(width: 32),
-                      const Text(
+                      Text(
                         'Mantra Counter',
-                        style: TextStyle(
-                          fontFamily: 'Georgia',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
+                        style: AppTextStyles.serifBody(
+                          size: 20,
                           color: AppColors.ink,
                         ),
                       ),
@@ -93,10 +99,57 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text('Tap to count · 108 chants',
+                  Text('Tap to count · $_total chants',
                       style:
                           AppTextStyles.body(size: 12, color: AppColors.ink3)),
-                  const SizedBox(height: 28),
+
+                  // Configurable count presets
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 6,
+                    children: _presets.map((preset) {
+                      final isActive = _total == preset;
+                      return GestureDetector(
+                        onTap: () {
+                          AppHaptics.selection();
+                          setState(() {
+                            _total = preset;
+                            _count = 0;
+                            _completed = false;
+                          });
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? AppColors.saffronGlow
+                                : AppColors.stone2,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: isActive
+                                  ? AppColors.saffron
+                                  : AppColors.stone3,
+                            ),
+                          ),
+                          child: Text(
+                            '$preset',
+                            style: AppTextStyles.body(
+                              size: 11,
+                              color: isActive
+                                  ? AppColors.saffronDark
+                                  : AppColors.ink3,
+                              weight: isActive
+                                  ? FontWeight.w500
+                                  : FontWeight.w300,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 24),
 
                   // Mala
                   SizedBox(
@@ -115,11 +168,9 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           children: [
                             Text(
                               '$_count',
-                              style: const TextStyle(
-                                fontFamily: 'Georgia',
+                              style: AppTextStyles.displayLarge(context)
+                                  .copyWith(
                                 fontSize: 44,
-                                fontWeight: FontWeight.w300,
-                                color: AppColors.ink,
                                 height: 1,
                               ),
                             ),
@@ -131,6 +182,29 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                       ],
                     ),
                   ),
+
+                  // Completion message
+                  if (_completed)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.saffronGlow,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '🪷 Mala Complete · Jai Ho!',
+                          style: AppTextStyles.body(
+                            size: 13,
+                            color: AppColors.saffronDark,
+                            weight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+
                   const SizedBox(height: 24),
 
                   // Tap button
@@ -142,26 +216,26 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
-                          color: AppColors.ink,
+                          color: _completed ? AppColors.saffron : AppColors.ink,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Text(
-                          '॥ Tap to Chant ॥',
+                        child: Text(
+                          _completed ? '॥ Complete! ॥' : '॥ Tap to Chant ॥',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Georgia',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
+                          style: AppTextStyles.serifBody(
+                            size: 20,
                             color: AppColors.white,
-                            letterSpacing: 0.5,
-                          ),
+                          ).copyWith(letterSpacing: 0.5),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextButton(
-                    onPressed: () => setState(() => _count = 0),
+                    onPressed: () => setState(() {
+                      _count = 0;
+                      _completed = false;
+                    }),
                     child: Text('Reset counter',
                         style: AppTextStyles.body(
                             size: 12, color: AppColors.ink3)),

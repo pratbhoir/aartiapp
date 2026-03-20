@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/utils/day_deity_mapper.dart';
+import '../../../data/models/aarti_item.dart';
 
 class TodayHeroCard extends StatefulWidget {
   final VoidCallback onTap;
-  const TodayHeroCard({super.key, required this.onTap});
+  final AartiItem aarti;
+  const TodayHeroCard({super.key, required this.onTap, required this.aarti});
 
   @override
   State<TodayHeroCard> createState() => _TodayHeroCardState();
@@ -93,7 +96,7 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            'Somvar Special',
+                            DayDeityMapper.todaySpecialLabel(),
                             style: AppTextStyles.label(
                               size: 10,
                               color: AppColors.saffronLight,
@@ -106,23 +109,20 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'SHIVA',
+                  widget.aarti.deity.toUpperCase(),
                   style: AppTextStyles.label(
                       size: 11, color: AppColors.saffronLight),
                 ),
                 const SizedBox(height: 5),
-                const Text(
-                  'Om Jai Shiv Omkara',
-                  style: TextStyle(
-                    fontFamily: 'Georgia',
-                    fontSize: 26,
-                    fontWeight: FontWeight.w400,
+                Text(
+                  widget.aarti.title,
+                  style: AppTextStyles.serifBody(
+                    size: 26,
                     color: AppColors.white,
-                    height: 1.2,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text('ॐ जय शिव ओंकारा',
+                Text(widget.aarti.devanagari,
                     style: AppTextStyles.devanagari(
                       size: 14,
                       color: AppColors.white.withValues(alpha: 0.45),
@@ -130,11 +130,11 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    _MetaChip(icon: Icons.schedule_outlined, label: '7:32'),
+                    _MetaChip(icon: Icons.schedule_outlined, label: widget.aarti.duration),
                     const SizedBox(width: 16),
                     _MetaChip(
                         icon: Icons.format_list_numbered_outlined,
-                        label: '6 verses'),
+                        label: widget.aarti.versesLabel),
                     const Spacer(),
                     const PlayCircleButton(),
                   ],

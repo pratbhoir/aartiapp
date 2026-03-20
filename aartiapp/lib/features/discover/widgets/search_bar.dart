@@ -3,7 +3,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({super.key});
+  final ValueChanged<String>? onChanged;
+  const SearchBar({super.key, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class SearchBar extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
+              onChanged: onChanged,
               style: AppTextStyles.body(size: 14),
               decoration: InputDecoration(
                 hintText: 'Search deity, Aarti, or festival…',

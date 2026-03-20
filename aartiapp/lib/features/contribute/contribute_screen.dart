@@ -3,6 +3,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../widgets/aarti_app_bar.dart';
 
+/// My Personal Collection — saves private Aartis locally.
+/// "Submit for Review" is deferred to backend phase.
 class ContributeScreen extends StatefulWidget {
   final VoidCallback onOpenDrawer;
   const ContributeScreen({super.key, required this.onOpenDrawer});
@@ -12,8 +14,6 @@ class ContributeScreen extends StatefulWidget {
 }
 
 class _ContributeScreenState extends State<ContributeScreen> {
-  int _privacyMode = 0;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,22 +30,19 @@ class _ContributeScreenState extends State<ContributeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('CONTRIBUTE',
+                  Text('MY COLLECTION',
                       style:
                           AppTextStyles.label(size: 10, color: AppColors.ink3)),
                   const SizedBox(height: 6),
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
-                        fontFamily: 'Georgia',
+                    text: TextSpan(
+                      style: AppTextStyles.displayLarge(context).copyWith(
                         fontSize: 34,
-                        fontWeight: FontWeight.w300,
-                        color: AppColors.ink,
                       ),
-                      children: [
-                        TextSpan(text: 'Add an '),
+                      children: const [
+                        TextSpan(text: 'Personal '),
                         TextSpan(
-                          text: 'Aarti',
+                          text: 'Collection',
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             color: AppColors.saffron,
@@ -56,7 +53,7 @@ class _ContributeScreenState extends State<ContributeScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Share a prayer with the community or keep it for yourself',
+                    'Save private Aartis for your personal devotion',
                     style:
                         AppTextStyles.body(size: 13, color: AppColors.ink3),
                   ),
@@ -87,47 +84,14 @@ class _ContributeScreenState extends State<ContributeScreen> {
                   hint: 'ॐ जय जगदीश हरे…',
                   maxLines: 6,
                 ),
-                const SizedBox(height: 18),
-                _FormField(
-                    label: 'Audio URL (optional)', hint: 'https://…'),
                 const SizedBox(height: 24),
 
-                // Privacy
-                Text('VISIBILITY',
-                    style:
-                        AppTextStyles.label(size: 10, color: AppColors.ink3)),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _PrivacyOption(
-                        title: 'Private',
-                        subtitle: 'Only visible to you',
-                        isSelected: _privacyMode == 0,
-                        onTap: () => setState(() => _privacyMode = 0),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _PrivacyOption(
-                        title: 'Submit for Review',
-                        subtitle: 'Added to global library if approved',
-                        isSelected: _privacyMode == 1,
-                        onTap: () => setState(() => _privacyMode = 1),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Submit
+                // Save button — private only in v1
                 ElevatedButton.icon(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(_privacyMode == 0
-                            ? 'Aarti saved privately.'
-                            : 'Aarti submitted for review. 🙏'),
+                        content: const Text('Aarti saved to your collection.'),
                         backgroundColor: AppColors.ink,
                         behavior: SnackBarBehavior.floating,
                         shape: RoundedRectangleBorder(
@@ -135,8 +99,8 @@ class _ContributeScreenState extends State<ContributeScreen> {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.send_rounded, size: 16),
-                  label: const Text('Submit Aarti'),
+                  icon: const Icon(Icons.save_outlined, size: 16),
+                  label: const Text('Save to My Collection'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.ink,
                     foregroundColor: AppColors.white,
@@ -202,53 +166,6 @@ class _FormField extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _PrivacyOption extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _PrivacyOption({
-    required this.title,
-    required this.subtitle,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.saffronGlow : AppColors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? AppColors.saffron : AppColors.stone3,
-            width: isSelected ? 1.5 : 1,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title,
-                style: AppTextStyles.body(
-                    size: 13,
-                    color: AppColors.ink,
-                    weight: FontWeight.w400)),
-            const SizedBox(height: 2),
-            Text(subtitle,
-                style:
-                    AppTextStyles.body(size: 11, color: AppColors.ink3)),
-          ],
-        ),
-      ),
     );
   }
 }

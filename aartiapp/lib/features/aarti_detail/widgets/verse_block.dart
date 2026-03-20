@@ -7,12 +7,14 @@ class VerseBlock extends StatelessWidget {
   final VerseData verse;
   final bool isFirst;
   final int viewMode;
+  final double textScale;
 
   const VerseBlock({
     super.key,
     required this.verse,
     required this.isFirst,
     required this.viewMode,
+    this.textScale = 1.0,
   });
 
   @override
@@ -57,13 +59,11 @@ class VerseBlock extends StatelessWidget {
                           : null,
                       child: Text(
                         verse.lines[i],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                        style: AppTextStyles.devanagari(
+                          size: 18 * textScale,
                           color: isHighlighted
                               ? AppColors.saffron
                               : AppColors.ink,
-                          height: 1.9,
                         ),
                       ),
                     ),
@@ -74,19 +74,15 @@ class VerseBlock extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(verse.lines[i],
-                            style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.ink,
-                                height: 1.9)),
+                            style: AppTextStyles.devanagari(
+                              size: 18 * textScale,
+                              color: AppColors.ink,
+                            )),
                         Text(
                           verse.transliteration[i],
-                          style: const TextStyle(
-                            fontFamily: 'Georgia',
-                            fontStyle: FontStyle.italic,
-                            fontSize: 14,
+                          style: AppTextStyles.transliteration(
+                            size: 14 * textScale,
                             color: AppColors.ink3,
-                            height: 1.6,
                           ),
                         ),
                       ],
@@ -98,11 +94,10 @@ class VerseBlock extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(verse.lines[i],
-                            style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.ink,
-                                height: 1.9)),
+                            style: AppTextStyles.devanagari(
+                              size: 18 * textScale,
+                              color: AppColors.ink,
+                            )),
                         const SizedBox(height: 4),
                         Container(
                           padding: const EdgeInsets.all(12),
@@ -117,7 +112,7 @@ class VerseBlock extends StatelessWidget {
                           child: Text(
                             verse.meanings[i],
                             style: AppTextStyles.body(
-                                size: 13, color: AppColors.ink3),
+                                size: 13 * textScale, color: AppColors.ink3),
                           ),
                         ),
                         const SizedBox(height: 4),
