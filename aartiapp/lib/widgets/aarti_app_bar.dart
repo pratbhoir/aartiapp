@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/theme_aware_colors.dart';
 
 class AartiAppBar extends StatelessWidget {
   final VoidCallback onMenuTap;
@@ -60,9 +61,9 @@ class _HamburgerButtonState extends State<HamburgerButton>
         width: 42,
         height: 42,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.stone3, width: 1),
+          border: Border.all(color: context.borderSubtle, width: 1),
         ),
         child: AnimatedBuilder(
           animation: _ctrl,

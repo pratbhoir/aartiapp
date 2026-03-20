@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 import '../../../data/models/aarti_item.dart';
 
 class PujaListItem extends StatelessWidget {
@@ -30,9 +31,9 @@ class PujaListItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: AppColors.white,
+            color: context.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.stone2),
+            border: Border.all(color: context.border),
           ),
           child: Row(
             children: [
@@ -80,7 +81,7 @@ class PujaListItem extends StatelessWidget {
                       aarti.title,
                       style: AppTextStyles.serifBody(
                         size: 16,
-                        color: AppColors.ink,
+                        color: context.textPrimary,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -90,6 +91,22 @@ class PujaListItem extends StatelessWidget {
                   ],
                 ),
               ),
+
+              // Play button
+              GestureDetector(
+                onTap: onTap,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: AppColors.saffronGlow,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.play_arrow_rounded,
+                      size: 18, color: AppColors.saffron),
+                ),
+              ),
+              const SizedBox(width: 8),
 
               Text(aarti.duration,
                   style: AppTextStyles.body(size: 12, color: AppColors.ink3)),

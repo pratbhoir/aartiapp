@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/theme_aware_colors.dart';
 import '../../providers/app_providers.dart';
 import '../../widgets/aarti_app_bar.dart';
 
@@ -168,10 +169,10 @@ class SettingsScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.white,
+        backgroundColor: context.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('Your Name',
-            style: AppTextStyles.serifBody(size: 18, color: AppColors.ink)),
+            style: AppTextStyles.serifBody(size: 18, color: context.textPrimary)),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -236,9 +237,9 @@ class _SettingsTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.stone2),
+          border: Border.all(color: context.border),
         ),
         child: Row(
           children: [
@@ -259,7 +260,7 @@ class _SettingsTile extends StatelessWidget {
                   Text(title,
                       style: AppTextStyles.body(
                           size: 14,
-                          color: AppColors.ink,
+                          color: context.textPrimary,
                           weight: FontWeight.w400)),
                   Text(subtitle,
                       style:
@@ -335,7 +336,7 @@ class _ThemeBtn extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: isActive ? AppColors.white : Colors.transparent,
+          color: isActive ? context.surface : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           boxShadow: isActive
               ? [

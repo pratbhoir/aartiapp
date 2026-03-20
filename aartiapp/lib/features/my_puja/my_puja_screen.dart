@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/theme_aware_colors.dart';
 import '../../providers/app_providers.dart';
 import '../../widgets/aarti_app_bar.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
@@ -116,7 +117,7 @@ class MyPujaScreen extends ConsumerWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: Container(height: 1, color: AppColors.stone2),
+            child: Container(height: 1, color: context.border),
           ),
 
           // Reorderable puja list
@@ -216,9 +217,9 @@ class _SettingChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.surface,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.stone3),
+        border: Border.all(color: context.borderSubtle),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

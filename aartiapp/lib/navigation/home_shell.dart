@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/constants/haptics.dart';
-import '../core/theme/app_colors.dart';
+import '../core/theme/theme_aware_colors.dart';
 import '../features/discover/discover_screen.dart';
 import '../features/my_puja/my_puja_screen.dart';
 import '../features/contribute/contribute_screen.dart';
@@ -77,7 +77,7 @@ class _HomeShellState extends State<HomeShell>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.stone,
+      backgroundColor: context.scaffoldBg,
       drawer: AppDrawer(
         currentIndex: _currentIndex,
         navItems: _navItems,

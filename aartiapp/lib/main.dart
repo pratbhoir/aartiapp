@@ -8,6 +8,7 @@ import 'app.dart';
 import 'data/repositories/aarti_repository.dart';
 import 'data/repositories/bookmark_repository.dart';
 import 'data/repositories/puja_repository.dart';
+import 'data/repositories/user_aarti_repository.dart';
 import 'providers/app_providers.dart';
 
 void main() async {
@@ -32,6 +33,8 @@ void main() async {
   await pujaRepo.init();
   final bookmarkRepo = BookmarkRepository();
   await bookmarkRepo.init();
+  final userAartiRepo = UserAartiRepository();
+  await userAartiRepo.init();
 
   runApp(
     ProviderScope(
@@ -39,6 +42,7 @@ void main() async {
         sharedPrefsProvider.overrideWithValue(prefs),
         pujaRepoProvider.overrideWithValue(pujaRepo),
         bookmarkRepoProvider.overrideWithValue(bookmarkRepo),
+        userAartiRepoProvider.overrideWithValue(userAartiRepo),
       ],
       child: const AartiSangrahApp(),
     ),

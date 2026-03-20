@@ -13,7 +13,7 @@ class AppTextStyles {
   static TextStyle displayLarge(BuildContext ctx) => GoogleFonts.lora(
         fontSize: 36,
         fontWeight: FontWeight.w300,
-        color: AppColors.ink,
+        color: Theme.of(ctx).colorScheme.onSurface,
         height: 1.15,
         letterSpacing: -0.5,
       );
@@ -22,7 +22,7 @@ class AppTextStyles {
   static TextStyle scriptTitle(BuildContext ctx) => GoogleFonts.lora(
         fontSize: 28,
         fontWeight: FontWeight.w400,
-        color: AppColors.ink,
+        color: Theme.of(ctx).colorScheme.onSurface,
         height: 1.2,
       );
 

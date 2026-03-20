@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/theme_aware_colors.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../providers/app_providers.dart';
@@ -86,7 +87,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     final verseCount = verses.isNotEmpty ? verses.length : 0;
 
     return Scaffold(
-      backgroundColor: AppColors.stone,
+      backgroundColor: context.scaffoldBg,
       body: Stack(
         children: [
           SafeArea(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 
 class DeityChip extends StatelessWidget {
   final String emoji;
@@ -30,10 +31,10 @@ class DeityChip extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: context.surface,
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: isActive ? AppColors.saffron : AppColors.stone3,
+                  color: isActive ? AppColors.saffron : context.borderSubtle,
                   width: isActive ? 1.5 : 1,
                 ),
                 boxShadow: isActive

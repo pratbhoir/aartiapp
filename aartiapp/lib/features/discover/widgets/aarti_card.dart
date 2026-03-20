@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 import '../../../data/models/aarti_item.dart';
 
 class AartiCard extends StatelessWidget {
@@ -26,9 +27,9 @@ class AartiCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.stone2, width: 1),
+          border: Border.all(color: context.border, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,11 +51,11 @@ class AartiCard extends StatelessWidget {
             Expanded(
               child: Text(
                 aarti.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Georgia',
                   fontSize: 17,
                   fontWeight: FontWeight.w400,
-                  color: AppColors.ink,
+                  color: context.textPrimary,
                   height: 1.3,
                 ),
                 maxLines: 2,

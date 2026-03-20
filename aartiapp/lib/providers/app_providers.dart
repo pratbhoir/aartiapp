@@ -6,6 +6,7 @@ import '../data/repositories/aarti_repository.dart';
 import '../data/repositories/settings_repository.dart';
 import '../data/repositories/puja_repository.dart';
 import '../data/repositories/bookmark_repository.dart';
+import '../data/repositories/user_aarti_repository.dart';
 import '../data/models/aarti_item.dart';
 import '../core/utils/search_engine.dart';
 
@@ -26,6 +27,34 @@ final pujaRepoProvider = Provider<PujaRepository>((ref) {
 final bookmarkRepoProvider = Provider<BookmarkRepository>((ref) {
   throw UnimplementedError('Must be overridden in ProviderScope');
 });
+
+final userAartiRepoProvider = Provider<UserAartiRepository>((ref) {
+  throw UnimplementedError('Must be overridden in ProviderScope');
+});
+
+// ─── User Aarti Collection State ────────────────────────────────────────────
+
+final userAartiProvider =
+    StateNotifierProvider<UserAartiNotifier, List<AartiItem>>((ref) {
+  final repo = ref.watch(userAartiRepoProvider);
+  return UserAartiNotifier(repo);
+});
+
+class UserAartiNotifier extends StateNotifier<List<AartiItem>> {
+  final UserAartiRepository _repo;
+  UserAartiNotifier(this._repo) : super(_repo.getAll());
+
+  Future<String> save(AartiItem aarti) async {
+    final id = await _repo.save(aarti);
+    state = _repo.getAll();
+    return id;
+  }
+
+  Future<void> delete(String id) async {
+    await _repo.delete(id);
+    state = _repo.getAll();
+  }
+}
 
 // ─── Theme State ────────────────────────────────────────────────────────────
 
@@ -98,16 +127,27 @@ class ScriptModeNotifier extends StateNotifier<int> {
 final bookmarkProvider =
     StateNotifierProvider<BookmarkNotifier, Set<String>>((ref) {
   final repo = ref.watch(bookmarkRepoProvider);
-  return BookmarkNotifier(repo);
+  final pujaNotifier = ref.read(pujaOrderProvider.notifier);
+  return BookmarkNotifier(repo, pujaNotifier);
 });
 
 class BookmarkNotifier extends StateNotifier<Set<String>> {
   final BookmarkRepository _repo;
-  BookmarkNotifier(this._repo) : super(_repo.getBookmarks());
+  final PujaOrderNotifier _pujaNotifier;
+  BookmarkNotifier(this._repo, this._pujaNotifier)
+      : super(_repo.getBookmarks());
 
   Future<void> toggle(String aartiId) async {
+    final wasBookmarked = state.contains(aartiId);
     await _repo.toggleBookmark(aartiId);
     state = _repo.getBookmarks();
+
+    // Sync with puja list: bookmark adds, unbookmark removes
+    if (!wasBookmarked) {
+      await _pujaNotifier.addAarti(aartiId);
+    } else {
+      await _pujaNotifier.removeAarti(aartiId);
+    }
   }
 
   bool isBookmarked(String aartiId) => state.contains(aartiId);
