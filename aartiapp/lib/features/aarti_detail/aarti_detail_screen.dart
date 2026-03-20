@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -25,32 +26,56 @@ class AartiDetailScreen extends ConsumerStatefulWidget {
 class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     with TickerProviderStateMixin {
   int _viewMode = 0; // 0=lyrics, 1=roman, 2=meaning
-  bool _isPlaying = false;
   bool _focusMode = false;
   bool _showCounter = false;
-  double _progress = 0.35;
-  late AnimationController _progressCtrl;
   final ScrollController _scrollController = ScrollController();
   int _currentVerse = 0;
+
+  late final AudioPlayer _audioPlayer;
+  bool _isPlaying = false;
+  Duration _position = Duration.zero;
+  Duration _duration = Duration.zero;
 
   @override
   void initState() {
     super.initState();
-    _progressCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 100),
-    );
-    _progressCtrl.addListener(() {
+    _audioPlayer = AudioPlayer();
+    _initAudio();
+    _scrollController.addListener(_updateVerseProgress);
+  }
+
+  Future<void> _initAudio() async {
+    try {
+      final dur = await _audioPlayer.setUrl(widget.aarti.audioUrl);
+      if (dur != null && mounted) {
+        setState(() => _duration = dur);
+      }
+    } catch (_) {
+      // URL may be unreachable — fail silently
+    }
+
+    _audioPlayer.positionStream.listen((pos) {
+      if (mounted) setState(() => _position = pos);
+    });
+
+    _audioPlayer.durationStream.listen((dur) {
+      if (dur != null && mounted) setState(() => _duration = dur);
+    });
+
+    _audioPlayer.playerStateStream.listen((state) {
       if (mounted) {
-        setState(() => _progress = _progressCtrl.value * 0.65 + 0.35);
+        setState(() => _isPlaying = state.playing);
+        if (state.processingState == ProcessingState.completed) {
+          _audioPlayer.seek(Duration.zero);
+          _audioPlayer.pause();
+        }
       }
     });
-    _scrollController.addListener(_updateVerseProgress);
   }
 
   @override
   void dispose() {
-    _progressCtrl.dispose();
+    _audioPlayer.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -69,11 +94,10 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
   }
 
   void _togglePlay() {
-    setState(() => _isPlaying = !_isPlaying);
     if (_isPlaying) {
-      _progressCtrl.forward();
+      _audioPlayer.pause();
     } else {
-      _progressCtrl.stop();
+      _audioPlayer.play();
     }
   }
 
@@ -368,9 +392,15 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             child: AudioPlayerWidget(
               aarti: widget.aarti,
               isPlaying: _isPlaying,
-              progress: _progress,
+              position: _position,
+              duration: _duration,
               onPlayPause: _togglePlay,
-              onScrub: (v) => setState(() => _progress = v),
+              onScrub: (v) {
+                final newPos = Duration(
+                    milliseconds:
+                        (v * _duration.inMilliseconds).round());
+                _audioPlayer.seek(newPos);
+              },
               verseLabel: verseCount > 0
                   ? 'Verse ${_currentVerse + 1} of $verseCount'
                   : null,

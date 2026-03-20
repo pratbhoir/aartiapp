@@ -6,7 +6,8 @@ import '../../../data/models/aarti_item.dart';
 class AudioPlayerWidget extends StatelessWidget {
   final AartiItem aarti;
   final bool isPlaying;
-  final double progress;
+  final Duration position;
+  final Duration duration;
   final VoidCallback onPlayPause;
   final ValueChanged<double> onScrub;
   final String? verseLabel;
@@ -15,16 +16,16 @@ class AudioPlayerWidget extends StatelessWidget {
     super.key,
     required this.aarti,
     required this.isPlaying,
-    required this.progress,
+    required this.position,
+    required this.duration,
     required this.onPlayPause,
     required this.onScrub,
     this.verseLabel,
   });
 
-  String _formatTime(double progress, int totalSec) {
-    final sec = (progress * totalSec).toInt();
-    final m = sec ~/ 60;
-    final s = sec % 60;
+  String _formatDuration(Duration d) {
+    final m = d.inMinutes;
+    final s = d.inSeconds % 60;
     return '$m:${s.toString().padLeft(2, '0')}';
   }
 
@@ -45,7 +46,7 @@ class AudioPlayerWidget extends StatelessWidget {
             // Progress
             Row(
               children: [
-                Text(_formatTime(progress, 452),
+                Text(_formatDuration(position),
                     style: AppTextStyles.body(size: 11, color: AppColors.ink3)),
                 const SizedBox(width: 10),
                 Expanded(
@@ -60,7 +61,11 @@ class AudioPlayerWidget extends StatelessWidget {
                       overlayShape: SliderComponentShape.noOverlay,
                     ),
                     child: Slider(
-                      value: progress,
+                      value: duration.inMilliseconds > 0
+                          ? (position.inMilliseconds /
+                                  duration.inMilliseconds)
+                              .clamp(0.0, 1.0)
+                          : 0.0,
                       onChanged: onScrub,
                       min: 0,
                       max: 1,
@@ -68,7 +73,7 @@ class AudioPlayerWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Text('7:32',
+                Text(_formatDuration(duration),
                     style: AppTextStyles.body(size: 11, color: AppColors.ink3)),
               ],
             ),

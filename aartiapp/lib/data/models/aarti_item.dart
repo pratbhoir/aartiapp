@@ -11,6 +11,11 @@ class AartiItem {
   final bool isOffline;
   final List<String> tags;
   final List<VerseData> verses; // actual verse content
+  final String audioUrl;
+
+  /// Default audio URL for all aartis.
+  static const String defaultAudioUrl =
+      'https://smt.rajresortarnala.com/aarti/aarti01.mp3';
 
   const AartiItem({
     required this.id,
@@ -23,6 +28,7 @@ class AartiItem {
     this.isOffline = false,
     this.tags = const [],
     this.verses = const [],
+    this.audioUrl = defaultAudioUrl,
   });
 
   /// Deserialise from JSON map (aarti_catalog.json schema).
@@ -42,6 +48,7 @@ class AartiItem {
       verses: versesList
           .map((v) => VerseData.fromJson(v as Map<String, dynamic>))
           .toList(),
+      audioUrl: (json['audioUrl'] as String?) ?? defaultAudioUrl,
     );
   }
 
@@ -54,6 +61,7 @@ class AartiItem {
         'duration': duration,
         'tags': tags,
         'verses': verses.map((v) => v.toJson()).toList(),
+        'audioUrl': audioUrl,
       };
 
   AartiItem copyWith({
@@ -67,6 +75,7 @@ class AartiItem {
     bool? isOffline,
     List<String>? tags,
     List<VerseData>? verses,
+    String? audioUrl,
   }) {
     return AartiItem(
       id: id ?? this.id,
@@ -79,6 +88,7 @@ class AartiItem {
       isOffline: isOffline ?? this.isOffline,
       tags: tags ?? this.tags,
       verses: verses ?? this.verses,
+      audioUrl: audioUrl ?? this.audioUrl,
     );
   }
 }

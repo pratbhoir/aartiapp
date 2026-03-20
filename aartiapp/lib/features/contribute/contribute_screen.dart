@@ -107,13 +107,13 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     final savedAartis = ref.watch(userAartiProvider);
 
     return SafeArea(
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: AartiAppBar(onMenuTap: widget.onOpenDrawer),
-          ),
-
+      child: Column(
+        children: [
+          AartiAppBar(onMenuTap: widget.onOpenDrawer),
+          Expanded(
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
           // Header
           SliverToBoxAdapter(
             child: Padding(
@@ -269,10 +269,22 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (ctx, i) {
                     final aarti = savedAartis[i];
+                    final isInPuja = ref.watch(
+                        pujaOrderProvider.notifier).isInPuja(aarti.id);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: _SavedAartiTile(
                         aarti: aarti,
+                        isInPuja: isInPuja,
+                        onTogglePuja: () {
+                          if (isInPuja) {
+                            ref.read(pujaOrderProvider.notifier)
+                                .removeAarti(aarti.id);
+                          } else {
+                            ref.read(pujaOrderProvider.notifier)
+                                .addAarti(aarti.id);
+                          }
+                        },
                         onDelete: () {
                           ref
                               .read(userAartiProvider.notifier)
@@ -288,15 +300,25 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
           ],
         ],
       ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _SavedAartiTile extends StatelessWidget {
   final AartiItem aarti;
+  final bool isInPuja;
+  final VoidCallback onTogglePuja;
   final VoidCallback onDelete;
 
-  const _SavedAartiTile({required this.aarti, required this.onDelete});
+  const _SavedAartiTile({
+    required this.aarti,
+    required this.isInPuja,
+    required this.onTogglePuja,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -342,6 +364,25 @@ class _SavedAartiTile extends StatelessWidget {
           Text(aarti.versesLabel,
               style: AppTextStyles.body(size: 11, color: AppColors.ink3)),
           const SizedBox(width: 8),
+          GestureDetector(
+            onTap: onTogglePuja,
+            child: Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: isInPuja ? AppColors.saffronGlow : context.border,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                isInPuja
+                    ? Icons.auto_awesome
+                    : Icons.auto_awesome_outlined,
+                size: 14,
+                color: isInPuja ? AppColors.saffron : AppColors.ink3,
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
           GestureDetector(
             onTap: onDelete,
             child: Container(

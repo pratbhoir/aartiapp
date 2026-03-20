@@ -16,8 +16,9 @@ class MyPujaScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pujaIds = ref.watch(pujaOrderProvider);
+    final userAartis = ref.watch(userAartiProvider);
     final pujaAartis =
-        ref.watch(pujaOrderProvider.notifier).getPujaAartis();
+        ref.watch(pujaOrderProvider.notifier).getPujaAartis(userAartis: userAartis);
 
     // Calculate total estimated duration
     int totalMinutes = 0;

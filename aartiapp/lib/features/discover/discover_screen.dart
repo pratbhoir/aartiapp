@@ -29,38 +29,13 @@ class DiscoverScreen extends ConsumerWidget {
     final deities = catalog.deities;
 
     return SafeArea(
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          // App bar
-          SliverToBoxAdapter(
-            child: AartiAppBar(
-              onMenuTap: onOpenDrawer,
-              trailing: Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.saffron, AppColors.gold],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(19),
-                ),
-                child: Center(
-                  child: Text(
-                    userName.isNotEmpty ? userName[0].toUpperCase() : 'B',
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
+      child: Column(
+        children: [
+          AartiAppBar(onMenuTap: onOpenDrawer),
+          Expanded(
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
           // Greeting
           SliverToBoxAdapter(
             child: Padding(
@@ -92,18 +67,6 @@ class DiscoverScreen extends ConsumerWidget {
                     style: AppTextStyles.body(size: 13, color: AppColors.ink3),
                   ),
                 ],
-              ),
-            ),
-          ),
-
-          // Search bar
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: app.SearchBar(
-                onChanged: (query) {
-                  ref.read(searchQueryProvider.notifier).state = query;
-                },
               ),
             ),
           ),
@@ -163,6 +126,18 @@ class DiscoverScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          // Search bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+              child: app.SearchBar(
+                onChanged: (query) {
+                  ref.read(searchQueryProvider.notifier).state = query;
+                },
               ),
             ),
           ),
@@ -236,6 +211,9 @@ class DiscoverScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+        ],
+      ),
+          ),
         ],
       ),
     );

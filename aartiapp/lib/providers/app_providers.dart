@@ -187,13 +187,16 @@ class PujaOrderNotifier extends StateNotifier<List<String>> {
   bool isInPuja(String aartiId) => state.contains(aartiId);
 
   /// Returns AartiItems in puja order.
-  List<AartiItem> getPujaAartis() {
+  /// Searches both the catalog and user-created aartis.
+  List<AartiItem> getPujaAartis({List<AartiItem> userAartis = const []}) {
     final catalog = AartiRepository.instance.aartis;
+    final allAartis = [...catalog, ...userAartis];
     return state
-        .map((id) => catalog.firstWhere(
+        .map((id) => allAartis.firstWhere(
               (a) => a.id == id,
               orElse: () => catalog.first,
             ))
+        .where((a) => state.contains(a.id))
         .toList();
   }
 }
