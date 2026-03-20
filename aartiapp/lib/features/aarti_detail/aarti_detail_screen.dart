@@ -400,7 +400,8 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                             labels: const [
                               'Lyrics',
                               'Transliteration',
-                              'Meaning'
+                              'Meaning',
+                              'ગુજરાતી',
                             ],
                             activeIndex: _viewMode,
                             onSelect: (i) => setState(() => _viewMode = i),

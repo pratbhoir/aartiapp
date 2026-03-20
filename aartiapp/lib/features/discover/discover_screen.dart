@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/day_deity_mapper.dart';
+import '../../core/utils/search_engine.dart';
+import '../../data/models/aarti_item.dart';
 import '../../data/repositories/aarti_repository.dart';
 import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
@@ -14,6 +16,7 @@ import 'widgets/today_hero_card.dart';
 import 'widgets/deity_chip.dart';
 import 'widgets/aarti_card.dart';
 import 'widgets/festive_banner.dart';
+import 'widgets/festival_filter_chips.dart';
 
 class DiscoverScreen extends ConsumerWidget {
   final VoidCallback onOpenDrawer;
@@ -84,13 +87,16 @@ class DiscoverScreen extends ConsumerWidget {
                   const SizedBox(height: 12),
                   TodayHeroCard(
                     aarti: aartis[todayIdx],
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            AartiDetailScreen(aarti: aartis[todayIdx]),
-                      ),
-                    ),
+                    onTap: () {
+                      ref.read(recentlyPlayedProvider.notifier).addRecent(aartis[todayIdx].id);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              AartiDetailScreen(aarti: aartis[todayIdx]),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -119,6 +125,63 @@ class DiscoverScreen extends ConsumerWidget {
                             deityIdx;
                       }
                     },
+                  ),
+                ),
+              );
+            },
+          ),
+
+          // Recently Played (v2.0)
+          Builder(
+            builder: (context) {
+              final recentIds = ref.watch(recentlyPlayedProvider);
+              if (recentIds.isEmpty) return const SliverToBoxAdapter();
+              final userAartis = ref.watch(userAartiProvider);
+              final recentAartis = ref
+                  .watch(recentlyPlayedProvider.notifier)
+                  .getRecentAartis(userAartis: userAartis);
+              if (recentAartis.isEmpty) return const SliverToBoxAdapter();
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(right: 24),
+                        child: SectionLabel('Recently Played'),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 100,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(right: 24),
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: recentAartis.length.clamp(0, 10),
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 12),
+                          itemBuilder: (ctx, i) {
+                            final ra = recentAartis[i];
+                            return _RecentlyPlayedCard(
+                              aarti: ra,
+                              onTap: () {
+                                ref
+                                    .read(recentlyPlayedProvider.notifier)
+                                    .addRecent(ra.id);
+                                Navigator.push(
+                                  ctx,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        AartiDetailScreen(aarti: ra),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -168,6 +231,31 @@ class DiscoverScreen extends ConsumerWidget {
                 onChanged: (query) {
                   ref.read(searchQueryProvider.notifier).state = query;
                 },
+              ),
+            ),
+          ),
+
+          // Festival filter chips (v2.0)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 0, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(right: 24),
+                    child: SectionLabel('Filter by Festival'),
+                  ),
+                  const SizedBox(height: 10),
+                  FestivalFilterChips(
+                    festivalTags:
+                        SearchEngine.allFestivalTags(aartis),
+                    activeTag: ref.watch(activeFestivalTagProvider),
+                    onSelect: (tag) {
+                      ref.read(activeFestivalTagProvider.notifier).state = tag;
+                    },
+                  ),
+                ],
               ),
             ),
           ),
@@ -222,12 +310,15 @@ class DiscoverScreen extends ConsumerWidget {
                           onBookmark: () {
                             ref.read(bookmarkProvider.notifier).toggle(aarti.id);
                           },
-                          onTap: () => Navigator.push(
-                            ctx,
-                            MaterialPageRoute(
-                              builder: (_) => AartiDetailScreen(aarti: aarti),
-                            ),
-                          ),
+                          onTap: () {
+                            ref.read(recentlyPlayedProvider.notifier).addRecent(aarti.id);
+                            Navigator.push(
+                              ctx,
+                              MaterialPageRoute(
+                                builder: (_) => AartiDetailScreen(aarti: aarti),
+                              ),
+                            );
+                          },
                         );
                       },
                       childCount: filteredIndices.length,
@@ -245,6 +336,57 @@ class DiscoverScreen extends ConsumerWidget {
       ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Compact card for the Recently Played horizontal list.
+class _RecentlyPlayedCard extends StatelessWidget {
+  final AartiItem aarti;
+  final VoidCallback onTap;
+
+  const _RecentlyPlayedCard({required this.aarti, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 140,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.stone3),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: AppColors.saffronGlow,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.play_arrow_rounded,
+                  size: 16, color: AppColors.saffron),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              aarti.deity.toUpperCase(),
+              style: AppTextStyles.label(size: 8, color: AppColors.saffron),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              aarti.title,
+              style: AppTextStyles.body(size: 12, color: AppColors.ink),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

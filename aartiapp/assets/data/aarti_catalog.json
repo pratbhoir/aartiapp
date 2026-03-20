@@ -1,15 +1,42 @@
 {
   "version": 1,
   "deities": [
-    { "emoji": "🕉️", "label": "All" },
-    { "emoji": "🐘", "label": "Ganesha" },
-    { "emoji": "🌙", "label": "Shiva" },
-    { "emoji": "🪷", "label": "Lakshmi" },
-    { "emoji": "🦚", "label": "Krishna" },
-    { "emoji": "☀️", "label": "Rama" },
-    { "emoji": "🌺", "label": "Durga" },
-    { "emoji": "🌟", "label": "Hanuman" },
-    { "emoji": "🙏", "label": "Vishnu" }
+    {
+      "emoji": "🕉️",
+      "label": "All"
+    },
+    {
+      "emoji": "🐘",
+      "label": "Ganesha"
+    },
+    {
+      "emoji": "🌙",
+      "label": "Shiva"
+    },
+    {
+      "emoji": "🪷",
+      "label": "Lakshmi"
+    },
+    {
+      "emoji": "🦚",
+      "label": "Krishna"
+    },
+    {
+      "emoji": "☀️",
+      "label": "Rama"
+    },
+    {
+      "emoji": "🌺",
+      "label": "Durga"
+    },
+    {
+      "emoji": "🌟",
+      "label": "Hanuman"
+    },
+    {
+      "emoji": "🙏",
+      "label": "Vishnu"
+    }
   ],
   "aartis": [
     {
@@ -18,7 +45,14 @@
       "devanagari": "ॐ जय शिव ओंकारा",
       "deity": "Shiva",
       "duration": "7:32",
-      "tags": ["Somvar", "Maha Shivaratri", "Shravan"],
+      "tags": [
+        "Somvar",
+        "Maha Shivaratri",
+        "Shravan"
+      ],
+      "festivalTags": [
+        "Maha Shivaratri"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -33,6 +67,10 @@
           "meanings": [
             "Praise be to Lord Shiva, the embodiment of the sacred syllable Om.",
             "Brahma, Vishnu and Sada Shiva — the one who holds his half-body as the divine feminine."
+          ],
+          "gujarati": [
+            "ૐ જય શિવ ઓંકારા, સ્વામી જય શિવ ઓંકારા।",
+            "બ્રહ્મા, વિષ્ણુ, સદાશિવ, અર્દ્ધાંગી ધારા॥"
           ]
         },
         {
@@ -48,6 +86,10 @@
           "meanings": [
             "The one-faced, four-faced, and five-faced lord reigns supreme.",
             "Riding upon the swan, the eagle and the bull — each form adorned magnificently."
+          ],
+          "gujarati": [
+            "એકાનન ચતુરાનન પઞ્ચાનન રાજે।",
+            "હંસાનન ગરુડાસન વૃષવાહન સાજે॥"
           ]
         },
         {
@@ -63,6 +105,10 @@
           "meanings": [
             "Two-armed, four-armed, ten-armed — each form resplendent in its glory.",
             "Beholding these three forms, all beings of the three worlds are enchanted."
+          ],
+          "gujarati": [
+            "દો ભુજ ચાર ચતુર્ભુજ દસ ભુજ અતિ સોહે।",
+            "તીનોં રૂપ નિરખતે ત્રિભુવન જન મોહે॥"
           ]
         },
         {
@@ -78,6 +124,10 @@
           "meanings": [
             "Adorned with a rosary of beads, a garland of forest flowers, and a garland of skulls.",
             "Sandalwood and musk adorn his forehead, the one who wears the crescent moon."
+          ],
+          "gujarati": [
+            "અક્ષમાલા વનમાલા મુંડમાલા ધારી।",
+            "ચંદન મૃગમદ સોહે ભાલે શશિધારી॥"
           ]
         },
         {
@@ -93,6 +143,10 @@
           "meanings": [
             "Wearing white robes, yellow robes, and tiger skin on his body.",
             "Accompanied by Sanaka and other sages, Garuda and others, and spirits."
+          ],
+          "gujarati": [
+            "શ્વેતામ્બર પીતામ્બર બાઘમ્બર અંગે।",
+            "સનકાદિક ગરુણાદિક ભૂતાદિક સંગે॥"
           ]
         },
         {
@@ -108,9 +162,14 @@
           "meanings": [
             "In his hands he holds a water pot, a discus, and a trident.",
             "He brings happiness, removes sorrow, and sustains the world."
+          ],
+          "gujarati": [
+            "કર કે મધ્ય કમંડલુ ચક્ર ત્રિશૂલધારી।",
+            "સુખકારી દુખહારી જગપાલન કારી॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "ૐ જય શિવ ઓંકારા"
     },
     {
       "id": "jai_ganesh_deva",
@@ -118,7 +177,14 @@
       "devanagari": "जय गणेश देव",
       "deity": "Ganesha",
       "duration": "5:14",
-      "tags": ["Ganesh Chaturthi", "Budhvar", "Mangal Murti"],
+      "tags": [
+        "Ganesh Chaturthi",
+        "Budhvar",
+        "Mangal Murti"
+      ],
+      "festivalTags": [
+        "Ganesh Chaturthi"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -133,6 +199,10 @@
           "meanings": [
             "Glory to Lord Ganesha, the divine one.",
             "Whose mother is Parvati and father is the great Lord Shiva."
+          ],
+          "gujarati": [
+            "જય ગણેશ જય ગણેશ જય ગણેશ દેવા।",
+            "માતા જાકી પાર્વતી પિતા મહાદેવા॥"
           ]
         },
         {
@@ -148,6 +218,10 @@
           "meanings": [
             "The single-tusked compassionate one, bearing four arms.",
             "A tilak adorns his forehead, and a mouse is his mount."
+          ],
+          "gujarati": [
+            "એક દંત દયાવંત ચાર ભુજા ધારી।",
+            "માથે પર તિલક સોહે મૂસે કી સવારી॥"
           ]
         },
         {
@@ -163,6 +237,10 @@
           "meanings": [
             "Betel leaves, flowers and dry fruits are offered to him.",
             "Laddoos are offered as food, and saints serve him devotionally."
+          ],
+          "gujarati": [
+            "પાન ચઢે ફૂલ ચઢે ઔર ચઢે મેવા।",
+            "લડ્ડુઅન કા ભોગ લગે સંત કરેં સેવા॥"
           ]
         },
         {
@@ -178,6 +256,10 @@
           "meanings": [
             "He gives sight to the blind and health to the lepers.",
             "He blesses the childless with sons and the poor with wealth."
+          ],
+          "gujarati": [
+            "અંધન કો આંખ દેત કોઢિન કો કાયા।",
+            "બાંઝન કો પુત્ર દેત નિર્ધન કો માયા॥"
           ]
         },
         {
@@ -193,9 +275,14 @@
           "meanings": [
             "Surdas and Shyam have come to your refuge, make their devotion fruitful.",
             "Whose mother is Parvati and father is the great Lord Shiva."
+          ],
+          "gujarati": [
+            "સૂર શ્યામ શરણ આયે સફલ કીજે સેવા।",
+            "માતા જાકી પાર્વતી પિતા મહાદેવા॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "જય ગણેશ દેવ"
     },
     {
       "id": "om_jai_lakshmi_mata",
@@ -203,7 +290,15 @@
       "devanagari": "ॐ जय लक्ष्मी माता",
       "deity": "Lakshmi",
       "duration": "6:02",
-      "tags": ["Diwali", "Shukravar", "Dhanteras"],
+      "tags": [
+        "Diwali",
+        "Shukravar",
+        "Dhanteras"
+      ],
+      "festivalTags": [
+        "Diwali",
+        "Raksha Bandhan"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -218,6 +313,10 @@
           "meanings": [
             "Glory to Mother Lakshmi, O divine mother.",
             "Day and night, Lord Vishnu the creator serves you."
+          ],
+          "gujarati": [
+            "ૐ જય લક્ષ્મી માતા, મૈયા જય લક્ષ્મી માતા।",
+            "તુમકો નિશદિન સેવત, હરિ વિષ્ણુ વિધાતા॥"
           ]
         },
         {
@@ -233,6 +332,10 @@
           "meanings": [
             "As Uma, Rama, and Brahmani — you alone are the mother of the world.",
             "The sun and moon meditate upon you, sage Narada sings your glory."
+          ],
+          "gujarati": [
+            "ઉમા રમા બ્રહ્માણી, તુમ હી જગ માતા।",
+            "સૂર્ય ચન્દ્રમા ધ્યાવત, નારદ ઋષિ ગાતા॥"
           ]
         },
         {
@@ -248,6 +351,10 @@
           "meanings": [
             "In the form of Durga, the pure one, you bestow happiness and wealth.",
             "Whoever meditates upon you gains prosperity, powers and riches."
+          ],
+          "gujarati": [
+            "દુર્ગા રૂપ નિરંજની, સુખ સમ્પત્તિ દાતા।",
+            "જો કોઈ તુમકો ધ્યાવત, ઋદ્ધિ સિદ્ધિ ધન પાતા॥"
           ]
         },
         {
@@ -263,6 +370,10 @@
           "meanings": [
             "You dwell in the netherworld, you alone are the bestower of good fortune.",
             "You illuminate the power of karma and are the saviour from the ocean of existence."
+          ],
+          "gujarati": [
+            "તુમ પાતાલ નિવાસિની, તુમ હી શુભદાતા।",
+            "કર્મ પ્રભાવ પ્રકાશિની, ભવનિધિ કી ત્રાતા॥"
           ]
         },
         {
@@ -278,6 +389,10 @@
           "meanings": [
             "In the home where you reside, all virtues arrive.",
             "Everything becomes possible, the mind fears not."
+          ],
+          "gujarati": [
+            "જિસ ઘર મેં તુમ રહતી, સબ સદ્ગુણ આતા।",
+            "સબ સમ્ભવ હો જાતા, મન નહીં ઘબરાતા॥"
           ]
         },
         {
@@ -293,6 +408,10 @@
           "meanings": [
             "Without you, no sacred fire can be lit, no one receives clothing.",
             "The splendour of food and drink — all comes from you."
+          ],
+          "gujarati": [
+            "તુમ બિન યજ્ઞ ન હોવે, વસ્ત્ર ન કોઈ પાતા।",
+            "ખાન પાન કા વૈભવ, સબ તુમસે આતા॥"
           ]
         },
         {
@@ -308,9 +427,14 @@
           "meanings": [
             "Beautiful temple of auspicious virtues, born from the ocean of milk.",
             "Without you, no one can obtain the fourteen jewels."
+          ],
+          "gujarati": [
+            "શુભ ગુણ મન્દિર સુન્દર, ક્ષીરોદધિ જાતા।",
+            "રત્ન ચતુર્દશ તુમ બિન, કોઈ નહીં પાતા॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "ૐ જય લક્ષ્મી માતા"
     },
     {
       "id": "aarti_hanuman",
@@ -318,7 +442,14 @@
       "devanagari": "आरती कीजे हनुमान लला की",
       "deity": "Hanuman",
       "duration": "4:45",
-      "tags": ["Mangalvar", "Shanivar", "Hanuman Jayanti"],
+      "tags": [
+        "Mangalvar",
+        "Shanivar",
+        "Hanuman Jayanti"
+      ],
+      "festivalTags": [
+        "Hanuman Jayanti"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -333,6 +464,10 @@
           "meanings": [
             "Let us perform the aarti of dear Hanuman.",
             "The destroyer of evil, an embodiment of Lord Rama's power."
+          ],
+          "gujarati": [
+            "આરતી કીજૈ હનુમાન લલા કી।",
+            "દુષ્ટ દલન રઘુનાથ કલા કી॥"
           ]
         },
         {
@@ -348,6 +483,10 @@
           "meanings": [
             "By whose strength even great mountains tremble.",
             "Diseases and faults dare not look near him."
+          ],
+          "gujarati": [
+            "જાકે બલ સે ગિરિવર કાંપે।",
+            "રોગ દોષ જાકે નિકટ ન ઝાંકે॥"
           ]
         },
         {
@@ -363,6 +502,10 @@
           "meanings": [
             "Son of Anjani, of immense strength.",
             "Always the helper and lord of the devotees."
+          ],
+          "gujarati": [
+            "અંજનિ પુત્ર મહા બલદાઈ।",
+            "સંતન કે પ્રભુ સદા સહાઈ॥"
           ]
         },
         {
@@ -378,6 +521,10 @@
           "meanings": [
             "The brave one, sent by Lord Rama.",
             "Burned Lanka and brought news of Sita."
+          ],
+          "gujarati": [
+            "દે બીરા રઘુનાથ પઠાયે।",
+            "લંકા જારિ સિયા સુધિ લાયે॥"
           ]
         },
         {
@@ -393,9 +540,14 @@
           "meanings": [
             "Lanka's fort was surrounded by an ocean-like moat.",
             "Yet the son of the Wind crossed it without delay."
+          ],
+          "gujarati": [
+            "લંકા સો કોટ સમુદ્ર સી ખાઈ।",
+            "જાત પવનસુત બાર ન લાઈ॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "આરતી કીજે હનુમાન લલા કી"
     },
     {
       "id": "aarti_kunj_bihari",
@@ -403,7 +555,14 @@
       "devanagari": "आरती कुंज बिहारी की",
       "deity": "Krishna",
       "duration": "6:30",
-      "tags": ["Janmashtami", "Krishna Janmashtami"],
+      "tags": [
+        "Janmashtami",
+        "Krishna Janmashtami"
+      ],
+      "festivalTags": [
+        "Janmashtami",
+        "Holi"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -418,6 +577,10 @@
           "meanings": [
             "Let us sing the aarti of Kunj Bihari (Krishna who plays in the groves).",
             "Of Shri Giridhar, Krishna, the enemy of demon Mura."
+          ],
+          "gujarati": [
+            "આરતી કુંજબિહારી કી।",
+            "શ્રી ગિરિધર કૃષ્ણમુરારી કી॥"
           ]
         },
         {
@@ -433,6 +596,10 @@
           "meanings": [
             "With a Vaijayanti garland around his neck, the divine child plays his sweet flute.",
             "Earrings glitter in his ears — the blissful child of Nanda."
+          ],
+          "gujarati": [
+            "ગલે મેં બૈજંતી માલા, બજાવૈ મુરલી મધુર બાલા।",
+            "શ્રવણ મેં કુણ્ડલ ઝલકાલા, નન્દ કે આનંદ નન્દલાલા॥"
           ]
         },
         {
@@ -448,6 +615,10 @@
           "meanings": [
             "His dark-hued body shines like the sky, Radhika gleams beside him.",
             "Banmali stands among the creepers, with bee-like curly locks and a musk tilak."
+          ],
+          "gujarati": [
+            "ગગન સમ અંગ કાન્તિ કાલી, રાધિકા ચમક રહી આલી।",
+            "લતન મેં ઠાઢે બનમાલી, ભ્રમર સી અલક કસ્તૂરી તિલક લાલી॥"
           ]
         },
         {
@@ -463,6 +634,10 @@
           "meanings": [
             "A golden peacock-feathered crown shines on his head, even gods long for his sight.",
             "From the sky, showers of flowers rain down; a flute graces his hands."
+          ],
+          "gujarati": [
+            "કનકમય મોર મુકુટ બિલસૈ, દેવતા દરસન કો તરસૈ।",
+            "ગગન સોં સુમન રાસિ બરસૈ, હાથન મેં વેણુ બિરાજૈ॥"
           ]
         },
         {
@@ -478,6 +653,10 @@
           "meanings": [
             "Leaving behind the gopis in this divine play, shining like the radiant moon.",
             "He removed the sorrow from Kubja's heart — sing the aarti of Kunj Bihari."
+          ],
+          "gujarati": [
+            "છાંડ થઈ ગોપિન યહ લીલા, ચમકે ચન્દ હી જૈસી લીલા।",
+            "કાટિ કુબ્જા હૃદય કી પીલા, આરતી કુંજબિહારી કી॥"
           ]
         },
         {
@@ -493,9 +672,14 @@
           "meanings": [
             "From where the holy Ganga manifested, granting all desired fruits.",
             "Those who sing devotional hymns with love — let us sing the aarti of Kunj Bihari."
+          ],
+          "gujarati": [
+            "જહાં તે પ્રકટ ભઈ ગંગા, સકલ મનુવાંછિત ફલ પંગા।",
+            "કરેં ભજન જે અનુરાગા, આરતી કુંજબિહારી કી॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "આરતી કુંજ બિહારી કી"
     },
     {
       "id": "om_jai_jagdish_hare",
@@ -503,7 +687,14 @@
       "devanagari": "ॐ जय जगदीश हरे",
       "deity": "Vishnu",
       "duration": "8:15",
-      "tags": ["Guruvar", "Ekadashi", "Dev Uthani Ekadashi"],
+      "tags": [
+        "Guruvar",
+        "Ekadashi",
+        "Dev Uthani Ekadashi"
+      ],
+      "festivalTags": [
+        "Guru Purnima"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -518,6 +709,10 @@
           "meanings": [
             "Glory to the Lord of the universe, O Lord Hari.",
             "The troubles of devotees and servants — you remove in an instant."
+          ],
+          "gujarati": [
+            "ૐ જય જગદીશ હરે, સ્વામી જય જગદીશ હરે।",
+            "ભક્ત જનોં કે સંકટ, દાસ જનોં કે સંકટ, ક્ષણ મેં દૂર કરે॥"
           ]
         },
         {
@@ -533,6 +728,10 @@
           "meanings": [
             "He who meditates obtains the fruit, sorrows of the mind vanish.",
             "O Lord, sorrows vanish, happiness and wealth enter the home, bodily suffering ends."
+          ],
+          "gujarati": [
+            "જો ધ્યાવે ફલ પાવે, દુખ બિનસે મન કા।",
+            "સ્વામી દુખ બિનસે મન કા, સુખ સમ્પત્તિ ઘર આવે, કષ્ટ મિટે તન કા॥"
           ]
         },
         {
@@ -548,6 +747,10 @@
           "meanings": [
             "You are my mother and father, whose refuge shall I seek?",
             "O Lord, whose refuge shall I seek? There is no other but you in whom I place my hope."
+          ],
+          "gujarati": [
+            "માત પિતા તુમ મેરે, શરણ ગહૂં મૈં કિસકી।",
+            "સ્વામી શરણ ગહૂં મૈં કિસકી, તુમ બિન ઔર ન દૂજા, આસ કરૂં મૈં જિસકી॥"
           ]
         },
         {
@@ -563,6 +766,10 @@
           "meanings": [
             "You are the complete Supreme Soul, you are the inner knower.",
             "O Lord, the inner knower, the Supreme Brahman, the highest God — you are everyone's master."
+          ],
+          "gujarati": [
+            "તુમ પૂરણ પરમાત્મા, તુમ અન્તર્યામી।",
+            "સ્વામી તુમ અન્તર્યામી, પારબ્રહ્મ પરમેશ્વર, તુમ સબકે સ્વામી॥"
           ]
         },
         {
@@ -578,6 +785,10 @@
           "meanings": [
             "You are the ocean of compassion, you are the sustainer.",
             "O Lord, I am a foolish, wicked, lustful being — shower your grace, O protector."
+          ],
+          "gujarati": [
+            "તુમ કરુણા કે સાગર, તુમ પાલનકર્તા।",
+            "સ્વામી તુમ પાલનકર્તા, મૈં મૂરખ ખલ કામી, કૃપા કરો ભર્તા॥"
           ]
         },
         {
@@ -593,6 +804,10 @@
           "meanings": [
             "You are the one unseen, the lord of all life.",
             "O Lord of all life, how shall I, with my weak mind, meet you, O compassionate one?"
+          ],
+          "gujarati": [
+            "તુમ હો એક અગોચર, સબકે પ્રાણપતિ।",
+            "સ્વામી સબકે પ્રાણપતિ, કિસ વિધિ મિલૂં દયામય, તુમકો મૈં કુમતિ॥"
           ]
         },
         {
@@ -608,6 +823,10 @@
           "meanings": [
             "Friend of the humble, remover of sorrows — you are my Lord.",
             "O Lord, you are my protector, raise your hands and grant me your shelter."
+          ],
+          "gujarati": [
+            "દીનબન્ધુ દુખ હર્તા, ઠાકુર તુમ મેરે।",
+            "સ્વામી રક્ષક તુમ મેરે, અપને હાથ ઉઠાઓ, અપની શરણ લગાઓ॥"
           ]
         },
         {
@@ -623,9 +842,14 @@
           "meanings": [
             "Remove the worldly afflictions, take away sins O Lord.",
             "O Lord, remove our sins, increase our faith and devotion in service to the saints."
+          ],
+          "gujarati": [
+            "વિષય વિકાર મિટાઓ, પાપ હરો દેવા।",
+            "સ્વામી પાપ હરો દેવા, શ્રદ્ધા ભક્તિ બઢાઓ, સન્તન કી સેવા॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "ૐ જય જગદીશ હરે"
     },
     {
       "id": "durga_aarti",
@@ -633,7 +857,15 @@
       "devanagari": "जय अम्बे गौरी",
       "deity": "Durga",
       "duration": "5:48",
-      "tags": ["Navratri", "Durga Puja", "Shukravar"],
+      "tags": [
+        "Navratri",
+        "Durga Puja",
+        "Shukravar"
+      ],
+      "festivalTags": [
+        "Navratri",
+        "Dussehra"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -648,6 +880,10 @@
           "meanings": [
             "Glory to Mother Ambe Gauri, of fair and dark complexion.",
             "Day and night, Hari, Brahma and Shiva meditate upon you."
+          ],
+          "gujarati": [
+            "જય અમ્બે ગૌરી, મૈયા જય શ્યામા ગૌરી।",
+            "તુમકો નિશદિન ધ્યાવત, હરિ બ્રહ્મા શિવરી॥"
           ]
         },
         {
@@ -663,6 +899,10 @@
           "meanings": [
             "Vermillion adorns your parting, with a musk tilak on your forehead.",
             "Your two eyes shine brightly, your moon-like face is beautiful."
+          ],
+          "gujarati": [
+            "માંગ સિન્દૂર વિરાજત, ટીકો મૃગમદ કો।",
+            "ઉજ્જ્વલ સે દોઉ નૈના, ચન્દ્રવદન નીકો॥"
           ]
         },
         {
@@ -678,6 +918,10 @@
           "meanings": [
             "Your body gleams like gold, draped in red cloth.",
             "A garland of red flowers adorns your neck."
+          ],
+          "gujarati": [
+            "કનક સમાન કલેવર, રક્તામ્બર રાજૈ।",
+            "રક્તપુષ્પ ગલ માલા, કંઠન પર સાજૈ॥"
           ]
         },
         {
@@ -693,6 +937,10 @@
           "meanings": [
             "You ride majestically on a lion, holding a sword and skull-cup.",
             "Gods, humans and sages serve you, you remove their sorrows."
+          ],
+          "gujarati": [
+            "કેહરિ વાહન રાજત, ખડ્ગ ખપ્પર ધારી।",
+            "સુર નર મુનિજન સેવત, તિનકે દુખહારી॥"
           ]
         },
         {
@@ -708,9 +956,14 @@
           "meanings": [
             "Earrings adorn your ears, a pearl graces the tip of your nose.",
             "Your radiance shines like millions of moons and suns."
+          ],
+          "gujarati": [
+            "કાનન કુણ્ડલ શોભિત, નાસાગ્રે મોતી।",
+            "કોટિક ચન્દ્ર દિવાકર, સમ રાજત જ્યોતિ॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "જય અમ્બે ગૌરી"
     },
     {
       "id": "ram_aarti",
@@ -718,7 +971,15 @@
       "devanagari": "श्री रामचन्द्र कृपालु भज मन",
       "deity": "Rama",
       "duration": "7:10",
-      "tags": ["Ram Navami", "Ravivar", "Dussehra"],
+      "tags": [
+        "Ram Navami",
+        "Ravivar",
+        "Dussehra"
+      ],
+      "festivalTags": [
+        "Ram Navami",
+        "Dussehra"
+      ],
       "verses": [
         {
           "label": "Verse 1",
@@ -733,6 +994,10 @@
           "meanings": [
             "O mind, worship the compassionate Shri Ramchandra who destroys the terrible fear of worldly existence.",
             "His eyes are like fresh lotuses, his face like a lotus, his hands and feet like reddish lotuses."
+          ],
+          "gujarati": [
+            "શ્રી રામચન્દ્ર કૃપાલુ ભજુ મન હરણ ભવભય દારુણમ્।",
+            "નવકંજ લોચન કંજમુખ કર કંજ પદ કંજારુણમ્॥"
           ]
         },
         {
@@ -748,6 +1013,10 @@
           "meanings": [
             "His beauty surpasses countless Cupids, beautiful as a fresh blue rain cloud.",
             "His yellow garments shimmer like lightning — I bow to the bridegroom of Janaka's daughter."
+          ],
+          "gujarati": [
+            "કંદર્પ અગણિત અમિત છવિ નવ નીલ નીરદ સુન્દરમ્।",
+            "પટ પીત માનહું તડિત રુચિ શુચિ નૌમિ જનક સુતાવરમ્॥"
           ]
         },
         {
@@ -763,6 +1032,10 @@
           "meanings": [
             "Worship the friend of the humble, the sun god, destroyer of demons and their lineage.",
             "He is the joy of the Raghu clan, the root of bliss, the moon of Kosala, son of Dasharatha."
+          ],
+          "gujarati": [
+            "ભજુ દીનબન્ધુ દિનેશ દાનવ દૈત્યવંશનિકન્દનમ્।",
+            "રઘુનન્દ આનન્દકન્દ કોશલચન્દ દશરથનન્દનમ્॥"
           ]
         },
         {
@@ -778,9 +1051,14 @@
           "meanings": [
             "Crown on head, earrings, beautiful tilak — his body adorned with gracious ornaments.",
             "With arms reaching to his knees, bearing bow and arrows — he conquered Khara and Dushana in battle."
+          ],
+          "gujarati": [
+            "શિર મુકુટ કુણ્ડલ તિલક ચારુ ઉદારુ અંગ વિભૂષણમ્।",
+            "આજાનુભુજ શર ચાપધર સંગ્રામ જિત ખરદૂષણમ્॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "શ્રી રામચન્દ્ર કૃપાલુ ભજ મન"
     },
     {
       "id": "saraswati_aarti",
@@ -788,7 +1066,13 @@
       "devanagari": "जय सरस्वती माता",
       "deity": "Durga",
       "duration": "5:20",
-      "tags": ["Vasant Panchami", "Saraswati Puja"],
+      "tags": [
+        "Vasant Panchami",
+        "Saraswati Puja"
+      ],
+      "festivalTags": [
+        "Vasant Panchami"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -803,6 +1087,10 @@
           "meanings": [
             "Glory to Mother Saraswati, O divine mother.",
             "Adorned with virtues and splendour, renowned across the three worlds."
+          ],
+          "gujarati": [
+            "જય સરસ્વતી માતા, મૈયા જય સરસ્વતી માતા।",
+            "સદગુણ વૈભવ શાલિની, ત્રિભુવન વિખ્યાતા॥"
           ]
         },
         {
@@ -818,6 +1106,10 @@
           "meanings": [
             "Moon-faced one, seated on a lotus — I meditate upon you with a focused mind.",
             "Bestow your grace upon us, O Mother, grant us righteous intelligence."
+          ],
+          "gujarati": [
+            "ચન્દ્રવદની પદ્માસની, ધ્યાન ધરૂં મન લાઈ।",
+            "હમ પે કૃપા કરો માતા, બુદ્ધિ દો ન્યાઈં॥"
           ]
         },
         {
@@ -833,6 +1125,10 @@
           "meanings": [
             "You are the foundation of the whole world, all creation takes your shelter.",
             "O bestower of knowledge, shower your grace — your feet are adorned with virtues."
+          ],
+          "gujarati": [
+            "તુમ્હીં હો સબ જગ કી આધાર, જગતી સબ તેરી શરણ।",
+            "વિદ્યા દાયિની કૃપા કીજિએ, ગુણવન્તી તેરી ચરણ॥"
           ]
         },
         {
@@ -848,6 +1144,10 @@
           "meanings": [
             "In difficult times we seek your refuge, you are the saviour of all.",
             "Riding the swan, bestower of wisdom, O Mother, destroyer of the dark night."
+          ],
+          "gujarati": [
+            "કઠિન સમય મેં શરણ તેરી, તુમ સબકી તારિણી।",
+            "હંસવાહિની જ્ઞાનદાયિની, માઁ કાલરાત્રિ કે નાશિની॥"
           ]
         },
         {
@@ -863,9 +1163,14 @@
           "meanings": [
             "Remove our troubles, O Mother, under the shade of your compassion.",
             "Dressed in white garments, O Mother, the mystical Veena graces your hands."
+          ],
+          "gujarati": [
+            "સંકટ કો મિટાવો માતા, કરુણા કી છાયા।",
+            "શ્વેત વસ્ત્ર ધારિણી માઁ, વીણા કર મેં સાજે માયા॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "જય સરસ્વતી માતા"
     },
     {
       "id": "shani_aarti",
@@ -873,7 +1178,11 @@
       "devanagari": "जय जय शनि देव महाराज",
       "deity": "Hanuman",
       "duration": "4:30",
-      "tags": ["Shanivar", "Shani Jayanti"],
+      "tags": [
+        "Shanivar",
+        "Shani Jayanti"
+      ],
+      "festivalTags": [],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -888,6 +1197,10 @@
           "meanings": [
             "Glory to Shri Shani Dev, benefactor of devotees.",
             "Son of the Sun god, born of Mother Chhaya."
+          ],
+          "gujarati": [
+            "જય જય શ્રી શનિદેવ ભક્તન હિતકારી।",
+            "સૂરજ કે પુત્ર પ્રભુ છાયા મહતારી॥"
           ]
         },
         {
@@ -903,6 +1216,10 @@
           "meanings": [
             "His dark body is large and his form unique.",
             "Wearing a shining blue robe and a crown upon his head."
+          ],
+          "gujarati": [
+            "શ્યામ શરીર વિશાલ, અંગ નિરાલા હૈ।",
+            "નીલ અમ્બર ઉજ્જ્વલ શિર પર મુકુટ ધારી॥"
           ]
         },
         {
@@ -918,6 +1235,10 @@
           "meanings": [
             "Lord Shani, the punisher and deliverer of justice, lover of righteousness.",
             "The giver of fruits of karma to all, the inner knower."
+          ],
+          "gujarati": [
+            "દણ્ડકર્તા શનિદેવ, ન્યાય પ્રિય સ્વામી।",
+            "કર્મ ફલ દાતા સબકે, અન્તર્યામી॥"
           ]
         },
         {
@@ -933,9 +1254,14 @@
           "meanings": [
             "Those who sing the virtues of Shani, all their troubles vanish.",
             "Glory to Shri Shani Dev, benefactor of devotees."
+          ],
+          "gujarati": [
+            "જો જન શનિ ગુણ ગાવે, કષ્ટ સબૈ મિટ જાવે।",
+            "જય જય શ્રી શનિદેવ ભક્તન હિતકારી॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "જય જય શનિ દેવ મહારાજ"
     },
     {
       "id": "vishnu_aarti",
@@ -943,7 +1269,13 @@
       "devanagari": "आरती श्री विष्णु जी की",
       "deity": "Vishnu",
       "duration": "5:55",
-      "tags": ["Guruvar", "Ekadashi"],
+      "tags": [
+        "Guruvar",
+        "Ekadashi"
+      ],
+      "festivalTags": [
+        "Guru Purnima"
+      ],
       "verses": [
         {
           "label": "Dhruva Pad",
@@ -958,6 +1290,10 @@
           "meanings": [
             "Glory to Lord Vishnu, the Lord of the universe.",
             "He removes the troubles of devotees in an instant."
+          ],
+          "gujarati": [
+            "ૐ જય જગદીશ હરે, સ્વામી જય જગદીશ હરે।",
+            "ભક્તજનોં કે સંકટ, ક્ષણ મેં દૂર કરે॥"
           ]
         },
         {
@@ -973,6 +1309,10 @@
           "meanings": [
             "Adorned with conch, discus, mace, lotus and the Vaijayanti garland.",
             "With Garuda as his mount, the beauty of his eyes is splendid."
+          ],
+          "gujarati": [
+            "શંખ ચક્ર ગદા પદ્મ, શ્રી વનમાલા વિરાજે।",
+            "ગરુડ વાહન નાગરિ, નયનન શોભા સાજે॥"
           ]
         },
         {
@@ -988,6 +1328,10 @@
           "meanings": [
             "He resides in the ocean of milk, reclining splendidly on Shesha Naga.",
             "With Lakshmi by his side, he enchants all three worlds."
+          ],
+          "gujarati": [
+            "ક્ષીરસાગર મેં વિરાજત, શેષનાગ પર સોહે।",
+            "લક્ષ્મી કે સંગ રહત, તીનોં લોક મોહે॥"
           ]
         },
         {
@@ -1003,6 +1347,10 @@
           "meanings": [
             "He performed the divine play of ten incarnations to uplift the devotees.",
             "In the age of Kali, Lord Jagdish is the support of everyone."
+          ],
+          "gujarati": [
+            "દશાવતાર લીલા કિન્હીં, ભક્તન કા ઉદ્ધારા।",
+            "કલિ મેં શ્રી જગદીશ, કરત સબકા સહારા॥"
           ]
         },
         {
@@ -1018,6 +1366,10 @@
           "meanings": [
             "His eyes are like blue lotuses, filled with auspicious marks.",
             "In yellow garments, crown and earrings — his form is most lovely."
+          ],
+          "gujarati": [
+            "નીલકમલ સે નૈના, શુભ લક્ષણ હૈં ભારી।",
+            "પીતામ્બર મુકુટ કુણ્ડલ, છવિ અતિ પ્યારી॥"
           ]
         },
         {
@@ -1033,9 +1385,14 @@
           "meanings": [
             "May Lord Tulsi Shyam be pleased, filling the world with joy.",
             "Whoever sings the aarti of Lord Vishnu — says Swami Shivanand — shall obtain happiness and prosperity."
+          ],
+          "gujarati": [
+            "તુલસી શ્યામ પ્રસન્ન હોં, જગ મેં સુખ ભારી।",
+            "વિષ્ણુ જી કી આરતી જો કોઈ નર ગાવે, કહત શિવાનન્દ સ્વામી સુખ સમ્પત્તિ પાવે॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "આરતી શ્રી વિષ્ણુ જી કી"
     },
     {
       "id": "shiv_chalisa",
@@ -1043,7 +1400,14 @@
       "devanagari": "शिव चालीसा",
       "deity": "Shiva",
       "duration": "12:30",
-      "tags": ["Somvar", "Maha Shivaratri", "Shravan"],
+      "tags": [
+        "Somvar",
+        "Maha Shivaratri",
+        "Shravan"
+      ],
+      "festivalTags": [
+        "Maha Shivaratri"
+      ],
       "verses": [
         {
           "label": "Doha 1",
@@ -1058,6 +1422,10 @@
           "meanings": [
             "Glory to Ganesha, son of Girija (Parvati), the wise root of auspiciousness.",
             "Says Ayodhyadas — grant me the boon of fearlessness."
+          ],
+          "gujarati": [
+            "જય ગણેશ ગિરિજા સુવન, મંગલ મૂલ સુજાન।",
+            "કહત અયોધ્યાદાસ તુમ, દેહુ અભય વરદાન॥"
           ]
         },
         {
@@ -1073,6 +1441,10 @@
           "meanings": [
             "Glory to the merciful Lord of Girija (Parvati).",
             "Who always protects and nurtures the saints."
+          ],
+          "gujarati": [
+            "જય ગિરિજા પતિ દીનદયાલા।",
+            "સદા કરત સન્તન પ્રતિપાલા॥"
           ]
         },
         {
@@ -1088,6 +1460,10 @@
           "meanings": [
             "The crescent moon shines beautifully on his forehead.",
             "Serpent-hooded earrings adorn his ears."
+          ],
+          "gujarati": [
+            "ભાલ ચન્દ્રમા સોહત નીકે।",
+            "કાનન કુણ્ડલ નાગફની કે॥"
           ]
         },
         {
@@ -1103,6 +1479,10 @@
           "meanings": [
             "His fair body with the Ganga flowing from his head.",
             "A garland of skulls on his body, smeared with ash."
+          ],
+          "gujarati": [
+            "અંગ ગૌર શિર ગંગ બહાયે।",
+            "મુણ્ડમાલ તન ક્ષાર લગાયે॥"
           ]
         },
         {
@@ -1118,6 +1498,10 @@
           "meanings": [
             "He is adorned with a tiger skin garment.",
             "Seeing his beauty, even serpents and sages are enchanted."
+          ],
+          "gujarati": [
+            "વસ્ત્ર ખાલ બાઘમ્બર સોહે।",
+            "છવિ કો દેખ નાગ મુનિ મોહે॥"
           ]
         },
         {
@@ -1133,6 +1517,10 @@
           "meanings": [
             "Mother Maina's beloved daughter (Parvati).",
             "Adorns his left side with a unique radiance."
+          ],
+          "gujarati": [
+            "મૈના માતુ કી હવસિ દુલારી।",
+            "વામ અંગ સોહત છવિ ન્યારી॥"
           ]
         },
         {
@@ -1148,6 +1536,10 @@
           "meanings": [
             "The trident in his hand shines with mighty splendour.",
             "He always acts for the welfare of his devotees."
+          ],
+          "gujarati": [
+            "કર ત્રિશૂલ સોહત છવિ ભારી।",
+            "કરત સદા ભક્તન હિતકારી॥"
           ]
         },
         {
@@ -1163,9 +1555,14 @@
           "meanings": [
             "Nandi and Ganesha look beautiful beside him.",
             "Like lotuses in the middle of the ocean."
+          ],
+          "gujarati": [
+            "નન્દિ ગણેશ સોહત તહં કૈસે।",
+            "સાગર મધ્ય કમલ હૈ જૈસે॥"
           ]
         }
-      ]
+      ],
+      "gujarati": "શિવ ચાલીસા"
     }
   ]
 }

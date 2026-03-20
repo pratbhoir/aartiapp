@@ -121,14 +121,11 @@ class SettingsScreen extends ConsumerWidget {
                 _SettingsTile(
                   icon: Icons.translate_outlined,
                   title: 'Default Script',
-                  subtitle:
-                      scriptMode == 0 ? 'Devanagari' : 'Roman Transliteration',
-                  trailing: Switch.adaptive(
-                    value: scriptMode == 1,
-                    activeTrackColor: AppColors.saffron,
-                    onChanged: (v) => ref
-                        .read(scriptModeProvider.notifier)
-                        .setMode(v ? 1 : 0),
+                  subtitle: _scriptModeLabel(scriptMode),
+                  trailing: _ScriptModeSelector(
+                    mode: scriptMode,
+                    onChanged: (mode) =>
+                        ref.read(scriptModeProvider.notifier).setMode(mode),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -303,6 +300,19 @@ class SettingsScreen extends ConsumerWidget {
         return 'Dark';
       case ThemeMode.system:
         return 'System';
+    }
+  }
+
+  String _scriptModeLabel(int mode) {
+    switch (mode) {
+      case 0:
+        return 'Devanagari';
+      case 1:
+        return 'Roman Transliteration';
+      case 2:
+        return 'Gujarati';
+      default:
+        return 'Devanagari';
     }
   }
 
@@ -524,6 +534,63 @@ class _ScaleButton extends StatelessWidget {
                 size: 12, color: AppColors.ink, weight: FontWeight.w500),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ScriptModeSelector extends StatelessWidget {
+  final int mode;
+  final ValueChanged<int> onChanged;
+
+  const _ScriptModeSelector({required this.mode, required this.onChanged});
+
+  static const _labels = ['अ', 'Aa', 'અ'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: AppColors.stone2,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(3, (i) {
+          final isActive = mode == i;
+          return GestureDetector(
+            onTap: () => onChanged(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 36,
+              height: 32,
+              decoration: BoxDecoration(
+                color: isActive ? context.surface : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: AppColors.ink.withValues(alpha: 0.08),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
+                        )
+                      ]
+                    : null,
+              ),
+              child: Center(
+                child: Text(
+                  _labels[i],
+                  style: AppTextStyles.body(
+                    size: 14,
+                    color: isActive ? AppColors.saffron : AppColors.ink3,
+                    weight: isActive ? FontWeight.w500 : FontWeight.w300,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

@@ -82,4 +82,22 @@ class AartiRepository {
   /// Unique deity labels (excluding "All").
   List<String> get deityLabels =>
       _deities.where((d) => d['label'] != 'All').map((d) => d['label']!).toList();
+
+  /// Get all aartis matching a festival tag (e.g. "Navratri").
+  List<AartiItem> getAartisForFestival(String festivalTag) {
+    if (festivalTag.isEmpty) return _aartis;
+    final lower = festivalTag.toLowerCase();
+    return _aartis
+        .where((a) => a.festivalTags.any((t) => t.toLowerCase() == lower))
+        .toList();
+  }
+
+  /// All unique festival tags across the catalog.
+  List<String> get allFestivalTags {
+    final tags = <String>{};
+    for (final a in _aartis) {
+      tags.addAll(a.festivalTags);
+    }
+    return tags.toList()..sort();
+  }
 }

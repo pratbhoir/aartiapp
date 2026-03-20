@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsRepository {
   static const _keyThemeMode = 'theme_mode';
   static const _keyTextScale = 'text_scale';
-  static const _keyScriptMode = 'script_mode'; // 0=devanagari, 1=roman
+  static const _keyScriptMode = 'script_mode'; // 0=devanagari, 1=roman, 2=gujarati
   static const _keyUserName = 'user_name';
   static const _keyCrossfadeDuration = 'crossfade_duration'; // 0–3 seconds
   static const _keyAutoPlay = 'auto_play'; // puja session auto-play
@@ -13,6 +13,8 @@ class SettingsRepository {
   static const _keyNotificationHour = 'notification_hour';
   static const _keyNotificationMinute = 'notification_minute';
   static const _keyNotificationEnabled = 'notification_enabled';
+  static const _keyOnboardingCompleted = 'onboarding_completed';
+  static const _keyPreferredLanguage = 'preferred_language'; // e.g. 'hi', 'gu', 'en'
 
   final SharedPreferences _prefs;
 
@@ -93,4 +95,18 @@ class SettingsRepository {
     await _prefs.setInt(_keyNotificationHour, time.hour);
     await _prefs.setInt(_keyNotificationMinute, time.minute);
   }
+
+  // --- Onboarding ---
+  bool getOnboardingCompleted() =>
+      _prefs.getBool(_keyOnboardingCompleted) ?? false;
+
+  Future<void> setOnboardingCompleted(bool value) =>
+      _prefs.setBool(_keyOnboardingCompleted, value);
+
+  // --- Preferred Language ---
+  String getPreferredLanguage() =>
+      _prefs.getString(_keyPreferredLanguage) ?? 'hi';
+
+  Future<void> setPreferredLanguage(String lang) =>
+      _prefs.setString(_keyPreferredLanguage, lang);
 }

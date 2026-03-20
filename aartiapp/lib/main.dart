@@ -11,6 +11,7 @@ import 'data/repositories/bookmark_repository.dart';
 import 'data/repositories/festival_repository.dart';
 import 'data/repositories/puja_repository.dart';
 import 'data/repositories/user_aarti_repository.dart';
+import 'data/repositories/recently_played_repository.dart';
 import 'providers/app_providers.dart';
 
 void main() async {
@@ -43,6 +44,8 @@ void main() async {
   await bookmarkRepo.init();
   final userAartiRepo = UserAartiRepository();
   await userAartiRepo.init();
+  final recentlyPlayedRepo = RecentlyPlayedRepository();
+  await recentlyPlayedRepo.init();
 
   // Restore scheduled notification if enabled (v1.5)
   final settingsNotifEnabled = prefs.getBool('notification_enabled') ?? false;
@@ -61,6 +64,7 @@ void main() async {
         pujaRepoProvider.overrideWithValue(pujaRepo),
         bookmarkRepoProvider.overrideWithValue(bookmarkRepo),
         userAartiRepoProvider.overrideWithValue(userAartiRepo),
+        recentlyPlayedRepoProvider.overrideWithValue(recentlyPlayedRepo),
       ],
       child: const AartiSangrahApp(),
     ),

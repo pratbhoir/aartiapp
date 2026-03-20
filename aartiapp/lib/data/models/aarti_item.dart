@@ -4,12 +4,14 @@ class AartiItem {
   final String id;
   final String title;
   final String devanagari;
+  final String gujarati; // Gujarati script title
   final String deity;
   final String duration;
   final String versesLabel; // e.g. "6 verses"
   final bool isBookmarked;
   final bool isOffline;
   final List<String> tags;
+  final List<String> festivalTags; // festival aartiTag links (e.g. ["Maha Shivaratri", "Shravan"])
   final List<VerseData> verses; // actual verse content
   final String audioUrl;
 
@@ -21,12 +23,14 @@ class AartiItem {
     required this.id,
     required this.title,
     required this.devanagari,
+    this.gujarati = '',
     required this.deity,
     required this.duration,
     this.versesLabel = '',
     this.isBookmarked = false,
     this.isOffline = false,
     this.tags = const [],
+    this.festivalTags = const [],
     this.verses = const [],
     this.audioUrl = defaultAudioUrl,
   });
@@ -38,10 +42,15 @@ class AartiItem {
       id: json['id'] as String,
       title: json['title'] as String,
       devanagari: json['devanagari'] as String,
+      gujarati: (json['gujarati'] as String?) ?? '',
       deity: json['deity'] as String,
       duration: json['duration'] as String,
       versesLabel: '${versesList.length} verses',
       tags: (json['tags'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      festivalTags: (json['festivalTags'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
@@ -57,9 +66,11 @@ class AartiItem {
         'id': id,
         'title': title,
         'devanagari': devanagari,
+        'gujarati': gujarati,
         'deity': deity,
         'duration': duration,
         'tags': tags,
+        'festivalTags': festivalTags,
         'verses': verses.map((v) => v.toJson()).toList(),
         'audioUrl': audioUrl,
       };
@@ -68,12 +79,14 @@ class AartiItem {
     String? id,
     String? title,
     String? devanagari,
+    String? gujarati,
     String? deity,
     String? duration,
     String? versesLabel,
     bool? isBookmarked,
     bool? isOffline,
     List<String>? tags,
+    List<String>? festivalTags,
     List<VerseData>? verses,
     String? audioUrl,
   }) {
@@ -81,12 +94,14 @@ class AartiItem {
       id: id ?? this.id,
       title: title ?? this.title,
       devanagari: devanagari ?? this.devanagari,
+      gujarati: gujarati ?? this.gujarati,
       deity: deity ?? this.deity,
       duration: duration ?? this.duration,
       versesLabel: versesLabel ?? this.versesLabel,
       isBookmarked: isBookmarked ?? this.isBookmarked,
       isOffline: isOffline ?? this.isOffline,
       tags: tags ?? this.tags,
+      festivalTags: festivalTags ?? this.festivalTags,
       verses: verses ?? this.verses,
       audioUrl: audioUrl ?? this.audioUrl,
     );

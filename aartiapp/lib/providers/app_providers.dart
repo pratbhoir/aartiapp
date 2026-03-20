@@ -7,6 +7,7 @@ import '../data/repositories/settings_repository.dart';
 import '../data/repositories/puja_repository.dart';
 import '../data/repositories/bookmark_repository.dart';
 import '../data/repositories/user_aarti_repository.dart';
+import '../data/repositories/recently_played_repository.dart';
 import '../data/models/aarti_item.dart';
 import '../core/utils/search_engine.dart';
 
@@ -32,6 +33,10 @@ final userAartiRepoProvider = Provider<UserAartiRepository>((ref) {
   throw UnimplementedError('Must be overridden in ProviderScope');
 });
 
+final recentlyPlayedRepoProvider = Provider<RecentlyPlayedRepository>((ref) {
+  throw UnimplementedError('Must be overridden in ProviderScope');
+});
+
 // ─── User Aarti Collection State ────────────────────────────────────────────
 
 final userAartiProvider =
@@ -53,6 +58,46 @@ class UserAartiNotifier extends StateNotifier<List<AartiItem>> {
   Future<void> delete(String id) async {
     await _repo.delete(id);
     state = _repo.getAll();
+  }
+}
+
+// ─── Recently Played State ──────────────────────────────────────────────────
+
+final recentlyPlayedProvider =
+    StateNotifierProvider<RecentlyPlayedNotifier, List<String>>((ref) {
+  final repo = ref.watch(recentlyPlayedRepoProvider);
+  return RecentlyPlayedNotifier(repo);
+});
+
+class RecentlyPlayedNotifier extends StateNotifier<List<String>> {
+  final RecentlyPlayedRepository _repo;
+  RecentlyPlayedNotifier(this._repo) : super(_repo.getRecentIds());
+
+  Future<void> addRecent(String aartiId) async {
+    await _repo.addRecent(aartiId);
+    state = _repo.getRecentIds();
+  }
+
+  Future<void> clear() async {
+    await _repo.clear();
+    state = [];
+  }
+
+  /// Resolves aarti IDs to AartiItem objects, searching both catalog and user aartis.
+  List<AartiItem> getRecentAartis({List<AartiItem> userAartis = const []}) {
+    final catalog = AartiRepository.instance.aartis;
+    final allAartis = [...catalog, ...userAartis];
+    return state
+        .map((id) {
+          try {
+            return allAartis.firstWhere((a) => a.id == id);
+          } catch (_) {
+            return null;
+          }
+        })
+        .where((a) => a != null)
+        .cast<AartiItem>()
+        .toList();
   }
 }
 
@@ -103,7 +148,7 @@ class TextScaleNotifier extends StateNotifier<double> {
 
 // ─── Script Mode State ──────────────────────────────────────────────────────
 
-/// 0 = Devanagari, 1 = Roman Transliteration
+/// 0 = Devanagari, 1 = Roman Transliteration, 2 = Gujarati
 final scriptModeProvider =
     StateNotifierProvider<ScriptModeNotifier, int>((ref) {
   final repo = ref.watch(settingsRepoProvider);
@@ -115,11 +160,11 @@ class ScriptModeNotifier extends StateNotifier<int> {
   ScriptModeNotifier(this._repo) : super(_repo.getScriptMode());
 
   void setMode(int mode) {
-    state = mode;
+    state = mode.clamp(0, 2);
     _repo.setScriptMode(mode);
   }
 
-  void toggle() => setMode(state == 0 ? 1 : 0);
+  void cycle() => setMode((state + 1) % 3);
 }
 
 // ─── Bookmark State ─────────────────────────────────────────────────────────
@@ -205,14 +250,17 @@ class PujaOrderNotifier extends StateNotifier<List<String>> {
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
 final activeDeityProvider = StateProvider<int>((ref) => 0);
+final activeFestivalTagProvider = StateProvider<String>((ref) => '');
 
 final filteredAartisProvider = Provider<List<int>>((ref) {
   final query = ref.watch(searchQueryProvider);
   final deityIdx = ref.watch(activeDeityProvider);
+  final festivalTag = ref.watch(activeFestivalTagProvider);
   final deities = AartiRepository.instance.deities;
   final deity = deities[deityIdx]['label']!;
   return SearchEngine.searchAndFilter(
-      AartiRepository.instance.aartis, query, deity);
+      AartiRepository.instance.aartis, query, deity,
+      festivalTag: festivalTag);
 });
 
 // ─── User Name ──────────────────────────────────────────────────────────────
@@ -323,5 +371,42 @@ class NotificationTimeNotifier extends StateNotifier<TimeOfDay> {
   void set(TimeOfDay time) {
     state = time;
     _repo.setNotificationTime(time);
+  }
+}
+
+// ─── v2.0: Onboarding State ────────────────────────────────────────────────
+
+final onboardingCompletedProvider =
+    StateNotifierProvider<OnboardingCompletedNotifier, bool>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return OnboardingCompletedNotifier(repo);
+});
+
+class OnboardingCompletedNotifier extends StateNotifier<bool> {
+  final SettingsRepository _repo;
+  OnboardingCompletedNotifier(this._repo)
+      : super(_repo.getOnboardingCompleted());
+
+  void complete() {
+    state = true;
+    _repo.setOnboardingCompleted(true);
+  }
+}
+
+// ─── v2.0: Preferred Language ──────────────────────────────────────────────
+
+final preferredLanguageProvider =
+    StateNotifierProvider<PreferredLanguageNotifier, String>((ref) {
+  final repo = ref.watch(settingsRepoProvider);
+  return PreferredLanguageNotifier(repo);
+});
+
+class PreferredLanguageNotifier extends StateNotifier<String> {
+  final SettingsRepository _repo;
+  PreferredLanguageNotifier(this._repo) : super(_repo.getPreferredLanguage());
+
+  void set(String lang) {
+    state = lang;
+    _repo.setPreferredLanguage(lang);
   }
 }

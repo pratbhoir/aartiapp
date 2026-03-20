@@ -43,7 +43,7 @@ class VerseBlock extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Main line (lyrics)
+                  // Main line (lyrics — Devanagari)
                   if (viewMode == 0)
                     Container(
                       padding: isHighlighted
@@ -68,7 +68,7 @@ class VerseBlock extends StatelessWidget {
                       ),
                     ),
 
-                  // Transliteration
+                  // Transliteration (Roman)
                   if (viewMode == 1)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,6 +78,7 @@ class VerseBlock extends StatelessWidget {
                               size: 18 * textScale,
                               color: AppColors.ink,
                             )),
+                        if (i < verse.transliteration.length)
                         Text(
                           verse.transliteration[i],
                           style: AppTextStyles.transliteration(
@@ -98,6 +99,7 @@ class VerseBlock extends StatelessWidget {
                               size: 18 * textScale,
                               color: AppColors.ink,
                             )),
+                        if (i < verse.meanings.length) ...[
                         const SizedBox(height: 4),
                         Container(
                           padding: const EdgeInsets.all(12),
@@ -116,7 +118,35 @@ class VerseBlock extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
+                        ],
                       ],
+                    ),
+
+                  // Gujarati script
+                  if (viewMode == 3)
+                    Container(
+                      padding: isHighlighted
+                          ? const EdgeInsets.only(left: 12)
+                          : EdgeInsets.zero,
+                      decoration: isHighlighted
+                          ? const BoxDecoration(
+                              border: Border(
+                                left: BorderSide(
+                                    color: AppColors.saffron, width: 2),
+                              ),
+                            )
+                          : null,
+                      child: Text(
+                        (verse.gujarati.isNotEmpty && i < verse.gujarati.length)
+                            ? verse.gujarati[i]
+                            : verse.lines[i], // fallback to Devanagari
+                        style: AppTextStyles.devanagari(
+                          size: 18 * textScale,
+                          color: isHighlighted
+                              ? AppColors.saffron
+                              : AppColors.ink,
+                        ),
+                      ),
                     ),
                 ],
               ),
