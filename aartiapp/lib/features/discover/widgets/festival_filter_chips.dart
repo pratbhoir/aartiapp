@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 
 /// Horizontal scrollable festival filter chips for the Discover screen.
@@ -103,7 +103,7 @@ class _FestivalChip extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: AppTextStyles.body(
+              style: AppTypography.body(
                 size: 12,
                 color: isActive ? AppColors.saffronDark : AppColors.ink3,
                 weight: isActive ? FontWeight.w500 : FontWeight.w300,

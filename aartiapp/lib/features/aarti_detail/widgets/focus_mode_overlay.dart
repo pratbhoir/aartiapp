@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../data/models/aarti_item.dart';
 import '../../../data/models/verse_data.dart';
 
@@ -75,14 +75,14 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                       children: [
                         Text(
                           'SADHANA MODE',
-                          style: AppTextStyles.label(
+                          style: AppTypography.label(
                             size: 10,
                             color: AppColors.ink3,
                           ),
                         ),
                         Text(
                           widget.aarti.title,
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                             size: 13,
                             color: AppColors.white.withValues(alpha: 0.5),
                           ),
@@ -93,7 +93,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                       children: [
                         Text(
                           '${_currentLineIdx + 1} / ${_allLines.length}',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 11,
                               color: AppColors.white.withValues(alpha: 0.4)),
                         ),
@@ -154,7 +154,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                 padding: const EdgeInsets.only(bottom: 32),
                 child: Text(
                   'Tap or swipe to advance',
-                  style: AppTextStyles.body(
+                  style: AppTypography.body(
                     size: 12,
                     color: AppColors.white.withValues(alpha: 0.25),
                   ),
@@ -185,7 +185,7 @@ class _FocusLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedDefaultTextStyle(
       duration: const Duration(milliseconds: 300),
-      style: AppTextStyles.devanagari(
+      style: AppTypography.devanagari(
         size: size,
         color: isCurrent
             ? AppColors.saffronLight

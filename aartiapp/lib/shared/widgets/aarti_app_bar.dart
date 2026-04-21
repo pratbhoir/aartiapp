@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_colors.dart';
-import '../core/theme/theme_aware_colors.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/theme_aware_colors.dart';
 
 class AartiAppBar extends StatelessWidget {
   final VoidCallback onMenuTap;

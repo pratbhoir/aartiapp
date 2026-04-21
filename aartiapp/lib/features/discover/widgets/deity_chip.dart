@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 
 class DeityChip extends StatelessWidget {
@@ -54,7 +54,7 @@ class DeityChip extends StatelessWidget {
             const SizedBox(height: 7),
             Text(
               label,
-              style: AppTextStyles.body(
+              style: AppTypography.body(
                 size: 11,
                 color: isActive ? AppColors.saffron : AppColors.ink3,
                 weight: isActive ? FontWeight.w500 : FontWeight.w300,

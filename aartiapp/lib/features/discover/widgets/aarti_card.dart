@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 import '../../../data/models/aarti_item.dart';
 
@@ -45,7 +45,7 @@ class AartiCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               aarti.deity.toUpperCase(),
-              style: AppTextStyles.label(size: 10, color: AppColors.saffron),
+              style: AppTypography.label(size: 10, color: AppColors.saffron),
             ),
             const SizedBox(height: 4),
             Expanded(
@@ -64,7 +64,7 @@ class AartiCard extends StatelessWidget {
             ),
             Text(
               aarti.devanagari,
-              style: AppTextStyles.devanagari(size: 12, color: AppColors.ink3),
+              style: AppTypography.devanagari(size: 12, color: AppColors.ink3),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -75,7 +75,7 @@ class AartiCard extends StatelessWidget {
                     size: 12, color: AppColors.ink3),
                 const SizedBox(width: 4),
                 Text(aarti.duration,
-                    style: AppTextStyles.body(size: 12, color: AppColors.ink3)),
+                    style: AppTypography.body(size: 12, color: AppColors.ink3)),
                 const Spacer(),
                 GestureDetector(
                   onTap: onBookmark,

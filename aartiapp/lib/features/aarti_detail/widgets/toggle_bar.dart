@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 
 class ToggleBar extends StatelessWidget {
   final List<String> labels;
@@ -47,7 +47,7 @@ class ToggleBar extends StatelessWidget {
                 child: Center(
                   child: Text(
                     labels[i],
-                    style: AppTextStyles.body(
+                    style: AppTypography.body(
                       size: 12,
                       color: isActive ? AppColors.ink : AppColors.ink3,
                       weight: isActive ? FontWeight.w500 : FontWeight.w300,

@@ -4,7 +4,7 @@ import 'package:just_audio/just_audio.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/services/sharing_service.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
@@ -212,7 +212,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                                 color: AppColors.ink3),
                                             const SizedBox(width: 4),
                                             Text('Back',
-                                                style: AppTextStyles.body(
+                                                style: AppTypography.body(
                                                     size: 12,
                                                     color: AppColors.ink3)),
                                           ],
@@ -322,13 +322,13 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
 
                               Text(
                                 '${widget.aarti.deity.toUpperCase()} · ${DayDeityMapper.todayHindiName().toUpperCase()}',
-                                style: AppTextStyles.label(
+                                style: AppTypography.label(
                                     size: 10, color: AppColors.saffronDark),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 widget.aarti.title,
-                                style: AppTextStyles.displayLarge(context)
+                                style: AppTypography.displayLarge(context)
                                     .copyWith(
                                   fontSize: 38 * textScale,
                                   letterSpacing: -0.5,
@@ -336,7 +336,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                               ),
                               const SizedBox(height: 6),
                               Text(widget.aarti.devanagari,
-                                  style: AppTextStyles.devanagari(
+                                  style: AppTypography.devanagari(
                                       size: 17 * textScale)),
                               const SizedBox(height: 16),
 
@@ -351,7 +351,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   ),
                                   child: Text(
                                     'Verse ${_currentVerse + 1} of $verseCount',
-                                    style: AppTextStyles.body(
+                                    style: AppTypography.body(
                                         size: 12, color: AppColors.saffronDark),
                                   ),
                                 ),
@@ -417,7 +417,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                 child: Center(
                                   child: Text(
                                     'Verse data coming soon for this Aarti.',
-                                    style: AppTextStyles.body(
+                                    style: AppTypography.body(
                                         size: 14, color: AppColors.ink3),
                                     textAlign: TextAlign.center,
                                   ),
@@ -528,11 +528,11 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             ),
             const SizedBox(height: 20),
             Text('Share Aarti',
-                style: AppTextStyles.serifBody(
+                style: AppTypography.serifBody(
                     size: 18, color: context.textPrimary)),
             const SizedBox(height: 4),
             Text(widget.aarti.title,
-                style: AppTextStyles.body(
+                style: AppTypography.body(
                     size: 13, color: AppColors.ink3)),
             const SizedBox(height: 24),
             Row(
@@ -628,7 +628,7 @@ class _ShareOption extends StatelessWidget {
             Icon(icon, size: 28, color: AppColors.saffron),
             const SizedBox(height: 8),
             Text(label,
-                style: AppTextStyles.body(
+                style: AppTypography.body(
                     size: 13, color: AppColors.ink2)),
           ],
         ),

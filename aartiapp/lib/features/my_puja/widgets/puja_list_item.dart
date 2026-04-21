@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 import '../../../data/models/aarti_item.dart';
 
@@ -74,19 +74,19 @@ class PujaListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(aarti.deity.toUpperCase(),
-                        style: AppTextStyles.label(
+                        style: AppTypography.label(
                             size: 9, color: AppColors.saffron)),
                     const SizedBox(height: 1),
                     Text(
                       aarti.title,
-                      style: AppTextStyles.serifBody(
+                      style: AppTypography.serifBody(
                         size: 16,
                         color: context.textPrimary,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(aarti.devanagari,
-                        style: AppTextStyles.devanagari(
+                        style: AppTypography.devanagari(
                             size: 11, color: AppColors.ink3)),
                   ],
                 ),
@@ -109,7 +109,7 @@ class PujaListItem extends StatelessWidget {
               const SizedBox(width: 8),
 
               Text(aarti.duration,
-                  style: AppTextStyles.body(size: 12, color: AppColors.ink3)),
+                  style: AppTypography.body(size: 12, color: AppColors.ink3)),
 
               if (onRemove != null) ...[
                 const SizedBox(width: 8),

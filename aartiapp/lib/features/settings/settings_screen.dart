@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../data/repositories/aarti_repository.dart';
 import '../../providers/app_providers.dart';
-import '../../widgets/aarti_app_bar.dart';
+import '../../shared/widgets/aarti_app_bar.dart';
 
 class SettingsScreen extends ConsumerWidget {
   final VoidCallback onOpenDrawer;
@@ -32,11 +32,11 @@ class SettingsScreen extends ConsumerWidget {
                 children: [
                   Text('SETTINGS',
                       style:
-                          AppTextStyles.label(size: 10, color: AppColors.ink3)),
+                          AppTypography.label(size: 10, color: AppColors.ink3)),
                   const SizedBox(height: 6),
                   RichText(
                     text: TextSpan(
-                      style: AppTextStyles.displayLarge(context)
+                      style: AppTypography.displayLarge(context)
                           .copyWith(fontSize: 34),
                       children: const [
                         TextSpan(text: 'App '),
@@ -101,7 +101,7 @@ class SettingsScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
                           '${(textScale * 100).round()}%',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 13, color: AppColors.ink),
                         ),
                       ),
@@ -251,7 +251,7 @@ class SettingsScreen extends ConsumerWidget {
                                 child: Center(
                                   child: Text(
                                     '${i}s',
-                                    style: AppTextStyles.body(
+                                    style: AppTypography.body(
                                       size: 10,
                                       color: isActive
                                           ? AppColors.saffronDark
@@ -324,13 +324,13 @@ class SettingsScreen extends ConsumerWidget {
         backgroundColor: context.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('Your Name',
-            style: AppTextStyles.serifBody(size: 18, color: context.textPrimary)),
+            style: AppTypography.serifBody(size: 18, color: context.textPrimary)),
         content: TextField(
           controller: controller,
           autofocus: true,
           decoration: InputDecoration(
             hintText: 'Enter your name',
-            hintStyle: AppTextStyles.body(size: 14, color: AppColors.ink3),
+            hintStyle: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
         ),
         actions: [
@@ -362,7 +362,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title.toUpperCase(),
-      style: AppTextStyles.label(size: 10, color: AppColors.ink3),
+      style: AppTypography.label(size: 10, color: AppColors.ink3),
     );
   }
 }
@@ -410,13 +410,13 @@ class _SettingsTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title,
-                      style: AppTextStyles.body(
+                      style: AppTypography.body(
                           size: 14,
                           color: context.textPrimary,
                           weight: FontWeight.w400)),
                   Text(subtitle,
                       style:
-                          AppTextStyles.body(size: 12, color: AppColors.ink3)),
+                          AppTypography.body(size: 12, color: AppColors.ink3)),
                 ],
               ),
             ),
@@ -530,7 +530,7 @@ class _ScaleButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.body(
+            style: AppTypography.body(
                 size: 12, color: AppColors.ink, weight: FontWeight.w500),
           ),
         ),
@@ -581,7 +581,7 @@ class _ScriptModeSelector extends StatelessWidget {
               child: Center(
                 child: Text(
                   _labels[i],
-                  style: AppTextStyles.body(
+                  style: AppTypography.body(
                     size: 14,
                     color: isActive ? AppColors.saffron : AppColors.ink3,
                     weight: isActive ? FontWeight.w500 : FontWeight.w300,

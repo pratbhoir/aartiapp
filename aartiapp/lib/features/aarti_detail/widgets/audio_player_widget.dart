@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../data/models/aarti_item.dart';
 
 class AudioPlayerWidget extends StatelessWidget {
@@ -86,7 +86,7 @@ class AudioPlayerWidget extends StatelessWidget {
                 children: [
                   Text(_formatDuration(position),
                       style:
-                          AppTextStyles.body(size: 11, color: AppColors.ink3)),
+                          AppTypography.body(size: 11, color: AppColors.ink3)),
                   const SizedBox(width: 10),
                   Expanded(
                     child: SliderTheme(
@@ -115,7 +115,7 @@ class AudioPlayerWidget extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(_formatDuration(duration),
                       style:
-                          AppTextStyles.body(size: 11, color: AppColors.ink3)),
+                          AppTypography.body(size: 11, color: AppColors.ink3)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -130,7 +130,7 @@ class AudioPlayerWidget extends StatelessWidget {
                       children: [
                         Text(
                           aarti.title,
-                          style: AppTextStyles.serifBody(
+                          style: AppTypography.serifBody(
                             size: 16,
                             color: AppColors.ink,
                           ),
@@ -139,7 +139,7 @@ class AudioPlayerWidget extends StatelessWidget {
                         ),
                         if (verseLabel != null)
                           Text(verseLabel!,
-                              style: AppTextStyles.body(
+                              style: AppTypography.body(
                                   size: 11, color: AppColors.ink3)),
                       ],
                     ),

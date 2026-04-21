@@ -2,8 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/constants/haptics.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-import '../../../painters/mala_painter.dart';
+import '../../../core/theme/app_typography.dart';
+import '../../../shared/painters/mala_painter.dart';
 
 class MantraCounterOverlay extends StatefulWidget {
   final VoidCallback onClose;
@@ -78,7 +78,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                       const SizedBox(width: 32),
                       Text(
                         'Mantra Counter',
-                        style: AppTextStyles.serifBody(
+                        style: AppTypography.serifBody(
                           size: 20,
                           color: AppColors.ink,
                         ),
@@ -101,7 +101,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                   const SizedBox(height: 4),
                   Text('Tap to count · $_total chants',
                       style:
-                          AppTextStyles.body(size: 12, color: AppColors.ink3)),
+                          AppTypography.body(size: 12, color: AppColors.ink3)),
 
                   // Configurable count presets
                   const SizedBox(height: 12),
@@ -135,7 +135,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           ),
                           child: Text(
                             '$preset',
-                            style: AppTextStyles.body(
+                            style: AppTypography.body(
                               size: 11,
                               color: isActive
                                   ? AppColors.saffronDark
@@ -168,14 +168,14 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           children: [
                             Text(
                               '$_count',
-                              style: AppTextStyles.displayLarge(context)
+                              style: AppTypography.displayLarge(context)
                                   .copyWith(
                                 fontSize: 44,
                                 height: 1,
                               ),
                             ),
                             Text('/ $_total',
-                                style: AppTextStyles.body(
+                                style: AppTypography.body(
                                     size: 14, color: AppColors.ink3)),
                           ],
                         ),
@@ -196,7 +196,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         ),
                         child: Text(
                           '🪷 Mala Complete · Jai Ho!',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                             size: 13,
                             color: AppColors.saffronDark,
                             weight: FontWeight.w500,
@@ -222,7 +222,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         child: Text(
                           _completed ? '॥ Complete! ॥' : '॥ Tap to Chant ॥',
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.serifBody(
+                          style: AppTypography.serifBody(
                             size: 20,
                             color: AppColors.white,
                           ).copyWith(letterSpacing: 0.5),
@@ -237,7 +237,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                       _completed = false;
                     }),
                     child: Text('Reset counter',
-                        style: AppTextStyles.body(
+                        style: AppTypography.body(
                             size: 12, color: AppColors.ink3)),
                   ),
                 ],

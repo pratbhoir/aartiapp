@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../providers/app_providers.dart';
 
@@ -135,7 +135,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           duration: const Duration(milliseconds: 350),
                           curve: Curves.easeOut),
                       child: Text('Back',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 14, color: AppColors.ink3)),
                     ),
                   const Spacer(),
@@ -143,7 +143,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     TextButton(
                       onPressed: _finishOnboarding,
                       child: Text('Skip',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 14, color: AppColors.ink3)),
                     ),
                   const SizedBox(width: 12),
@@ -197,7 +197,7 @@ class _WelcomePage extends StatelessWidget {
           const SizedBox(height: 32),
           Text(
             'Aarti Sangrah',
-            style: AppTextStyles.displayLarge(context).copyWith(
+            style: AppTypography.displayLarge(context).copyWith(
               fontSize: 36,
               letterSpacing: -0.5,
             ),
@@ -206,12 +206,12 @@ class _WelcomePage extends StatelessWidget {
           Text(
             'Your complete collection of\nHindu prayers and Aartis',
             textAlign: TextAlign.center,
-            style: AppTextStyles.body(size: 16, color: AppColors.ink3),
+            style: AppTypography.body(size: 16, color: AppColors.ink3),
           ),
           const SizedBox(height: 8),
           Text(
             'आरती संग्रह',
-            style: AppTextStyles.devanagari(
+            style: AppTypography.devanagari(
                 size: 22, color: AppColors.saffronDark),
           ),
         ],
@@ -237,7 +237,7 @@ class _NamePage extends StatelessWidget {
           const SizedBox(height: 60),
           Text(
             'What should we\ncall you?',
-            style: AppTextStyles.displayLarge(context).copyWith(
+            style: AppTypography.displayLarge(context).copyWith(
               fontSize: 32,
               letterSpacing: -0.5,
             ),
@@ -245,17 +245,17 @@ class _NamePage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             "We'll personalize your daily greeting.",
-            style: AppTextStyles.body(size: 14, color: AppColors.ink3),
+            style: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
           const SizedBox(height: 32),
           TextField(
             controller: controller,
             autofocus: true,
-            style: AppTextStyles.serifBody(
+            style: AppTypography.serifBody(
                 size: 24, color: context.textPrimary),
             decoration: InputDecoration(
               hintText: 'Your name',
-              hintStyle: AppTextStyles.serifBody(
+              hintStyle: AppTypography.serifBody(
                   size: 24, color: AppColors.ink3.withValues(alpha: 0.4)),
               border: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppColors.stone3),
@@ -296,7 +296,7 @@ class _ScriptPage extends StatelessWidget {
           const SizedBox(height: 60),
           Text(
             'Choose your\npreferred script',
-            style: AppTextStyles.displayLarge(context).copyWith(
+            style: AppTypography.displayLarge(context).copyWith(
               fontSize: 32,
               letterSpacing: -0.5,
             ),
@@ -304,7 +304,7 @@ class _ScriptPage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'You can always change this later in Settings.',
-            style: AppTextStyles.body(size: 14, color: AppColors.ink3),
+            style: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
           const SizedBox(height: 32),
           _ScriptOption(
@@ -332,7 +332,7 @@ class _ScriptPage extends StatelessWidget {
           ),
           const SizedBox(height: 28),
           Text('PREFERRED LANGUAGE',
-              style: AppTextStyles.label(size: 10, color: AppColors.ink3)),
+              style: AppTypography.label(size: 10, color: AppColors.ink3)),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -398,17 +398,17 @@ class _ScriptOption extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title,
-                      style: AppTextStyles.devanagari(
+                      style: AppTypography.devanagari(
                           size: 18,
                           color: isSelected
                               ? AppColors.saffronDark
                               : context.textPrimary)),
                   Text(subtitle,
-                      style: AppTextStyles.body(
+                      style: AppTypography.body(
                           size: 12, color: AppColors.ink3)),
                   const SizedBox(height: 4),
                   Text(example,
-                      style: AppTextStyles.body(
+                      style: AppTypography.body(
                           size: 13,
                           color: isSelected
                               ? AppColors.saffronDark
@@ -469,7 +469,7 @@ class _LangChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: AppTextStyles.body(
+          style: AppTypography.body(
             size: 13,
             color: isSelected ? AppColors.saffronDark : AppColors.ink3,
             weight: isSelected ? FontWeight.w500 : FontWeight.w300,
@@ -505,7 +505,7 @@ class _NotificationPage extends StatelessWidget {
           const SizedBox(height: 60),
           Text(
             'Daily puja\nreminder',
-            style: AppTextStyles.displayLarge(context).copyWith(
+            style: AppTypography.displayLarge(context).copyWith(
               fontSize: 32,
               letterSpacing: -0.5,
             ),
@@ -513,7 +513,7 @@ class _NotificationPage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             "We'll gently remind you at your preferred time.",
-            style: AppTextStyles.body(size: 14, color: AppColors.ink3),
+            style: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
           const SizedBox(height: 40),
           Container(
@@ -541,7 +541,7 @@ class _NotificationPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Daily Reminder',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 15,
                               color: context.textPrimary,
                               weight: FontWeight.w400)),
@@ -549,7 +549,7 @@ class _NotificationPage extends StatelessWidget {
                           enabled
                               ? 'Remind at ${time.format(context)}'
                               : 'Disabled',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 12, color: AppColors.ink3)),
                     ],
                   ),
@@ -599,19 +599,19 @@ class _NotificationPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Reminder Time',
-                              style: AppTextStyles.body(
+                              style: AppTypography.body(
                                   size: 15,
                                   color: context.textPrimary,
                                   weight: FontWeight.w400)),
                           Text('Tap to change',
-                              style: AppTextStyles.body(
+                              style: AppTypography.body(
                                   size: 12, color: AppColors.ink3)),
                         ],
                       ),
                     ),
                     Text(
                       time.format(context),
-                      style: AppTextStyles.serifBody(
+                      style: AppTypography.serifBody(
                           size: 20, color: AppColors.saffron),
                     ),
                   ],
@@ -633,7 +633,7 @@ class _NotificationPage extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Start each day with a moment of devotion and inner peace.',
-                    style: AppTextStyles.body(
+                    style: AppTypography.body(
                         size: 13, color: AppColors.saffronDark),
                   ),
                 ),

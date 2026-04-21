@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../data/models/aarti_item.dart';
 import '../../data/models/verse_data.dart';
 import '../../providers/app_providers.dart';
-import '../../widgets/aarti_app_bar.dart';
+import '../../shared/widgets/aarti_app_bar.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
 
 /// My Personal Collection — saves private Aartis locally via Hive.
@@ -192,11 +192,11 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                 children: [
                   Text('MY COLLECTION',
                       style:
-                          AppTextStyles.label(size: 10, color: AppColors.ink3)),
+                          AppTypography.label(size: 10, color: AppColors.ink3)),
                   const SizedBox(height: 6),
                   RichText(
                     text: TextSpan(
-                      style: AppTextStyles.displayLarge(context).copyWith(
+                      style: AppTypography.displayLarge(context).copyWith(
                         fontSize: 34,
                       ),
                       children: const [
@@ -215,7 +215,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                   Text(
                     '${savedAartis.length} saved · Private to you',
                     style:
-                        AppTextStyles.body(size: 13, color: AppColors.ink3),
+                        AppTypography.body(size: 13, color: AppColors.ink3),
                   ),
                 ],
               ),
@@ -343,14 +343,14 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'No saved Aartis yet',
-                      style: AppTextStyles.serifBody(
+                      style: AppTypography.serifBody(
                           size: 18, color: context.textPrimary),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Tap "Add New Aarti" to create your\nfirst personal prayer.',
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.body(
+                      style: AppTypography.body(
                           size: 13, color: AppColors.ink3),
                     ),
                   ],
@@ -364,7 +364,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                 padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
                 child: Text('SAVED AARTIS',
                     style:
-                        AppTextStyles.label(size: 10, color: AppColors.ink3)),
+                        AppTypography.label(size: 10, color: AppColors.ink3)),
               ),
             ),
             SliverPadding(
@@ -465,15 +465,15 @@ class _SavedAartiTile extends StatelessWidget {
                 children: [
                   Text(aarti.deity.toUpperCase(),
                       style:
-                          AppTextStyles.label(size: 9, color: AppColors.saffron)),
+                          AppTypography.label(size: 9, color: AppColors.saffron)),
                   const SizedBox(height: 1),
                   Text(aarti.title,
-                      style: AppTextStyles.serifBody(
+                      style: AppTypography.serifBody(
                           size: 15, color: context.textPrimary),
                       overflow: TextOverflow.ellipsis),
                   Text(aarti.devanagari,
                       style:
-                          AppTextStyles.devanagari(size: 11, color: AppColors.ink3),
+                          AppTypography.devanagari(size: 11, color: AppColors.ink3),
                       overflow: TextOverflow.ellipsis),
                   if (aarti.festivalTags.isNotEmpty)
                     Padding(
@@ -490,7 +490,7 @@ class _SavedAartiTile extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(t,
-                                      style: AppTextStyles.body(
+                                      style: AppTypography.body(
                                           size: 9,
                                           color: AppColors.saffronDark)),
                                 ))
@@ -501,7 +501,7 @@ class _SavedAartiTile extends StatelessWidget {
               ),
             ),
             Text(aarti.versesLabel,
-                style: AppTextStyles.body(size: 11, color: AppColors.ink3)),
+                style: AppTypography.body(size: 11, color: AppColors.ink3)),
             const SizedBox(width: 6),
             GestureDetector(
               onTap: onEdit,
@@ -575,15 +575,15 @@ class _FormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label.toUpperCase(),
-            style: AppTextStyles.label(size: 10, color: AppColors.ink3)),
+            style: AppTypography.label(size: 10, color: AppColors.ink3)),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           maxLines: maxLines,
-          style: AppTextStyles.body(size: 14, color: context.textPrimary),
+          style: AppTypography.body(size: 14, color: context.textPrimary),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: AppTextStyles.body(size: 14, color: AppColors.ink3),
+            hintStyle: AppTypography.body(size: 14, color: AppColors.ink3),
             filled: true,
             fillColor: context.surface,
             contentPadding:

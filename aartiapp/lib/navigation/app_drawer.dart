@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/theme/app_colors.dart';
-import '../core/theme/app_text_styles.dart';
+import '../core/theme/app_typography.dart';
 import '../providers/app_providers.dart';
-import '../widgets/gradient_divider.dart';
+import '../shared/widgets/gradient_divider.dart';
 
 class AppDrawer extends ConsumerWidget {
   final int currentIndex;
@@ -57,7 +57,7 @@ class AppDrawer extends ConsumerWidget {
                       ),
                       Text(
                         'Prayer Book',
-                        style: AppTextStyles.label(
+                        style: AppTypography.label(
                           size: 10,
                           color: AppColors.ink3,
                         ),
@@ -133,7 +133,7 @@ class AppDrawer extends ConsumerWidget {
                     children: [
                       Text(
                         userName,
-                        style: AppTextStyles.body(
+                        style: AppTypography.body(
                           size: 14,
                           color: AppColors.white,
                           weight: FontWeight.w400,
@@ -142,7 +142,7 @@ class AppDrawer extends ConsumerWidget {
                       Text(
                         'Jai Shri Krishna 🙏',
                         style:
-                            AppTextStyles.body(size: 11, color: AppColors.ink3),
+                            AppTypography.body(size: 11, color: AppColors.ink3),
                       ),
                     ],
                   ),

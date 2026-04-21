@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 
 class ActionChip extends StatelessWidget {
   final IconData icon;
@@ -38,7 +38,7 @@ class ActionChip extends StatelessWidget {
             const SizedBox(width: 5),
             Text(
               label,
-              style: AppTextStyles.body(
+              style: AppTypography.body(
                 size: 12,
                 color: isPrimary ? AppColors.white : AppColors.ink2,
               ),

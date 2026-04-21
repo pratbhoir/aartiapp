@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../core/utils/search_engine.dart';
 import '../../data/models/aarti_item.dart';
 import '../../data/repositories/aarti_repository.dart';
 import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
-import '../../widgets/aarti_app_bar.dart';
-import '../../widgets/section_label.dart';
+import '../../shared/widgets/aarti_app_bar.dart';
+import '../../shared/widgets/section_label.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
 import 'widgets/search_bar.dart' as app;
 import 'widgets/today_hero_card.dart';
@@ -50,7 +50,7 @@ class DiscoverScreen extends ConsumerWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: AppTextStyles.displayLarge(context).copyWith(
+                      style: AppTypography.displayLarge(context).copyWith(
                         fontSize: 34,
                       ),
                       children: [
@@ -69,7 +69,7 @@ class DiscoverScreen extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     DayDeityMapper.todaySubtitle(),
-                    style: AppTextStyles.body(size: 13, color: AppColors.ink3),
+                    style: AppTypography.body(size: 13, color: AppColors.ink3),
                   ),
                 ],
               ),
@@ -270,7 +270,7 @@ class DiscoverScreen extends ConsumerWidget {
                   const Spacer(),
                   Text(
                     '${filteredIndices.length} found',
-                    style: AppTextStyles.body(size: 11, color: AppColors.ink3),
+                    style: AppTypography.body(size: 11, color: AppColors.ink3),
                   ),
                 ],
               ),
@@ -289,7 +289,7 @@ class DiscoverScreen extends ConsumerWidget {
                         const SizedBox(height: 12),
                         Text(
                           'No Aartis found',
-                          style: AppTextStyles.body(
+                          style: AppTypography.body(
                               size: 14, color: AppColors.ink3),
                         ),
                       ],
@@ -376,12 +376,12 @@ class _RecentlyPlayedCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               aarti.deity.toUpperCase(),
-              style: AppTextStyles.label(size: 8, color: AppColors.saffron),
+              style: AppTypography.label(size: 8, color: AppColors.saffron),
             ),
             const SizedBox(height: 2),
             Text(
               aarti.title,
-              style: AppTextStyles.body(size: 12, color: AppColors.ink),
+              style: AppTypography.body(size: 12, color: AppColors.ink),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

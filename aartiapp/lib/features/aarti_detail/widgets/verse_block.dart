@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../data/models/verse_data.dart';
 
 class VerseBlock extends StatelessWidget {
@@ -27,7 +27,7 @@ class VerseBlock extends StatelessWidget {
           // Label row
           Row(
             children: [
-              Text(verse.label, style: AppTextStyles.label()),
+              Text(verse.label, style: AppTypography.label()),
               const SizedBox(width: 10),
               Expanded(
                 child: Container(height: 1, color: AppColors.stone3),
@@ -59,7 +59,7 @@ class VerseBlock extends StatelessWidget {
                           : null,
                       child: Text(
                         verse.lines[i],
-                        style: AppTextStyles.devanagari(
+                        style: AppTypography.devanagari(
                           size: 18 * textScale,
                           color: isHighlighted
                               ? AppColors.saffron
@@ -74,14 +74,14 @@ class VerseBlock extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(verse.lines[i],
-                            style: AppTextStyles.devanagari(
+                            style: AppTypography.devanagari(
                               size: 18 * textScale,
                               color: AppColors.ink,
                             )),
                         if (i < verse.transliteration.length)
                         Text(
                           verse.transliteration[i],
-                          style: AppTextStyles.transliteration(
+                          style: AppTypography.transliteration(
                             size: 14 * textScale,
                             color: AppColors.ink3,
                           ),
@@ -95,7 +95,7 @@ class VerseBlock extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(verse.lines[i],
-                            style: AppTextStyles.devanagari(
+                            style: AppTypography.devanagari(
                               size: 18 * textScale,
                               color: AppColors.ink,
                             )),
@@ -113,7 +113,7 @@ class VerseBlock extends StatelessWidget {
                           ),
                           child: Text(
                             verse.meanings[i],
-                            style: AppTextStyles.body(
+                            style: AppTypography.body(
                                 size: 13 * textScale, color: AppColors.ink3),
                           ),
                         ),
@@ -140,7 +140,7 @@ class VerseBlock extends StatelessWidget {
                         (verse.gujarati.isNotEmpty && i < verse.gujarati.length)
                             ? verse.gujarati[i]
                             : verse.lines[i], // fallback to Devanagari
-                        style: AppTextStyles.devanagari(
+                        style: AppTypography.devanagari(
                           size: 18 * textScale,
                           color: isHighlighted
                               ? AppColors.saffron

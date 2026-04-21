@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../providers/app_providers.dart';
-import '../../widgets/aarti_app_bar.dart';
+import '../../shared/widgets/aarti_app_bar.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
 import 'puja_session_screen.dart';
 import 'widgets/puja_list_item.dart';
@@ -45,7 +45,7 @@ class MyPujaScreen extends ConsumerWidget {
                     children: [
                       RichText(
                         text: TextSpan(
-                          style: AppTextStyles.displayLarge(context).copyWith(
+                          style: AppTypography.displayLarge(context).copyWith(
                             fontSize: 34,
                           ),
                           children: const [
@@ -63,7 +63,7 @@ class MyPujaScreen extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         '${pujaAartis.length} aartis · Est. $totalMinutes min',
-                        style: AppTextStyles.body(
+                        style: AppTypography.body(
                             size: 13, color: AppColors.ink3),
                       ),
                     ],
@@ -213,7 +213,7 @@ class _EmptyPujaView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Your daily puja is empty',
-              style: AppTextStyles.serifBody(
+              style: AppTypography.serifBody(
                 size: 18,
                 color: AppColors.ink,
               ),
@@ -222,7 +222,7 @@ class _EmptyPujaView extends StatelessWidget {
             Text(
               'Bookmark Aartis from the Discover tab\nto build your daily puja list.',
               textAlign: TextAlign.center,
-              style: AppTextStyles.body(size: 13, color: AppColors.ink3),
+              style: AppTypography.body(size: 13, color: AppColors.ink3),
             ),
           ],
         ),
@@ -271,7 +271,7 @@ class _SettingChip extends StatelessWidget {
             const SizedBox(width: 5),
           ],
           Text(label,
-              style: AppTextStyles.body(
+              style: AppTypography.body(
                 size: 12,
                 color: isActive ? AppColors.saffronDark : AppColors.ink2,
               )),

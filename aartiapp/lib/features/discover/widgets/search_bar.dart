@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 
 class SearchBar extends StatelessWidget {
@@ -25,10 +25,10 @@ class SearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               onChanged: onChanged,
-              style: AppTextStyles.body(size: 14),
+              style: AppTypography.body(size: 14),
               decoration: InputDecoration(
                 hintText: 'Search deity, Aarti, or festival…',
-                hintStyle: AppTextStyles.body(size: 14, color: AppColors.ink3),
+                hintStyle: AppTypography.body(size: 14, color: AppColors.ink3),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,

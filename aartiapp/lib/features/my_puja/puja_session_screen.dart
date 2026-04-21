@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_typography.dart';
 import '../../data/models/aarti_item.dart';
 import '../../providers/app_providers.dart';
 import '../aarti_detail/widgets/audio_player_widget.dart';
@@ -186,11 +186,11 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                   Column(
                     children: [
                       Text('PUJA SESSION',
-                          style: AppTextStyles.label(
+                          style: AppTypography.label(
                               size: 10, color: AppColors.saffronLight)),
                       Text(
                         '${_currentIndex + 1} of ${widget.pujaAartis.length}',
-                        style: AppTextStyles.body(
+                        style: AppTypography.body(
                             size: 12,
                             color:
                                 AppColors.white.withValues(alpha: 0.5)),
@@ -251,7 +251,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       // Deity / day label
                       Text(
                         _currentAarti.deity.toUpperCase(),
-                        style: AppTextStyles.label(
+                        style: AppTypography.label(
                             size: 11, color: AppColors.saffronLight),
                       ),
                       const SizedBox(height: 12),
@@ -259,7 +259,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       // Title
                       Text(
                         _currentAarti.title,
-                        style: AppTextStyles.serifBody(
+                        style: AppTypography.serifBody(
                           size: 30,
                           color: AppColors.white,
                         ),
@@ -268,7 +268,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       const SizedBox(height: 8),
                       Text(
                         _currentAarti.devanagari,
-                        style: AppTextStyles.devanagari(
+                        style: AppTypography.devanagari(
                           size: 18,
                           color: AppColors.white.withValues(alpha: 0.4),
                         ),
@@ -291,7 +291,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                             children: [
                               Text(
                                 _currentAarti.verses.first.label,
-                                style: AppTextStyles.label(
+                                style: AppTypography.label(
                                     size: 9, color: AppColors.ink3),
                               ),
                               const SizedBox(height: 8),
@@ -302,7 +302,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                                             const EdgeInsets.only(bottom: 4),
                                         child: Text(
                                           line,
-                                          style: AppTextStyles.devanagari(
+                                          style: AppTypography.devanagari(
                                             size: 16,
                                             color: AppColors.white
                                                 .withValues(alpha: 0.7),
@@ -360,7 +360,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                     children: [
                       Text(
                         _formatDuration(_position),
-                        style: AppTextStyles.body(
+                        style: AppTypography.body(
                             size: 11,
                             color:
                                 AppColors.white.withValues(alpha: 0.5)),
@@ -395,7 +395,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       const SizedBox(width: 10),
                       Text(
                         _formatDuration(_duration),
-                        style: AppTextStyles.body(
+                        style: AppTypography.body(
                             size: 11,
                             color:
                                 AppColors.white.withValues(alpha: 0.5)),
@@ -515,7 +515,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                 ),
                 const SizedBox(height: 20),
                 Text('Session Settings',
-                    style: AppTextStyles.serifBody(
+                    style: AppTypography.serifBody(
                         size: 18, color: AppColors.white)),
                 const SizedBox(height: 24),
 
@@ -578,7 +578,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                           child: Center(
                             child: Text(
                               '${i}s',
-                              style: AppTextStyles.body(
+                              style: AppTypography.body(
                                 size: 11,
                                 color: isActive
                                     ? AppColors.saffron
@@ -636,7 +636,7 @@ class _SessionChip extends StatelessWidget {
                   : AppColors.ink3),
           const SizedBox(width: 5),
           Text(label,
-              style: AppTextStyles.body(
+              style: AppTypography.body(
                 size: 12,
                 color: isActive
                     ? AppColors.saffronLight
@@ -675,12 +675,12 @@ class _SessionSettingRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label,
-                    style: AppTextStyles.body(
+                    style: AppTypography.body(
                         size: 14,
                         color: AppColors.white,
                         weight: FontWeight.w400)),
                 Text(subtitle,
-                    style: AppTextStyles.body(
+                    style: AppTypography.body(
                         size: 11, color: AppColors.ink3)),
               ],
             ),

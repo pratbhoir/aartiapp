@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../core/utils/day_deity_mapper.dart';
 import '../../../data/models/aarti_item.dart';
 
@@ -97,7 +97,7 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                           const SizedBox(width: 5),
                           Text(
                             DayDeityMapper.todaySpecialLabel(),
-                            style: AppTextStyles.label(
+                            style: AppTypography.label(
                               size: 10,
                               color: AppColors.saffronLight,
                             ),
@@ -110,20 +110,20 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                 const SizedBox(height: 14),
                 Text(
                   widget.aarti.deity.toUpperCase(),
-                  style: AppTextStyles.label(
+                  style: AppTypography.label(
                       size: 11, color: AppColors.saffronLight),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   widget.aarti.title,
-                  style: AppTextStyles.serifBody(
+                  style: AppTypography.serifBody(
                     size: 26,
                     color: AppColors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(widget.aarti.devanagari,
-                    style: AppTextStyles.devanagari(
+                    style: AppTypography.devanagari(
                       size: 14,
                       color: AppColors.white.withValues(alpha: 0.45),
                     )),
@@ -161,7 +161,7 @@ class _MetaChip extends StatelessWidget {
         Icon(icon, size: 13, color: AppColors.white.withValues(alpha: 0.5)),
         const SizedBox(width: 4),
         Text(label,
-            style: AppTextStyles.body(
+            style: AppTypography.body(
                 size: 12, color: AppColors.white.withValues(alpha: 0.5))),
       ],
     );

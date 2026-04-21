@@ -6,8 +6,8 @@ import 'app_colors.dart';
 /// - Noto Serif Devanagari for Devanagari lyrics
 /// - Lora for English serif text (titles, headings)
 /// - Default sans-serif for UI labels and body
-class AppTextStyles {
-  AppTextStyles._();
+class AppTypography {
+  AppTypography._();
 
   /// Large display heading (e.g., greeting)
   static TextStyle displayLarge(BuildContext ctx) => GoogleFonts.lora(

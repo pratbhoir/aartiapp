@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_typography.dart';
 import '../../../data/models/festival.dart';
 
 /// A festive banner card shown on the Discover screen when a Hindu festival
@@ -75,7 +75,7 @@ class FestiveBanner extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text('TODAY',
-                              style: AppTextStyles.label(
+                              style: AppTypography.label(
                                   size: 8, color: AppColors.white)),
                         )
                       else
@@ -93,13 +93,13 @@ class FestiveBanner extends StatelessWidget {
                           ),
                           child: Text(
                             'IN $daysLeft DAY${daysLeft == 1 ? '' : 'S'}',
-                            style: AppTextStyles.label(
+                            style: AppTypography.label(
                                 size: 8, color: AppColors.saffronDark),
                           ),
                         ),
                       Text(
                         festival.deity.toUpperCase(),
-                        style: AppTextStyles.label(
+                        style: AppTypography.label(
                             size: 9, color: AppColors.saffronDark),
                       ),
                     ],
@@ -107,12 +107,12 @@ class FestiveBanner extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     festival.name,
-                    style: AppTextStyles.serifBody(
+                    style: AppTypography.serifBody(
                         size: 17, color: AppColors.ink),
                   ),
                   Text(
                     festival.nameDevanagari,
-                    style: AppTextStyles.devanagari(
+                    style: AppTypography.devanagari(
                         size: 12, color: AppColors.ink3),
                   ),
                 ],
