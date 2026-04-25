@@ -148,7 +148,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () => onSelect(3), // Navigate to Settings
+                    onTap: () => onSelect(4), // Navigate to Settings
                     child: const Icon(Icons.settings_outlined,
                         size: 18, color: AppColors.ink3),
                   ),

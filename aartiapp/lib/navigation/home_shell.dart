@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/constants/haptics.dart';
 import '../core/theme/theme_aware_colors.dart';
+import '../features/home/home_screen.dart';
 import '../features/discover/discover_screen.dart';
 import '../features/my_puja/my_puja_screen.dart';
 import '../features/contribute/contribute_screen.dart';
@@ -21,6 +22,7 @@ class _HomeShellState extends State<HomeShell>
   late AnimationController _drawerAnimCtrl;
 
   final List<NavItem> _navItems = const [
+    NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
     NavItem(
         icon: Icons.explore_outlined,
         activeIcon: Icons.explore,
@@ -58,18 +60,29 @@ class _HomeShellState extends State<HomeShell>
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  void _openDiscoverTab() {
+    if (_currentIndex == 1) return;
+    AppHaptics.pageTransition();
+    setState(() => _currentIndex = 1);
+  }
+
   Widget _buildScreen() {
     switch (_currentIndex) {
       case 0:
-        return DiscoverScreen(onOpenDrawer: _openDrawer);
+        return HomeScreen(
+          onOpenDrawer: _openDrawer,
+          onOpenDiscover: _openDiscoverTab,
+        );
       case 1:
-        return MyPujaScreen(onOpenDrawer: _openDrawer);
+        return DiscoverScreen(onOpenDrawer: _openDrawer);
       case 2:
-        return ContributeScreen(onOpenDrawer: _openDrawer);
+        return MyPujaScreen(onOpenDrawer: _openDrawer);
       case 3:
+        return ContributeScreen(onOpenDrawer: _openDrawer);
+      case 4:
         return SettingsScreen(onOpenDrawer: _openDrawer);
       default:
-        return DiscoverScreen(onOpenDrawer: _openDrawer);
+        return HomeScreen(onOpenDrawer: _openDrawer);
     }
   }
 
