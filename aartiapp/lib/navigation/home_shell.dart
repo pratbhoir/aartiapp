@@ -28,11 +28,11 @@ class _HomeShellState extends State<HomeShell> {
     NavItem(
         icon: Icons.auto_awesome_outlined,
         activeIcon: Icons.auto_awesome,
-        label: 'My Daily Puja'),
+        label: 'My Puja'),
     NavItem(
         icon: Icons.add_circle_outline,
         activeIcon: Icons.add_circle,
-        label: 'My Collection'),
+        label: 'Collection'),
     NavItem(
         icon: Icons.settings_outlined,
         activeIcon: Icons.settings,

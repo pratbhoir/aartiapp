@@ -1,31 +1,61 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 
 class AartiAppBar extends StatelessWidget {
   final VoidCallback onMenuTap;
   final Widget? trailing;
   final bool showMenu;
+  final String? title;
+  final bool showLogoTitle;
 
   const AartiAppBar({
     super.key,
     required this.onMenuTap,
     this.trailing,
     this.showMenu = true,
+    this.title,
+    this.showLogoTitle = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final Widget leading = showMenu
+        ? HamburgerButton(onTap: onMenuTap)
+        : const SizedBox(width: 42, height: 42);
+    final Widget trailingWidget = trailing ?? const SizedBox(width: 42, height: 42);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          if (showMenu)
-            HamburgerButton(onTap: onMenuTap)
-          else
-            const SizedBox(width: 42, height: 42),
-          if (trailing != null) trailing!,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [leading, trailingWidget],
+          ),
+          if (showLogoTitle && title != null)
+            IgnorePointer(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.auto_awesome_rounded,
+                    size: 24,
+                    color: AppColors.saffron,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    title!,
+                    style: AppTypography.serifBody(
+                      size: 24,
+                      color: context.textPrimary,
+                    ).copyWith(fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

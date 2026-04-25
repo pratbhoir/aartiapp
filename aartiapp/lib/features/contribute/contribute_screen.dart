@@ -178,7 +178,12 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     return SafeArea(
       child: Column(
         children: [
-          AartiAppBar(onMenuTap: widget.onOpenDrawer, showMenu: false),
+          AartiAppBar(
+            onMenuTap: widget.onOpenDrawer,
+            showMenu: false,
+            showLogoTitle: true,
+            title: 'My Collection',
+          ),
           Expanded(
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),

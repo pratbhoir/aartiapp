@@ -33,7 +33,12 @@ class MyPujaScreen extends ConsumerWidget {
     return SafeArea(
       child: Column(
         children: [
-          AartiAppBar(onMenuTap: onOpenDrawer, showMenu: false),
+          AartiAppBar(
+            onMenuTap: onOpenDrawer,
+            showMenu: false,
+            showLogoTitle: true,
+            title: 'My Daily Puja',
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
             child: Row(

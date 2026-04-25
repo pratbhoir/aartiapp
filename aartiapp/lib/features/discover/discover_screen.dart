@@ -29,7 +29,12 @@ class DiscoverScreen extends ConsumerWidget {
     return SafeArea(
       child: Column(
         children: [
-          AartiAppBar(onMenuTap: onOpenDrawer, showMenu: false),
+          AartiAppBar(
+            onMenuTap: onOpenDrawer,
+            showMenu: false,
+            showLogoTitle: true,
+            title: 'Discover',
+          ),
           Expanded(
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),

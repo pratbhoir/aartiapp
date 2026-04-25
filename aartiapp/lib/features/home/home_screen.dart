@@ -37,7 +37,12 @@ class HomeScreen extends ConsumerWidget {
     return SafeArea(
       child: Column(
         children: [
-          AartiAppBar(onMenuTap: onOpenDrawer, showMenu: false),
+          AartiAppBar(
+            onMenuTap: onOpenDrawer,
+            showMenu: false,
+            showLogoTitle: true,
+            title: 'Home',
+          ),
           Expanded(
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
@@ -52,7 +57,7 @@ class HomeScreen extends ConsumerWidget {
                         RichText(
                           text: TextSpan(
                             style: AppTypography.displayLarge(context).copyWith(
-                              fontSize: 28,
+                              fontSize: 34,
                             ),
                             children: [
                               const TextSpan(text: 'Jai '),
@@ -63,11 +68,12 @@ class HomeScreen extends ConsumerWidget {
                                   color: AppColors.saffron,
                                 ),
                               ),
-                              TextSpan(text: ' ${userName.split(' ').first}'),
+                              // TextSpan(text: ' ${userName.split(' ').first}'),
+                              TextSpan(text: '\n$userName'),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 8),
                         Text(
                           DayDeityMapper.todaySubtitle(),
                           style:
@@ -81,12 +87,12 @@ class HomeScreen extends ConsumerWidget {
                 // Aarti of the day
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 15, 12, 0),
+                    padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SectionLabel('Aarti of the Day'),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 13),
                         TodayHeroCard(
                           aarti: aartis[todayIdx],
                           onTap: () {
