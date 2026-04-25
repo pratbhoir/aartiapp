@@ -42,6 +42,12 @@
 
 ## 2. User Flows
 
+### 2.0 Primary Navigation
+
+1. User navigates between Home, Discover, My Daily Puja, My Collection, and Settings via the bottom navigation dock.
+2. Active tab state is visually highlighted and preserved in `HomeShell`.
+3. Section transitions use shell-level fade + slight upward motion.
+
 ### 2.1 First Launch (Onboarding)
 
 1. User opens app → `OnboardingScreen` displayed.
@@ -50,11 +56,11 @@
 4. **Step 3 — Language:** User selects preferred script (Devanagari / Roman / Gujarati).
 5. **Step 4 — Notification:** User sets daily puja reminder time (optional).
 6. **Step 5 — Deity:** User selects favourite deity (sets initial filter).
-7. Onboarding marked complete → `HomeShell` displayed.
+7. Onboarding marked complete → `HomeShell` displayed with Home tab active.
 
 ### 2.2 Discover
 
-1. User sees greeting with their name + "Aarti of the Day" hero card.
+1. User opens Discover to find prayers using deity chips, search, and festival filters.
 2. User can search by title, deity, Devanagari text, or festival tags.
 3. User can filter by deity chips (horizontal scroll) or festival tags.
 4. User taps an Aarti card → navigates to `AartiDetailScreen`.

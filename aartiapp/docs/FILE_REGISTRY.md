@@ -72,14 +72,15 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/navigation/home_shell.dart` | `HomeShell` — top-level `Scaffold` with `AppDrawer` and `AnimatedSwitcher` screen transitions | 2026-04-20 |
-| `lib/navigation/app_drawer.dart` | `AppDrawer` — dark-themed side navigation drawer with nav items and user profile | 2026-04-20 |
+| `lib/navigation/home_shell.dart` | `HomeShell` — top-level `Scaffold` with Temple Dock bottom navigation and `AnimatedSwitcher` screen transitions | 2026-04-25 |
+| `lib/navigation/app_drawer.dart` | `AppDrawer` — dark-themed side navigation drawer component (legacy, currently not mounted by `HomeShell`) | 2026-04-25 |
+| `lib/navigation/widgets/app_bottom_nav.dart` | `AppBottomNav` — Temple Dock style bottom navigation used for primary app sections | 2026-04-25 |
 
 ## Shared / Widgets
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/shared/widgets/aarti_app_bar.dart` | `AartiAppBar` — reusable app bar with hamburger menu and optional action buttons | 2026-04-20 |
+| `lib/shared/widgets/aarti_app_bar.dart` | `AartiAppBar` — reusable app bar with optional menu affordance and trailing action area | 2026-04-25 |
 | `lib/shared/widgets/gradient_divider.dart` | `GradientDivider` — saffron-to-transparent horizontal divider | 2026-04-20 |
 | `lib/shared/widgets/section_label.dart` | `SectionLabel` — uppercase tracked section header text | 2026-04-20 |
 
@@ -93,7 +94,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — main landing screen with greeting, search, hero card, deity filter, aarti grid | 2026-04-20 |
+| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with deity filter, search, festival filters, and aarti grid | 2026-04-25 |
 | `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, Devanagari subtitle, duration, bookmark | 2026-04-20 |
 | `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
 | `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable festival tag chips | 2026-04-20 |
@@ -117,7 +118,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder and session launcher | 2026-04-20 |
+| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder and session launcher | 2026-04-25 |
 | `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls | 2026-04-20 |
 | `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, title, and remove button | 2026-04-20 |
 
@@ -125,7 +126,13 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/contribute/contribute_screen.dart` | `ContributeScreen` — form to create and save personal Aartis locally | 2026-04-20 |
+| `lib/features/contribute/contribute_screen.dart` | `ContributeScreen` — form to create and save personal Aartis locally | 2026-04-25 |
+
+## Features / Home
+
+| File Path | Purpose | Last Updated |
+|-----------|---------|--------------|
+| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and recently played | 2026-04-25 |
 
 ## Features / Onboarding
 
@@ -137,7 +144,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme toggle, text scale, script mode, notification config, about | 2026-04-20 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme toggle, text scale, script mode, notification config, about | 2026-04-25 |
 
 ## Assets
 

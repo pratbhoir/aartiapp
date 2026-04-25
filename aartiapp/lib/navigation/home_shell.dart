@@ -7,6 +7,7 @@ import '../features/my_puja/my_puja_screen.dart';
 import '../features/contribute/contribute_screen.dart';
 import '../features/settings/settings_screen.dart';
 import 'app_drawer.dart';
+import 'widgets/app_bottom_nav.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -15,11 +16,8 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomeShellState extends State<HomeShell>
-    with SingleTickerProviderStateMixin {
+class _HomeShellState extends State<HomeShell> {
   int _currentIndex = 0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late AnimationController _drawerAnimCtrl;
 
   final List<NavItem> _navItems = const [
     NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
@@ -41,29 +39,18 @@ class _HomeShellState extends State<HomeShell>
         label: 'Settings'),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _drawerAnimCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-  }
-
-  @override
-  void dispose() {
-    _drawerAnimCtrl.dispose();
-    super.dispose();
-  }
-
   void _openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
+    _selectTab(4);
+  }
+
+  void _selectTab(int index) {
+    if (_currentIndex == index) return;
+    AppHaptics.pageTransition();
+    setState(() => _currentIndex = index);
   }
 
   void _openDiscoverTab() {
-    if (_currentIndex == 1) return;
-    AppHaptics.pageTransition();
-    setState(() => _currentIndex = 1);
+    _selectTab(1);
   }
 
   Widget _buildScreen() {
@@ -82,24 +69,17 @@ class _HomeShellState extends State<HomeShell>
       case 4:
         return SettingsScreen(onOpenDrawer: _openDrawer);
       default:
-        return HomeScreen(onOpenDrawer: _openDrawer);
+        return HomeScreen(
+          onOpenDrawer: _openDrawer,
+          onOpenDiscover: _openDiscoverTab,
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       backgroundColor: context.scaffoldBg,
-      drawer: AppDrawer(
-        currentIndex: _currentIndex,
-        navItems: _navItems,
-        onSelect: (i) {
-          AppHaptics.pageTransition();
-          setState(() => _currentIndex = i);
-          Navigator.of(context).pop();
-        },
-      ),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 320),
         switchInCurve: Curves.easeOut,
@@ -118,6 +98,11 @@ class _HomeShellState extends State<HomeShell>
           key: ValueKey(_currentIndex),
           child: _buildScreen(),
         ),
+      ),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: _currentIndex,
+        items: _navItems,
+        onSelect: _selectTab,
       ),
     );
   }

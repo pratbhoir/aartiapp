@@ -5,8 +5,14 @@ import '../../core/theme/theme_aware_colors.dart';
 class AartiAppBar extends StatelessWidget {
   final VoidCallback onMenuTap;
   final Widget? trailing;
+  final bool showMenu;
 
-  const AartiAppBar({super.key, required this.onMenuTap, this.trailing});
+  const AartiAppBar({
+    super.key,
+    required this.onMenuTap,
+    this.trailing,
+    this.showMenu = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,10 @@ class AartiAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          HamburgerButton(onTap: onMenuTap),
+          if (showMenu)
+            HamburgerButton(onTap: onMenuTap)
+          else
+            const SizedBox(width: 42, height: 42),
           if (trailing != null) trailing!,
         ],
       ),

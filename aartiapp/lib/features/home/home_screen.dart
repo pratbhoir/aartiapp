@@ -37,7 +37,7 @@ class HomeScreen extends ConsumerWidget {
     return SafeArea(
       child: Column(
         children: [
-          AartiAppBar(onMenuTap: onOpenDrawer),
+          AartiAppBar(onMenuTap: onOpenDrawer, showMenu: false),
           Expanded(
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),

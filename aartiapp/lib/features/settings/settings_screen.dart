@@ -23,7 +23,9 @@ class SettingsScreen extends ConsumerWidget {
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(child: AartiAppBar(onMenuTap: onOpenDrawer)),
+          SliverToBoxAdapter(
+            child: AartiAppBar(onMenuTap: onOpenDrawer, showMenu: false),
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),

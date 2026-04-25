@@ -41,8 +41,10 @@ lib/
 ├── providers/
 │   └── app_providers.dart             # All Riverpod providers & StateNotifiers
 ├── navigation/
-│   ├── home_shell.dart                # Top-level scaffold + drawer + screen switcher
-│   └── app_drawer.dart                # Dark-themed side navigation drawer
+│   ├── home_shell.dart                # Top-level scaffold + bottom nav + screen switcher
+│   ├── app_drawer.dart                # Legacy side drawer component (not mounted)
+│   └── widgets/
+│       └── app_bottom_nav.dart        # Temple Dock style bottom navigation
 ├── shared/
 │   ├── widgets/
 │   │   ├── aarti_app_bar.dart         # Reusable app bar with hamburger menu
@@ -134,9 +136,9 @@ No formal `Result<T, E>` or `Either` pattern is used. Consider adopting one as c
 
 ## 5. Navigation
 
-**Approach:** Imperative `Navigator.push()` / `Navigator.pop()`.
+**Approach:** Imperative `Navigator.push()` / `Navigator.pop()` for in-flow pages, plus index-based shell navigation for top-level sections.
 
-The `HomeShell` widget acts as a shell around the 4 top-level screens (Discover, My Puja, My Collection, Settings). Screen switching uses `AnimatedSwitcher` with combined Fade + Slide transitions. The `AppDrawer` provides navigation between screens.
+The `HomeShell` widget acts as a shell around the 5 top-level screens (Home, Discover, My Puja, My Collection, Settings). Screen switching uses `AnimatedSwitcher` with combined Fade + Slide transitions. Primary navigation is handled by `AppBottomNav` (Temple Dock style) at the bottom of the screen.
 
 No declarative router (e.g., `go_router`) is currently used. Consider adopting one if deep linking or web navigation is needed.
 

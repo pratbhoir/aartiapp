@@ -4,6 +4,25 @@ All notable changes to the Aarti Sangrah project are documented here.
 
 ---
 
+## [2026-04-25] — Home/Discover Split + Temple Dock Navigation
+
+### Added
+- `lib/features/home/home_screen.dart` — New Home screen with greeting, Aarti of the Day, festive banner, and recently played sections.
+- `lib/navigation/widgets/app_bottom_nav.dart` — Temple Dock style bottom navigation used as the primary top-level navigation.
+
+### Modified
+- `lib/navigation/home_shell.dart` — Switched from drawer-mounted navigation to bottom-nav-only shell with shared tab selection logic.
+- `lib/features/discover/discover_screen.dart` — Focused Discover on search/browse/filter/grid flows only.
+- `lib/features/home/home_screen.dart` — Added optional callback to jump from festive banner to Discover with deity preselected.
+- `lib/shared/widgets/aarti_app_bar.dart` — Added `showMenu` option so top bars can hide menu affordance in bottom-nav mode.
+- `lib/features/my_puja/my_puja_screen.dart` — Updated top app bar usage to bottom-nav-only layout.
+- `lib/features/contribute/contribute_screen.dart` — Updated top app bar usage to bottom-nav-only layout.
+- `lib/features/settings/settings_screen.dart` — Updated top app bar usage to bottom-nav-only layout.
+- `lib/navigation/app_drawer.dart` — Kept as legacy component; no longer mounted by `HomeShell`.
+- `docs/FILE_REGISTRY.md` — Registered new files and refreshed purposes/last-updated entries.
+- `docs/ARCHITECTURE.md` — Updated navigation architecture to bottom-nav-first model.
+- `docs/FUNCTIONAL_SPEC.md` — Updated user flows for primary navigation and Discover scope.
+
 ## [2026-04-20] — Project Standardisation
 
 ### Added
