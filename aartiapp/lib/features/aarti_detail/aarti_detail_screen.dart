@@ -222,57 +222,57 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   ),
                                   Row(
                                     children: [
-                                      // Add to Puja button
-                                      Semantics(
-                                        label: isInPuja
-                                            ? 'Remove from My Puja'
-                                            : 'Add to My Puja',
-                                        button: true,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            AppHaptics.selection();
-                                            if (isInPuja) {
-                                              ref
-                                                  .read(pujaOrderProvider
-                                                      .notifier)
-                                                  .removeAarti(
-                                                      widget.aarti.id);
-                                            } else {
-                                              ref
-                                                  .read(pujaOrderProvider
-                                                      .notifier)
-                                                  .addAarti(widget.aarti.id);
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 44,
-                                            height: 44,
-                                            decoration: BoxDecoration(
-                                              color: isInPuja
-                                                  ? AppColors.saffronGlow
-                                                  : AppColors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color: isInPuja
-                                                    ? AppColors.saffron
-                                                    : AppColors.stone3,
-                                              ),
-                                            ),
-                                            child: Icon(
-                                              isInPuja
-                                                  ? Icons.auto_awesome
-                                                  : Icons
-                                                      .auto_awesome_outlined,
-                                              size: 18,
-                                              color: isInPuja
-                                                  ? AppColors.saffron
-                                                  : AppColors.ink3,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
+                                      // // Add to Puja button
+                                      // Semantics(
+                                      //   label: isInPuja
+                                      //       ? 'Remove from My Puja'
+                                      //       : 'Add to My Puja',
+                                      //   button: true,
+                                      //   child: GestureDetector(
+                                      //     onTap: () {
+                                      //       AppHaptics.selection();
+                                      //       if (isInPuja) {
+                                      //         ref
+                                      //             .read(pujaOrderProvider
+                                      //                 .notifier)
+                                      //             .removeAarti(
+                                      //                 widget.aarti.id);
+                                      //       } else {
+                                      //         ref
+                                      //             .read(pujaOrderProvider
+                                      //                 .notifier)
+                                      //             .addAarti(widget.aarti.id);
+                                      //       }
+                                      //     },
+                                      //     child: Container(
+                                      //       width: 44,
+                                      //       height: 44,
+                                      //       decoration: BoxDecoration(
+                                      //         color: isInPuja
+                                      //             ? AppColors.saffronGlow
+                                      //             : AppColors.white,
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(12),
+                                      //         border: Border.all(
+                                      //           color: isInPuja
+                                      //               ? AppColors.saffron
+                                      //               : AppColors.stone3,
+                                      //         ),
+                                      //       ),
+                                      //       child: Icon(
+                                      //         isInPuja
+                                      //             ? Icons.auto_awesome
+                                      //             : Icons
+                                      //                 .auto_awesome_outlined,
+                                      //         size: 18,
+                                      //         color: isInPuja
+                                      //             ? AppColors.saffron
+                                      //             : AppColors.ink3,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(width: 8),
                                       // Bookmark button
                                       Semantics(
                                         label: isBookmarked

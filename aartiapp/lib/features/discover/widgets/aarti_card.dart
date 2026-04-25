@@ -25,7 +25,7 @@ class AartiCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: context.surface,
           borderRadius: BorderRadius.circular(20),
@@ -34,12 +34,15 @@ class AartiCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 32,
-              height: 3,
-              decoration: BoxDecoration(
-                color: AppColors.saffron.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(2),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 8, 5, 5),
+              child: Container(
+                width: 32,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: AppColors.saffron.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -56,7 +59,7 @@ class AartiCard extends StatelessWidget {
                   fontSize: 17,
                   fontWeight: FontWeight.w400,
                   color: context.textPrimary,
-                  height: 1.3,
+                  height: 1.2,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -68,7 +71,7 @@ class AartiCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Row(
               children: [
                 const Icon(Icons.schedule_outlined,

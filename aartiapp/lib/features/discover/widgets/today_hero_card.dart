@@ -37,7 +37,7 @@ class _TodayHeroCardState extends State<TodayHeroCard>
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        padding: const EdgeInsets.all(28),
+        padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
         decoration: BoxDecoration(
           color: AppColors.ink,
           borderRadius: BorderRadius.circular(24),
@@ -107,7 +107,7 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 10),
                 Text(
                   widget.aarti.deity.toUpperCase(),
                   style: AppTypography.label(
@@ -117,7 +117,7 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                 Text(
                   widget.aarti.title,
                   style: AppTypography.serifBody(
-                    size: 26,
+                    size: 22,
                     color: AppColors.white,
                   ),
                 ),
@@ -127,7 +127,7 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                       size: 14,
                       color: AppColors.white.withValues(alpha: 0.45),
                     )),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     _MetaChip(icon: Icons.schedule_outlined, label: widget.aarti.duration),

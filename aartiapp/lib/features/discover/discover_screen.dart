@@ -44,25 +44,25 @@ class DiscoverScreen extends ConsumerWidget {
           // Greeting
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+              padding: const EdgeInsets.fromLTRB(15, 24, 15, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
                     text: TextSpan(
                       style: AppTypography.displayLarge(context).copyWith(
-                        fontSize: 34,
+                        fontSize: 28,
                       ),
                       children: [
                         const TextSpan(text: 'Jai '),
                         TextSpan(
-                          text: 'Shri Krishna,',
+                          text: 'Shri Krishna, ',
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             color: AppColors.saffron,
                           ),
                         ),
-                        TextSpan(text: '\n$userName'),
+                        TextSpan(text: ' ${userName.split(' ').first}'),
                       ],
                     ),
                   ),
@@ -79,7 +79,7 @@ class DiscoverScreen extends ConsumerWidget {
           // Today hero
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+              padding: const EdgeInsets.fromLTRB(12, 15, 12, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -111,7 +111,7 @@ class DiscoverScreen extends ConsumerWidget {
               if (festival == null) return const SliverToBoxAdapter();
               return SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                   child: FestiveBanner(
                     festival: festival,
                     onTap: () {
@@ -143,7 +143,7 @@ class DiscoverScreen extends ConsumerWidget {
               if (recentAartis.isEmpty) return const SliverToBoxAdapter();
               return SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(15, 24, 15, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -191,7 +191,7 @@ class DiscoverScreen extends ConsumerWidget {
           // Deity chips
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 28, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 28, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -226,7 +226,7 @@ class DiscoverScreen extends ConsumerWidget {
           // Search bar
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+              padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
               child: app.SearchBar(
                 onChanged: (query) {
                   ref.read(searchQueryProvider.notifier).state = query;
@@ -238,7 +238,7 @@ class DiscoverScreen extends ConsumerWidget {
           // Festival filter chips (v2.0)
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 16, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 16, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -263,7 +263,7 @@ class DiscoverScreen extends ConsumerWidget {
           // Grid label
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
+              padding: const EdgeInsets.fromLTRB(12, 28, 12, 12),
               child: Row(
                 children: [
                   const SectionLabel('Popular Aartis'),
@@ -281,7 +281,7 @@ class DiscoverScreen extends ConsumerWidget {
           filteredIndices.isEmpty
               ? SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.all(48),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       children: [
                         Icon(Icons.search_off_rounded,
@@ -297,7 +297,7 @@ class DiscoverScreen extends ConsumerWidget {
                   ),
                 )
               : SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 40),
                   sliver: SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (ctx, i) {
