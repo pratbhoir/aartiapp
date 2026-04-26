@@ -78,12 +78,13 @@
    - **Bookmark** the Aarti (auto-adds to puja list).
    - **Add to Puja** directly.
    - **Play audio** via sticky bottom player.
-   - **Enter Focus Mode** for distraction-free verse-by-verse reading.
+   - **Enter Focus Mode** for distraction-free verse-by-verse reading with tap-above for previous and tap-on-or-below for next navigation.
    - **Open Mantra Counter** for Japa meditation.
    - **Share** lyrics as text or image.
 7. Audio player shows progress, seek ±10s, repeat toggle.
 8. When the current Aarti belongs to My Daily Puja and has a following item in that ordered sequence, a "Next" FAB appears at 90% audio progress or scroll-to-bottom.
 9. Tapping "Next" opens the next Aarti detail screen in the user's current My Daily Puja order.
+10. In Focus Mode, reaching the last verse shows a dark-mode-consistent "Next Aarti" CTA only when the current Aarti has a following item in the user's My Daily Puja order.
 
 ### 2.4 My Daily Puja
 
@@ -129,7 +130,8 @@
 | App language default | First-run app language defaults to English. |
 | Transliteration visibility | Transliteration is hidden when the selected script already matches the user's app-language reading script. |
 | Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
-| Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines. |
+| Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines; taps above the highlighted verse move to the previous verse, and taps on or below it move to the next verse. |
+| Focus Mode next CTA | The last-verse "Next Aarti" CTA is only visible when the current Aarti is in My Daily Puja and has a following item in that ordered sequence. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
 | Offline | All content is bundled — the app works fully offline. |
 | Theme-aware chrome | Settings controls, My Puja list controls, and Home recently played cards resolve neutral fills, borders, and captions from the current theme instead of fixed light-only tokens. |

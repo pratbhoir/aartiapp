@@ -63,6 +63,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     return pujaAartis[currentIndex + 1];
   }
 
+  void _openAarti(AartiItem aarti) {
+    ref.read(recentlyPlayedProvider.notifier).addRecent(aarti.id);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => AartiDetailScreen(aarti: aarti)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -568,19 +576,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             Positioned(
               bottom: hasAudioUrl ? 140 : 24,
               right: 24,
-              child: _NextFab(
-                onTap: () {
-                  ref
-                      .read(recentlyPlayedProvider.notifier)
-                      .addRecent(nextPujaAarti.id);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AartiDetailScreen(aarti: nextPujaAarti),
-                    ),
-                  );
-                },
-              ),
+              child: _NextFab(onTap: () => _openAarti(nextPujaAarti)),
             ),
 
           // Focus mode overlay
@@ -589,6 +585,10 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               aarti: widget.aarti,
               verses: verses,
               scriptMode: scriptMode,
+              onNextAarti: nextPujaAarti == null
+                  ? null
+                  : () => _openAarti(nextPujaAarti),
+              nextAartiTitle: nextPujaAarti?.title,
               onClose: () => setState(() => _focusMode = false),
             ),
 
@@ -778,7 +778,9 @@ Color _accentFillColor(BuildContext context) {
 
 Color _accentSurfaceColor(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
-  return isDark ? AppColors.saffron.withValues(alpha: 0.18) : AppColors.saffronGlow;
+  return isDark
+      ? AppColors.saffron.withValues(alpha: 0.18)
+      : AppColors.saffronGlow;
 }
 
 Color _accentTextColor(BuildContext context) {

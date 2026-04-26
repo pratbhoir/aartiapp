@@ -1,3 +1,11 @@
+## [2026-04-26] — Focus Mode Tap Zones + Puja Next CTA
+
+### Modified
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Changed focus-mode tap behavior so taps above the highlighted verse go to the previous verse, taps on or below it go forward, and the last verse can show a dark-mode-consistent next-aarti CTA when a puja-sequence successor exists.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Reused the detail-screen puja navigation callback for both the floating next FAB and the focus-mode last-verse CTA.
+- `docs/FILE_REGISTRY.md` — Refreshed Aarti Detail metadata for the focus-mode interaction and sequence handoff updates.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the new focus-mode tap-zone rule and the last-verse next-aarti CTA visibility rule.
+
 ## [2026-04-26] — Settings, My Puja, and Home Theme Contrast Fix
 
 ### Modified
