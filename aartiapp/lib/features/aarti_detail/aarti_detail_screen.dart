@@ -46,7 +46,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
-    _initAudio();
+    if (widget.aarti.audioUrl.trim().isNotEmpty) {
+      _initAudio();
+    }
     _scrollController.addListener(_onScroll);
   }
 
@@ -167,9 +169,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     final textScale = ref.watch(textScaleProvider);
     final bookmarks = ref.watch(bookmarkProvider);
     final isBookmarked = bookmarks.contains(widget.aarti.id);
-    final isInPuja = ref.watch(pujaOrderProvider.notifier).isInPuja(widget.aarti.id);
     final verses = widget.aarti.verses;
     final verseCount = verses.isNotEmpty ? verses.length : 0;
+    final hasAudioUrl = widget.aarti.audioUrl.trim().isNotEmpty;
 
     return Scaffold(
       backgroundColor: context.scaffoldBg,
@@ -426,7 +428,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                             )
                           : SliverPadding(
                               padding:
-                                  const EdgeInsets.fromLTRB(24, 0, 24, 160),
+                                  EdgeInsets.fromLTRB(24, 0, 24, hasAudioUrl ? 160 : 24),
                               sliver: SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                   (_, i) => VerseBlock(
@@ -447,36 +449,37 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
           ),
 
           // Sticky audio player
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: AudioPlayerWidget(
-              aarti: widget.aarti,
-              isPlaying: _isPlaying,
-              position: _position,
-              duration: _duration,
-              onPlayPause: _togglePlay,
-              onSkipPrevious: _seekBackward,
-              onSkipNext: _seekForward,
-              onRepeatToggle: _toggleRepeat,
-              isRepeatOn: _repeatOn,
-              onScrub: (v) {
-                final newPos = Duration(
-                    milliseconds:
-                        (v * _duration.inMilliseconds).round());
-                _audioPlayer.seek(newPos);
-              },
-              verseLabel: verseCount > 0
-                  ? 'Verse ${_currentVerse + 1} of $verseCount'
-                  : null,
+          if (hasAudioUrl)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: AudioPlayerWidget(
+                aarti: widget.aarti,
+                isPlaying: _isPlaying,
+                position: _position,
+                duration: _duration,
+                onPlayPause: _togglePlay,
+                onSkipPrevious: _seekBackward,
+                onSkipNext: _seekForward,
+                onRepeatToggle: _toggleRepeat,
+                isRepeatOn: _repeatOn,
+                onScrub: (v) {
+                  final newPos = Duration(
+                      milliseconds:
+                          (v * _duration.inMilliseconds).round());
+                  _audioPlayer.seek(newPos);
+                },
+                verseLabel: verseCount > 0
+                    ? 'Verse ${_currentVerse + 1} of $verseCount'
+                    : null,
+              ),
             ),
-          ),
 
           // "Next" FAB — triggered at 90% audio OR scroll-to-bottom
           if (_showNextFab)
             Positioned(
-              bottom: 140,
+              bottom: hasAudioUrl ? 140 : 24,
               right: 24,
               child: _NextFab(
                 onTap: () {

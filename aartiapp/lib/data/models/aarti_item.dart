@@ -16,8 +16,8 @@ class AartiItem {
   final String audioUrl;
 
   /// Default audio URL for all aartis.
-  static const String defaultAudioUrl =
-      'https://smt.rajresortarnala.com/aarti/aarti01.mp3';
+  static const String defaultAudioUrl = '';
+  // static const String defaultAudioUrl = 'https://smt.foozylab.com/aarti/aarti01.mp3';
 
   const AartiItem({
     required this.id,

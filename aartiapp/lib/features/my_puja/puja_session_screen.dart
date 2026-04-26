@@ -40,6 +40,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
   late Animation<double> _fadeAnim;
 
   AartiItem get _currentAarti => widget.pujaAartis[_currentIndex];
+  bool get _hasAudioUrl => _currentAarti.audioUrl.trim().isNotEmpty;
   bool get _hasNext => _currentIndex < widget.pujaAartis.length - 1;
   bool get _hasPrev => _currentIndex > 0;
 
@@ -71,11 +72,17 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
       _currentIndex = index;
       _position = Duration.zero;
       _duration = Duration.zero;
+      _isPlaying = false;
     });
 
     // Animate transition
     _fadeCtrl.reset();
     _fadeCtrl.forward();
+
+    if (!_hasAudioUrl) {
+      await _audioPlayer.stop();
+      return;
+    }
 
     try {
       final dur = await _audioPlayer.setUrl(_currentAarti.audioUrl);
@@ -143,6 +150,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
   }
 
   void _togglePlay() {
+    if (!_hasAudioUrl) return;
     if (_isPlaying) {
       _audioPlayer.pause();
     } else {
@@ -353,124 +361,160 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(24)),
               ),
-              child: Column(
-                children: [
-                  // Progress
-                  Row(
-                    children: [
-                      Text(
-                        _formatDuration(_position),
-                        style: AppTypography.body(
-                            size: 11,
-                            color:
-                                AppColors.white.withValues(alpha: 0.5)),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            activeTrackColor: AppColors.saffron,
-                            inactiveTrackColor: AppColors.darkBorder,
-                            thumbColor: AppColors.saffron,
-                            thumbShape: const RoundSliderThumbShape(
-                                enabledThumbRadius: 5),
-                            trackHeight: 2.5,
-                            overlayShape: SliderComponentShape.noOverlay,
+              child: _hasAudioUrl
+                  ? Column(
+                      children: [
+                        // Progress
+                        Row(
+                          children: [
+                            Text(
+                              _formatDuration(_position),
+                              style: AppTypography.body(
+                                  size: 11,
+                                  color:
+                                      AppColors.white.withValues(alpha: 0.5)),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                  activeTrackColor: AppColors.saffron,
+                                  inactiveTrackColor: AppColors.darkBorder,
+                                  thumbColor: AppColors.saffron,
+                                  thumbShape: const RoundSliderThumbShape(
+                                      enabledThumbRadius: 5),
+                                  trackHeight: 2.5,
+                                  overlayShape:
+                                      SliderComponentShape.noOverlay,
+                                ),
+                                child: Slider(
+                                  value: _duration.inMilliseconds > 0
+                                      ? (_position.inMilliseconds /
+                                              _duration.inMilliseconds)
+                                          .clamp(0.0, 1.0)
+                                      : 0.0,
+                                  onChanged: (v) {
+                                    _audioPlayer.seek(Duration(
+                                        milliseconds:
+                                            (v * _duration.inMilliseconds)
+                                                .round()));
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              _formatDuration(_duration),
+                              style: AppTypography.body(
+                                  size: 11,
+                                  color:
+                                      AppColors.white.withValues(alpha: 0.5)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Control buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Repeat toggle
+                            IconButton(
+                              icon: Icon(
+                                _repeatCurrent
+                                    ? Icons.repeat_one
+                                    : Icons.repeat,
+                                size: 22,
+                                color: _repeatCurrent
+                                    ? AppColors.saffron
+                                    : AppColors.ink3,
+                              ),
+                              onPressed: () {
+                                ref
+                                    .read(repeatCurrentProvider.notifier)
+                                    .toggle();
+                              },
+                            ),
+                            const SizedBox(width: 12),
+
+                            // Previous
+                            IconButton(
+                              icon: Icon(Icons.skip_previous_rounded,
+                                  size: 32,
+                                  color: _hasPrev
+                                      ? AppColors.white
+                                      : AppColors.darkBorder),
+                              onPressed: _hasPrev ? _goPrev : null,
+                            ),
+                            const SizedBox(width: 12),
+
+                            // Play/Pause
+                            PlayPauseBtn(
+                              isPlaying: _isPlaying,
+                              onTap: _togglePlay,
+                            ),
+                            const SizedBox(width: 12),
+
+                            // Next
+                            IconButton(
+                              icon: Icon(Icons.skip_next_rounded,
+                                  size: 32,
+                                  color: _hasNext
+                                      ? AppColors.white
+                                      : AppColors.darkBorder),
+                              onPressed: _hasNext ? _goNext : null,
+                            ),
+                            const SizedBox(width: 12),
+
+                            // Auto-play toggle
+                            IconButton(
+                              icon: Icon(
+                                Icons.playlist_play_rounded,
+                                size: 22,
+                                color: _autoPlay
+                                    ? AppColors.saffron
+                                    : AppColors.ink3,
+                              ),
+                              onPressed: () {
+                                ref
+                                    .read(autoPlayProvider.notifier)
+                                    .toggle();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Audio unavailable for this aarti.',
+                            style: AppTypography.body(
+                              size: 12,
+                              color: AppColors.white.withValues(alpha: 0.6),
+                            ),
                           ),
-                          child: Slider(
-                            value: _duration.inMilliseconds > 0
-                                ? (_position.inMilliseconds /
-                                        _duration.inMilliseconds)
-                                    .clamp(0.0, 1.0)
-                                : 0.0,
-                            onChanged: (v) {
-                              _audioPlayer.seek(Duration(
-                                  milliseconds:
-                                      (v * _duration.inMilliseconds)
-                                          .round()));
-                            },
-                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        _formatDuration(_duration),
-                        style: AppTypography.body(
-                            size: 11,
-                            color:
-                                AppColors.white.withValues(alpha: 0.5)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Control buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Repeat toggle
-                      IconButton(
-                        icon: Icon(
-                          _repeatCurrent
-                              ? Icons.repeat_one
-                              : Icons.repeat,
-                          size: 22,
-                          color: _repeatCurrent
-                              ? AppColors.saffron
-                              : AppColors.ink3,
+                        const SizedBox(width: 8),
+                        IconButton(
+                          icon: Icon(Icons.skip_previous_rounded,
+                              size: 30,
+                              color: _hasPrev
+                                  ? AppColors.white
+                                  : AppColors.darkBorder),
+                          onPressed: _hasPrev ? _goPrev : null,
                         ),
-                        onPressed: () {
-                          ref.read(repeatCurrentProvider.notifier).toggle();
-                        },
-                      ),
-                      const SizedBox(width: 12),
-
-                      // Previous
-                      IconButton(
-                        icon: Icon(Icons.skip_previous_rounded,
-                            size: 32,
-                            color: _hasPrev
-                                ? AppColors.white
-                                : AppColors.darkBorder),
-                        onPressed: _hasPrev ? _goPrev : null,
-                      ),
-                      const SizedBox(width: 12),
-
-                      // Play/Pause
-                      PlayPauseBtn(
-                        isPlaying: _isPlaying,
-                        onTap: _togglePlay,
-                      ),
-                      const SizedBox(width: 12),
-
-                      // Next
-                      IconButton(
-                        icon: Icon(Icons.skip_next_rounded,
-                            size: 32,
-                            color: _hasNext
-                                ? AppColors.white
-                                : AppColors.darkBorder),
-                        onPressed: _hasNext ? _goNext : null,
-                      ),
-                      const SizedBox(width: 12),
-
-                      // Auto-play toggle
-                      IconButton(
-                        icon: Icon(
-                          Icons.playlist_play_rounded,
-                          size: 22,
-                          color: _autoPlay
-                              ? AppColors.saffron
-                              : AppColors.ink3,
+                        IconButton(
+                          icon: Icon(Icons.skip_next_rounded,
+                              size: 30,
+                              color: _hasNext
+                                  ? AppColors.white
+                                  : AppColors.darkBorder),
+                          onPressed: _hasNext ? _goNext : null,
                         ),
-                        onPressed: () {
-                          ref.read(autoPlayProvider.notifier).toggle();
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
             ),
           ],
         ),
