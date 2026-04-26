@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
-import '../../core/utils/search_engine.dart';
 import '../../data/repositories/aarti_repository.dart';
+import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
 import '../../shared/widgets/section_label.dart';
@@ -26,6 +26,9 @@ class DiscoverScreen extends ConsumerWidget {
     final catalog = AartiRepository.instance;
     final aartis = catalog.aartis;
     final deities = catalog.deities;
+    final festivalTags = FestivalRepository.instance.orderedFestivalTags(
+      allowedTags: catalog.allFestivalTags,
+    );
 
     return SafeArea(
       child: Column(
@@ -100,7 +103,7 @@ class DiscoverScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 10),
                         FestivalFilterChips(
-                          festivalTags: SearchEngine.allFestivalTags(aartis),
+                          festivalTags: festivalTags,
                           activeTag: ref.watch(activeFestivalTagProvider),
                           onSelect: (tag) {
                             ref.read(activeFestivalTagProvider.notifier).state =

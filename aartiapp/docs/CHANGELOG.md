@@ -1,3 +1,24 @@
+## [2026-04-27] — Upcoming-Only Festival Filters
+
+### Modified
+- `lib/data/models/festival.dart` — Removed the no-longer-used recent-past festival helpers after simplifying Discover festival ordering.
+- `lib/data/repositories/festival_repository.dart` — Simplified Discover festival tags to return only the nearest current or upcoming festivals, capped at 5 chips.
+- `test/festival_repository_test.dart` — Replaced recent-past retention coverage with focused verification for upcoming-only ordering and the 5-chip limit.
+- `docs/FILE_REGISTRY.md` — Updated festival data and test file descriptions for the simplified filter behavior.
+- `docs/FUNCTIONAL_SPEC.md` — Replaced the recent-past retention rule with the upcoming-only, max-5 chip rule.
+
+## [2026-04-27] — Calendar-Ordered Festival Filters
+
+### Added
+- `test/festival_repository_test.dart` — Added focused repository coverage for active, upcoming, duplicate-tag, and recent-past festival filter ordering.
+
+### Modified
+- `lib/data/models/festival.dart` — Added recent-past date helpers so calendar relevance can retain ended festivals for a limited window.
+- `lib/data/repositories/festival_repository.dart` — Added calendar-driven festival tag ordering for Discover, promoting active festivals first, upcoming festivals next, and recent past festivals for up to 5 days.
+- `lib/features/discover/discover_screen.dart` — Switched festival filter chips from alphabetical catalog tags to the repository’s calendar-ordered tag list.
+- `docs/FILE_REGISTRY.md` — Updated Discover and festival data file metadata and registered the new repository test.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the date-aware Discover festival chip ordering and 5-day recent-past retention rule.
+
 ## [2026-04-27] — Focus Settings Language-Only Surface Buttons
 
 ### Modified

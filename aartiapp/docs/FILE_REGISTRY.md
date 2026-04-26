@@ -49,7 +49,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/data/models/aarti_item.dart` | `AartiItem` data class — title, deity, verses, tags, audio URL | 2026-04-20 |
-| `lib/data/models/festival.dart` | `Festival` data class — date-range Hindu festival with deity and aarti tag linking | 2026-04-20 |
+| `lib/data/models/festival.dart` | `Festival` data class — date-range Hindu festival with deity and aarti tag linking plus active/upcoming date helpers | 2026-04-27 |
 | `lib/data/models/verse_data.dart` | `VerseData` data class — Devanagari lines, transliteration, meanings, Gujarati | 2026-04-20 |
 
 ## Data / Repositories
@@ -58,7 +58,7 @@
 |-----------|---------|--------------|
 | `lib/data/repositories/aarti_repository.dart` | `AartiRepository` singleton — loads bundled `aarti_catalog.json`, provides query accessors | 2026-04-20 |
 | `lib/data/repositories/bookmark_repository.dart` | `BookmarkRepository` — Hive-backed bookmark toggle/query | 2026-04-20 |
-| `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled Hindu calendar JSON (2026–2028) | 2026-04-20 |
+| `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled Hindu calendar JSON (2026–2028) and returns up to 5 Discover festival tags in nearest current/upcoming order | 2026-04-27 |
 | `lib/data/repositories/puja_repository.dart` | `PujaRepository` — Hive-backed ordered puja list persistence | 2026-04-20 |
 | `lib/data/repositories/recently_played_repository.dart` | `RecentlyPlayedRepository` — Hive-backed recently-viewed aarti tracking (max 20) | 2026-04-20 |
 | `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, script language, app language, and other user settings | 2026-04-26 |
@@ -103,7 +103,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with deity filter, search, festival filters, and script-aware aarti grid | 2026-04-26 |
+| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with deity filter, search, calendar-ordered festival filters, and script-aware aarti grid | 2026-04-27 |
 | `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, script-aware subtitle, duration, bookmark | 2026-04-26 |
 | `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
 | `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable festival tag chips | 2026-04-20 |
@@ -174,3 +174,9 @@
 | `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-04-27 |
 | `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions | 2026-04-26 |
 | `docs/CHANGELOG.md` | Chronological log of all changes | 2026-04-27 |
+
+## Testing
+
+| File Path | Purpose | Last Updated |
+|-----------|---------|--------------|
+| `test/festival_repository_test.dart` | Focused repository tests for upcoming-only festival filter ordering, duplicate-tag collapsing, and the 5-chip limit | 2026-04-27 |

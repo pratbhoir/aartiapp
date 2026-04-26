@@ -67,7 +67,8 @@
 1. User opens Discover to find prayers using deity chips, search, and festival filters.
 2. User can search by title, deity, Devanagari text, or festival tags.
 3. User can filter by deity chips (horizontal scroll) or festival tags.
-4. User taps an Aarti card → navigates to `AartiDetailScreen`.
+4. Festival filter chips show only the next 5 current or upcoming festivals, ordered by nearest date.
+5. User taps an Aarti card → navigates to `AartiDetailScreen`.
 
 ### 2.3 Aarti Detail
 
@@ -132,6 +133,7 @@
 | Recently played | Max 20 items, most recent first, duplicates removed on re-add. |
 | Mantra counter presets | 11, 21, 27, 108, 1008 — user selects before starting. |
 | Festival calendar | Pre-calculated dates for 2026–2028. Supports single-day and multi-day ranges. |
+| Discover festival filter ordering | Festival chips show only the next 5 current or upcoming festivals, ordered by nearest date, with duplicate yearly tags collapsed to one chip. |
 | Audio default | All aartis share a default audio URL if no specific URL is provided. |
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
 | Script language default | First-run script language defaults to Devanagari. |

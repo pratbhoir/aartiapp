@@ -59,4 +59,103 @@ class FestivalRepository {
   Festival? todayOrUpcoming({DateTime? now}) {
     return todayFestival(now: now) ?? nextUpcoming(from: now);
   }
+
+  /// Returns up to [maxCount] unique current or upcoming festival tags.
+  ///
+  /// Tags are ordered by the nearest festival date starting from today, with
+  /// active festivals naturally appearing first. When multiple yearly festival
+  /// entries share the same tag, only the nearest current or upcoming one is
+  /// kept.
+  List<String> orderedFestivalTags({
+    DateTime? now,
+    int maxCount = 5,
+    Iterable<String>? allowedTags,
+  }) {
+    final today = _dateOnly(now ?? DateTime.now());
+    final allowedTagMap = <String, String>{};
+
+    if (allowedTags != null) {
+      for (final tag in allowedTags) {
+        allowedTagMap.putIfAbsent(tag.toLowerCase(), () => tag);
+      }
+    }
+
+    final upcomingByTag = <String, _FestivalTagOrder>{};
+
+    for (final festival in _festivals) {
+      final normalizedTag = festival.aartiTag.toLowerCase();
+      if (allowedTagMap.isNotEmpty && !allowedTagMap.containsKey(normalizedTag)) {
+        continue;
+      }
+
+      final candidate = _buildTagOrder(
+        festival,
+        today: today,
+        displayTag: allowedTagMap[normalizedTag] ?? festival.aartiTag,
+      );
+      if (candidate == null) {
+        continue;
+      }
+
+      final current = upcomingByTag[normalizedTag];
+      if (current == null || _compareFestivalTagOrder(candidate, current) < 0) {
+        upcomingByTag[normalizedTag] = candidate;
+      }
+    }
+
+    final ordered = upcomingByTag.values.toList()..sort(_compareFestivalTagOrder);
+    return ordered.take(maxCount).map((entry) => entry.tag).toList();
+  }
+
+  static _FestivalTagOrder? _buildTagOrder(
+    Festival festival, {
+    required DateTime today,
+    required String displayTag,
+  }) {
+    if (festival.isActiveOn(today) || !festival.date.isBefore(today)) {
+      return _FestivalTagOrder(
+        tag: displayTag,
+        normalizedTag: festival.aartiTag.toLowerCase(),
+        priority: festival.isActiveOn(today) ? 0 : 1,
+        offsetDays: festival.isActiveOn(today) ? 0 : festival.daysUntil(from: today),
+      );
+    }
+
+    return null;
+  }
+
+  static int _compareFestivalTagOrder(
+    _FestivalTagOrder a,
+    _FestivalTagOrder b,
+  ) {
+    final priorityCompare = a.priority.compareTo(b.priority);
+    if (priorityCompare != 0) {
+      return priorityCompare;
+    }
+
+    final offsetCompare = a.offsetDays.compareTo(b.offsetDays);
+    if (offsetCompare != 0) {
+      return offsetCompare;
+    }
+
+    return a.tag.toLowerCase().compareTo(b.tag.toLowerCase());
+  }
+
+  static DateTime _dateOnly(DateTime value) {
+    return DateTime(value.year, value.month, value.day);
+  }
+}
+
+class _FestivalTagOrder {
+  const _FestivalTagOrder({
+    required this.tag,
+    required this.normalizedTag,
+    required this.priority,
+    required this.offsetDays,
+  });
+
+  final String tag;
+  final String normalizedTag;
+  final int priority;
+  final int offsetDays;
 }
