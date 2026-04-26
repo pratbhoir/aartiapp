@@ -226,6 +226,7 @@ After every implementation task, you MUST:
 6. **Update `docs/ANALYTICS_EVENTS.md`** — If analytics events were added or modified.
 7. **Verify no hardcoded values** — Search your changes for raw `Color(`, `TextStyle(`, `EdgeInsets.all(<number>)` and replace with theme tokens.
 8. **Verify reuse** — Confirm you didn't recreate something that already existed in `shared/`.
+9. **Create a apk or ipa build and save it to the shared drive** — This ensures the feature is available for manual testing and demoing. You can use `execute/runCommand` `flutter build apk; $timestamp = Get-Date -Format "MMdd-HHmm"; $src = "build\app\outputs\flutter-apk\app-release.apk"; $dst = "\\192.168.0.32\Share\aartiapp\aartiapp-v$timestamp.apk"; Copy-Item -Path $src -Destination $dst -Force; Write-Host "√ Copied to: $dst"` to run the appropriate build command for Android or iOS, then move the generated file to the shared drive location.
 
 ---
 
@@ -244,6 +245,8 @@ VERIFY (no hardcoded values, no duplicated modules, tests pass)
     ↓
 UPDATE ALL AFFECTED DOCS
     ↓
+CREATE BUILD AND SAVE TO SHARED DRIVE
+    ↓   
 DONE
 ```
 

@@ -31,7 +31,7 @@
 | Daily notification reminder | ✅ Done | v1.5 | `NotificationService` |
 | Festival banner (bundled calendar 2026–2028) | ✅ Done | v1.5 | `FestiveBanner` |
 | Festival tag filtering | ✅ Done | v1.5 | `FestivalFilterChips` |
-| "Next" FAB (90% audio or scroll-to-bottom) | ✅ Done | v1.5 | `AartiDetailScreen` |
+| "Next" FAB for My Puja sequence (90% audio or scroll-to-bottom) | ✅ Done | v2.2 | `AartiDetailScreen` |
 | Personal Collection (local private aartis) | ✅ Done | v2.0 | `ContributeScreen` |
 | Recently played section | ✅ Done | v2.0 | `DiscoverScreen` |
 | Gujarati script support | ✅ Done | v2.0 | Data + `VerseBlock` |
@@ -82,7 +82,8 @@
    - **Open Mantra Counter** for Japa meditation.
    - **Share** lyrics as text or image.
 7. Audio player shows progress, seek ±10s, repeat toggle.
-8. "Next" FAB appears at 90% audio progress or scroll-to-bottom.
+8. When the current Aarti belongs to My Daily Puja and has a following item in that ordered sequence, a "Next" FAB appears at 90% audio progress or scroll-to-bottom.
+9. Tapping "Next" opens the next Aarti detail screen in the user's current My Daily Puja order.
 
 ### 2.4 My Daily Puja
 
@@ -117,6 +118,7 @@
 | Rule | Description |
 |------|-------------|
 | Bookmark ↔ Puja sync | Bookmarking an Aarti auto-adds it to the puja list. Unbookmarking removes it. |
+| Aarti detail next navigation | The detail-screen "Next" FAB is only available for Aartis that are currently in My Daily Puja and are not the final item in the puja order. |
 | Aarti of the Day | Deterministic: `DateTime.now().weekday` → deity → first matching Aarti in catalog. |
 | Recently played | Max 20 items, most recent first, duplicates removed on re-add. |
 | Mantra counter presets | 11, 21, 27, 108, 1008 — user selects before starting. |

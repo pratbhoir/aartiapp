@@ -4,6 +4,13 @@ All notable changes to the Aarti Sangrah project are documented here.
 
 ---
 
+## [2026-04-26] — Puja-Aware Detail Next Navigation
+
+### Modified
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Restricted the detail-screen "Next" FAB to Aartis that are part of My Daily Puja and wired it to open the next Aarti in puja order instead of popping the current screen.
+- `docs/FILE_REGISTRY.md` — Updated the detail-screen file purpose to include puja-aware next navigation.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the My Puja-only visibility rule and sequential navigation behavior for the detail-screen "Next" FAB.
+
 ## [2026-04-26] — App Language + Script Language Unification
 
 ### Added

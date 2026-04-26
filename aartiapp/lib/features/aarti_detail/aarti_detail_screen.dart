@@ -44,6 +44,25 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
   // For share-as-image
   final GlobalKey _lyricsRepaintKey = GlobalKey();
 
+  AartiItem? _resolveNextPujaAarti() {
+    final userAartis = ref.read(userAartiProvider);
+    final pujaAartis = ref
+        .read(pujaOrderProvider.notifier)
+        .getPujaAartis(userAartis: userAartis);
+    return _nextPujaAarti(pujaAartis: pujaAartis);
+  }
+
+  AartiItem? _nextPujaAarti({required List<AartiItem> pujaAartis}) {
+    final currentIndex = pujaAartis.indexWhere(
+      (aarti) => aarti.id == widget.aarti.id,
+    );
+    if (currentIndex == -1 || currentIndex >= pujaAartis.length - 1) {
+      return null;
+    }
+
+    return pujaAartis[currentIndex + 1];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -88,10 +107,13 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
           if (_repeatOn) {
             _audioPlayer.seek(Duration.zero);
             _audioPlayer.play();
-          } else {
+          } else if (_resolveNextPujaAarti() != null) {
             _audioPlayer.seek(Duration.zero);
             _audioPlayer.pause();
             setState(() => _showNextFab = true);
+          } else {
+            _audioPlayer.seek(Duration.zero);
+            _audioPlayer.pause();
           }
         }
       }
@@ -115,9 +137,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     if (verses.isEmpty || !_scrollController.hasClients) return;
     final maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll <= 0) return;
-    final scrollFraction =
-        (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
-    final newVerse = (scrollFraction * verses.length).floor().clamp(0, verses.length - 1);
+    final scrollFraction = (_scrollController.offset / maxScroll).clamp(
+      0.0,
+      1.0,
+    );
+    final newVerse = (scrollFraction * verses.length).floor().clamp(
+      0,
+      verses.length - 1,
+    );
     if (newVerse != _currentVerse) {
       setState(() => _currentVerse = newVerse);
     }
@@ -125,11 +152,11 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
 
   /// Check if user has scrolled to bottom → trigger Next FAB
   void _checkScrollToBottom() {
+    if (_resolveNextPujaAarti() == null) return;
     if (!_scrollController.hasClients) return;
     final maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll <= 0) return;
-    final fraction =
-        (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
+    final fraction = (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
     if (fraction >= 0.95 && !_showNextFab) {
       setState(() => _showNextFab = true);
     }
@@ -137,9 +164,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
 
   /// Check if audio progress ≥ 90% → trigger Next FAB
   void _checkNextFabTrigger() {
+    if (_resolveNextPujaAarti() == null) return;
     if (_duration.inMilliseconds <= 0) return;
-    final progress =
-        _position.inMilliseconds / _duration.inMilliseconds;
+    final progress = _position.inMilliseconds / _duration.inMilliseconds;
     if (progress >= 0.9 && !_showNextFab) {
       setState(() => _showNextFab = true);
     }
@@ -160,14 +187,12 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
 
   void _seekBackward() {
     final newPos = _position - const Duration(seconds: 10);
-    _audioPlayer
-        .seek(newPos < Duration.zero ? Duration.zero : newPos);
+    _audioPlayer.seek(newPos < Duration.zero ? Duration.zero : newPos);
   }
 
   void _seekForward() {
     final newPos = _position + const Duration(seconds: 10);
-    _audioPlayer.seek(
-        newPos > _duration ? _duration : newPos);
+    _audioPlayer.seek(newPos > _duration ? _duration : newPos);
   }
 
   @override
@@ -176,14 +201,23 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     final scriptMode = ref.watch(scriptModeProvider);
     final appLanguageCode = ref.watch(preferredLanguageProvider);
     final bookmarks = ref.watch(bookmarkProvider);
+    final userAartis = ref.watch(userAartiProvider);
+    final pujaAartis = ref
+        .watch(pujaOrderProvider.notifier)
+        .getPujaAartis(userAartis: userAartis);
     final isBookmarked = bookmarks.contains(widget.aarti.id);
+    final nextPujaAarti = _nextPujaAarti(pujaAartis: pujaAartis);
+    final canShowNextFab = nextPujaAarti != null;
     final verses = widget.aarti.verses;
     final verseCount = verses.isNotEmpty ? verses.length : 0;
     final hasAudioUrl = widget.aarti.audioUrl.trim().isNotEmpty;
-    final scriptTitle =
-        AartiLanguageResolver.resolveAartiTitle(widget.aarti, scriptMode);
+    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(
+      widget.aarti,
+      scriptMode,
+    );
     final showScriptTitle =
-        scriptTitle.trim().isNotEmpty && scriptTitle.trim() != widget.aarti.title.trim();
+        scriptTitle.trim().isNotEmpty &&
+        scriptTitle.trim() != widget.aarti.title.trim();
     final showTransliteration = AartiLanguageResolver.shouldShowTransliteration(
       scriptMode: scriptMode,
       appLanguageCode: appLanguageCode,
@@ -238,14 +272,18 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(
-                                                Icons.arrow_back_ios_new,
-                                                size: 14,
-                                                color: AppColors.ink3),
+                                              Icons.arrow_back_ios_new,
+                                              size: 14,
+                                              color: AppColors.ink3,
+                                            ),
                                             const SizedBox(width: 4),
-                                            Text('Back',
-                                                style: AppTypography.body(
-                                                    size: 12,
-                                                    color: AppColors.ink3)),
+                                            Text(
+                                              'Back',
+                                              style: AppTypography.body(
+                                                size: 12,
+                                                color: AppColors.ink3,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -314,8 +352,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                           onTap: () {
                                             AppHaptics.selection();
                                             ref
-                                                .read(bookmarkProvider
-                                                    .notifier)
+                                                .read(bookmarkProvider.notifier)
                                                 .toggle(widget.aarti.id);
                                           },
                                           child: Container(
@@ -354,16 +391,18 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                               Text(
                                 '${widget.aarti.deity.toUpperCase()} · ${DayDeityMapper.todayHindiName().toUpperCase()}',
                                 style: AppTypography.label(
-                                    size: 10, color: AppColors.saffronDark),
+                                  size: 10,
+                                  color: AppColors.saffronDark,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 widget.aarti.title,
                                 style: AppTypography.displayLarge(context)
                                     .copyWith(
-                                  fontSize: 38 * textScale,
-                                  letterSpacing: -0.5,
-                                ),
+                                      fontSize: 38 * textScale,
+                                      letterSpacing: -0.5,
+                                    ),
                               ),
                               if (showScriptTitle) ...[
                                 const SizedBox(height: 6),
@@ -381,7 +420,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                               if (verseCount > 0)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: AppColors.saffronGlow,
                                     borderRadius: BorderRadius.circular(8),
@@ -389,7 +430,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   child: Text(
                                     'Verse ${_currentVerse + 1} of $verseCount',
                                     style: AppTypography.body(
-                                        size: 12, color: AppColors.saffronDark),
+                                      size: 12,
+                                      color: AppColors.saffronDark,
+                                    ),
                                   ),
                                 ),
                               const SizedBox(height: 16),
@@ -436,8 +479,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                             child: ToggleBar(
                               labels: toggleLabels,
                               activeIndex: availableModes.indexOf(selectedMode),
-                              onSelect: (i) =>
-                                  setState(() => _contentMode = availableModes[i]),
+                              onSelect: (i) => setState(
+                                () => _contentMode = availableModes[i],
+                              ),
                             ),
                           ),
                         ),
@@ -451,15 +495,21 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   child: Text(
                                     'Verse data coming soon for this Aarti.',
                                     style: AppTypography.body(
-                                        size: 14, color: AppColors.ink3),
+                                      size: 14,
+                                      color: AppColors.ink3,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
                             )
                           : SliverPadding(
-                              padding:
-                                  EdgeInsets.fromLTRB(24, 0, 24, hasAudioUrl ? 160 : 24),
+                              padding: EdgeInsets.fromLTRB(
+                                24,
+                                0,
+                                24,
+                                hasAudioUrl ? 160 : 24,
+                              ),
                               sliver: SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                   (_, i) => VerseBlock(
@@ -499,8 +549,8 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                 isRepeatOn: _repeatOn,
                 onScrub: (v) {
                   final newPos = Duration(
-                      milliseconds:
-                          (v * _duration.inMilliseconds).round());
+                    milliseconds: (v * _duration.inMilliseconds).round(),
+                  );
                   _audioPlayer.seek(newPos);
                 },
                 verseLabel: verseCount > 0
@@ -510,14 +560,21 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             ),
 
           // "Next" FAB — triggered at 90% audio OR scroll-to-bottom
-          if (_showNextFab)
+          if (_showNextFab && canShowNextFab)
             Positioned(
               bottom: hasAudioUrl ? 140 : 24,
               right: 24,
               child: _NextFab(
                 onTap: () {
-                  setState(() => _showNextFab = false);
-                  Navigator.pop(context);
+                  ref
+                      .read(recentlyPlayedProvider.notifier)
+                      .addRecent(nextPujaAarti.id);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AartiDetailScreen(aarti: nextPujaAarti),
+                    ),
+                  );
                 },
               ),
             ),
@@ -564,10 +621,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
       );
     }
 
-    return AppTypography.devanagari(
-      size: 17 * textScale,
-      color: AppColors.ink,
-    );
+    return AppTypography.devanagari(size: 17 * textScale, color: AppColors.ink);
   }
 
   void _showShareOptions(BuildContext context) {
@@ -578,8 +632,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: context.surface,
-          borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -593,13 +646,18 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               ),
             ),
             const SizedBox(height: 20),
-            Text('Share Aarti',
-                style: AppTypography.serifBody(
-                    size: 18, color: context.textPrimary)),
+            Text(
+              'Share Aarti',
+              style: AppTypography.serifBody(
+                size: 18,
+                color: context.textPrimary,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(widget.aarti.title,
-                style: AppTypography.body(
-                    size: 13, color: AppColors.ink3)),
+            Text(
+              widget.aarti.title,
+              style: AppTypography.body(size: 13, color: AppColors.ink3),
+            ),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -609,8 +667,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                     label: 'As Text',
                     onTap: () {
                       Navigator.pop(ctx);
-                      SharingService.instance
-                          .shareAsText(widget.aarti);
+                      SharingService.instance.shareAsText(widget.aarti);
                     },
                   ),
                 ),
@@ -621,8 +678,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                     label: 'As Image',
                     onTap: () {
                       Navigator.pop(ctx);
-                      SharingService.instance
-                          .shareAsImage(_lyricsRepaintKey);
+                      SharingService.instance.shareAsImage(_lyricsRepaintKey);
                     },
                   ),
                 ),
@@ -648,10 +704,7 @@ class _NextFab extends StatelessWidget {
       tween: Tween(begin: 0.0, end: 1.0),
       duration: const Duration(milliseconds: 350),
       curve: Curves.easeOutBack,
-      builder: (_, value, child) => Transform.scale(
-        scale: value,
-        child: child,
-      ),
+      builder: (_, value, child) => Transform.scale(scale: value, child: child),
       child: FloatingActionButton.extended(
         onPressed: onTap,
         backgroundColor: AppColors.saffron,
@@ -659,9 +712,7 @@ class _NextFab extends StatelessWidget {
         icon: const Icon(Icons.skip_next_rounded, size: 20),
         label: const Text('Next'),
         elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
   }
@@ -693,9 +744,10 @@ class _ShareOption extends StatelessWidget {
           children: [
             Icon(icon, size: 28, color: AppColors.saffron),
             const SizedBox(height: 8),
-            Text(label,
-                style: AppTypography.body(
-                    size: 13, color: AppColors.ink2)),
+            Text(
+              label,
+              style: AppTypography.body(size: 13, color: AppColors.ink2),
+            ),
           ],
         ),
       ),
