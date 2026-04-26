@@ -128,7 +128,7 @@
 |-----------|---------|--------------|
 | `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, session launcher, and script-aware preview items | 2026-04-26 |
 | `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, and script-aware verse preview | 2026-04-26 |
-| `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, title, script-aware subtitle, and remove button | 2026-04-26 |
+| `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, script-aware subtitle, and theme-aware sequence/remove controls | 2026-04-26 |
 
 ## Features / Contribute
 
@@ -140,7 +140,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and script-aware recently played previews | 2026-04-26 |
+| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and theme-aware script-aware recently played previews | 2026-04-26 |
 
 ## Features / Onboarding
 
@@ -152,7 +152,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, script language, notification, session settings, and diagnostics entries | 2026-04-26 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, script language, notification, session settings, diagnostics entries, and theme-aware control chrome | 2026-04-26 |
 | `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
 
 ## Assets

@@ -132,6 +132,7 @@
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
 | Offline | All content is bundled — the app works fully offline. |
+| Theme-aware chrome | Settings controls, My Puja list controls, and Home recently played cards resolve neutral fills, borders, and captions from the current theme instead of fixed light-only tokens. |
 
 ---
 

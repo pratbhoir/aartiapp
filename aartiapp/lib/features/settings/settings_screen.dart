@@ -43,7 +43,7 @@ class SettingsScreen extends ConsumerWidget {
                 children: [
                   Text('SETTINGS',
                       style:
-                          AppTypography.label(size: 10, color: AppColors.ink3)),
+                          AppTypography.label(size: 10, color: context.textCaption)),
                   const SizedBox(height: 6),
                   RichText(
                     text: TextSpan(
@@ -113,7 +113,7 @@ class SettingsScreen extends ConsumerWidget {
                         child: Text(
                           '${(textScale * 100).round()}%',
                           style: AppTypography.body(
-                              size: 13, color: AppColors.ink),
+                              size: 13, color: context.textSecondary),
                         ),
                       ),
                       _ScaleButton(
@@ -261,14 +261,14 @@ class SettingsScreen extends ConsumerWidget {
                                 margin: const EdgeInsets.only(left: 4),
                                 decoration: BoxDecoration(
                                   color: isActive
-                                      ? AppColors.saffronGlow
-                                      : AppColors.stone2,
+                                      ? _accentSurfaceColor(context)
+                                      : context.border,
                                   borderRadius:
                                       BorderRadius.circular(6),
                                   border: Border.all(
                                     color: isActive
-                                        ? AppColors.saffron
-                                        : AppColors.stone3,
+                                        ? _accentFillColor(context)
+                                        : context.borderSubtle,
                                   ),
                                 ),
                                 child: Center(
@@ -277,8 +277,8 @@ class SettingsScreen extends ConsumerWidget {
                                     style: AppTypography.body(
                                       size: 10,
                                       color: isActive
-                                          ? AppColors.saffronDark
-                                          : AppColors.ink3,
+                                          ? _accentTextColor(context)
+                                          : context.textCaption,
                                     ),
                                   ),
                                 ),
@@ -382,7 +382,7 @@ class SettingsScreen extends ConsumerWidget {
           autofocus: true,
           decoration: InputDecoration(
             hintText: 'Enter your name',
-            hintStyle: AppTypography.body(size: 14, color: AppColors.ink3),
+            hintStyle: AppTypography.body(size: 14, color: context.textCaption),
           ),
         ),
         actions: [
@@ -432,7 +432,7 @@ class SettingsScreen extends ConsumerWidget {
                     width: 36,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.stone3,
+                      color: modalContext.borderSubtle,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -450,20 +450,20 @@ class SettingsScreen extends ConsumerWidget {
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.ios_share_outlined,
                             size: 20,
-                            color: AppColors.ink2,
+                            color: modalContext.textSecondary,
                           ),
                           onPressed: () async {
                             await ActivityLogService.share();
                           },
                         ),
                         IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.delete_outline,
                             size: 20,
-                            color: AppColors.ink2,
+                            color: modalContext.textSecondary,
                           ),
                           onPressed: () async {
                             await ActivityLogService.clear();
@@ -494,7 +494,7 @@ class SettingsScreen extends ConsumerWidget {
                               'No activity captured yet.',
                               style: AppTypography.body(
                                 size: 14,
-                                color: AppColors.ink3,
+                                color: modalContext.textCaption,
                               ),
                             ),
                           )
@@ -545,21 +545,25 @@ class _ActivityLogEntryTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(_iconForLevel(level), size: 16, color: _colorForLevel(level)),
+              Icon(
+                _iconForLevel(level),
+                size: 16,
+                color: _colorForLevel(context, level),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   '$tag · ${level.toUpperCase()}',
                   style: AppTypography.body(
                     size: 12,
-                    color: AppColors.ink2,
+                    color: context.textSecondary,
                     weight: FontWeight.w500,
                   ),
                 ),
               ),
               Text(
                 ts,
-                style: AppTypography.body(size: 11, color: AppColors.ink3),
+                style: AppTypography.body(size: 11, color: context.textCaption),
               ),
             ],
           ),
@@ -578,7 +582,7 @@ class _ActivityLogEntryTile extends StatelessWidget {
               stack,
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
-              style: AppTypography.body(size: 11, color: AppColors.ink3),
+              style: AppTypography.body(size: 11, color: context.textCaption),
             ),
           ],
         ],
@@ -597,14 +601,16 @@ class _ActivityLogEntryTile extends StatelessWidget {
     }
   }
 
-  static Color _colorForLevel(String level) {
+  static Color _colorForLevel(BuildContext context, String level) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     switch (level) {
       case 'error':
-        return AppColors.saffronDark;
+        return isDark ? AppColors.saffronLight : AppColors.saffronDark;
       case 'warn':
         return AppColors.gold;
       default:
-        return AppColors.ink3;
+        return context.textCaption;
     }
   }
 
@@ -628,7 +634,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title.toUpperCase(),
-      style: AppTypography.label(size: 10, color: AppColors.ink3),
+      style: AppTypography.label(size: 10, color: context.textCaption),
     );
   }
 }
@@ -665,10 +671,10 @@ class _SettingsTile extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppColors.stone2,
+                color: context.border,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, size: 18, color: AppColors.ink2),
+              child: Icon(icon, size: 18, color: context.textSecondary),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -682,13 +688,13 @@ class _SettingsTile extends StatelessWidget {
                           weight: FontWeight.w400)),
                   Text(subtitle,
                       style:
-                          AppTypography.body(size: 12, color: AppColors.ink3)),
+                          AppTypography.body(size: 12, color: context.textCaption)),
                 ],
               ),
             ),
             if (trailing != null) trailing!,
             if (onTap != null && trailing == null)
-              const Icon(Icons.chevron_right, size: 18, color: AppColors.ink3),
+              Icon(Icons.chevron_right, size: 18, color: context.textCaption),
           ],
         ),
       ),
@@ -707,7 +713,7 @@ class _ThemeToggle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: AppColors.stone2,
+        color: context.border,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -747,6 +753,8 @@ class _ThemeBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -759,7 +767,7 @@ class _ThemeBtn extends StatelessWidget {
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: AppColors.ink.withValues(alpha: 0.08),
+                    color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.08),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   )
@@ -769,7 +777,7 @@ class _ThemeBtn extends StatelessWidget {
         child: Icon(
           icon,
           size: 16,
-          color: isActive ? AppColors.saffron : AppColors.ink3,
+          color: isActive ? _accentFillColor(context) : context.textCaption,
         ),
       ),
     );
@@ -790,14 +798,14 @@ class _ScaleButton extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: AppColors.stone2,
+          color: context.border,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
           child: Text(
             label,
             style: AppTypography.body(
-                size: 12, color: AppColors.ink, weight: FontWeight.w500),
+                size: 12, color: context.textSecondary, weight: FontWeight.w500),
           ),
         ),
       ),
@@ -818,7 +826,7 @@ class _ScriptModeSelector extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: AppColors.stone2,
+        color: context.border,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -837,7 +845,11 @@ class _ScriptModeSelector extends StatelessWidget {
                 boxShadow: isActive
                     ? [
                         BoxShadow(
-                          color: AppColors.ink.withValues(alpha: 0.08),
+                          color: Colors.black.withValues(
+                            alpha: Theme.of(context).brightness == Brightness.dark
+                                ? 0.18
+                                : 0.08,
+                          ),
                           blurRadius: 3,
                           offset: const Offset(0, 1),
                         )
@@ -849,7 +861,9 @@ class _ScriptModeSelector extends StatelessWidget {
                   _labels[i],
                   style: AppTypography.body(
                     size: 14,
-                    color: isActive ? AppColors.saffron : AppColors.ink3,
+                    color: isActive
+                        ? _accentFillColor(context)
+                        : context.textCaption,
                     weight: isActive ? FontWeight.w500 : FontWeight.w300,
                   ),
                 ),
@@ -879,7 +893,7 @@ class _AppLanguageSelector extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: AppColors.stone2,
+        color: context.border,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -899,7 +913,11 @@ class _AppLanguageSelector extends StatelessWidget {
                 boxShadow: isActive
                     ? [
                         BoxShadow(
-                          color: AppColors.ink.withValues(alpha: 0.08),
+                          color: Colors.black.withValues(
+                            alpha: Theme.of(context).brightness == Brightness.dark
+                                ? 0.18
+                                : 0.08,
+                          ),
                           blurRadius: 3,
                           offset: const Offset(0, 1),
                         )
@@ -911,7 +929,9 @@ class _AppLanguageSelector extends StatelessWidget {
                   _labels[index],
                   style: AppTypography.body(
                     size: 14,
-                    color: isActive ? AppColors.saffron : AppColors.ink3,
+                    color: isActive
+                        ? _accentFillColor(context)
+                        : context.textCaption,
                     weight: isActive ? FontWeight.w500 : FontWeight.w300,
                   ),
                 ),
@@ -922,4 +942,19 @@ class _AppLanguageSelector extends StatelessWidget {
       ),
     );
   }
+}
+
+Color _accentFillColor(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.saffronLight : AppColors.saffron;
+}
+
+Color _accentSurfaceColor(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.saffron.withValues(alpha: 0.18) : AppColors.saffronGlow;
+}
+
+Color _accentTextColor(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.saffronLight : AppColors.saffronDark;
 }

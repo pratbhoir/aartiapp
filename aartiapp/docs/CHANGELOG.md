@@ -1,3 +1,12 @@
+## [2026-04-26] — Settings, My Puja, and Home Theme Contrast Fix
+
+### Modified
+- `lib/features/settings/settings_screen.dart` — Reworked settings controls, diagnostics sheet, and selector chrome to use theme-aware neutral surfaces and captions in dark mode.
+- `lib/features/my_puja/widgets/puja_list_item.dart` — Updated the sequence badge, drag handle, duration text, play affordance, and remove button to use theme-aware neutral styling.
+- `lib/features/home/home_screen.dart` — Updated the Recently Played card surface, border, and text colors to resolve from the current theme.
+- `docs/FILE_REGISTRY.md` — Refreshed metadata for the touched Settings, My Puja, and Home files.
+- `docs/FUNCTIONAL_SPEC.md` — Added a business rule clarifying theme-aware chrome across these surfaces.
+
 ## [2026-04-26] — Aarti Detail Theme Contrast Fix
 
 ### Modified

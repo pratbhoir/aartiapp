@@ -27,6 +27,11 @@ class PujaListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentFill = isDark ? AppColors.saffronLight : AppColors.saffron;
+    final accentForeground = isDark ? AppColors.darkBg : AppColors.white;
+    final accentSurface =
+        isDark ? AppColors.saffron.withValues(alpha: 0.18) : AppColors.saffronGlow;
     final scriptTitle = AartiLanguageResolver.resolveAartiTitle(aarti, scriptMode);
     final showScriptTitle = scriptTitle.trim() != aarti.title.trim();
 
@@ -49,7 +54,7 @@ class PujaListItem extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: Icon(Icons.drag_indicator,
-                      size: 18, color: AppColors.stone3),
+                      size: 18, color: context.borderSubtle),
                 ),
               ),
 
@@ -58,16 +63,16 @@ class PujaListItem extends StatelessWidget {
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
-                  color: isPlaying ? AppColors.saffron : AppColors.stone2,
+                  color: isPlaying ? accentFill : context.border,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
                   child: Text(
                     '$index',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: isPlaying ? AppColors.white : AppColors.ink3,
+                    style: AppTypography.body(
+                      size: 12,
+                      weight: FontWeight.w500,
+                      color: isPlaying ? accentForeground : context.textCaption,
                     ),
                   ),
                 ),
@@ -96,7 +101,7 @@ class PujaListItem extends StatelessWidget {
                         scriptTitle,
                         style: AppTypography.devanagari(
                           size: 11,
-                          color: AppColors.ink3,
+                          color: context.textCaption,
                         ),
                       ),
                   ],
@@ -110,17 +115,17 @@ class PujaListItem extends StatelessWidget {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: AppColors.saffronGlow,
+                    color: accentSurface,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(Icons.play_arrow_rounded,
-                      size: 18, color: AppColors.saffron),
+                  child: Icon(Icons.play_arrow_rounded,
+                      size: 18, color: accentFill),
                 ),
               ),
               const SizedBox(width: 8),
 
               Text(aarti.duration,
-                  style: AppTypography.body(size: 12, color: AppColors.ink3)),
+                  style: AppTypography.body(size: 12, color: context.textCaption)),
 
               if (onRemove != null) ...[
                 const SizedBox(width: 8),
@@ -130,11 +135,12 @@ class PujaListItem extends StatelessWidget {
                     width: 28,
                     height: 28,
                     decoration: BoxDecoration(
-                      color: AppColors.stone2,
+                      color: context.border,
                       borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: context.borderSubtle),
                     ),
-                    child: const Icon(Icons.close,
-                        size: 12, color: AppColors.ink3),
+                    child: Icon(Icons.close,
+                        size: 12, color: context.textCaption),
                   ),
                 ),
               ],

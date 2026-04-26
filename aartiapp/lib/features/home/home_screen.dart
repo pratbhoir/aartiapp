@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
+import '../../core/theme/theme_aware_colors.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../data/repositories/aarti_repository.dart';
@@ -79,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
                         Text(
                           DayDeityMapper.todaySubtitle(),
                           style:
-                              AppTypography.body(size: 13, color: AppColors.ink3),
+                          AppTypography.body(size: 13, color: context.textCaption),
                         ),
                       ],
                     ),
@@ -229,9 +230,9 @@ class _RecentlyPlayedCard extends StatelessWidget {
         width: 140,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.stone3),
+          border: Border.all(color: context.borderSubtle),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +258,7 @@ class _RecentlyPlayedCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               aarti.title,
-              style: AppTypography.body(size: 12, color: AppColors.ink),
+              style: AppTypography.body(size: 12, color: context.textPrimary),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -268,7 +269,7 @@ class _RecentlyPlayedCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.devanagari(
                   size: 11,
-                  color: AppColors.ink3,
+                  color: context.textCaption,
                 ),
               ),
           ],
