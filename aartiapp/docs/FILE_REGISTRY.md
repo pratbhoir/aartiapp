@@ -83,6 +83,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/shared/widgets/aarti_app_bar.dart` | `AartiAppBar` — reusable app bar with optional menu affordance and trailing action area | 2026-04-25 |
+| `lib/shared/widgets/focus_mode_settings_sheet.dart` | Shared temporary focus-mode settings bottom sheet used by standalone focus mode and My Puja focus sessions | 2026-04-27 |
 | `lib/shared/widgets/gradient_divider.dart` | `GradientDivider` — saffron-to-transparent horizontal divider | 2026-04-20 |
 | `lib/shared/widgets/section_label.dart` | `SectionLabel` — uppercase tracked section header text | 2026-04-20 |
 
@@ -90,7 +91,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/shared/utils/aarti_language_resolver.dart` | `AartiLanguageResolver` — central script/app-language resolver for aarti titles, verse lines, tab visibility, and English meaning fallback | 2026-04-26 |
+| `lib/shared/utils/aarti_language_resolver.dart` | `AartiLanguageResolver` — central script/app-language resolver for aarti titles, lyric lines, derived secondary-script surfaces, and English meaning fallback | 2026-04-27 |
 
 ## Shared / Painters
 
@@ -114,20 +115,20 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, dynamic tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, focus-mode sequence handoff, and audio init warning logging | 2026-04-26 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, session-style focus mode with temporary reading overrides, and audio init warning logging | 2026-04-27 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
-| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with tap-zone navigation, optional session header/progress dots, puja boundary handoff CTAs, and balanced line splits | 2026-04-27 |
+| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with tap-zone navigation, derived secondary-script rendering, centered session-style header support, puja boundary handoff CTAs, and balanced line splits | 2026-04-27 |
 | `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, and theme-aware modal chrome | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — segmented control switching Lyrics / Transliteration / Meaning views with theme-aware surfaces | 2026-04-26 |
-| `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, transliteration, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, derived secondary-script lines, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-27 |
 
 ## Features / My Puja
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, audio/focus session launchers, and script-aware preview items | 2026-04-26 |
-| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local script/text-size overrides, progress dots, and previous/next aarti handoff | 2026-04-27 |
+| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local reading overrides powered by the shared focus settings sheet, progress dots, and previous/next aarti handoff | 2026-04-27 |
 | `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, and script-aware verse preview | 2026-04-26 |
 | `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, script-aware subtitle, and theme-aware sequence/remove controls | 2026-04-26 |
 
@@ -153,7 +154,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, script language, notification, session settings, diagnostics entries, and theme-aware control chrome | 2026-04-26 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, diagnostics entries, and theme-aware control chrome | 2026-04-27 |
 | `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
 
 ## Assets
@@ -167,9 +168,9 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-04-26 |
-| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-04-26 |
+| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-04-27 |
+| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-04-27 |
 | `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing | 2026-04-20 |
-| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-04-26 |
+| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-04-27 |
 | `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions | 2026-04-26 |
-| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-04-26 |
+| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-04-27 |

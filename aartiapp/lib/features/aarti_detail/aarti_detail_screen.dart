@@ -11,6 +11,7 @@ import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/utils/aarti_language_resolver.dart';
+import '../../shared/widgets/focus_mode_settings_sheet.dart';
 import 'widgets/action_chip.dart' as app;
 import 'widgets/toggle_bar.dart';
 import 'widgets/verse_block.dart';
@@ -29,12 +30,15 @@ class AartiDetailScreen extends ConsumerStatefulWidget {
 class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     with TickerProviderStateMixin {
   AartiDetailContentMode _contentMode = AartiDetailContentMode.lyrics;
+  AartiDetailContentMode _focusContentMode = AartiDetailContentMode.lyrics;
   bool _focusMode = false;
   bool _showCounter = false;
   final ScrollController _scrollController = ScrollController();
   int _currentVerse = 0;
   bool _showNextFab = false;
   bool _repeatOn = false;
+  int _focusScriptMode = 0;
+  double _focusTextScale = 1.0;
 
   late final AudioPlayer _audioPlayer;
   bool _isPlaying = false;
@@ -203,6 +207,19 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     _audioPlayer.seek(newPos > _duration ? _duration : newPos);
   }
 
+  void _openFocusMode({
+    required int scriptMode,
+    required double textScale,
+    required AartiDetailContentMode selectedMode,
+  }) {
+    setState(() {
+      _focusScriptMode = scriptMode;
+      _focusTextScale = textScale;
+      _focusContentMode = selectedMode;
+      _focusMode = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final textScale = ref.watch(textScaleProvider);
@@ -229,22 +246,28 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     final showScriptTitle =
         scriptTitle.trim().isNotEmpty &&
         scriptTitle.trim() != widget.aarti.title.trim();
-    final showTransliteration = AartiLanguageResolver.shouldShowTransliteration(
-      scriptMode: scriptMode,
-      appLanguageCode: appLanguageCode,
-      verses: verses,
-    );
+    final showSecondaryScript =
+        AartiLanguageResolver.shouldShowSecondaryScriptMode(verses: verses);
     final showMeaning = AartiLanguageResolver.hasMeaning(verses);
+    final preferredScriptMode = _preferredScriptModeForFocusSession(
+      appLanguageCode,
+    );
     final availableModes = <AartiDetailContentMode>[
       AartiDetailContentMode.lyrics,
-      if (showTransliteration) AartiDetailContentMode.transliteration,
+      if (showSecondaryScript) AartiDetailContentMode.transliteration,
       if (showMeaning) AartiDetailContentMode.meaning,
     ];
     final selectedMode = availableModes.contains(_contentMode)
         ? _contentMode
         : availableModes.first;
     final toggleLabels = availableModes
-        .map((mode) => _contentModeLabel(mode))
+        .map(
+          (mode) => _contentModeLabel(
+            mode,
+            scriptMode: scriptMode,
+            appLanguageCode: appLanguageCode,
+          ),
+        )
         .toList(growable: false);
 
     return Scaffold(
@@ -459,8 +482,11 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                       icon: Icons.fullscreen_outlined,
                                       label: 'Focus Mode',
                                       isPrimary: true,
-                                      onTap: () =>
-                                          setState(() => _focusMode = true),
+                                      onTap: () => _openFocusMode(
+                                        scriptMode: scriptMode,
+                                        textScale: textScale,
+                                        selectedMode: selectedMode,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     app.ActionChip(
@@ -584,10 +610,19 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             FocusModeOverlay(
               aarti: widget.aarti,
               verses: verses,
-              scriptMode: scriptMode,
-              textScale: textScale,
+              scriptMode: _focusScriptMode,
+              textScale: _focusTextScale,
               appLanguageCode: appLanguageCode,
-              contentMode: selectedMode,
+              contentMode: _focusContentMode,
+              headerLabel: 'AARTI FOCUS MODE',
+              useSessionHeaderLayout: true,
+              onOpenSettings: () => _showFocusModeSettings(
+                context: context,
+                appLanguageCode: appLanguageCode,
+                canShowSecondaryScript: showSecondaryScript,
+                preferredScriptMode: preferredScriptMode,
+                hasNextAarti: nextPujaAarti != null,
+              ),
               onNextAarti: nextPujaAarti == null
                   ? null
                   : () => _openAarti(nextPujaAarti),
@@ -605,15 +640,75 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     );
   }
 
-  String _contentModeLabel(AartiDetailContentMode mode) {
+  String _contentModeLabel(
+    AartiDetailContentMode mode, {
+    required int scriptMode,
+    required String appLanguageCode,
+  }) {
     switch (mode) {
       case AartiDetailContentMode.lyrics:
         return 'Lyrics';
       case AartiDetailContentMode.transliteration:
-        return 'Transliteration';
+        return AartiLanguageResolver.secondaryScriptLabel(
+          scriptMode: scriptMode,
+          appLanguageCode: appLanguageCode,
+        );
       case AartiDetailContentMode.meaning:
         return 'Meaning';
     }
+  }
+
+  int _preferredScriptModeForFocusSession(String appLanguageCode) {
+    final int preferredScriptMode =
+        AartiLanguageResolver.preferredScriptModeForLanguageCode(
+          appLanguageCode,
+        );
+    return preferredScriptMode == 1 ? 0 : preferredScriptMode;
+  }
+
+  void _showFocusModeSettings({
+    required BuildContext context,
+    required String appLanguageCode,
+    required bool canShowSecondaryScript,
+    required int preferredScriptMode,
+    required bool hasNextAarti,
+  }) {
+    showFocusModeSettingsSheet(
+      context: context,
+      appLanguageCode: appLanguageCode,
+      scriptMode: _focusScriptMode,
+      textScale: _focusTextScale,
+      canShowSecondaryScript: canShowSecondaryScript,
+      isSecondaryScriptOn:
+          _focusContentMode == AartiDetailContentMode.transliteration,
+      preferredScriptMode: preferredScriptMode,
+      onScriptModeChanged: (newMode) {
+        setState(() {
+          _focusScriptMode = newMode;
+          if (_focusContentMode == AartiDetailContentMode.transliteration &&
+              !canShowSecondaryScript) {
+            _focusContentMode = AartiDetailContentMode.lyrics;
+          }
+        });
+      },
+      onSecondaryScriptChanged: (value) {
+        setState(() {
+          _focusContentMode = value
+              ? AartiDetailContentMode.transliteration
+              : AartiDetailContentMode.lyrics;
+        });
+      },
+      onTextScaleChanged: (newScale) {
+        setState(() {
+          _focusTextScale = newScale;
+        });
+      },
+      description:
+          'Adjust this focus session without changing your saved app settings.',
+      footerNote: hasNextAarti
+          ? 'Reach the final verse to continue to the next aarti in your puja order. These changes stay only for this focus session.'
+          : 'These changes stay only for this focus session and reset when you reopen focus mode.',
+    );
   }
 
   TextStyle _scriptTitleStyle({

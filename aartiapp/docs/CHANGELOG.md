@@ -1,3 +1,29 @@
+## [2026-04-27] — Standalone Focus Mode Header And Temporary Settings
+
+### Added
+- `lib/shared/widgets/focus_mode_settings_sheet.dart` — Added a shared temporary reading-settings bottom sheet reused by standalone Focus Mode and My Puja Focus Session.
+
+### Modified
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Aligned standalone Focus Mode with the puja-session header chrome and added session-local script, secondary-script, and text-size overrides that reset when the overlay is reopened.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Extended the centered header layout to show verse progress so the same header works for both standalone and puja focus flows.
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Reused the shared focus settings sheet to keep temporary reading controls aligned with standalone Focus Mode.
+- `docs/FILE_REGISTRY.md` — Registered the shared focus settings sheet and refreshed focus-mode file purposes.
+- `docs/ARCHITECTURE.md` — Documented the shared focus settings sheet pattern alongside the reused focus-reading surface.
+- `docs/FUNCTIONAL_SPEC.md` — Added the standalone Focus Mode temporary-settings behavior and centered-header parity with the puja focus session.
+
+## [2026-04-27] — Derived Secondary Script Reading Mode
+
+### Modified
+- `lib/shared/utils/aarti_language_resolver.dart` — Added shared secondary-script derivation and line/title resolution based on app language with a Devanagari fallback when the selected lyric script already matches.
+- `lib/features/settings/settings_screen.dart` — Renamed the existing script selector to primary script and added a derived secondary-script summary used by reading and focus mode.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Switched the dynamic second reader tab from a fixed Transliteration label to the derived secondary-script label.
+- `lib/features/aarti_detail/widgets/verse_block.dart` — Updated the second reading surface to render the derived secondary-script lines instead of Roman-only transliteration.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Made focus reading render the derived secondary script and use the matching dynamic label in fallback content.
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Updated focus-session reading controls to use the same derived secondary-script rule and copy as the detail screen.
+- `docs/FILE_REGISTRY.md` — Refreshed file purposes and last-updated dates for the derived secondary-script feature.
+- `docs/ARCHITECTURE.md` — Documented the shared derived secondary-script rule in the language-resolution architecture.
+- `docs/FUNCTIONAL_SPEC.md` — Updated the detail, settings, and focus-session flows to reflect the derived secondary-script behavior.
+
 ## [2026-04-26] — My Puja Focus Session
 
 ### Added

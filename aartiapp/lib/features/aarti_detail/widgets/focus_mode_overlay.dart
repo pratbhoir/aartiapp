@@ -123,7 +123,13 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
       VerseData(
         label: _contentModeLabel(widget.contentMode),
         lines: fallbackLines.isEmpty ? [fallbackTitle] : fallbackLines,
-        transliteration: [widget.aarti.title],
+        transliteration: [
+          AartiLanguageResolver.resolveSecondaryAartiTitle(
+            widget.aarti,
+            scriptMode: widget.scriptMode,
+            appLanguageCode: widget.appLanguageCode,
+          ),
+        ],
         meanings: widget.contentMode == AartiDetailContentMode.meaning
             ? [widget.aarti.title]
             : const [],
@@ -142,7 +148,11 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
           widget.scriptMode,
         );
       case AartiDetailContentMode.transliteration:
-        return AartiLanguageResolver.resolveTransliterationLines(verse);
+        return AartiLanguageResolver.resolveSecondaryScriptLines(
+          verse,
+          scriptMode: widget.scriptMode,
+          appLanguageCode: widget.appLanguageCode,
+        );
       case AartiDetailContentMode.meaning:
         return AartiLanguageResolver.resolveMeaningLines(
           verse,
@@ -156,7 +166,10 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
       case AartiDetailContentMode.lyrics:
         return 'Lyrics';
       case AartiDetailContentMode.transliteration:
-        return 'Transliteration';
+        return AartiLanguageResolver.secondaryScriptLabel(
+          scriptMode: widget.scriptMode,
+          appLanguageCode: widget.appLanguageCode,
+        );
       case AartiDetailContentMode.meaning:
         return 'Meaning';
     }
@@ -324,16 +337,30 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                       ],
                     ),
             ),
-            if (widget.useSessionHeaderLayout && widget.progressLabel != null)
+            if (widget.useSessionHeaderLayout)
               Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.md),
-                child: Text(
-                  widget.progressLabel!,
-                  style: AppTypography.body(
-                    size: 12,
-                    color: AppColors.white.withValues(alpha: 0.5),
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (widget.progressLabel != null)
+                      Text(
+                        widget.progressLabel!,
+                        style: AppTypography.body(
+                          size: 12,
+                          color: AppColors.white.withValues(alpha: 0.5),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    Text(
+                      verseProgressLabel,
+                      style: AppTypography.body(
+                        size: 11,
+                        color: AppColors.white.withValues(alpha: 0.35),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             if (widget.useSessionHeaderLayout &&
@@ -614,7 +641,11 @@ class _FocusVerse extends StatelessWidget {
       case AartiDetailContentMode.lyrics:
         return AartiLanguageResolver.resolveLyricsLines(verse, scriptMode);
       case AartiDetailContentMode.transliteration:
-        return AartiLanguageResolver.resolveTransliterationLines(verse);
+        return AartiLanguageResolver.resolveSecondaryScriptLines(
+          verse,
+          scriptMode: scriptMode,
+          appLanguageCode: appLanguageCode,
+        );
       case AartiDetailContentMode.meaning:
         return AartiLanguageResolver.resolveMeaningLines(
           verse,
@@ -638,10 +669,20 @@ class _FocusVerse extends StatelessWidget {
               );
         return baseStyle.copyWith(height: 1.5);
       case AartiDetailContentMode.transliteration:
-        return AppTypography.transliteration(
-          size: lineSize * textScale,
-          color: textColor,
-        ).copyWith(height: 1.5);
+        final secondaryScript = AartiLanguageResolver.resolveSecondaryScript(
+          scriptMode: scriptMode,
+          appLanguageCode: appLanguageCode,
+        );
+        final baseStyle = secondaryScript == AppScriptLanguage.english
+            ? AppTypography.transliteration(
+                size: lineSize * textScale,
+                color: textColor,
+              )
+            : AppTypography.devanagari(
+                size: lineSize * textScale,
+                color: textColor,
+              );
+        return baseStyle.copyWith(height: 1.5);
       case AartiDetailContentMode.meaning:
         return AppTypography.body(
           size: lineSize * textScale,

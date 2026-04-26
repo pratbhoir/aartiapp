@@ -22,6 +22,11 @@ class SettingsScreen extends ConsumerWidget {
     final scriptMode = ref.watch(scriptModeProvider);
     final appLanguage = ref.watch(preferredLanguageProvider);
     final userName = ref.watch(userNameProvider);
+    final secondaryScriptMode =
+        AartiLanguageResolver.resolveSecondaryScriptMode(
+          scriptMode: scriptMode,
+          appLanguageCode: appLanguage,
+        );
 
     return SafeArea(
       child: CustomScrollView(
@@ -41,14 +46,19 @@ class SettingsScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('SETTINGS',
-                      style:
-                          AppTypography.label(size: 10, color: context.textCaption)),
+                  Text(
+                    'SETTINGS',
+                    style: AppTypography.label(
+                      size: 10,
+                      color: context.textCaption,
+                    ),
+                  ),
                   const SizedBox(height: 6),
                   RichText(
                     text: TextSpan(
-                      style: AppTypography.displayLarge(context)
-                          .copyWith(fontSize: 34),
+                      style: AppTypography.displayLarge(
+                        context,
+                      ).copyWith(fontSize: 34),
                       children: const [
                         TextSpan(text: 'App '),
                         TextSpan(
@@ -113,7 +123,9 @@ class SettingsScreen extends ConsumerWidget {
                         child: Text(
                           '${(textScale * 100).round()}%',
                           style: AppTypography.body(
-                              size: 13, color: context.textSecondary),
+                            size: 13,
+                            color: context.textSecondary,
+                          ),
                         ),
                       ),
                       _ScaleButton(
@@ -143,7 +155,7 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.language_outlined,
-                  title: 'Script Language',
+                  title: 'Primary Script',
                   subtitle: _scriptModeLabel(scriptMode),
                   trailing: _ScriptModeSelector(
                     mode: scriptMode,
@@ -151,145 +163,155 @@ class SettingsScreen extends ConsumerWidget {
                         ref.read(scriptModeProvider.notifier).setMode(mode),
                   ),
                 ),
+                const SizedBox(height: 12),
+                _SettingsTile(
+                  icon: Icons.compare_arrows_outlined,
+                  title: 'Secondary Script',
+                  subtitle: _secondaryScriptSubtitle(
+                    scriptMode: scriptMode,
+                    secondaryScriptMode: secondaryScriptMode,
+                    appLanguageCode: appLanguage,
+                  ),
+                ),
                 const SizedBox(height: 24),
 
                 // --- Notifications (v1.5) ---
                 _SectionHeader('Notifications'),
                 const SizedBox(height: 12),
-                Builder(builder: (context) {
-                  final notifEnabled = ref.watch(notificationEnabledProvider);
-                  final notifTime = ref.watch(notificationTimeProvider);
-                  return Column(
-                    children: [
-                      _SettingsTile(
-                        icon: Icons.notifications_outlined,
-                        title: 'Daily Puja Reminder',
-                        subtitle: notifEnabled
-                            ? 'Reminder at ${notifTime.format(context)}'
-                            : 'Disabled',
-                        trailing: Switch.adaptive(
-                          value: notifEnabled,
-                          activeTrackColor: AppColors.saffron,
-                          onChanged: (v) async {
-                            if (v) {
-                              await NotificationService.instance.init();
-                              final granted =
-                                  await NotificationService.instance
-                                      .requestPermission();
-                              if (granted) {
-                                ref
-                                    .read(notificationEnabledProvider
-                                        .notifier)
-                                    .set(true);
-                                await NotificationService.instance
-                                    .scheduleDailyReminder(time: notifTime);
-                              }
-                            } else {
-                              ref
-                                  .read(notificationEnabledProvider
-                                      .notifier)
-                                  .set(false);
-                              await NotificationService.instance
-                                  .cancelAll();
-                            }
-                          },
-                        ),
-                      ),
-                      if (notifEnabled) ...[
-                        const SizedBox(height: 12),
+                Builder(
+                  builder: (context) {
+                    final notifEnabled = ref.watch(notificationEnabledProvider);
+                    final notifTime = ref.watch(notificationTimeProvider);
+                    return Column(
+                      children: [
                         _SettingsTile(
-                          icon: Icons.schedule_outlined,
-                          title: 'Reminder Time',
-                          subtitle: notifTime.format(context),
-                          onTap: () async {
-                            final picked = await showTimePicker(
-                              context: context,
-                              initialTime: notifTime,
-                            );
-                            if (picked != null) {
-                              ref
-                                  .read(notificationTimeProvider
-                                      .notifier)
-                                  .set(picked);
-                              await NotificationService.instance
-                                  .scheduleDailyReminder(time: picked);
-                            }
-                          },
+                          icon: Icons.notifications_outlined,
+                          title: 'Daily Puja Reminder',
+                          subtitle: notifEnabled
+                              ? 'Reminder at ${notifTime.format(context)}'
+                              : 'Disabled',
+                          trailing: Switch.adaptive(
+                            value: notifEnabled,
+                            activeTrackColor: AppColors.saffron,
+                            onChanged: (v) async {
+                              if (v) {
+                                await NotificationService.instance.init();
+                                final granted = await NotificationService
+                                    .instance
+                                    .requestPermission();
+                                if (granted) {
+                                  ref
+                                      .read(
+                                        notificationEnabledProvider.notifier,
+                                      )
+                                      .set(true);
+                                  await NotificationService.instance
+                                      .scheduleDailyReminder(time: notifTime);
+                                }
+                              } else {
+                                ref
+                                    .read(notificationEnabledProvider.notifier)
+                                    .set(false);
+                                await NotificationService.instance.cancelAll();
+                              }
+                            },
+                          ),
                         ),
+                        if (notifEnabled) ...[
+                          const SizedBox(height: 12),
+                          _SettingsTile(
+                            icon: Icons.schedule_outlined,
+                            title: 'Reminder Time',
+                            subtitle: notifTime.format(context),
+                            onTap: () async {
+                              final picked = await showTimePicker(
+                                context: context,
+                                initialTime: notifTime,
+                              );
+                              if (picked != null) {
+                                ref
+                                    .read(notificationTimeProvider.notifier)
+                                    .set(picked);
+                                await NotificationService.instance
+                                    .scheduleDailyReminder(time: picked);
+                              }
+                            },
+                          ),
+                        ],
                       ],
-                    ],
-                  );
-                }),
+                    );
+                  },
+                ),
                 const SizedBox(height: 24),
 
                 // --- Puja Session (v1.5) ---
                 _SectionHeader('Puja Session'),
                 const SizedBox(height: 12),
-                Builder(builder: (context) {
-                  final crossfade = ref.watch(crossfadeProvider);
-                  final autoPlay = ref.watch(autoPlayProvider);
-                  return Column(
-                    children: [
-                      _SettingsTile(
-                        icon: Icons.playlist_play_rounded,
-                        title: 'Auto-play',
-                        subtitle: 'Play next aarti in puja session',
-                        trailing: Switch.adaptive(
-                          value: autoPlay,
-                          activeTrackColor: AppColors.saffron,
-                          onChanged: (v) =>
-                              ref.read(autoPlayProvider.notifier).set(v),
+                Builder(
+                  builder: (context) {
+                    final crossfade = ref.watch(crossfadeProvider);
+                    final autoPlay = ref.watch(autoPlayProvider);
+                    return Column(
+                      children: [
+                        _SettingsTile(
+                          icon: Icons.playlist_play_rounded,
+                          title: 'Auto-play',
+                          subtitle: 'Play next aarti in puja session',
+                          trailing: Switch.adaptive(
+                            value: autoPlay,
+                            activeTrackColor: AppColors.saffron,
+                            onChanged: (v) =>
+                                ref.read(autoPlayProvider.notifier).set(v),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      _SettingsTile(
-                        icon: Icons.tune_outlined,
-                        title: 'Crossfade Duration',
-                        subtitle: '${crossfade}s between aartis',
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(4, (i) {
-                            final isActive = crossfade == i;
-                            return GestureDetector(
-                              onTap: () =>
-                                  ref.read(crossfadeProvider.notifier).set(i),
-                              child: AnimatedContainer(
-                                duration:
-                                    const Duration(milliseconds: 200),
-                                width: 32,
-                                height: 28,
-                                margin: const EdgeInsets.only(left: 4),
-                                decoration: BoxDecoration(
-                                  color: isActive
-                                      ? _accentSurfaceColor(context)
-                                      : context.border,
-                                  borderRadius:
-                                      BorderRadius.circular(6),
-                                  border: Border.all(
+                        const SizedBox(height: 12),
+                        _SettingsTile(
+                          icon: Icons.tune_outlined,
+                          title: 'Crossfade Duration',
+                          subtitle: '${crossfade}s between aartis',
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(4, (i) {
+                              final isActive = crossfade == i;
+                              return GestureDetector(
+                                onTap: () =>
+                                    ref.read(crossfadeProvider.notifier).set(i),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  width: 32,
+                                  height: 28,
+                                  margin: const EdgeInsets.only(left: 4),
+                                  decoration: BoxDecoration(
                                     color: isActive
-                                        ? _accentFillColor(context)
-                                        : context.borderSubtle,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '${i}s',
-                                    style: AppTypography.body(
-                                      size: 10,
+                                        ? _accentSurfaceColor(context)
+                                        : context.border,
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
                                       color: isActive
-                                          ? _accentTextColor(context)
-                                          : context.textCaption,
+                                          ? _accentFillColor(context)
+                                          : context.borderSubtle,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${i}s',
+                                      style: AppTypography.body(
+                                        size: 10,
+                                        color: isActive
+                                            ? _accentTextColor(context)
+                                            : context.textCaption,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
+                      ],
+                    );
+                  },
+                ),
                 const SizedBox(height: 24),
 
                 // --- Diagnostics ---
@@ -368,6 +390,22 @@ class SettingsScreen extends ConsumerWidget {
     return AartiLanguageResolver.appLanguageLabel(code);
   }
 
+  String _secondaryScriptSubtitle({
+    required int scriptMode,
+    required int secondaryScriptMode,
+    required String appLanguageCode,
+  }) {
+    final selectedScript = AartiLanguageResolver.scriptFromMode(scriptMode);
+    final appLanguageScript = AartiLanguageResolver.preferredScriptForLanguage(
+      AartiLanguageResolver.appLanguageFromCode(appLanguageCode),
+    );
+    final secondaryLabel = _scriptModeLabel(secondaryScriptMode);
+    if (selectedScript == appLanguageScript) {
+      return '$secondaryLabel · Fallback when app and primary scripts match';
+    }
+    return '$secondaryLabel · Used in secondary reading mode and focus mode';
+  }
+
   void _showNameDialog(BuildContext context, WidgetRef ref, String current) {
     final controller = TextEditingController(text: current);
     showDialog(
@@ -375,8 +413,10 @@ class SettingsScreen extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: context.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Your Name',
-            style: AppTypography.serifBody(size: 18, color: context.textPrimary)),
+        title: Text(
+          'Your Name',
+          style: AppTypography.serifBody(size: 18, color: context.textPrimary),
+        ),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -422,8 +462,9 @@ class SettingsScreen extends ConsumerWidget {
               height: MediaQuery.of(modalContext).size.height * 0.78,
               decoration: BoxDecoration(
                 color: modalContext.surface,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
               ),
               child: Column(
                 children: [
@@ -681,14 +722,21 @@ class _SettingsTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: AppTypography.body(
-                          size: 14,
-                          color: context.textPrimary,
-                          weight: FontWeight.w400)),
-                  Text(subtitle,
-                      style:
-                          AppTypography.body(size: 12, color: context.textCaption)),
+                  Text(
+                    title,
+                    style: AppTypography.body(
+                      size: 14,
+                      color: context.textPrimary,
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: AppTypography.body(
+                      size: 12,
+                      color: context.textCaption,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -770,7 +818,7 @@ class _ThemeBtn extends StatelessWidget {
                     color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.08),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
-                  )
+                  ),
                 ]
               : null,
         ),
@@ -805,7 +853,10 @@ class _ScaleButton extends StatelessWidget {
           child: Text(
             label,
             style: AppTypography.body(
-                size: 12, color: context.textSecondary, weight: FontWeight.w500),
+              size: 12,
+              color: context.textSecondary,
+              weight: FontWeight.w500,
+            ),
           ),
         ),
       ),
@@ -846,13 +897,14 @@ class _ScriptModeSelector extends StatelessWidget {
                     ? [
                         BoxShadow(
                           color: Colors.black.withValues(
-                            alpha: Theme.of(context).brightness == Brightness.dark
+                            alpha:
+                                Theme.of(context).brightness == Brightness.dark
                                 ? 0.18
                                 : 0.08,
                           ),
                           blurRadius: 3,
                           offset: const Offset(0, 1),
-                        )
+                        ),
                       ]
                     : null,
               ),
@@ -914,13 +966,14 @@ class _AppLanguageSelector extends StatelessWidget {
                     ? [
                         BoxShadow(
                           color: Colors.black.withValues(
-                            alpha: Theme.of(context).brightness == Brightness.dark
+                            alpha:
+                                Theme.of(context).brightness == Brightness.dark
                                 ? 0.18
                                 : 0.08,
                           ),
                           blurRadius: 3,
                           offset: const Offset(0, 1),
-                        )
+                        ),
                       ]
                     : null,
               ),
@@ -951,7 +1004,9 @@ Color _accentFillColor(BuildContext context) {
 
 Color _accentSurfaceColor(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
-  return isDark ? AppColors.saffron.withValues(alpha: 0.18) : AppColors.saffronGlow;
+  return isDark
+      ? AppColors.saffron.withValues(alpha: 0.18)
+      : AppColors.saffronGlow;
 }
 
 Color _accentTextColor(BuildContext context) {

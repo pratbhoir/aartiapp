@@ -50,6 +50,7 @@ lib/
 ├── shared/
 │   ├── widgets/
 │   │   ├── aarti_app_bar.dart         # Reusable app bar with hamburger menu
+│   │   ├── focus_mode_settings_sheet.dart # Shared temporary focus-mode settings sheet
 │   │   ├── gradient_divider.dart      # Saffron gradient divider
 │   │   └── section_label.dart         # Uppercase tracked section label
 │   ├── painters/
@@ -97,9 +98,11 @@ Screens are composed from small, focused widgets. Feature-specific widgets live 
 
 The focus-reading surface is intentionally reused across both `AartiDetailScreen` and `PujaFocusSessionScreen` through `features/aarti_detail/widgets/focus_mode_overlay.dart` so verse navigation, balancing, and completion CTA rules stay consistent.
 
+Temporary focus-mode controls that are shared across those flows live in `shared/widgets/focus_mode_settings_sheet.dart`, which keeps the modal chrome and script/text-size override behavior aligned while leaving the actual focus-session state in the owning screen.
+
 ### Shared Language Resolution
 
-Script-language and app-language display rules are centralized in `shared/utils/aarti_language_resolver.dart`. Reading surfaces should resolve titles, lyric lines, transliteration visibility, and meaning fallbacks through that utility instead of duplicating `scriptMode` or `preferredLanguage` branching locally.
+Script-language and app-language display rules are centralized in `shared/utils/aarti_language_resolver.dart`. Reading surfaces should resolve titles, lyric lines, derived secondary-script surfaces, and meaning fallbacks through that utility instead of duplicating `scriptMode` or `preferredLanguage` branching locally.
 
 ---
 
@@ -119,6 +122,8 @@ Script-language and app-language display rules are centralized in `shared/utils/
 User reading preferences are split into two persisted provider-backed settings:
 - `scriptModeProvider` controls the script used for lyric surfaces: Devanagari, English, or Gujarati.
 - `preferredLanguageProvider` controls the app language used for translated meaning surfaces and tab visibility decisions.
+
+The app also derives a non-persisted secondary script from those two settings. Secondary-script surfaces use the app-language reading script by default, and fall back to Devanagari when the selected lyric script already matches that app-language script.
 
 ### Injection Strategy
 

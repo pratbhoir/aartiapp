@@ -27,13 +27,24 @@ class VerseBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final accentColor = isDark ? AppColors.saffronLight : AppColors.saffronDark;
-    final lyricsLines =
-        AartiLanguageResolver.resolveLyricsLines(verse, scriptMode);
-    final transliterationLines =
-        AartiLanguageResolver.resolveTransliterationLines(verse);
-    final meaningLines =
-        AartiLanguageResolver.resolveMeaningLines(verse, appLanguageCode);
+    final lyricsLines = AartiLanguageResolver.resolveLyricsLines(
+      verse,
+      scriptMode,
+    );
+    final secondaryLines = AartiLanguageResolver.resolveSecondaryScriptLines(
+      verse,
+      scriptMode: scriptMode,
+      appLanguageCode: appLanguageCode,
+    );
+    final meaningLines = AartiLanguageResolver.resolveMeaningLines(
+      verse,
+      appLanguageCode,
+    );
     final script = AartiLanguageResolver.scriptFromMode(scriptMode);
+    final secondaryScript = AartiLanguageResolver.resolveSecondaryScript(
+      scriptMode: scriptMode,
+      appLanguageCode: appLanguageCode,
+    );
     final lyricsTextStyle = script == AppScriptLanguage.english
         ? AppTypography.transliteration(
             size: 18 * textScale,
@@ -48,9 +59,15 @@ class VerseBlock extends StatelessWidget {
             size: 18 * textScale,
             color: accentColor,
           )
+        : AppTypography.devanagari(size: 18 * textScale, color: accentColor);
+    final secondaryTextStyle = secondaryScript == AppScriptLanguage.english
+        ? AppTypography.transliteration(
+            size: 14 * textScale,
+            color: context.textCaption,
+          )
         : AppTypography.devanagari(
-            size: 18 * textScale,
-            color: accentColor,
+            size: 15 * textScale,
+            color: context.textCaption,
           );
 
     return Padding(
@@ -76,9 +93,14 @@ class VerseBlock extends StatelessWidget {
           ...List.generate(lyricsLines.length, (i) {
             final isHighlighted = isFirst && i == 0;
             final lyricLine = i < lyricsLines.length ? lyricsLines[i] : '';
-            final transliterationLine =
-                i < transliterationLines.length ? transliterationLines[i] : lyricLine;
+            final secondaryLine = i < secondaryLines.length
+                ? secondaryLines[i]
+                : lyricLine;
             final meaningLine = i < meaningLines.length ? meaningLines[i] : '';
+            final showSecondaryLine =
+                secondaryLine.trim().isNotEmpty &&
+                (secondaryLine.trim() != lyricLine.trim() ||
+                    secondaryScript != script);
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Column(
@@ -92,10 +114,7 @@ class VerseBlock extends StatelessWidget {
                       decoration: isHighlighted
                           ? BoxDecoration(
                               border: Border(
-                                left: BorderSide(
-                                  color: accentColor,
-                                  width: 2,
-                                ),
+                                left: BorderSide(color: accentColor, width: 2),
                               ),
                             )
                           : null,
@@ -112,14 +131,8 @@ class VerseBlock extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(lyricLine, style: lyricsTextStyle),
-                        if (transliterationLine.isNotEmpty)
-                          Text(
-                            transliterationLine,
-                            style: AppTypography.transliteration(
-                              size: 14 * textScale,
-                              color: context.textCaption,
-                            ),
-                          ),
+                        if (showSecondaryLine)
+                          Text(secondaryLine, style: secondaryTextStyle),
                       ],
                     ),
 
@@ -136,10 +149,7 @@ class VerseBlock extends StatelessWidget {
                               color: context.border,
                               borderRadius: BorderRadius.circular(10),
                               border: Border(
-                                left: BorderSide(
-                                  color: accentColor,
-                                  width: 2,
-                                ),
+                                left: BorderSide(color: accentColor, width: 2),
                               ),
                             ),
                             child: Text(
