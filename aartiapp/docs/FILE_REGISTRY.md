@@ -9,7 +9,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/main.dart` | App entry point — initialises Hive, repositories, notifications, and runs `ProviderScope` | 2026-04-20 |
+| `lib/main.dart` | App entry point — initialises Activity Log, Hive, repositories, notifications, global error hooks, and runs `ProviderScope` | 2026-04-26 |
 | `lib/app.dart` | Root `AartiSangrahApp` `ConsumerWidget` — configures `MaterialApp` with light/dark theme and onboarding gate | 2026-04-20 |
 
 ## Core / Theme
@@ -26,14 +26,16 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
+| `lib/core/constants/app_constants.dart` | App-level constants for cross-cutting services (including Activity Log retention + file name) | 2026-04-26 |
 | `lib/core/constants/haptics.dart` | `AppHaptics` — scoped haptic feedback definitions (light, medium, selection, completion) | 2026-04-20 |
 
 ## Core / Services
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
+| `lib/core/services/activity_log_service.dart` | `ActivityLogService` static utility — JSONL-backed runtime log with init/write/read/clear/share APIs | 2026-04-26 |
 | `lib/core/services/notification_service.dart` | `NotificationService` singleton — daily puja reminder scheduling via `flutter_local_notifications` | 2026-04-20 |
-| `lib/core/services/sharing_service.dart` | `SharingService` singleton — share Aarti as text or rendered image via `share_plus` | 2026-04-20 |
+| `lib/core/services/sharing_service.dart` | `SharingService` singleton — share Aarti as text or rendered image via `share_plus`, with Activity Log failure reporting | 2026-04-26 |
 
 ## Core / Utils
 
@@ -106,7 +108,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with lyrics, audio player, bookmark, puja controls | 2026-04-20 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with lyrics, audio player, bookmark, puja controls, and audio init warning logging | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc. | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free reading | 2026-04-20 |
@@ -144,7 +146,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme toggle, text scale, script mode, notification config, about | 2026-04-25 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme/script/notification/session settings plus diagnostics entry for viewing/sharing/clearing Activity Log | 2026-04-26 |
 
 ## Assets
 
@@ -157,9 +159,9 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-04-20 |
-| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-04-20 |
+| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-04-26 |
+| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-04-26 |
 | `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing | 2026-04-20 |
-| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-04-20 |
-| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions | 2026-04-20 |
-| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-04-20 |
+| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-04-26 |
+| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions | 2026-04-26 |
+| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-04-26 |

@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../data/models/aarti_item.dart';
+import 'activity_log_service.dart';
 
 /// Service for sharing Aarti lyrics as text or image.
 class SharingService {
@@ -14,24 +15,33 @@ class SharingService {
 
   /// Share Aarti lyrics as formatted text.
   Future<void> shareAsText(AartiItem aarti) async {
-    final buffer = StringBuffer();
-    buffer.writeln('🙏 ${aarti.title}');
-    buffer.writeln(aarti.devanagari);
-    buffer.writeln('');
-    buffer.writeln('Deity: ${aarti.deity}');
-    buffer.writeln('');
-
-    for (final verse in aarti.verses) {
-      buffer.writeln('— ${verse.label} —');
-      for (final line in verse.lines) {
-        buffer.writeln(line);
-      }
+    try {
+      final buffer = StringBuffer();
+      buffer.writeln('🙏 ${aarti.title}');
+      buffer.writeln(aarti.devanagari);
       buffer.writeln('');
+      buffer.writeln('Deity: ${aarti.deity}');
+      buffer.writeln('');
+
+      for (final verse in aarti.verses) {
+        buffer.writeln('— ${verse.label} —');
+        for (final line in verse.lines) {
+          buffer.writeln(line);
+        }
+        buffer.writeln('');
+      }
+
+      buffer.writeln('Shared from Aarti Sangrah 🙏');
+
+      await Share.share(buffer.toString());
+      ActivityLogService.info('Share', 'Shared text for ${aarti.id}');
+    } catch (e, stack) {
+      ActivityLogService.error(
+        'Share',
+        'Failed to share text for ${aarti.id}: $e',
+        stack,
+      );
     }
-
-    buffer.writeln('Shared from Aarti Sangrah 🙏');
-
-    await Share.share(buffer.toString());
   }
 
   /// Share Aarti lyrics as an image captured from [repaintKey].
@@ -60,8 +70,8 @@ class SharingService {
       );
 
       await Share.shareXFiles([xFile]);
-    } catch (_) {
-      // Fail silently
+    } catch (e, stack) {
+      ActivityLogService.warn('Share', 'Failed to share image: $e', stack);
     }
   }
 }

@@ -4,6 +4,23 @@ All notable changes to the Aarti Sangrah project are documented here.
 
 ---
 
+## [2026-04-26] — Activity Log Diagnostics
+
+### Added
+- `lib/core/constants/app_constants.dart` — Added cross-cutting app constants for Activity Log retention and JSONL file naming.
+- `lib/core/services/activity_log_service.dart` — Added static file-backed JSONL activity log service with init, info/warn/error, read, clear, and share APIs.
+
+### Modified
+- `pubspec.yaml` — Added `path_provider` dependency for Activity Log file persistence/export paths.
+- `lib/main.dart` — Added Activity Log initialization plus global Flutter/Zone error capture hooks.
+- `lib/core/services/sharing_service.dart` — Added Activity Log success/failure reporting for share actions.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Added warning logging for audio initialization failures.
+- `lib/features/settings/settings_screen.dart` — Added diagnostics section with Activity Log viewer, share export, and clear actions.
+- `docs/FILE_REGISTRY.md` — Registered Activity Log files and updated touched-file metadata.
+- `docs/ARCHITECTURE.md` — Documented Activity Log service, global error hooks, and new dependency.
+- `docs/FUNCTIONAL_SPEC.md` — Added Activity Log diagnostics feature and Settings flow update.
+- `docs/ANALYTICS_EVENTS.md` — Added planned diagnostics interaction events.
+
 ## [2026-04-25] — Home/Discover Split + Temple Dock Navigation
 
 ### Added

@@ -34,6 +34,7 @@
 | Personal Collection (local private aartis) | ✅ Done | v2.0 | `ContributeScreen` |
 | Recently played section | ✅ Done | v2.0 | `DiscoverScreen` |
 | Gujarati script support | ✅ Done | v2.0 | Data + `VerseBlock` |
+| Activity Log diagnostics (local JSONL, view/share/clear) | ✅ Done | v2.1 | `SettingsScreen` + `ActivityLogService` |
 | Community contributor moderation | 🔮 Planned | v3.0 (backend) | — |
 | Report incorrect lyrics | 🔮 Planned | v3.0 (backend) | — |
 | User authentication + cloud sync | 🔮 Planned | v3.0 (backend) | — |
@@ -101,6 +102,7 @@
 4. Notification toggle + time picker.
 5. Crossfade duration (0–3s).
 6. User name edit.
+7. Diagnostics actions: view Activity Log, share log export, and clear log.
 
 ---
 
