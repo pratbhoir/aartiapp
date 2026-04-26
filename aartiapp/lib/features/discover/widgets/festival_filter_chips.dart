@@ -24,19 +24,10 @@ class FestivalFilterChips extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(right: 24),
         physics: const BouncingScrollPhysics(),
-        itemCount: festivalTags.length + 1, // +1 for "All" chip
+        itemCount: festivalTags.length,
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (_, i) {
-          if (i == 0) {
-            final isActive = activeTag.isEmpty;
-            return _FestivalChip(
-              label: 'All Festivals',
-              emoji: '🕉️',
-              isActive: isActive,
-              onTap: () => onSelect(''),
-            );
-          }
-          final tag = festivalTags[i - 1];
+          final tag = festivalTags[i];
           final isActive = activeTag == tag;
           return _FestivalChip(
             label: tag,

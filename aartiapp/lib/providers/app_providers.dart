@@ -41,9 +41,9 @@ final recentlyPlayedRepoProvider = Provider<RecentlyPlayedRepository>((ref) {
 
 final userAartiProvider =
     StateNotifierProvider<UserAartiNotifier, List<AartiItem>>((ref) {
-  final repo = ref.watch(userAartiRepoProvider);
-  return UserAartiNotifier(repo);
-});
+      final repo = ref.watch(userAartiRepoProvider);
+      return UserAartiNotifier(repo);
+    });
 
 class UserAartiNotifier extends StateNotifier<List<AartiItem>> {
   final UserAartiRepository _repo;
@@ -65,9 +65,9 @@ class UserAartiNotifier extends StateNotifier<List<AartiItem>> {
 
 final recentlyPlayedProvider =
     StateNotifierProvider<RecentlyPlayedNotifier, List<String>>((ref) {
-  final repo = ref.watch(recentlyPlayedRepoProvider);
-  return RecentlyPlayedNotifier(repo);
-});
+      final repo = ref.watch(recentlyPlayedRepoProvider);
+      return RecentlyPlayedNotifier(repo);
+    });
 
 class RecentlyPlayedNotifier extends StateNotifier<List<String>> {
   final RecentlyPlayedRepository _repo;
@@ -103,8 +103,9 @@ class RecentlyPlayedNotifier extends StateNotifier<List<String>> {
 
 // ─── Theme State ────────────────────────────────────────────────────────────
 
-final themeModeProvider =
-    StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
+  ref,
+) {
   final repo = ref.watch(settingsRepoProvider);
   return ThemeModeNotifier(repo);
 });
@@ -127,8 +128,9 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 
 // ─── Text Scale State ───────────────────────────────────────────────────────
 
-final textScaleProvider =
-    StateNotifierProvider<TextScaleNotifier, double>((ref) {
+final textScaleProvider = StateNotifierProvider<TextScaleNotifier, double>((
+  ref,
+) {
   final repo = ref.watch(settingsRepoProvider);
   return TextScaleNotifier(repo);
 });
@@ -149,8 +151,9 @@ class TextScaleNotifier extends StateNotifier<double> {
 // ─── Script Mode State ──────────────────────────────────────────────────────
 
 /// 0 = Devanagari, 1 = English, 2 = Gujarati
-final scriptModeProvider =
-    StateNotifierProvider<ScriptModeNotifier, int>((ref) {
+final scriptModeProvider = StateNotifierProvider<ScriptModeNotifier, int>((
+  ref,
+) {
   final repo = ref.watch(settingsRepoProvider);
   return ScriptModeNotifier(repo);
 });
@@ -169,8 +172,9 @@ class ScriptModeNotifier extends StateNotifier<int> {
 
 // ─── Bookmark State ─────────────────────────────────────────────────────────
 
-final bookmarkProvider =
-    StateNotifierProvider<BookmarkNotifier, Set<String>>((ref) {
+final bookmarkProvider = StateNotifierProvider<BookmarkNotifier, Set<String>>((
+  ref,
+) {
   final repo = ref.watch(bookmarkRepoProvider);
   final pujaNotifier = ref.read(pujaOrderProvider.notifier);
   return BookmarkNotifier(repo, pujaNotifier);
@@ -180,7 +184,7 @@ class BookmarkNotifier extends StateNotifier<Set<String>> {
   final BookmarkRepository _repo;
   final PujaOrderNotifier _pujaNotifier;
   BookmarkNotifier(this._repo, this._pujaNotifier)
-      : super(_repo.getBookmarks());
+    : super(_repo.getBookmarks());
 
   Future<void> toggle(String aartiId) async {
     final wasBookmarked = state.contains(aartiId);
@@ -202,9 +206,9 @@ class BookmarkNotifier extends StateNotifier<Set<String>> {
 
 final pujaOrderProvider =
     StateNotifierProvider<PujaOrderNotifier, List<String>>((ref) {
-  final repo = ref.watch(pujaRepoProvider);
-  return PujaOrderNotifier(repo);
-});
+      final repo = ref.watch(pujaRepoProvider);
+      return PujaOrderNotifier(repo);
+    });
 
 class PujaOrderNotifier extends StateNotifier<List<String>> {
   final PujaRepository _repo;
@@ -237,10 +241,12 @@ class PujaOrderNotifier extends StateNotifier<List<String>> {
     final catalog = AartiRepository.instance.aartis;
     final allAartis = [...catalog, ...userAartis];
     return state
-        .map((id) => allAartis.firstWhere(
-              (a) => a.id == id,
-              orElse: () => catalog.first,
-            ))
+        .map(
+          (id) => allAartis.firstWhere(
+            (a) => a.id == id,
+            orElse: () => catalog.first,
+          ),
+        )
         .where((a) => state.contains(a.id))
         .toList();
   }
@@ -248,19 +254,137 @@ class PujaOrderNotifier extends StateNotifier<List<String>> {
 
 // ─── Discover Screen State ──────────────────────────────────────────────────
 
-final searchQueryProvider = StateProvider<String>((ref) => '');
-final activeDeityProvider = StateProvider<int>((ref) => 0);
-final activeFestivalTagProvider = StateProvider<String>((ref) => '');
+/// The currently active Discover filter type.
+enum DiscoverFilterMode {
+  /// No active filter. Discover defaults to the full catalog with deity All selected.
+  none,
+
+  /// Full-text search is active.
+  search,
+
+  /// A deity chip is active.
+  deity,
+
+  /// A festival chip is active.
+  festival,
+}
+
+/// Immutable Discover filter state.
+class DiscoverFilterState {
+  /// Creates the current Discover filter selection.
+  const DiscoverFilterState({
+    this.mode = DiscoverFilterMode.none,
+    this.searchQuery = '',
+    this.activeDeityIndex = 0,
+    this.activeFestivalTag = '',
+  });
+
+  /// Which Discover filter is currently active.
+  final DiscoverFilterMode mode;
+
+  /// Current search text.
+  final String searchQuery;
+
+  /// Currently selected deity chip index.
+  final int activeDeityIndex;
+
+  /// Currently selected festival tag.
+  final String activeFestivalTag;
+}
+
+/// Coordinates Discover filters so only one of search, deity, or festival is active.
+class DiscoverFilterNotifier extends StateNotifier<DiscoverFilterState> {
+  /// Creates the Discover filter controller.
+  DiscoverFilterNotifier() : super(const DiscoverFilterState());
+
+  /// Activates search and clears deity and festival filters.
+  void applySearch(String query) {
+    final normalized = query.trim();
+    if (normalized.isEmpty) {
+      clearAll();
+      return;
+    }
+
+    state = DiscoverFilterState(
+      mode: DiscoverFilterMode.search,
+      searchQuery: query,
+    );
+  }
+
+  /// Activates a deity filter. Selecting index 0 resets Discover to All.
+  void selectDeity(int deityIndex) {
+    if (deityIndex <= 0) {
+      clearAll();
+      return;
+    }
+
+    state = DiscoverFilterState(
+      mode: DiscoverFilterMode.deity,
+      activeDeityIndex: deityIndex,
+    );
+  }
+
+  /// Activates a festival filter. Selecting an empty tag resets Discover to All.
+  void selectFestival(String festivalTag) {
+    final normalized = festivalTag.trim();
+    if (normalized.isEmpty) {
+      clearAll();
+      return;
+    }
+
+    state = DiscoverFilterState(
+      mode: DiscoverFilterMode.festival,
+      activeFestivalTag: normalized,
+    );
+  }
+
+  /// Clears Discover back to the default All state.
+  void clearAll() {
+    state = const DiscoverFilterState();
+  }
+}
+
+final discoverFilterProvider =
+    StateNotifierProvider<DiscoverFilterNotifier, DiscoverFilterState>((ref) {
+      return DiscoverFilterNotifier();
+    });
+
+final searchQueryProvider = Provider<String>((ref) {
+  return ref.watch(discoverFilterProvider).searchQuery;
+});
+
+final activeDeityProvider = Provider<int>((ref) {
+  return ref.watch(discoverFilterProvider).activeDeityIndex;
+});
+
+final activeFestivalTagProvider = Provider<String>((ref) {
+  return ref.watch(discoverFilterProvider).activeFestivalTag;
+});
 
 final filteredAartisProvider = Provider<List<int>>((ref) {
-  final query = ref.watch(searchQueryProvider);
-  final deityIdx = ref.watch(activeDeityProvider);
-  final festivalTag = ref.watch(activeFestivalTagProvider);
+  final discoverFilter = ref.watch(discoverFilterProvider);
+  final aartis = AartiRepository.instance.aartis;
   final deities = AartiRepository.instance.deities;
-  final deity = deities[deityIdx]['label']!;
-  return SearchEngine.searchAndFilter(
-      AartiRepository.instance.aartis, query, deity,
-      festivalTag: festivalTag);
+
+  switch (discoverFilter.mode) {
+    case DiscoverFilterMode.search:
+      return SearchEngine.search(aartis, discoverFilter.searchQuery);
+    case DiscoverFilterMode.deity:
+      final safeDeityIndex =
+          discoverFilter.activeDeityIndex >= 0 &&
+              discoverFilter.activeDeityIndex < deities.length
+          ? discoverFilter.activeDeityIndex
+          : 0;
+      final deity = deities[safeDeityIndex]['label']!;
+      return SearchEngine.filterByDeity(aartis, deity);
+    case DiscoverFilterMode.festival:
+      return SearchEngine.filterByFestival(
+        aartis,
+        discoverFilter.activeFestivalTag,
+      );
+    case DiscoverFilterMode.none:
+      return List.generate(aartis.length, (index) => index);
+  }
 });
 
 // ─── User Name ──────────────────────────────────────────────────────────────
@@ -282,8 +406,7 @@ class UserNameNotifier extends StateNotifier<String> {
 
 // ─── v1.5: Crossfade Duration ───────────────────────────────────────────────
 
-final crossfadeProvider =
-    StateNotifierProvider<CrossfadeNotifier, int>((ref) {
+final crossfadeProvider = StateNotifierProvider<CrossfadeNotifier, int>((ref) {
   final repo = ref.watch(settingsRepoProvider);
   return CrossfadeNotifier(repo);
 });
@@ -300,8 +423,7 @@ class CrossfadeNotifier extends StateNotifier<int> {
 
 // ─── v1.5: Auto-Play ────────────────────────────────────────────────────────
 
-final autoPlayProvider =
-    StateNotifierProvider<AutoPlayNotifier, bool>((ref) {
+final autoPlayProvider = StateNotifierProvider<AutoPlayNotifier, bool>((ref) {
   final repo = ref.watch(settingsRepoProvider);
   return AutoPlayNotifier(repo);
 });
@@ -325,9 +447,9 @@ class AutoPlayNotifier extends StateNotifier<bool> {
 
 final repeatCurrentProvider =
     StateNotifierProvider<RepeatCurrentNotifier, bool>((ref) {
-  final repo = ref.watch(settingsRepoProvider);
-  return RepeatCurrentNotifier(repo);
-});
+      final repo = ref.watch(settingsRepoProvider);
+      return RepeatCurrentNotifier(repo);
+    });
 
 class RepeatCurrentNotifier extends StateNotifier<bool> {
   final SettingsRepository _repo;
@@ -343,14 +465,14 @@ class RepeatCurrentNotifier extends StateNotifier<bool> {
 
 final notificationEnabledProvider =
     StateNotifierProvider<NotificationEnabledNotifier, bool>((ref) {
-  final repo = ref.watch(settingsRepoProvider);
-  return NotificationEnabledNotifier(repo);
-});
+      final repo = ref.watch(settingsRepoProvider);
+      return NotificationEnabledNotifier(repo);
+    });
 
 class NotificationEnabledNotifier extends StateNotifier<bool> {
   final SettingsRepository _repo;
   NotificationEnabledNotifier(this._repo)
-      : super(_repo.getNotificationEnabled());
+    : super(_repo.getNotificationEnabled());
 
   void set(bool value) {
     state = value;
@@ -360,9 +482,9 @@ class NotificationEnabledNotifier extends StateNotifier<bool> {
 
 final notificationTimeProvider =
     StateNotifierProvider<NotificationTimeNotifier, TimeOfDay>((ref) {
-  final repo = ref.watch(settingsRepoProvider);
-  return NotificationTimeNotifier(repo);
-});
+      final repo = ref.watch(settingsRepoProvider);
+      return NotificationTimeNotifier(repo);
+    });
 
 class NotificationTimeNotifier extends StateNotifier<TimeOfDay> {
   final SettingsRepository _repo;
@@ -378,14 +500,14 @@ class NotificationTimeNotifier extends StateNotifier<TimeOfDay> {
 
 final onboardingCompletedProvider =
     StateNotifierProvider<OnboardingCompletedNotifier, bool>((ref) {
-  final repo = ref.watch(settingsRepoProvider);
-  return OnboardingCompletedNotifier(repo);
-});
+      final repo = ref.watch(settingsRepoProvider);
+      return OnboardingCompletedNotifier(repo);
+    });
 
 class OnboardingCompletedNotifier extends StateNotifier<bool> {
   final SettingsRepository _repo;
   OnboardingCompletedNotifier(this._repo)
-      : super(_repo.getOnboardingCompleted());
+    : super(_repo.getOnboardingCompleted());
 
   void complete() {
     state = true;
@@ -397,9 +519,9 @@ class OnboardingCompletedNotifier extends StateNotifier<bool> {
 
 final preferredLanguageProvider =
     StateNotifierProvider<PreferredLanguageNotifier, String>((ref) {
-  final repo = ref.watch(settingsRepoProvider);
-  return PreferredLanguageNotifier(repo);
-});
+      final repo = ref.watch(settingsRepoProvider);
+      return PreferredLanguageNotifier(repo);
+    });
 
 class PreferredLanguageNotifier extends StateNotifier<String> {
   final SettingsRepository _repo;

@@ -68,7 +68,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, script language, app language, bookmarks, puja order, search, etc. | 2026-04-26 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, script language, app language, bookmarks, puja order, and the mutually exclusive Discover filter controller | 2026-04-27 |
 
 ## Navigation
 
@@ -103,12 +103,12 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with deity filter, search, calendar-ordered festival filters, and script-aware aarti grid | 2026-04-27 |
+| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with mutually exclusive search, deity, and festival filters plus a script-aware aarti grid | 2026-04-27 |
 | `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, script-aware subtitle, duration, bookmark | 2026-04-26 |
 | `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
-| `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable festival tag chips | 2026-04-20 |
+| `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable Discover festival tag chips showing only actual festival entries | 2026-04-27 |
 | `lib/features/discover/widgets/festive_banner.dart` | `FestiveBanner` — seasonal festival banner card with emoji and countdown | 2026-04-20 |
-| `lib/features/discover/widgets/search_bar.dart` | `AartiSearchBar` — text input with search icon and clear button | 2026-04-20 |
+| `lib/features/discover/widgets/search_bar.dart` | `AartiSearchBar` — text input with parent-controlled value support for Discover filter resets | 2026-04-27 |
 | `lib/features/discover/widgets/today_hero_card.dart` | `TodayHeroCard` — dark pulsing hero card for "Aarti of the Day" with script-aware subtitle preview | 2026-04-26 |
 
 ## Features / Aarti Detail
@@ -142,7 +142,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and theme-aware script-aware recently played previews | 2026-04-26 |
+| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and Discover handoff that reuses the centralized filter controller | 2026-04-27 |
 
 ## Features / Onboarding
 
@@ -179,4 +179,5 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
+| `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
 | `test/festival_repository_test.dart` | Focused repository tests for upcoming-only festival filter ordering, duplicate-tag collapsing, and the 5-chip limit | 2026-04-27 |

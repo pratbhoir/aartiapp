@@ -115,9 +115,11 @@ Script-language and app-language display rules are centralized in `shared/utils/
 | Provider Type | Purpose | Example |
 |---------------|---------|---------|
 | `Provider<T>` | Expose singleton repos | `sharedPrefsProvider`, `settingsRepoProvider` |
-| `StateNotifierProvider<N, T>` | Mutable state with business logic | `themeModeProvider`, `bookmarkProvider`, `pujaOrderProvider` |
-| `StateProvider<T>` | Simple mutable state | `searchQueryProvider`, `activeDeityProvider` |
+| `StateNotifierProvider<N, T>` | Mutable state with business logic | `themeModeProvider`, `bookmarkProvider`, `pujaOrderProvider`, `discoverFilterProvider` |
+| `StateProvider<T>` | Simple mutable state | transient UI values with no coordination rules |
 | `Provider<T>` (computed) | Derived/filtered data | `filteredAartisProvider` |
+
+Discover filtering is coordinated through a dedicated `DiscoverFilterNotifier` instead of three independent mutable providers. This keeps search, deity, and festival selection mutually exclusive, ensures the default deity `All` state behaves as the clear-filter state, and lets cross-screen entry points such as Home preselect Discover state without leaving stale search text behind.
 
 User reading preferences are split into two persisted provider-backed settings:
 - `scriptModeProvider` controls the script used for lyric surfaces: Devanagari, English, or Gujarati.

@@ -4,8 +4,9 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 
 class SearchBar extends StatelessWidget {
+  final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
-  const SearchBar({super.key, this.onChanged});
+  const SearchBar({super.key, this.controller, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class SearchBar extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
+              controller: controller,
               onChanged: onChanged,
               style: AppTypography.body(size: 14),
               decoration: InputDecoration(

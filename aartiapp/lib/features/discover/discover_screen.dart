@@ -13,13 +13,45 @@ import 'widgets/deity_chip.dart';
 import 'widgets/aarti_card.dart';
 import 'widgets/festival_filter_chips.dart';
 
-class DiscoverScreen extends ConsumerWidget {
+class DiscoverScreen extends ConsumerStatefulWidget {
   final VoidCallback onOpenDrawer;
   const DiscoverScreen({super.key, required this.onOpenDrawer});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final activeDeity = ref.watch(activeDeityProvider);
+  ConsumerState<DiscoverScreen> createState() => _DiscoverScreenState();
+}
+
+class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(
+      text: ref.read(discoverFilterProvider).searchQuery,
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<DiscoverFilterState>(discoverFilterProvider, (_, next) {
+      if (_searchController.text == next.searchQuery) {
+        return;
+      }
+
+      _searchController.value = TextEditingValue(
+        text: next.searchQuery,
+        selection: TextSelection.collapsed(offset: next.searchQuery.length),
+      );
+    });
+
+    final discoverFilter = ref.watch(discoverFilterProvider);
     final filteredIndices = ref.watch(filteredAartisProvider);
     final bookmarks = ref.watch(bookmarkProvider);
     final scriptMode = ref.watch(scriptModeProvider);
@@ -34,7 +66,7 @@ class DiscoverScreen extends ConsumerWidget {
       child: Column(
         children: [
           AartiAppBar(
-            onMenuTap: onOpenDrawer,
+            onMenuTap: widget.onOpenDrawer,
             showMenu: false,
             showLogoTitle: true,
             title: 'Discover',
@@ -62,13 +94,21 @@ class DiscoverScreen extends ConsumerWidget {
                             padding: const EdgeInsets.only(right: 24),
                             physics: const BouncingScrollPhysics(),
                             itemCount: deities.length,
-                            separatorBuilder: (_, __) => const SizedBox(width: 10),
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(width: 10),
                             itemBuilder: (_, i) => DeityChip(
                               emoji: deities[i]['emoji']!,
                               label: deities[i]['label']!,
-                              isActive: activeDeity == i,
+                              isActive: i == 0
+                                  ? discoverFilter.mode ==
+                                        DiscoverFilterMode.none
+                                  : discoverFilter.mode ==
+                                            DiscoverFilterMode.deity &&
+                                        discoverFilter.activeDeityIndex == i,
                               onTap: () {
-                                ref.read(activeDeityProvider.notifier).state = i;
+                                ref
+                                    .read(discoverFilterProvider.notifier)
+                                    .selectDeity(i);
                               },
                             ),
                           ),
@@ -83,8 +123,11 @@ class DiscoverScreen extends ConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                     child: app.SearchBar(
+                      controller: _searchController,
                       onChanged: (query) {
-                        ref.read(searchQueryProvider.notifier).state = query;
+                        ref
+                            .read(discoverFilterProvider.notifier)
+                            .applySearch(query);
                       },
                     ),
                   ),
@@ -104,10 +147,11 @@ class DiscoverScreen extends ConsumerWidget {
                         const SizedBox(height: 10),
                         FestivalFilterChips(
                           festivalTags: festivalTags,
-                          activeTag: ref.watch(activeFestivalTagProvider),
+                          activeTag: discoverFilter.activeFestivalTag,
                           onSelect: (tag) {
-                            ref.read(activeFestivalTagProvider.notifier).state =
-                                tag;
+                            ref
+                                .read(discoverFilterProvider.notifier)
+                                .selectFestival(tag);
                           },
                         ),
                       ],
@@ -125,8 +169,10 @@ class DiscoverScreen extends ConsumerWidget {
                         const Spacer(),
                         Text(
                           '${filteredIndices.length} found',
-                          style:
-                              AppTypography.body(size: 11, color: AppColors.ink3),
+                          style: AppTypography.body(
+                            size: 11,
+                            color: AppColors.ink3,
+                          ),
                         ),
                       ],
                     ),
@@ -148,8 +194,10 @@ class DiscoverScreen extends ConsumerWidget {
                               const SizedBox(height: 12),
                               Text(
                                 'No Aartis found',
-                                style:
-                                    AppTypography.body(size: 14, color: AppColors.ink3),
+                                style: AppTypography.body(
+                                  size: 14,
+                                  color: AppColors.ink3,
+                                ),
                               ),
                             ],
                           ),
@@ -158,41 +206,40 @@ class DiscoverScreen extends ConsumerWidget {
                     : SliverPadding(
                         padding: const EdgeInsets.fromLTRB(12, 0, 12, 40),
                         sliver: SliverGrid(
-                          delegate: SliverChildBuilderDelegate(
-                            (ctx, i) {
-                              final aartiIdx = filteredIndices[i];
-                              final aarti = aartis[aartiIdx];
-                              return AartiCard(
-                                aarti: aarti,
-                                scriptMode: scriptMode,
-                                isBookmarked: bookmarks.contains(aarti.id),
-                                delay: Duration(milliseconds: i * 60),
-                                onBookmark: () {
-                                  ref.read(bookmarkProvider.notifier).toggle(aarti.id);
-                                },
-                                onTap: () {
-                                  ref
-                                      .read(recentlyPlayedProvider.notifier)
-                                      .addRecent(aarti.id);
-                                  Navigator.push(
-                                    ctx,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          AartiDetailScreen(aarti: aarti),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            childCount: filteredIndices.length,
-                          ),
+                          delegate: SliverChildBuilderDelegate((ctx, i) {
+                            final aartiIdx = filteredIndices[i];
+                            final aarti = aartis[aartiIdx];
+                            return AartiCard(
+                              aarti: aarti,
+                              scriptMode: scriptMode,
+                              isBookmarked: bookmarks.contains(aarti.id),
+                              delay: Duration(milliseconds: i * 60),
+                              onBookmark: () {
+                                ref
+                                    .read(bookmarkProvider.notifier)
+                                    .toggle(aarti.id);
+                              },
+                              onTap: () {
+                                ref
+                                    .read(recentlyPlayedProvider.notifier)
+                                    .addRecent(aarti.id);
+                                Navigator.push(
+                                  ctx,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        AartiDetailScreen(aarti: aarti),
+                                  ),
+                                );
+                              },
+                            );
+                          }, childCount: filteredIndices.length),
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 260,
-                            mainAxisExtent: 168,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 14,
-                          ),
+                                maxCrossAxisExtent: 260,
+                                mainAxisExtent: 168,
+                                crossAxisSpacing: 14,
+                                mainAxisSpacing: 14,
+                              ),
                         ),
                       ),
               ],

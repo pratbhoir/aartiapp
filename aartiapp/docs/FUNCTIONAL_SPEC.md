@@ -66,9 +66,13 @@
 
 1. User opens Discover to find prayers using deity chips, search, and festival filters.
 2. User can search by title, deity, Devanagari text, or festival tags.
-3. User can filter by deity chips (horizontal scroll) or festival tags.
-4. Festival filter chips show only the next 5 current or upcoming festivals, ordered by nearest date.
-5. User taps an Aarti card → navigates to `AartiDetailScreen`.
+3. Discover allows only one active filter mode at a time: search, deity, or festival.
+4. Entering search text clears any selected deity or festival filter.
+5. Selecting a deity clears the search text and any selected festival filter.
+6. Selecting a festival clears the search text and resets deity selection to `All`.
+7. The deity `All` chip is selected by default and acts as the clear-filter state.
+8. Festival filter chips show only the next 5 current or upcoming festivals, ordered by nearest date.
+9. User taps an Aarti card → navigates to `AartiDetailScreen`.
 
 ### 2.3 Aarti Detail
 
@@ -133,6 +137,8 @@
 | Recently played | Max 20 items, most recent first, duplicates removed on re-add. |
 | Mantra counter presets | 11, 21, 27, 108, 1008 — user selects before starting. |
 | Festival calendar | Pre-calculated dates for 2026–2028. Supports single-day and multi-day ranges. |
+| Discover filter exclusivity | Discover applies only one filter mode at a time. Search clears deity and festival state, deity clears search and festival state, and festival clears search while resetting deity to `All`. |
+| Discover clear state | The deity `All` chip is the default Discover selection and returns the full catalog when selected. |
 | Discover festival filter ordering | Festival chips show only the next 5 current or upcoming festivals, ordered by nearest date, with duplicate yearly tags collapsed to one chip. |
 | Audio default | All aartis share a default audio URL if no specific URL is provided. |
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
@@ -156,7 +162,7 @@
 
 | Scenario | Handling |
 |----------|----------|
-| No aartis match deity + search + festival filter | Empty state shown with message |
+| No aartis match the active Discover filter | Empty state shown with message |
 | Audio URL unreachable | Fail silently — player shows but audio doesn't play |
 | Festival calendar exhausted (after 2028) | Festival features degrade gracefully — no banner shown |
 | User hasn't completed onboarding | Redirect to `OnboardingScreen` before `HomeShell` |

@@ -1,3 +1,18 @@
+## [2026-04-27] — Exclusive Discover Filters
+
+### Added
+- `test/discover_filter_provider_test.dart` — Added focused Riverpod coverage for exclusive Discover filter state, clear resets, and derived filtered results.
+
+### Modified
+- `lib/providers/app_providers.dart` — Replaced independent Discover filter providers with a centralized `DiscoverFilterNotifier` so search, deity, and festival selection are mutually exclusive.
+- `lib/features/discover/discover_screen.dart` — Switched Discover to a controlled search field and exclusive filter interactions with deity `All` as the clear state.
+- `lib/features/discover/widgets/search_bar.dart` — Added controller support so external filter changes can clear the visible search text.
+- `lib/features/discover/widgets/festival_filter_chips.dart` — Removed the synthetic `All Festivals` chip so the row shows only actual festival filters.
+- `lib/features/home/home_screen.dart` — Updated the festive-banner Discover handoff to reuse the centralized filter controller.
+- `docs/ARCHITECTURE.md` — Documented the dedicated Discover filter controller in the Riverpod state model.
+- `docs/FILE_REGISTRY.md` — Refreshed Discover-related file purposes and registered the new provider test.
+- `docs/FUNCTIONAL_SPEC.md` — Documented Discover filter exclusivity, the deity `All` clear state, and the updated empty-state rule.
+
 ## [2026-04-27] — Upcoming-Only Festival Filters
 
 ### Modified

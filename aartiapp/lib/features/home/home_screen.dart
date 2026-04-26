@@ -59,9 +59,9 @@ class HomeScreen extends ConsumerWidget {
                       children: [
                         RichText(
                           text: TextSpan(
-                            style: AppTypography.displayLarge(context).copyWith(
-                              fontSize: 34,
-                            ),
+                            style: AppTypography.displayLarge(
+                              context,
+                            ).copyWith(fontSize: 34),
                             children: [
                               const TextSpan(text: 'Jai '),
                               TextSpan(
@@ -79,8 +79,10 @@ class HomeScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Text(
                           DayDeityMapper.todaySubtitle(),
-                          style:
-                          AppTypography.body(size: 13, color: context.textCaption),
+                          style: AppTypography.body(
+                            size: 13,
+                            color: context.textCaption,
+                          ),
                         ),
                       ],
                     ),
@@ -120,7 +122,8 @@ class HomeScreen extends ConsumerWidget {
                 // Festive banner
                 Builder(
                   builder: (context) {
-                    final festival = FestivalRepository.instance.todayOrUpcoming();
+                    final festival = FestivalRepository.instance
+                        .todayOrUpcoming();
                     if (festival == null) return const SliverToBoxAdapter();
                     return SliverToBoxAdapter(
                       child: Padding(
@@ -134,7 +137,9 @@ class HomeScreen extends ConsumerWidget {
                                   festival.deity.toLowerCase(),
                             );
                             if (deityIdx >= 0) {
-                              ref.read(activeDeityProvider.notifier).state = deityIdx;
+                              ref
+                                  .read(discoverFilterProvider.notifier)
+                                  .selectDeity(deityIdx);
                             }
                             onOpenDiscover?.call();
                           },
@@ -221,7 +226,10 @@ class _RecentlyPlayedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(aarti, scriptMode);
+    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(
+      aarti,
+      scriptMode,
+    );
     final showScriptTitle = scriptTitle.trim() != aarti.title.trim();
 
     return GestureDetector(
