@@ -51,10 +51,14 @@
 |------------|---------|------------|--------|
 | `puja_screen_viewed` | Screen loaded | `puja_count` | My Puja |
 | `puja_session_started` | User taps "Start Session" | `puja_count` | My Puja |
+| `puja_focus_session_started` | User taps "Focus Session" | `puja_count` | My Puja |
 | `puja_item_reordered` | User drags to reorder | `aarti_id`, `old_index`, `new_index` | My Puja |
 | `puja_item_removed` | User removes an aarti | `aarti_id` | My Puja |
 | `puja_session_completed` | All aartis in session played | `total_count`, `duration_s` | Puja Session |
 | `puja_session_exited` | User exits session early | `current_index`, `total_count` | Puja Session |
+| `puja_focus_mode_changed` | User changes reading surface in Focus Session | `mode` (lyrics/transliteration/meaning), `aarti_id` | Puja Focus Session |
+| `puja_focus_session_completed` | User finishes the final puja item in Focus Session | `total_count` | Puja Focus Session |
+| `puja_focus_session_exited` | User exits Focus Session early | `current_index`, `total_count` | Puja Focus Session |
 
 ### Contribute
 

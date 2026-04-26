@@ -67,6 +67,7 @@ lib/
 │   │   └── widgets/                   # 6 feature-specific widgets
 │   ├── my_puja/
 │   │   ├── my_puja_screen.dart
+│   │   ├── puja_focus_session_screen.dart
 │   │   ├── puja_session_screen.dart
 │   │   └── widgets/                   # 1 feature-specific widget
 │   ├── contribute/
@@ -93,6 +94,8 @@ Each feature lives under `lib/features/<feature_name>/` with optional `data/`, `
 ### Widget Composition
 
 Screens are composed from small, focused widgets. Feature-specific widgets live in `features/<name>/widgets/`. Cross-feature reusable widgets live in `shared/widgets/`.
+
+The focus-reading surface is intentionally reused across both `AartiDetailScreen` and `PujaFocusSessionScreen` through `features/aarti_detail/widgets/focus_mode_overlay.dart` so verse navigation, balancing, and completion CTA rules stay consistent.
 
 ### Shared Language Resolution
 

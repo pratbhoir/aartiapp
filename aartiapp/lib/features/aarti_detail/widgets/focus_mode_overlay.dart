@@ -11,18 +11,44 @@ class FocusModeOverlay extends StatefulWidget {
   final AartiItem aarti;
   final List<VerseData> verses;
   final int scriptMode;
+  final double textScale;
+  final String appLanguageCode;
+  final AartiDetailContentMode contentMode;
   final VoidCallback onClose;
+  final VoidCallback? onOpenSettings;
+  final VoidCallback? onPreviousAarti;
   final VoidCallback? onNextAarti;
+  final VoidCallback? onComplete;
+  final String? previousAartiTitle;
   final String? nextAartiTitle;
+  final String headerLabel;
+  final bool useSessionHeaderLayout;
+  final String? progressLabel;
+  final String? completionLabel;
+  final int? sessionIndex;
+  final int? sessionCount;
 
   const FocusModeOverlay({
     super.key,
     required this.aarti,
     required this.verses,
     required this.scriptMode,
+    this.textScale = 1.0,
+    this.appLanguageCode = 'en',
+    this.contentMode = AartiDetailContentMode.lyrics,
     required this.onClose,
+    this.onOpenSettings,
+    this.onPreviousAarti,
     this.onNextAarti,
+    this.onComplete,
+    this.previousAartiTitle,
     this.nextAartiTitle,
+    this.headerLabel = 'SADHANA MODE',
+    this.useSessionHeaderLayout = false,
+    this.progressLabel,
+    this.completionLabel,
+    this.sessionIndex,
+    this.sessionCount,
   });
 
   @override
@@ -38,26 +64,27 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
   @override
   void initState() {
     super.initState();
-    _displayVerses = widget.verses
-        .where((verse) => verse.lines.isNotEmpty)
-        .toList();
-    if (_displayVerses.isEmpty) {
-      final List<String> fallbackLines = widget.aarti.devanagari
-          .split('\n')
-          .map((line) => line.trim())
-          .where((line) => line.isNotEmpty)
-          .toList();
-      _displayVerses = [
-        VerseData(
-          label: 'Verse',
-          lines: fallbackLines.isEmpty ? [widget.aarti.title] : fallbackLines,
-          transliteration: [widget.aarti.title],
-          meanings: const [],
-          gujarati: widget.aarti.gujarati.trim().isNotEmpty
-              ? [widget.aarti.gujarati]
-              : const [],
-        ),
-      ];
+    _displayVerses = _buildDisplayVerses();
+  }
+
+  @override
+  void didUpdateWidget(covariant FocusModeOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.aarti.id != widget.aarti.id) {
+      setState(() {
+        _displayVerses = _buildDisplayVerses();
+        _currentVerseIdx = 0;
+      });
+      return;
+    }
+
+    if (oldWidget.contentMode != widget.contentMode ||
+        oldWidget.scriptMode != widget.scriptMode ||
+        oldWidget.appLanguageCode != widget.appLanguageCode) {
+      setState(() {
+        _displayVerses = _buildDisplayVerses();
+        _currentVerseIdx = _currentVerseIdx.clamp(0, _displayVerses.length - 1);
+      });
     }
   }
 
@@ -74,6 +101,66 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
   }
 
   bool get _isLastVerse => _currentVerseIdx >= _displayVerses.length - 1;
+
+  List<VerseData> _buildDisplayVerses() {
+    final List<VerseData> verses = widget.verses
+        .where((verse) => _resolveDisplayLines(verse).isNotEmpty)
+        .toList();
+    if (verses.isNotEmpty) {
+      return verses;
+    }
+
+    final List<String> fallbackLines = widget.aarti.devanagari
+        .split('\n')
+        .map((line) => line.trim())
+        .where((line) => line.isNotEmpty)
+        .toList();
+    final String fallbackTitle = AartiLanguageResolver.resolveAartiTitle(
+      widget.aarti,
+      widget.scriptMode,
+    );
+    return [
+      VerseData(
+        label: _contentModeLabel(widget.contentMode),
+        lines: fallbackLines.isEmpty ? [fallbackTitle] : fallbackLines,
+        transliteration: [widget.aarti.title],
+        meanings: widget.contentMode == AartiDetailContentMode.meaning
+            ? [widget.aarti.title]
+            : const [],
+        gujarati: widget.aarti.gujarati.trim().isNotEmpty
+            ? [widget.aarti.gujarati]
+            : const [],
+      ),
+    ];
+  }
+
+  List<String> _resolveDisplayLines(VerseData verse) {
+    switch (widget.contentMode) {
+      case AartiDetailContentMode.lyrics:
+        return AartiLanguageResolver.resolveLyricsLines(
+          verse,
+          widget.scriptMode,
+        );
+      case AartiDetailContentMode.transliteration:
+        return AartiLanguageResolver.resolveTransliterationLines(verse);
+      case AartiDetailContentMode.meaning:
+        return AartiLanguageResolver.resolveMeaningLines(
+          verse,
+          widget.appLanguageCode,
+        );
+    }
+  }
+
+  String _contentModeLabel(AartiDetailContentMode mode) {
+    switch (mode) {
+      case AartiDetailContentMode.lyrics:
+        return 'Lyrics';
+      case AartiDetailContentMode.transliteration:
+        return 'Transliteration';
+      case AartiDetailContentMode.meaning:
+        return 'Meaning';
+    }
+  }
 
   void _handleTapDown(TapDownDetails details) {
     final double verseCenterY = _resolveCurrentVerseCenterY();
@@ -110,6 +197,9 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final String verseProgressLabel =
+        '${_currentVerseIdx + 1} / ${_displayVerses.length}';
+
     return Container(
       color: AppColors.ink,
       child: SafeArea(
@@ -117,55 +207,166 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl,
                 AppSpacing.lg,
+                AppSpacing.md,
                 AppSpacing.lg,
                 0,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'SADHANA MODE',
-                        style: AppTypography.label(
-                          size: 10,
-                          color: AppColors.ink3,
+              child: widget.useSessionHeaderLayout
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _SessionHeaderButton(
+                          icon: Icons.close,
+                          onTap: widget.onClose,
                         ),
-                      ),
-                      Text(
-                        widget.aarti.title,
-                        style: AppTypography.body(
-                          size: 13,
-                          color: AppColors.white.withValues(alpha: 0.5),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                widget.headerLabel,
+                                style: AppTypography.label(
+                                  size: 10,
+                                  color: AppColors.saffronLight,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                widget.aarti.title,
+                                style: AppTypography.body(
+                                  size: 12,
+                                  color: AppColors.white.withValues(
+                                    alpha: 0.55,
+                                  ),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '${_currentVerseIdx + 1} / ${_displayVerses.length}',
-                        style: AppTypography.body(
-                          size: 11,
-                          color: AppColors.white.withValues(alpha: 0.4),
+                        widget.onOpenSettings != null
+                            ? _SessionHeaderButton(
+                                icon: Icons.tune_outlined,
+                                onTap: widget.onOpenSettings!,
+                              )
+                            : const SizedBox(width: 44, height: 44),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.headerLabel,
+                              style: AppTypography.label(
+                                size: 10,
+                                color: AppColors.ink3,
+                              ),
+                            ),
+                            Text(
+                              widget.aarti.title,
+                              style: AppTypography.body(
+                                size: 13,
+                                color: AppColors.white.withValues(alpha: 0.5),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: AppColors.ink3,
-                          size: 20,
+                        Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                if (widget.progressLabel != null)
+                                  Text(
+                                    widget.progressLabel!,
+                                    style: AppTypography.body(
+                                      size: 11,
+                                      color: AppColors.white.withValues(
+                                        alpha: 0.55,
+                                      ),
+                                    ),
+                                  ),
+                                Text(
+                                  verseProgressLabel,
+                                  style: AppTypography.body(
+                                    size: 11,
+                                    color: AppColors.white.withValues(
+                                      alpha: 0.4,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (widget.onOpenSettings != null)
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.tune_outlined,
+                                  color: AppColors.ink3,
+                                  size: 20,
+                                ),
+                                onPressed: widget.onOpenSettings,
+                              ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                color: AppColors.ink3,
+                                size: 20,
+                              ),
+                              onPressed: widget.onClose,
+                            ),
+                          ],
                         ),
-                        onPressed: widget.onClose,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
             ),
+            if (widget.useSessionHeaderLayout && widget.progressLabel != null)
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.md),
+                child: Text(
+                  widget.progressLabel!,
+                  style: AppTypography.body(
+                    size: 12,
+                    color: AppColors.white.withValues(alpha: 0.5),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            if (widget.useSessionHeaderLayout &&
+                widget.sessionIndex != null &&
+                widget.sessionCount != null &&
+                widget.sessionCount! > 1)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.huge,
+                  vertical: AppSpacing.lg,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(widget.sessionCount!, (index) {
+                    final bool isCurrent = index == widget.sessionIndex;
+                    final bool isCompleted = index < widget.sessionIndex!;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      width: isCurrent ? 24 : 8,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: isCurrent
+                            ? AppColors.saffron
+                            : isCompleted
+                            ? AppColors.saffron.withValues(alpha: 0.4)
+                            : AppColors.darkBorder,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    );
+                  }),
+                ),
+              ),
             Expanded(
               child: GestureDetector(
                 key: _contentAreaKey,
@@ -190,7 +391,10 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         if (_currentVerseIdx > 0)
                           _FocusVerse(
                             verse: _displayVerses[_currentVerseIdx - 1],
+                            contentMode: widget.contentMode,
                             scriptMode: widget.scriptMode,
+                            appLanguageCode: widget.appLanguageCode,
+                            textScale: widget.textScale,
                             opacity: 0.3,
                             lineSize: 20,
                             lineVerticalPadding: AppSpacing.md,
@@ -198,7 +402,10 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         _FocusVerse(
                           key: _currentVerseKey,
                           verse: _displayVerses[_currentVerseIdx],
+                          contentMode: widget.contentMode,
                           scriptMode: widget.scriptMode,
+                          appLanguageCode: widget.appLanguageCode,
+                          textScale: widget.textScale,
                           opacity: 1.0,
                           lineSize: 22,
                           lineVerticalPadding: AppSpacing.md,
@@ -207,7 +414,10 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         if (_currentVerseIdx < _displayVerses.length - 1)
                           _FocusVerse(
                             verse: _displayVerses[_currentVerseIdx + 1],
+                            contentMode: widget.contentMode,
                             scriptMode: widget.scriptMode,
+                            appLanguageCode: widget.appLanguageCode,
+                            textScale: widget.textScale,
                             opacity: 0.3,
                             lineSize: 20,
                             lineVerticalPadding: AppSpacing.md,
@@ -215,7 +425,10 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         if (_currentVerseIdx < _displayVerses.length - 2)
                           _FocusVerse(
                             verse: _displayVerses[_currentVerseIdx + 2],
+                            contentMode: widget.contentMode,
                             scriptMode: widget.scriptMode,
+                            appLanguageCode: widget.appLanguageCode,
+                            textScale: widget.textScale,
                             opacity: 0.15,
                             lineSize: 18,
                             lineVerticalPadding: AppSpacing.sm,
@@ -233,28 +446,76 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                 AppSpacing.xl,
                 AppSpacing.xxxl,
               ),
-              child: _isLastVerse && widget.onNextAarti != null
-                  ? _FocusModeNextButton(
-                      label:
-                          widget.nextAartiTitle == null ||
-                              widget.nextAartiTitle!.trim().isEmpty
-                          ? 'Next Aarti'
-                          : 'Next: ${widget.nextAartiTitle!}',
-                      onTap: widget.onNextAarti!,
-                    )
-                  : Text(
-                      _currentVerseIdx > 0
-                          ? 'Tap above for previous, tap on or below the highlighted verse for next'
-                          : 'Tap on or below the highlighted verse to advance',
-                      style: AppTypography.body(
-                        size: 12,
-                        color: AppColors.white.withValues(alpha: 0.25),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+              child: _buildFooter(),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    if (_isLastVerse && widget.onNextAarti != null) {
+      return _FocusModeNextButton(
+        label:
+            widget.nextAartiTitle == null ||
+                widget.nextAartiTitle!.trim().isEmpty
+            ? 'Next Aarti'
+            : 'Next: ${widget.nextAartiTitle!}',
+        onTap: widget.onNextAarti!,
+      );
+    }
+
+    if (_isLastVerse && widget.onComplete != null) {
+      return _FocusModeNextButton(
+        label: widget.completionLabel ?? 'Complete Session',
+        onTap: widget.onComplete!,
+      );
+    }
+
+    if (_currentVerseIdx == 0 && widget.onPreviousAarti != null) {
+      return _FocusModeSecondaryButton(
+        label:
+            widget.previousAartiTitle == null ||
+                widget.previousAartiTitle!.trim().isEmpty
+            ? 'Previous Aarti'
+            : 'Previous: ${widget.previousAartiTitle!}',
+        onTap: widget.onPreviousAarti!,
+        icon: Icons.skip_previous_rounded,
+      );
+    }
+
+    return Text(
+      _currentVerseIdx > 0
+          ? 'Tap above for previous, tap on or below the highlighted verse for next'
+          : 'Tap on or below the highlighted verse to advance',
+      style: AppTypography.body(
+        size: 12,
+        color: AppColors.white.withValues(alpha: 0.25),
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class _SessionHeaderButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _SessionHeaderButton({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, size: 18, color: AppColors.ink3),
       ),
     );
   }
@@ -262,7 +523,10 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
 
 class _FocusVerse extends StatelessWidget {
   final VerseData verse;
+  final AartiDetailContentMode contentMode;
   final int scriptMode;
+  final String appLanguageCode;
+  final double textScale;
   final double opacity;
   final double lineSize;
   final double lineVerticalPadding;
@@ -271,7 +535,10 @@ class _FocusVerse extends StatelessWidget {
   const _FocusVerse({
     super.key,
     required this.verse,
+    required this.contentMode,
     required this.scriptMode,
+    required this.appLanguageCode,
+    required this.textScale,
     required this.opacity,
     required this.lineSize,
     required this.lineVerticalPadding,
@@ -283,19 +550,8 @@ class _FocusVerse extends StatelessWidget {
     final Color textColor = isCurrent
         ? AppColors.saffronLight
         : AppColors.white.withValues(alpha: opacity);
-    final displayedLines = AartiLanguageResolver.resolveLyricsLines(
-      verse,
-      scriptMode,
-    );
-    final script = AartiLanguageResolver.scriptFromMode(scriptMode);
-    final TextStyle lineTextStyle =
-        (script == AppScriptLanguage.english
-                ? AppTypography.transliteration(
-                    size: lineSize,
-                    color: textColor,
-                  )
-                : AppTypography.devanagari(size: lineSize, color: textColor))
-            .copyWith(height: 1.5);
+    final displayedLines = _resolveDisplayLines();
+    final TextStyle lineTextStyle = _lineTextStyle(textColor);
     final TextDirection textDirection = Directionality.of(context);
     final TextScaler textScaler = MediaQuery.textScalerOf(context);
 
@@ -351,6 +607,48 @@ class _FocusVerse extends StatelessWidget {
         );
       },
     );
+  }
+
+  List<String> _resolveDisplayLines() {
+    switch (contentMode) {
+      case AartiDetailContentMode.lyrics:
+        return AartiLanguageResolver.resolveLyricsLines(verse, scriptMode);
+      case AartiDetailContentMode.transliteration:
+        return AartiLanguageResolver.resolveTransliterationLines(verse);
+      case AartiDetailContentMode.meaning:
+        return AartiLanguageResolver.resolveMeaningLines(
+          verse,
+          appLanguageCode,
+        );
+    }
+  }
+
+  TextStyle _lineTextStyle(Color textColor) {
+    switch (contentMode) {
+      case AartiDetailContentMode.lyrics:
+        final script = AartiLanguageResolver.scriptFromMode(scriptMode);
+        final baseStyle = script == AppScriptLanguage.english
+            ? AppTypography.transliteration(
+                size: lineSize * textScale,
+                color: textColor,
+              )
+            : AppTypography.devanagari(
+                size: lineSize * textScale,
+                color: textColor,
+              );
+        return baseStyle.copyWith(height: 1.5);
+      case AartiDetailContentMode.transliteration:
+        return AppTypography.transliteration(
+          size: lineSize * textScale,
+          color: textColor,
+        ).copyWith(height: 1.5);
+      case AartiDetailContentMode.meaning:
+        return AppTypography.body(
+          size: lineSize * textScale,
+          color: textColor,
+          weight: FontWeight.w400,
+        ).copyWith(height: 1.6);
+    }
   }
 
   List<String> _balanceLine(
@@ -526,6 +824,58 @@ class _FocusModeNextButton extends StatelessWidget {
                 Icons.skip_next_rounded,
                 size: 18,
                 color: AppColors.darkBg,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FocusModeSecondaryButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  final IconData icon;
+
+  const _FocusModeSecondaryButton({
+    required this.label,
+    required this.onTap,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Open previous aarti in sequence',
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          constraints: const BoxConstraints(minHeight: AppSpacing.touchTarget),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.darkSurface,
+            borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+            border: Border.all(color: AppColors.darkBorder),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 18, color: AppColors.white),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.body(size: 13, color: AppColors.white),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

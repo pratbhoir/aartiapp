@@ -585,6 +585,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               aarti: widget.aarti,
               verses: verses,
               scriptMode: scriptMode,
+              textScale: textScale,
+              appLanguageCode: appLanguageCode,
+              contentMode: selectedMode,
               onNextAarti: nextPujaAarti == null
                   ? null
                   : () => _openAarti(nextPujaAarti),

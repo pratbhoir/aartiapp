@@ -117,7 +117,7 @@
 | `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, dynamic tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, focus-mode sequence handoff, and audio init warning logging | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
-| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free verse-by-verse reading with above/below tap zones, puja-aware last-verse next CTA, selected-script rendering, and balanced line splits | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with tap-zone navigation, optional session header/progress dots, puja boundary handoff CTAs, and balanced line splits | 2026-04-27 |
 | `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, and theme-aware modal chrome | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — segmented control switching Lyrics / Transliteration / Meaning views with theme-aware surfaces | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, transliteration, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-26 |
@@ -126,7 +126,8 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, session launcher, and script-aware preview items | 2026-04-26 |
+| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, audio/focus session launchers, and script-aware preview items | 2026-04-26 |
+| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local script/text-size overrides, progress dots, and previous/next aarti handoff | 2026-04-27 |
 | `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, and script-aware verse preview | 2026-04-26 |
 | `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, script-aware subtitle, and theme-aware sequence/remove controls | 2026-04-26 |
 

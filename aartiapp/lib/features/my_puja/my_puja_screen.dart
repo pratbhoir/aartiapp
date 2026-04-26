@@ -7,6 +7,7 @@ import '../../core/theme/theme_aware_colors.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
+import 'puja_focus_session_screen.dart';
 import 'puja_session_screen.dart';
 import 'widgets/puja_list_item.dart';
 
@@ -19,8 +20,9 @@ class MyPujaScreen extends ConsumerWidget {
     final pujaIds = ref.watch(pujaOrderProvider);
     final userAartis = ref.watch(userAartiProvider);
     final scriptMode = ref.watch(scriptModeProvider);
-    final pujaAartis =
-        ref.watch(pujaOrderProvider.notifier).getPujaAartis(userAartis: userAartis);
+    final pujaAartis = ref
+        .watch(pujaOrderProvider.notifier)
+        .getPujaAartis(userAartis: userAartis);
 
     // Calculate total estimated duration
     int totalMinutes = 0;
@@ -51,9 +53,9 @@ class MyPujaScreen extends ConsumerWidget {
                     children: [
                       RichText(
                         text: TextSpan(
-                          style: AppTypography.displayLarge(context).copyWith(
-                            fontSize: 34,
-                          ),
+                          style: AppTypography.displayLarge(
+                            context,
+                          ).copyWith(fontSize: 34),
                           children: const [
                             TextSpan(text: 'My Daily '),
                             TextSpan(
@@ -70,45 +72,95 @@ class MyPujaScreen extends ConsumerWidget {
                       Text(
                         '${pujaAartis.length} aartis · Est. $totalMinutes min',
                         style: AppTypography.body(
-                            size: 13, color: AppColors.ink3),
+                          size: 13,
+                          color: AppColors.ink3,
+                        ),
                       ),
+                      if (pujaAartis.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PujaSessionScreen(
+                                      pujaAartis: pujaAartis,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.play_arrow_rounded,
+                                size: 16,
+                              ),
+                              label: const Text('Start Session'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.ink,
+                                foregroundColor: AppColors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PujaFocusSessionScreen(
+                                      pujaAartis: pujaAartis,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.fullscreen_outlined,
+                                size: 16,
+                              ),
+                              label: const Text('Focus Session'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppColors.saffronDark,
+                                backgroundColor: AppColors.saffronGlow,
+                                side: const BorderSide(
+                                  color: AppColors.saffron,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),
-                if (pujaAartis.isNotEmpty)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Launch Puja Session with auto-play
-                      if (pujaAartis.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                PujaSessionScreen(pujaAartis: pujaAartis),
-                          ),
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.play_arrow_rounded, size: 16),
-                    label: const Text('Start Session'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.ink,
-                      foregroundColor: AppColors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w400),
-                      elevation: 0,
-                    ),
-                  ),
               ],
             ),
           ),
 
-          // Settings chips (v1.5: wired to state)
+          // Audio session settings chips
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
             child: Builder(
@@ -129,7 +181,8 @@ class MyPujaScreen extends ConsumerWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => ref.read(repeatCurrentProvider.notifier).toggle(),
+                      onTap: () =>
+                          ref.read(repeatCurrentProvider.notifier).toggle(),
                       child: _SettingChip(
                         icon: Icons.repeat,
                         label: repeat ? 'Repeat on' : 'Repeat off',
@@ -215,15 +268,15 @@ class _EmptyPujaView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.auto_awesome_outlined,
-                size: 48, color: AppColors.ink3.withValues(alpha: 0.4)),
+            Icon(
+              Icons.auto_awesome_outlined,
+              size: 48,
+              color: AppColors.ink3.withValues(alpha: 0.4),
+            ),
             const SizedBox(height: 16),
             Text(
               'Your daily puja is empty',
-              style: AppTypography.serifBody(
-                size: 18,
-                color: AppColors.ink,
-              ),
+              style: AppTypography.serifBody(size: 18, color: AppColors.ink),
             ),
             const SizedBox(height: 8),
             Text(
@@ -254,9 +307,7 @@ class _SettingChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: isActive
-            ? AppColors.saffronGlow
-            : context.surface,
+        color: isActive ? AppColors.saffronGlow : context.surface,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: isActive ? AppColors.saffron : context.borderSubtle,
@@ -270,18 +321,22 @@ class _SettingChip extends StatelessWidget {
               width: 6,
               height: 6,
               decoration: const BoxDecoration(
-                  color: AppColors.saffron, shape: BoxShape.circle),
+                color: AppColors.saffron,
+                shape: BoxShape.circle,
+              ),
             ),
             const SizedBox(width: 6),
           ] else ...[
             Icon(icon, size: 13, color: AppColors.ink2),
             const SizedBox(width: 5),
           ],
-          Text(label,
-              style: AppTypography.body(
-                size: 12,
-                color: isActive ? AppColors.saffronDark : AppColors.ink2,
-              )),
+          Text(
+            label,
+            style: AppTypography.body(
+              size: 12,
+              color: isActive ? AppColors.saffronDark : AppColors.ink2,
+            ),
+          ),
         ],
       ),
     );

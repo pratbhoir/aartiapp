@@ -1,3 +1,40 @@
+## [2026-04-26] — My Puja Focus Session
+
+### Added
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Added a dedicated full-screen reading session for the My Daily Puja order with in-session controls for reading mode, script, and text size.
+
+### Modified
+- `lib/features/my_puja/my_puja_screen.dart` — Added a second `Focus Session` launcher alongside the existing audio session CTA.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Generalized the focus-reading surface to support lyrics, transliteration, and meaning plus puja-session progress and completion CTAs.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Passed the current reading mode, app language, and text scale into Focus Mode so the overlay matches the active detail-screen reading surface.
+- `docs/FILE_REGISTRY.md` — Registered the new My Puja focus-session screen and refreshed related file purposes.
+- `docs/ARCHITECTURE.md` — Documented the new My Puja screen and the reuse of the focus-reading surface across flows.
+- `docs/FUNCTIONAL_SPEC.md` — Added the My Puja Focus Session flow, business rules, and edge case coverage.
+- `docs/ANALYTICS_EVENTS.md` — Added planned event definitions for focus-session start, mode changes, completion, and exit.
+
+## [2026-04-26] — Puja Focus Session Header And Reader Controls Refinement
+
+### Modified
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Aligned the focus-session header with the audio session layout, replaced the reading-surface selector with script plus optional transliteration controls, and fixed the live text-size percentage display in the settings sheet.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Added an optional session-style centered header layout so the shared reading surface can match the puja session chrome without changing detail-screen Focus Mode.
+- `docs/FILE_REGISTRY.md` — Refreshed file purposes for the focus-session header and settings refinement.
+- `docs/FUNCTIONAL_SPEC.md` — Updated the Focus Session flow and business rules to reflect script-first controls with optional transliteration.
+
+## [2026-04-27] — Puja Focus Session Sequence Controls
+
+### Modified
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Added puja-level progress dots, previous-aarti handoff, and a two-option script selector that always offers English plus the preferred non-English script with a Devanagari fallback.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Extended the shared reading surface to render session progress dots and a previous-aarti CTA at the start of an aarti when the puja sequence has a predecessor.
+- `docs/FILE_REGISTRY.md` — Updated the Focus Session and overlay file purposes for the puja-sequence refinement.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the puja-level progress dots, previous-aarti handoff, and two-option script rule.
+
+## [2026-04-27] — Temporary Focus Session Settings
+
+### Modified
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Switched Focus Session script and text-size controls from global provider writes to session-local state initialized from the main settings when the session opens.
+- `docs/FILE_REGISTRY.md` — Refreshed the Focus Session file purpose to reflect temporary in-session overrides.
+- `docs/FUNCTIONAL_SPEC.md` — Clarified that Focus Session settings are temporary and rehydrate from the main settings on each new launch.
+
 ## [2026-04-26] — Focus Mode Tap Zones + Puja Next CTA
 
 ### Modified

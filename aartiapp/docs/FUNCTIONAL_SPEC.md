@@ -15,6 +15,7 @@
 | Aarti Detail — lyrics with Devanagari / Transliteration / Meaning | ✅ Done | v1.0 | `AartiDetailScreen` |
 | Bookmark toggle | ✅ Done | v1.0 | `AartiDetailScreen`, `AartiCard` |
 | My Daily Puja — ordered playlist with drag-to-reorder | ✅ Done | v1.0 | `MyPujaScreen` |
+| My Daily Puja — Focus Session | ✅ Done | v2.3 | `PujaFocusSessionScreen` |
 | Focus Mode (Sadhana Mode) | ✅ Done | v1.0 | `FocusModeOverlay` |
 | Mantra Counter (configurable count, Mala bead ring) | ✅ Done | v1.0 | `MantraCounterOverlay` |
 | Text size control (A–/A+) | ✅ Done | v1.0 | `SettingsScreen` |
@@ -91,8 +92,12 @@
 1. User sees their ordered puja list.
 2. User can drag-to-reorder entries.
 3. User can remove entries.
-4. User taps "Start Session" → `PujaSessionScreen`.
-5. Session plays through aartis sequentially with auto-play and crossfade.
+4. User taps `Start Session` → `PujaSessionScreen` for audio-led playback.
+5. User taps `Focus Session` → `PujaFocusSessionScreen` for verse-by-verse reading.
+6. Audio session plays through aartis sequentially with auto-play and crossfade.
+7. Focus Session reuses the Focus Mode interaction model with a full-screen reading surface, verse progression, a session-style centered header, puja-level progress dots, and boundary CTAs for previous/next aarti handoff.
+8. Focus Session exposes in-session reading controls for text size, an optional transliteration toggle when the selected script differs from the user's reading language, and exactly two script choices: English plus the user's preferred non-English script.
+9. Focus Session settings are temporary for the active session only; reopening Focus Session re-initializes them from the main app settings.
 
 ### 2.5 Personal Collection (Contribute)
 
@@ -132,6 +137,9 @@
 | Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines; taps above the highlighted verse move to the previous verse, and taps on or below it move to the next verse. |
 | Focus Mode next CTA | The last-verse "Next Aarti" CTA is only visible when the current Aarti is in My Daily Puja and has a following item in that ordered sequence. |
+| Puja Focus Session display modes | Puja Focus Session always shows lyrics in the selected script and can optionally switch to transliteration only when it adds value for the active script/app-language combination. |
+| Puja Focus Session progression | In Puja Focus Session, reaching the first verse can offer a `Previous Aarti` handoff when a prior puja item exists, and reaching the final verse shows `Next Aarti` for intermediate items or `Complete Session` for the final puja item. |
+| Puja Focus Session settings | Transliteration, script language, and text size are local to the active Focus Session only. Each new Focus Session starts from the current main app settings, and the script row offers only `English` plus the preferred non-English reading script derived from app language; if the preferred script would otherwise be English, Devanagari is used as the alternate. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
 | Offline | All content is bundled — the app works fully offline. |
 | Theme-aware chrome | Settings controls, My Puja list controls, and Home recently played cards resolve neutral fills, borders, and captions from the current theme instead of fixed light-only tokens. |
@@ -148,4 +156,5 @@
 | User hasn't completed onboarding | Redirect to `OnboardingScreen` before `HomeShell` |
 | Bookmark an already-bookmarked aarti | Toggles off — removes from bookmarks and puja list |
 | Puja list empty | Empty state with CTA to discover aartis |
+| Selected reading mode unavailable for the next aarti | Puja Focus Session falls back to the first valid display mode for the new aarti |
 | Mantra counter at completion | Heavy haptic burst + visual feedback |
