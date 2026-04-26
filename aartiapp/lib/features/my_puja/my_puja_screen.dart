@@ -97,7 +97,7 @@ class MyPujaScreen extends ConsumerWidget {
                                 Icons.play_arrow_rounded,
                                 size: 16,
                               ),
-                              label: const Text('Start Session'),
+                              label: const Text('Play Aartis'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.ink,
                                 foregroundColor: AppColors.white,
@@ -115,7 +115,7 @@ class MyPujaScreen extends ConsumerWidget {
                                 elevation: 0,
                               ),
                             ),
-                            OutlinedButton.icon(
+                            ElevatedButton.icon(
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -130,13 +130,10 @@ class MyPujaScreen extends ConsumerWidget {
                                 Icons.fullscreen_outlined,
                                 size: 16,
                               ),
-                              label: const Text('Focus Session'),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColors.saffronDark,
-                                backgroundColor: AppColors.saffronGlow,
-                                side: const BorderSide(
-                                  color: AppColors.saffron,
-                                ),
+                              label: const Text('Read Aartis'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.ink,
+                                foregroundColor: AppColors.white,
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                   vertical: 12,
@@ -148,8 +145,44 @@ class MyPujaScreen extends ConsumerWidget {
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                 ),
+                                elevation: 0,
                               ),
                             ),
+                            // OutlinedButton.icon(
+                            //   onPressed: () {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (_) => PujaFocusSessionScreen(
+                            //           pujaAartis: pujaAartis,
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            //   icon: const Icon(
+                            //     Icons.fullscreen_outlined,
+                            //     size: 16,
+                            //   ),
+                            //   label: const Text('Focus Session'),
+                            //   style: OutlinedButton.styleFrom(
+                            //     foregroundColor: AppColors.saffronDark,
+                            //     backgroundColor: AppColors.saffronGlow,
+                            //     side: const BorderSide(
+                            //       color: AppColors.saffron,
+                            //     ),
+                            //     padding: const EdgeInsets.symmetric(
+                            //       horizontal: 16,
+                            //       vertical: 12,
+                            //     ),
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(14),
+                            //     ),
+                            //     textStyle: const TextStyle(
+                            //       fontSize: 13,
+                            //       fontWeight: FontWeight.w400,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],

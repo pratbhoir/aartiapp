@@ -160,7 +160,7 @@ class HomeScreen extends ConsumerWidget {
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(right: 24),
-                              child: SectionLabel('Recently Played'),
+                              child: SectionLabel('Recently Visited'),
                             ),
                             const SizedBox(height: 12),
                             SizedBox(
@@ -237,17 +237,28 @@ class _RecentlyPlayedCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.saffronGlow,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.play_arrow_rounded,
-                size: 16,
-                color: AppColors.saffron,
+            // Container(
+            //   width: 32,
+            //   height: 32,
+            //   decoration: BoxDecoration(
+            //     color: AppColors.saffronGlow,
+            //     borderRadius: BorderRadius.circular(8),
+            //   ),
+            //   child: const Icon(
+            //     Icons.play_arrow_rounded,
+            //     size: 16,
+            //     color: AppColors.saffron,
+            //   ),
+            // ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Container(
+                width: 25,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: AppColors.saffron.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
             const SizedBox(height: 8),
