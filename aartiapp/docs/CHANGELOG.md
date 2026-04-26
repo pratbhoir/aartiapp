@@ -1,3 +1,21 @@
+## [2026-04-27] — Focus Settings Language-Only Surface Buttons
+
+### Modified
+- `lib/shared/widgets/focus_mode_settings_sheet.dart` — Removed the separate Primary Script selector, reduced the Reading Surface buttons to language-only labels, and tightened the text-size layout.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Removed now-unused focus-settings primary-script plumbing from standalone Focus Mode.
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Removed now-unused focus-settings primary-script plumbing from My Puja Focus Session.
+- `docs/FILE_REGISTRY.md` — Updated focus-settings file purposes for the language-only Reading Surface controls.
+- `docs/FUNCTIONAL_SPEC.md` — Replaced primary-script selector wording with the simplified language-only Reading Surface behavior.
+
+## [2026-04-27] — Focus Settings Primary/Secondary Script Controls
+
+### Modified
+- `lib/shared/widgets/focus_mode_settings_sheet.dart` — Replaced the secondary-script toggle with explicit Primary Script and Secondary Script selectors and compacted the text-size control layout.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Updated standalone Focus Mode to use the new shared script-surface selection model.
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Updated My Puja Focus Session to use the same Primary Script / Secondary Script selection model as standalone Focus Mode.
+- `docs/FILE_REGISTRY.md` — Refreshed focus-settings file purposes for the explicit script-surface controls.
+- `docs/FUNCTIONAL_SPEC.md` — Replaced secondary-script toggle wording with explicit Primary Script / Secondary Script settings behavior.
+
 ## [2026-04-27] — Standalone Focus Mode Header And Temporary Settings
 
 ### Added

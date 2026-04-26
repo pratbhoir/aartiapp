@@ -87,7 +87,7 @@
 8. When the current Aarti belongs to My Daily Puja and has a following item in that ordered sequence, a "Next" FAB appears at 90% audio progress or scroll-to-bottom.
 9. Tapping "Next" opens the next Aarti detail screen in the user's current My Daily Puja order.
 10. In Focus Mode, reaching the last verse shows a dark-mode-consistent "Next Aarti" CTA only when the current Aarti has a following item in the user's My Daily Puja order.
-11. Standalone Focus Mode uses the same centered header chrome as My Daily Puja Focus Session, including a temporary settings sheet for script choice, secondary-script toggle, and text size that resets when Focus Mode is reopened.
+11. Standalone Focus Mode uses the same centered header chrome as My Daily Puja Focus Session, including a temporary settings sheet with language-only reading-surface buttons for the active primary and derived secondary scripts plus a compact text-size control that resets when Focus Mode is reopened.
 
 ### 2.4 My Daily Puja
 
@@ -98,7 +98,7 @@
 5. User taps `Focus Session` → `PujaFocusSessionScreen` for verse-by-verse reading.
 6. Audio session plays through aartis sequentially with auto-play and crossfade.
 7. Focus Session reuses the Focus Mode interaction model with a full-screen reading surface, verse progression, a session-style centered header, puja-level progress dots, and boundary CTAs for previous/next aarti handoff.
-8. Focus Session exposes in-session reading controls for text size, an optional secondary-script toggle that follows the same derived-script rule as detail reading, and exactly two lyric-script choices: English plus the user's preferred non-English script.
+8. Focus Session exposes in-session reading controls for a compact text-size stepper and a language-only Reading Surface selector that switches between the active primary script and the derived secondary script using the same fallback rule as detail reading.
 9. Focus Session settings are temporary for the active session only; reopening Focus Session re-initializes them from the main app settings.
 
 ### 2.5 Personal Collection (Contribute)
@@ -140,10 +140,10 @@
 | Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines; taps above the highlighted verse move to the previous verse, and taps on or below it move to the next verse. |
 | Focus Mode next CTA | The last-verse "Next Aarti" CTA is only visible when the current Aarti is in My Daily Puja and has a following item in that ordered sequence. |
-| Aarti Detail Focus Mode settings | Standalone Focus Mode initializes from the current app reading settings, but script choice, secondary-script state, and text size changes made from the in-focus settings sheet remain temporary for that overlay session only. |
+| Aarti Detail Focus Mode settings | Standalone Focus Mode initializes from the current app reading settings, and the in-focus settings sheet lets the user temporarily switch between the active primary-script language and the derived secondary-script language while adjusting text size for that overlay session only. |
 | Puja Focus Session display modes | Puja Focus Session always shows lyrics in the selected script and can optionally switch to the derived secondary script using the same app-language-plus-fallback rule as the detail screen. |
 | Puja Focus Session progression | In Puja Focus Session, reaching the first verse can offer a `Previous Aarti` handoff when a prior puja item exists, and reaching the final verse shows `Next Aarti` for intermediate items or `Complete Session` for the final puja item. |
-| Puja Focus Session settings | Secondary-script mode, lyric-script choice, and text size are local to the active Focus Session only. Each new Focus Session starts from the current main app settings, and the script row offers only `English` plus the preferred non-English reading script derived from app language; if the preferred script would otherwise be English, Devanagari is used as the alternate. |
+| Puja Focus Session settings | Active script surface and text size are local to the active Focus Session only. Each new Focus Session starts from the current main app settings, the Reading Surface row labels each button with the resolved language name, and the secondary-script surface continues to follow the same derived-script fallback rule. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
 | Offline | All content is bundled — the app works fully offline. |
 | Theme-aware chrome | Settings controls, My Puja list controls, and Home recently played cards resolve neutral fills, borders, and captions from the current theme instead of fixed light-only tokens. |

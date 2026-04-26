@@ -76,9 +76,6 @@ class _PujaFocusSessionScreenState
   @override
   Widget build(BuildContext context) {
     final appLanguageCode = ref.watch(preferredLanguageProvider);
-    final int preferredScriptMode = _preferredScriptModeForFocusSession(
-      appLanguageCode,
-    );
     final bool canShowSecondaryScript =
         AartiLanguageResolver.shouldShowSecondaryScriptMode(
           verses: _currentAarti.verses,
@@ -110,7 +107,6 @@ class _PujaFocusSessionScreenState
           context: context,
           appLanguageCode: appLanguageCode,
           canShowSecondaryScript: canShowSecondaryScript,
-          preferredScriptMode: preferredScriptMode,
         ),
         onPreviousAarti: _hasPrev ? _goPrev : null,
         previousAartiTitle: _hasPrev
@@ -131,7 +127,6 @@ class _PujaFocusSessionScreenState
     required BuildContext context,
     required String appLanguageCode,
     required bool canShowSecondaryScript,
-    required int preferredScriptMode,
   }) {
     showFocusModeSettingsSheet(
       context: context,
@@ -139,23 +134,15 @@ class _PujaFocusSessionScreenState
       scriptMode: _focusScriptMode,
       textScale: _focusTextScale,
       canShowSecondaryScript: canShowSecondaryScript,
-      isSecondaryScriptOn:
-          _contentMode == AartiDetailContentMode.transliteration,
-      preferredScriptMode: preferredScriptMode,
-      onScriptModeChanged: (newMode) {
+      activeScriptSurface:
+          _contentMode == AartiDetailContentMode.transliteration
+          ? FocusModeScriptSurface.secondary
+          : FocusModeScriptSurface.primary,
+      onScriptSurfaceChanged: (surface) {
         setState(() {
-          _focusScriptMode = newMode;
-          if (_contentMode == AartiDetailContentMode.transliteration &&
-              !AartiLanguageResolver.shouldShowSecondaryScriptMode(
-                verses: _currentAarti.verses,
-              )) {
-            _contentMode = AartiDetailContentMode.lyrics;
-          }
-        });
-      },
-      onSecondaryScriptChanged: (value) {
-        setState(() {
-          _contentMode = value
+          _contentMode =
+              surface == FocusModeScriptSurface.secondary &&
+                  canShowSecondaryScript
               ? AartiDetailContentMode.transliteration
               : AartiDetailContentMode.lyrics;
         });
@@ -170,13 +157,5 @@ class _PujaFocusSessionScreenState
           ? 'Reach the final verse to continue to the next aarti in your puja order.'
           : 'Reach the final verse to finish this focus session.',
     );
-  }
-
-  int _preferredScriptModeForFocusSession(String appLanguageCode) {
-    final int preferredScriptMode =
-        AartiLanguageResolver.preferredScriptModeForLanguageCode(
-          appLanguageCode,
-        );
-    return preferredScriptMode == 1 ? 0 : preferredScriptMode;
   }
 }

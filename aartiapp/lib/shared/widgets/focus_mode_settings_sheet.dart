@@ -5,6 +5,9 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../utils/aarti_language_resolver.dart';
 
+/// Script surfaces available in temporary focus-mode reading settings.
+enum FocusModeScriptSurface { primary, secondary }
+
 /// Shows the temporary focus-mode reading settings sheet.
 Future<void> showFocusModeSettingsSheet({
   required BuildContext context,
@@ -12,17 +15,14 @@ Future<void> showFocusModeSettingsSheet({
   required int scriptMode,
   required double textScale,
   required bool canShowSecondaryScript,
-  required bool isSecondaryScriptOn,
-  required int preferredScriptMode,
-  required ValueChanged<int> onScriptModeChanged,
-  required ValueChanged<bool> onSecondaryScriptChanged,
+  required FocusModeScriptSurface activeScriptSurface,
+  required ValueChanged<FocusModeScriptSurface> onScriptSurfaceChanged,
   required ValueChanged<double> onTextScaleChanged,
   required String description,
   required String footerNote,
 }) {
-  int localScriptMode = scriptMode;
   double localTextScale = textScale;
-  bool localSecondaryScriptOn = isSecondaryScriptOn;
+  FocusModeScriptSurface localScriptSurface = activeScriptSurface;
 
   return showModalBottomSheet<void>(
     context: context,
@@ -30,9 +30,12 @@ Future<void> showFocusModeSettingsSheet({
     builder: (ctx) {
       return StatefulBuilder(
         builder: (ctx, setSheetState) {
+          final String primaryScriptLabel = AartiLanguageResolver.scriptLabel(
+            scriptMode,
+          );
           final String secondaryScriptLabel =
               AartiLanguageResolver.secondaryScriptLabel(
-                scriptMode: localScriptMode,
+                scriptMode: scriptMode,
                 appLanguageCode: appLanguageCode,
               );
 
@@ -75,96 +78,52 @@ Future<void> showFocusModeSettingsSheet({
                     color: AppColors.white.withValues(alpha: 0.55),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xl),
-                _FocusModeSettingSection(
-                  label: 'Script Language',
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: AppSpacing.sm),
-                          child: _ScriptOptionButton(
-                            label: AartiLanguageResolver.scriptLabel(1),
-                            isActive: localScriptMode == 1,
-                            onTap: () {
-                              onScriptModeChanged(1);
-                              setSheetState(() {
-                                localScriptMode = 1;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: _ScriptOptionButton(
-                          label: AartiLanguageResolver.scriptLabel(
-                            preferredScriptMode,
-                          ),
-                          isActive: localScriptMode == preferredScriptMode,
-                          onTap: () {
-                            onScriptModeChanged(preferredScriptMode);
-                            setSheetState(() {
-                              localScriptMode = preferredScriptMode;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 if (canShowSecondaryScript) ...[
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: AppSpacing.xl),
                   _FocusModeSettingSection(
-                    label: 'Secondary Script',
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.md,
-                        vertical: AppSpacing.md,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.darkBg,
-                        borderRadius: BorderRadius.circular(
-                          AppSpacing.buttonRadius,
-                        ),
-                        border: Border.all(color: AppColors.darkBorder),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Show $secondaryScriptLabel',
-                                  style: AppTypography.body(
-                                    size: 13,
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'The app language defines the secondary script. Matching choices fall back to Devanagari.',
-                                  style: AppTypography.body(
-                                    size: 11,
-                                    color: AppColors.white.withValues(
-                                      alpha: 0.45,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                    label: 'Reading Surface',
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              right: AppSpacing.sm,
+                            ),
+                            child: _ScriptSurfaceButton(
+                              label: primaryScriptLabel,
+                              isActive:
+                                  localScriptSurface ==
+                                  FocusModeScriptSurface.primary,
+                              onTap: () {
+                                onScriptSurfaceChanged(
+                                  FocusModeScriptSurface.primary,
+                                );
+                                setSheetState(() {
+                                  localScriptSurface =
+                                      FocusModeScriptSurface.primary;
+                                });
+                              },
                             ),
                           ),
-                          Switch.adaptive(
-                            value: localSecondaryScriptOn,
-                            activeTrackColor: AppColors.saffron,
-                            onChanged: (value) {
-                              onSecondaryScriptChanged(value);
+                        ),
+                        Expanded(
+                          child: _ScriptSurfaceButton(
+                            label: secondaryScriptLabel,
+                            isActive:
+                                localScriptSurface ==
+                                FocusModeScriptSurface.secondary,
+                            onTap: () {
+                              onScriptSurfaceChanged(
+                                FocusModeScriptSurface.secondary,
+                              );
                               setSheetState(() {
-                                localSecondaryScriptOn = value;
+                                localScriptSurface =
+                                    FocusModeScriptSurface.secondary;
                               });
                             },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -173,8 +132,8 @@ Future<void> showFocusModeSettingsSheet({
                   label: 'Text Size',
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.md,
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.darkBg,
@@ -201,8 +160,9 @@ Future<void> showFocusModeSettingsSheet({
                             child: Text(
                               '${(localTextScale * 100).round()}%',
                               style: AppTypography.body(
-                                size: 13,
+                                size: 12,
                                 color: AppColors.white,
+                                weight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -261,12 +221,12 @@ class _FocusModeSettingSection extends StatelessWidget {
   }
 }
 
-class _ScriptOptionButton extends StatelessWidget {
+class _ScriptSurfaceButton extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
 
-  const _ScriptOptionButton({
+  const _ScriptSurfaceButton({
     required this.label,
     required this.isActive,
     required this.onTap,
@@ -278,7 +238,8 @@ class _ScriptOptionButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        height: AppSpacing.touchTarget,
+        constraints: const BoxConstraints(minHeight: AppSpacing.touchTarget),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
         decoration: BoxDecoration(
           color: isActive ? AppColors.saffronGlow : AppColors.darkBg,
           borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
@@ -286,14 +247,16 @@ class _ScriptOptionButton extends StatelessWidget {
             color: isActive ? AppColors.saffron : AppColors.darkBorder,
           ),
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: AppTypography.body(
-              size: 12,
-              color: isActive ? AppColors.saffronLight : AppColors.white,
-              weight: isActive ? FontWeight.w500 : FontWeight.w400,
-            ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: AppTypography.body(
+            size: 12,
+            color: isActive ? AppColors.saffronLight : AppColors.white,
+            weight: isActive ? FontWeight.w500 : FontWeight.w400,
           ),
         ),
       ),
@@ -319,16 +282,15 @@ class _TextScaleButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.saffronGlow,
           borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-          border: Border.all(color: AppColors.saffron),
+          border: Border.all(color: AppColors.darkBorder),
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: AppTypography.body(
-              size: 13,
-              color: AppColors.saffronLight,
-              weight: FontWeight.w500,
-            ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: AppTypography.body(
+            size: 12,
+            color: AppColors.saffronLight,
+            weight: FontWeight.w600,
           ),
         ),
       ),

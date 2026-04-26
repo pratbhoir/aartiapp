@@ -249,9 +249,6 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     final showSecondaryScript =
         AartiLanguageResolver.shouldShowSecondaryScriptMode(verses: verses);
     final showMeaning = AartiLanguageResolver.hasMeaning(verses);
-    final preferredScriptMode = _preferredScriptModeForFocusSession(
-      appLanguageCode,
-    );
     final availableModes = <AartiDetailContentMode>[
       AartiDetailContentMode.lyrics,
       if (showSecondaryScript) AartiDetailContentMode.transliteration,
@@ -620,7 +617,6 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                 context: context,
                 appLanguageCode: appLanguageCode,
                 canShowSecondaryScript: showSecondaryScript,
-                preferredScriptMode: preferredScriptMode,
                 hasNextAarti: nextPujaAarti != null,
               ),
               onNextAarti: nextPujaAarti == null
@@ -649,28 +645,20 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
       case AartiDetailContentMode.lyrics:
         return 'Lyrics';
       case AartiDetailContentMode.transliteration:
-        return AartiLanguageResolver.secondaryScriptLabel(
-          scriptMode: scriptMode,
-          appLanguageCode: appLanguageCode,
-        );
+        // return AartiLanguageResolver.secondaryScriptLabel(
+        //   scriptMode: scriptMode,
+        //   appLanguageCode: appLanguageCode,
+        // );
+        return 'Transliteration';
       case AartiDetailContentMode.meaning:
         return 'Meaning';
     }
-  }
-
-  int _preferredScriptModeForFocusSession(String appLanguageCode) {
-    final int preferredScriptMode =
-        AartiLanguageResolver.preferredScriptModeForLanguageCode(
-          appLanguageCode,
-        );
-    return preferredScriptMode == 1 ? 0 : preferredScriptMode;
   }
 
   void _showFocusModeSettings({
     required BuildContext context,
     required String appLanguageCode,
     required bool canShowSecondaryScript,
-    required int preferredScriptMode,
     required bool hasNextAarti,
   }) {
     showFocusModeSettingsSheet(
@@ -679,21 +667,15 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
       scriptMode: _focusScriptMode,
       textScale: _focusTextScale,
       canShowSecondaryScript: canShowSecondaryScript,
-      isSecondaryScriptOn:
-          _focusContentMode == AartiDetailContentMode.transliteration,
-      preferredScriptMode: preferredScriptMode,
-      onScriptModeChanged: (newMode) {
+      activeScriptSurface:
+          _focusContentMode == AartiDetailContentMode.transliteration
+          ? FocusModeScriptSurface.secondary
+          : FocusModeScriptSurface.primary,
+      onScriptSurfaceChanged: (surface) {
         setState(() {
-          _focusScriptMode = newMode;
-          if (_focusContentMode == AartiDetailContentMode.transliteration &&
-              !canShowSecondaryScript) {
-            _focusContentMode = AartiDetailContentMode.lyrics;
-          }
-        });
-      },
-      onSecondaryScriptChanged: (value) {
-        setState(() {
-          _focusContentMode = value
+          _focusContentMode =
+              surface == FocusModeScriptSurface.secondary &&
+                  canShowSecondaryScript
               ? AartiDetailContentMode.transliteration
               : AartiDetailContentMode.lyrics;
         });

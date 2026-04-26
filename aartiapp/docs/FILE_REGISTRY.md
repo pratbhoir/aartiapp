@@ -83,7 +83,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/shared/widgets/aarti_app_bar.dart` | `AartiAppBar` — reusable app bar with optional menu affordance and trailing action area | 2026-04-25 |
-| `lib/shared/widgets/focus_mode_settings_sheet.dart` | Shared temporary focus-mode settings bottom sheet used by standalone focus mode and My Puja focus sessions | 2026-04-27 |
+| `lib/shared/widgets/focus_mode_settings_sheet.dart` | Shared temporary focus-mode settings bottom sheet used by standalone focus mode and My Puja focus sessions, with language-only reading-surface buttons and a compact text-size control | 2026-04-27 |
 | `lib/shared/widgets/gradient_divider.dart` | `GradientDivider` — saffron-to-transparent horizontal divider | 2026-04-20 |
 | `lib/shared/widgets/section_label.dart` | `SectionLabel` — uppercase tracked section header text | 2026-04-20 |
 
@@ -115,7 +115,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, session-style focus mode with temporary reading overrides, and audio init warning logging | 2026-04-27 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, and session-style focus mode with temporary reading-surface and text-size overrides | 2026-04-27 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with tap-zone navigation, derived secondary-script rendering, centered session-style header support, puja boundary handoff CTAs, and balanced line splits | 2026-04-27 |
@@ -128,7 +128,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, audio/focus session launchers, and script-aware preview items | 2026-04-26 |
-| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local reading overrides powered by the shared focus settings sheet, progress dots, and previous/next aarti handoff | 2026-04-27 |
+| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local reading-surface and text-size overrides powered by the shared focus settings sheet, progress dots, and previous/next aarti handoff | 2026-04-27 |
 | `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, and script-aware verse preview | 2026-04-26 |
 | `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, script-aware subtitle, and theme-aware sequence/remove controls | 2026-04-26 |
 
