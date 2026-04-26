@@ -4,6 +4,13 @@ All notable changes to the Aarti Sangrah project are documented here.
 
 ---
 
+## [2026-04-26] — Verse-Based Focus Mode
+
+### Modified
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Changed Sadhana Mode navigation and highlighting from line-by-line to verse-by-verse, including grouped verse rendering, verse-wide balanced splits when any line in a verse needs wrapping, configurable spacing between verse lines, and single-verse progress.
+- `docs/FILE_REGISTRY.md` — Refreshed Focus Mode widget metadata for the verse-by-verse behavior.
+- `docs/FUNCTIONAL_SPEC.md` — Documented verse-based Focus Mode progression in the detail flow and business rules.
+
 ## [2026-04-26] — Activity Log Diagnostics
 
 ### Added

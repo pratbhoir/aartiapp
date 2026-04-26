@@ -111,7 +111,7 @@
 | `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with lyrics, audio player, bookmark, puja controls, and audio init warning logging | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc. | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat | 2026-04-20 |
-| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free reading | 2026-04-20 |
+| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free verse-by-verse reading with verse-wide balanced line splits and configurable separated line blocks | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics and configurable count | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — 3-segment control switching Lyrics / Transliteration / Meaning views | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders verse content based on selected script/view mode | 2026-04-20 |

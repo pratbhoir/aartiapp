@@ -74,7 +74,7 @@
    - **Bookmark** the Aarti (auto-adds to puja list).
    - **Add to Puja** directly.
    - **Play audio** via sticky bottom player.
-   - **Enter Focus Mode** for distraction-free reading.
+   - **Enter Focus Mode** for distraction-free verse-by-verse reading.
    - **Open Mantra Counter** for Japa meditation.
    - **Share** lyrics as text or image.
 4. Audio player shows progress, seek ±10s, repeat toggle.
@@ -118,6 +118,7 @@
 | Festival calendar | Pre-calculated dates for 2026–2028. Supports single-day and multi-day ranges. |
 | Audio default | All aartis share a default audio URL if no specific URL is provided. |
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
+| Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
 | Offline | All content is bundled — the app works fully offline. |
 

@@ -241,6 +241,7 @@ class _PlayPauseBtnState extends State<PlayPauseBtn>
       child: Container(
         width: 48,
         height: 48,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppColors.ink,
           shape: BoxShape.circle,
