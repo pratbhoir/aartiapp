@@ -73,7 +73,8 @@ lib/
 │   ├── onboarding/
 │   │   └── onboarding_screen.dart
 │   └── settings/
-│       └── settings_screen.dart
+│       ├── settings_screen.dart
+│       └── dev_tools_screen.dart
 ```
 
 ---

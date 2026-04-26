@@ -15,7 +15,8 @@ All notable changes to the Aarti Sangrah project are documented here.
 - `lib/main.dart` — Added Activity Log initialization plus global Flutter/Zone error capture hooks.
 - `lib/core/services/sharing_service.dart` — Added Activity Log success/failure reporting for share actions.
 - `lib/features/aarti_detail/aarti_detail_screen.dart` — Added warning logging for audio initialization failures.
-- `lib/features/settings/settings_screen.dart` — Added diagnostics section with Activity Log viewer, share export, and clear actions.
+- `lib/features/settings/settings_screen.dart` — Added diagnostics section with Activity Log viewer, share export, clear actions, and visible DevTools navigation.
+- `lib/features/settings/dev_tools_screen.dart` — Added dedicated DevTools diagnostics hub with Activity Log and Share Activity Log actions.
 - `docs/FILE_REGISTRY.md` — Registered Activity Log files and updated touched-file metadata.
 - `docs/ARCHITECTURE.md` — Documented Activity Log service, global error hooks, and new dependency.
 - `docs/FUNCTIONAL_SPEC.md` — Added Activity Log diagnostics feature and Settings flow update.

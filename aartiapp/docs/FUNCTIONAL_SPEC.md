@@ -103,6 +103,7 @@
 5. Crossfade duration (0–3s).
 6. User name edit.
 7. Diagnostics actions: view Activity Log, share log export, and clear log.
+8. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
 
 ---
 

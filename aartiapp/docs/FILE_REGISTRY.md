@@ -146,7 +146,8 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme/script/notification/session settings plus diagnostics entry for viewing/sharing/clearing Activity Log | 2026-04-26 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme/script/notification/session settings plus diagnostics entries for DevTools navigation and Activity Log actions | 2026-04-26 |
+| `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
 
 ## Assets
 

@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../data/repositories/aarti_repository.dart';
+import 'dev_tools_screen.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
 
@@ -279,6 +280,19 @@ class SettingsScreen extends ConsumerWidget {
 
                 // --- Diagnostics ---
                 _SectionHeader('Diagnostics'),
+                const SizedBox(height: 12),
+                _SettingsTile(
+                  icon: Icons.developer_mode_outlined,
+                  title: 'DevTools',
+                  subtitle: 'Open full diagnostics page',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const DevToolsScreen(),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.fact_check_outlined,
