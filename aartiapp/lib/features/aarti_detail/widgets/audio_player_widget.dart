@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/aarti_item.dart';
 
@@ -40,6 +41,9 @@ class AudioPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentColor = isDark ? AppColors.saffronLight : AppColors.saffron;
+
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       child: BackdropFilter(
@@ -48,18 +52,18 @@ class AudioPlayerWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(24, 14, 24, 28),
           decoration: BoxDecoration(
             // Glassmorphic: translucent background with blurred backdrop
-            color: AppColors.stone.withValues(alpha: 0.78),
+            color: context.surface.withValues(alpha: isDark ? 0.9 : 0.78),
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(24)),
             border: Border(
               top: BorderSide(
-                color: AppColors.saffron.withValues(alpha: 0.15),
+                color: accentColor.withValues(alpha: 0.18),
                 width: 1,
               ),
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.ink.withValues(alpha: 0.08),
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.08),
                 blurRadius: 20,
                 offset: const Offset(0, -4),
               ),
@@ -75,7 +79,9 @@ class AudioPlayerWidget extends StatelessWidget {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.stone3.withValues(alpha: 0.5),
+                    color: context.borderSubtle.withValues(
+                      alpha: isDark ? 0.9 : 0.5,
+                    ),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -86,15 +92,17 @@ class AudioPlayerWidget extends StatelessWidget {
                 children: [
                   Text(_formatDuration(position),
                       style:
-                          AppTypography.body(size: 11, color: AppColors.ink3)),
+                          AppTypography.body(size: 11, color: context.textCaption)),
                   const SizedBox(width: 10),
                   Expanded(
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: AppColors.saffron,
+                        activeTrackColor: accentColor,
                         inactiveTrackColor:
-                            AppColors.stone3.withValues(alpha: 0.5),
-                        thumbColor: AppColors.saffron,
+                            context.borderSubtle.withValues(
+                              alpha: isDark ? 0.9 : 0.5,
+                            ),
+                        thumbColor: accentColor,
                         thumbShape: const RoundSliderThumbShape(
                             enabledThumbRadius: 5),
                         trackHeight: 2.5,
@@ -115,7 +123,7 @@ class AudioPlayerWidget extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(_formatDuration(duration),
                       style:
-                          AppTypography.body(size: 11, color: AppColors.ink3)),
+                          AppTypography.body(size: 11, color: context.textCaption)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -132,7 +140,7 @@ class AudioPlayerWidget extends StatelessWidget {
                           aarti.title,
                           style: AppTypography.serifBody(
                             size: 16,
-                            color: AppColors.ink,
+                            color: context.textPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -140,7 +148,7 @@ class AudioPlayerWidget extends StatelessWidget {
                         if (verseLabel != null)
                           Text(verseLabel!,
                               style: AppTypography.body(
-                                  size: 11, color: AppColors.ink3)),
+                                  size: 11, color: context.textCaption)),
                       ],
                     ),
                   ),
@@ -187,11 +195,15 @@ class _CtrlBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IconButton(
       icon: Icon(
         icon,
         size: 20,
-        color: isActive ? AppColors.saffron : AppColors.ink2,
+        color: isActive
+            ? (isDark ? AppColors.saffronLight : AppColors.saffron)
+            : context.textSecondary,
       ),
       onPressed: onTap,
       padding: EdgeInsets.zero,
@@ -236,6 +248,9 @@ class _PlayPauseBtnState extends State<PlayPauseBtn>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentForeground = isDark ? AppColors.darkBg : AppColors.white;
+
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
@@ -243,11 +258,11 @@ class _PlayPauseBtnState extends State<PlayPauseBtn>
         height: 48,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColors.ink,
+          color: isDark ? AppColors.saffronLight : AppColors.ink,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: AppColors.ink.withValues(alpha: 0.25),
+              color: Colors.black.withValues(alpha: isDark ? 0.24 : 0.25),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -256,7 +271,7 @@ class _PlayPauseBtnState extends State<PlayPauseBtn>
         child: AnimatedIcon(
           icon: AnimatedIcons.play_pause,
           progress: _ctrl,
-          color: AppColors.white,
+          color: accentForeground,
           size: 22,
         ),
       ),

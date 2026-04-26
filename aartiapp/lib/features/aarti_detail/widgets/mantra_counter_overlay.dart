@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/constants/haptics.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/painters/mala_painter.dart';
 
@@ -55,10 +56,21 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentTextColor =
+        isDark ? AppColors.saffronLight : AppColors.saffronDark;
+    final accentSurfaceColor = isDark
+        ? AppColors.saffron.withValues(alpha: 0.18)
+        : AppColors.saffronGlow;
+    final buttonBackground = isDark
+        ? (_completed ? AppColors.saffron : AppColors.saffronLight)
+        : (_completed ? AppColors.saffron : AppColors.ink);
+    final buttonForeground = isDark ? AppColors.darkBg : AppColors.white;
+
     return GestureDetector(
       onTap: widget.onClose,
       child: Container(
-        color: AppColors.ink.withValues(alpha: 0.5),
+        color: Colors.black.withValues(alpha: 0.5),
         child: Center(
           child: GestureDetector(
             onTap: () {},
@@ -66,7 +78,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
               width: math.min(380, MediaQuery.of(context).size.width - 48),
               padding: const EdgeInsets.all(36),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: context.surface,
                 borderRadius: BorderRadius.circular(28),
               ),
               child: Column(
@@ -80,7 +92,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         'Mantra Counter',
                         style: AppTypography.serifBody(
                           size: 20,
-                          color: AppColors.ink,
+                          color: context.textPrimary,
                         ),
                       ),
                       GestureDetector(
@@ -89,11 +101,14 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: AppColors.stone2,
+                            color: context.border,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(Icons.close,
-                              size: 14, color: AppColors.ink3),
+                          child: Icon(
+                            Icons.close,
+                            size: 14,
+                            color: context.textCaption,
+                          ),
                         ),
                       ),
                     ],
@@ -101,7 +116,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                   const SizedBox(height: 4),
                   Text('Tap to count · $_total chants',
                       style:
-                          AppTypography.body(size: 12, color: AppColors.ink3)),
+                          AppTypography.body(size: 12, color: context.textCaption)),
 
                   // Configurable count presets
                   const SizedBox(height: 12),
@@ -124,13 +139,13 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
                             color: isActive
-                                ? AppColors.saffronGlow
-                                : AppColors.stone2,
+                                ? accentSurfaceColor
+                                : context.border,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: isActive
-                                  ? AppColors.saffron
-                                  : AppColors.stone3,
+                                  ? accentTextColor
+                                  : context.borderSubtle,
                             ),
                           ),
                           child: Text(
@@ -138,8 +153,8 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                             style: AppTypography.body(
                               size: 11,
                               color: isActive
-                                  ? AppColors.saffronDark
-                                  : AppColors.ink3,
+                                  ? accentTextColor
+                                  : context.textCaption,
                               weight: isActive
                                   ? FontWeight.w500
                                   : FontWeight.w300,
@@ -176,7 +191,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                             ),
                             Text('/ $_total',
                                 style: AppTypography.body(
-                                    size: 14, color: AppColors.ink3)),
+                                    size: 14, color: context.textCaption)),
                           ],
                         ),
                       ],
@@ -191,14 +206,14 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: AppColors.saffronGlow,
+                          color: accentSurfaceColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '🪷 Mala Complete · Jai Ho!',
                           style: AppTypography.body(
                             size: 13,
-                            color: AppColors.saffronDark,
+                            color: accentTextColor,
                             weight: FontWeight.w500,
                           ),
                         ),
@@ -216,7 +231,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
-                          color: _completed ? AppColors.saffron : AppColors.ink,
+                          color: buttonBackground,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
@@ -224,7 +239,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           textAlign: TextAlign.center,
                           style: AppTypography.serifBody(
                             size: 20,
-                            color: AppColors.white,
+                            color: buttonForeground,
                           ).copyWith(letterSpacing: 0.5),
                         ),
                       ),
@@ -238,7 +253,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                     }),
                     child: Text('Reset counter',
                         style: AppTypography.body(
-                            size: 12, color: AppColors.ink3)),
+                            size: 12, color: context.textCaption)),
                   ),
                 ],
               ),

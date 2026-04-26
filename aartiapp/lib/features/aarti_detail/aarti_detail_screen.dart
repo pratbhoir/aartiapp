@@ -200,6 +200,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     final textScale = ref.watch(textScaleProvider);
     final scriptMode = ref.watch(scriptModeProvider);
     final appLanguageCode = ref.watch(preferredLanguageProvider);
+    final accentFillColor = _accentFillColor(context);
+    final accentSurfaceColor = _accentSurfaceColor(context);
+    final accentTextColor = _accentTextColor(context);
     final bookmarks = ref.watch(bookmarkProvider);
     final userAartis = ref.watch(userAartiProvider);
     final pujaAartis = ref
@@ -271,17 +274,17 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            const Icon(
+                                            Icon(
                                               Icons.arrow_back_ios_new,
                                               size: 14,
-                                              color: AppColors.ink3,
+                                              color: context.textCaption,
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
                                               'Back',
                                               style: AppTypography.body(
                                                 size: 12,
-                                                color: AppColors.ink3,
+                                                color: context.textCaption,
                                               ),
                                             ),
                                           ],
@@ -360,14 +363,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                             height: 44,
                                             decoration: BoxDecoration(
                                               color: isBookmarked
-                                                  ? AppColors.saffronGlow
-                                                  : AppColors.white,
+                                                  ? accentSurfaceColor
+                                                  : context.surface,
                                               borderRadius:
                                                   BorderRadius.circular(12),
                                               border: Border.all(
                                                 color: isBookmarked
-                                                    ? AppColors.saffron
-                                                    : AppColors.stone3,
+                                                    ? accentFillColor
+                                                    : context.borderSubtle,
                                               ),
                                             ),
                                             child: Icon(
@@ -376,8 +379,8 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                                   : Icons.bookmark_outline,
                                               size: 18,
                                               color: isBookmarked
-                                                  ? AppColors.saffron
-                                                  : AppColors.ink3,
+                                                  ? accentFillColor
+                                                  : context.textCaption,
                                             ),
                                           ),
                                         ),
@@ -392,7 +395,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                 '${widget.aarti.deity.toUpperCase()} · ${DayDeityMapper.todayHindiName().toUpperCase()}',
                                 style: AppTypography.label(
                                   size: 10,
-                                  color: AppColors.saffronDark,
+                                  color: accentTextColor,
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -409,6 +412,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                 Text(
                                   scriptTitle,
                                   style: _scriptTitleStyle(
+                                    context: context,
                                     scriptMode: scriptMode,
                                     textScale: textScale,
                                   ),
@@ -424,14 +428,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     vertical: 6,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.saffronGlow,
+                                    color: accentSurfaceColor,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
                                     'Verse ${_currentVerse + 1} of $verseCount',
                                     style: AppTypography.body(
                                       size: 12,
-                                      color: AppColors.saffronDark,
+                                      color: accentTextColor,
                                     ),
                                   ),
                                 ),
@@ -496,7 +500,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     'Verse data coming soon for this Aarti.',
                                     style: AppTypography.body(
                                       size: 14,
-                                      color: AppColors.ink3,
+                                      color: context.textCaption,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -610,6 +614,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
   }
 
   TextStyle _scriptTitleStyle({
+    required BuildContext context,
     required int scriptMode,
     required double textScale,
   }) {
@@ -617,11 +622,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     if (script == AppScriptLanguage.english) {
       return AppTypography.transliteration(
         size: 16 * textScale,
-        color: AppColors.ink3,
+        color: context.textSecondary,
       );
     }
 
-    return AppTypography.devanagari(size: 17 * textScale, color: AppColors.ink);
+    return AppTypography.devanagari(
+      size: 17 * textScale,
+      color: context.textSecondary,
+    );
   }
 
   void _showShareOptions(BuildContext context) {
@@ -641,7 +649,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.stone3,
+                color: context.borderSubtle,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -656,7 +664,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             const SizedBox(height: 4),
             Text(
               widget.aarti.title,
-              style: AppTypography.body(size: 13, color: AppColors.ink3),
+              style: AppTypography.body(size: 13, color: context.textCaption),
             ),
             const SizedBox(height: 24),
             Row(
@@ -700,6 +708,8 @@ class _NextFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
       duration: const Duration(milliseconds: 350),
@@ -707,8 +717,8 @@ class _NextFab extends StatelessWidget {
       builder: (_, value, child) => Transform.scale(scale: value, child: child),
       child: FloatingActionButton.extended(
         onPressed: onTap,
-        backgroundColor: AppColors.saffron,
-        foregroundColor: AppColors.white,
+        backgroundColor: isDark ? AppColors.saffronLight : AppColors.saffron,
+        foregroundColor: isDark ? AppColors.darkBg : AppColors.white,
         icon: const Icon(Icons.skip_next_rounded, size: 20),
         label: const Text('Next'),
         elevation: 4,
@@ -731,26 +741,47 @@ class _ShareOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: AppColors.stone2,
+          color: context.border,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.stone3),
+          border: Border.all(color: context.borderSubtle),
         ),
         child: Column(
           children: [
-            Icon(icon, size: 28, color: AppColors.saffron),
+            Icon(
+              icon,
+              size: 28,
+              color: isDark ? AppColors.saffronLight : AppColors.saffron,
+            ),
             const SizedBox(height: 8),
             Text(
               label,
-              style: AppTypography.body(size: 13, color: AppColors.ink2),
+              style: AppTypography.body(size: 13, color: context.textSecondary),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+Color _accentFillColor(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.saffronLight : AppColors.saffron;
+}
+
+Color _accentSurfaceColor(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.saffron.withValues(alpha: 0.18) : AppColors.saffronGlow;
+}
+
+Color _accentTextColor(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? AppColors.saffronLight : AppColors.saffronDark;
 }

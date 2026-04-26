@@ -1,3 +1,13 @@
+## [2026-04-26] — Aarti Detail Theme Contrast Fix
+
+### Modified
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Replaced remaining light-only reader surfaces with theme-aware colors for the back row, bookmark affordance, script subtitle, verse progress pill, share sheet, and next FAB.
+- `lib/features/aarti_detail/widgets/action_chip.dart` — Switched neutral chip fill, border, and text colors to theme-aware values and tuned the primary chip for dark mode.
+- `lib/features/aarti_detail/widgets/toggle_bar.dart` — Made the tab track and active pill resolve from theme-aware surfaces instead of fixed light-theme tokens.
+- `lib/features/aarti_detail/widgets/verse_block.dart` — Fixed dark-mode lyric, transliteration, meaning, and divider contrast by using theme-aware text and border colors.
+- `lib/features/aarti_detail/widgets/audio_player_widget.dart` — Updated the sticky player glass surface, controls, and text colors for dark-mode readability.
+- `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` — Updated the counter modal, preset chips, and primary action button to respect light and dark themes.
+- `docs/FILE_REGISTRY.md` — Refreshed Aarti Detail file metadata to reflect the theme-aware surface updates.
 # Changelog
 
 All notable changes to the Aarti Sangrah project are documented here.

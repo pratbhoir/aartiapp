@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/utils/aarti_language_resolver.dart';
 import '../../../data/models/verse_data.dart';
@@ -24,23 +25,32 @@ class VerseBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lyricsLines = AartiLanguageResolver.resolveLyricsLines(verse, scriptMode);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentColor = isDark ? AppColors.saffronLight : AppColors.saffronDark;
+    final lyricsLines =
+        AartiLanguageResolver.resolveLyricsLines(verse, scriptMode);
     final transliterationLines =
         AartiLanguageResolver.resolveTransliterationLines(verse);
     final meaningLines =
         AartiLanguageResolver.resolveMeaningLines(verse, appLanguageCode);
     final script = AartiLanguageResolver.scriptFromMode(scriptMode);
     final lyricsTextStyle = script == AppScriptLanguage.english
-        ? AppTypography.transliteration(size: 18 * textScale, color: AppColors.ink)
-        : AppTypography.devanagari(size: 18 * textScale, color: AppColors.ink);
-    final highlightedLyricsTextStyle = script == AppScriptLanguage.english
         ? AppTypography.transliteration(
             size: 18 * textScale,
-            color: AppColors.saffron,
+            color: context.textPrimary,
           )
         : AppTypography.devanagari(
             size: 18 * textScale,
-            color: AppColors.saffron,
+            color: context.textPrimary,
+          );
+    final highlightedLyricsTextStyle = script == AppScriptLanguage.english
+        ? AppTypography.transliteration(
+            size: 18 * textScale,
+            color: accentColor,
+          )
+        : AppTypography.devanagari(
+            size: 18 * textScale,
+            color: accentColor,
           );
 
     return Padding(
@@ -51,10 +61,13 @@ class VerseBlock extends StatelessWidget {
           // Label row
           Row(
             children: [
-              Text(verse.label, style: AppTypography.label()),
+              Text(
+                verse.label,
+                style: AppTypography.label(color: context.textCaption),
+              ),
               const SizedBox(width: 10),
               Expanded(
-                child: Container(height: 1, color: AppColors.stone3),
+                child: Container(height: 1, color: context.borderSubtle),
               ),
             ],
           ),
@@ -77,10 +90,12 @@ class VerseBlock extends StatelessWidget {
                           ? const EdgeInsets.only(left: 12)
                           : EdgeInsets.zero,
                       decoration: isHighlighted
-                          ? const BoxDecoration(
+                          ? BoxDecoration(
                               border: Border(
                                 left: BorderSide(
-                                    color: AppColors.saffron, width: 2),
+                                  color: accentColor,
+                                  width: 2,
+                                ),
                               ),
                             )
                           : null,
@@ -102,7 +117,7 @@ class VerseBlock extends StatelessWidget {
                             transliterationLine,
                             style: AppTypography.transliteration(
                               size: 14 * textScale,
-                              color: AppColors.ink3,
+                              color: context.textCaption,
                             ),
                           ),
                       ],
@@ -118,18 +133,20 @@ class VerseBlock extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.stone2,
+                              color: context.border,
                               borderRadius: BorderRadius.circular(10),
-                              border: const Border(
+                              border: Border(
                                 left: BorderSide(
-                                    color: AppColors.saffronLight, width: 2),
+                                  color: accentColor,
+                                  width: 2,
+                                ),
                               ),
                             ),
                             child: Text(
                               meaningLine,
                               style: AppTypography.body(
                                 size: 13 * textScale,
-                                color: AppColors.ink3,
+                                color: context.textSecondary,
                               ),
                             ),
                           ),

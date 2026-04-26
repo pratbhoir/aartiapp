@@ -114,13 +114,13 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with global script-aware lyrics, dynamic tabs, audio player, bookmark, puja-aware next navigation, and audio init warning logging | 2026-04-26 |
-| `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc. | 2026-04-20 |
-| `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat | 2026-04-20 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, dynamic tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, and audio init warning logging | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free verse-by-verse reading using the selected script, verse-wide balanced line splits, and configurable separated line blocks | 2026-04-26 |
-| `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics and configurable count | 2026-04-20 |
-| `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — 3-segment control switching Lyrics / Transliteration / Meaning views | 2026-04-20 |
-| `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, transliteration, and meaning using the shared script/app-language resolver | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, and theme-aware modal chrome | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — segmented control switching Lyrics / Transliteration / Meaning views with theme-aware surfaces | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, transliteration, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-26 |
 
 ## Features / My Puja
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_aware_colors.dart';
 import '../../../core/theme/app_typography.dart';
 
 class ToggleBar extends StatelessWidget {
@@ -16,11 +16,13 @@ class ToggleBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       height: 42,
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: AppColors.stone2,
+        color: context.border,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -32,12 +34,14 @@ class ToggleBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
-                  color: isActive ? AppColors.white : Colors.transparent,
+                  color: isActive ? context.surface : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: isActive
                       ? [
                           BoxShadow(
-                            color: AppColors.ink.withValues(alpha: 0.08),
+                            color: Colors.black.withValues(
+                              alpha: isDark ? 0.18 : 0.08,
+                            ),
                             blurRadius: 4,
                             offset: const Offset(0, 1),
                           )
@@ -49,7 +53,9 @@ class ToggleBar extends StatelessWidget {
                     labels[i],
                     style: AppTypography.body(
                       size: 12,
-                      color: isActive ? AppColors.ink : AppColors.ink3,
+                      color: isActive
+                          ? context.textPrimary
+                          : context.textCaption,
                       weight: isActive ? FontWeight.w500 : FontWeight.w300,
                     ),
                   ),
