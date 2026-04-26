@@ -19,7 +19,8 @@
 | Mantra Counter (configurable count, Mala bead ring) | ✅ Done | v1.0 | `MantraCounterOverlay` |
 | Text size control (A–/A+) | ✅ Done | v1.0 | `SettingsScreen` |
 | Dark / Light / System theme | ✅ Done | v1.0 | `SettingsScreen` |
-| Script toggle (Devanagari / Roman / Gujarati) | ✅ Done | v1.0 | `SettingsScreen` |
+| Script language setting (Devanagari / English / Gujarati) | ✅ Done | v1.0 | `SettingsScreen` |
+| App language setting (English / Hindi / Gujarati) | ✅ Done | v2.2 | `SettingsScreen` |
 | Verse progress indicator | ✅ Done | v1.0 | `AartiDetailScreen` |
 | Haptic feedback (scoped) | ✅ Done | v1.0 | `AppHaptics` |
 | Onboarding flow (name, language, notification, deity) | ✅ Done | v2.0 | `OnboardingScreen` |
@@ -54,7 +55,7 @@
 1. User opens app → `OnboardingScreen` displayed.
 2. **Step 1 — Welcome:** App title, description, "Begin" button.
 3. **Step 2 — Name:** User enters their name (stored in `SettingsRepository`).
-4. **Step 3 — Language:** User selects preferred script (Devanagari / Roman / Gujarati).
+4. **Step 3 — Language:** User selects preferred script (Devanagari / English / Gujarati) and app language (English / Hindi / Gujarati).
 5. **Step 4 — Notification:** User sets daily puja reminder time (optional).
 6. **Step 5 — Deity:** User selects favourite deity (sets initial filter).
 7. Onboarding marked complete → `HomeShell` displayed with Home tab active.
@@ -68,17 +69,20 @@
 
 ### 2.3 Aarti Detail
 
-1. User sees title, deity, Devanagari subtitle.
+1. User sees title, deity, and a script-aware subtitle when the selected script differs from the English title.
 2. User toggles between Lyrics / Transliteration / Meaning views.
-3. User can:
+3. `Lyrics` always uses the global Script Language preference.
+4. `Transliteration` is only shown when the selected Script Language does not already match the user's App Language reading script.
+5. `Meaning` uses the app language translation surface, with English meaning as the fallback until localized Hindi/Gujarati meaning data exists.
+6. User can:
    - **Bookmark** the Aarti (auto-adds to puja list).
    - **Add to Puja** directly.
    - **Play audio** via sticky bottom player.
    - **Enter Focus Mode** for distraction-free verse-by-verse reading.
    - **Open Mantra Counter** for Japa meditation.
    - **Share** lyrics as text or image.
-4. Audio player shows progress, seek ±10s, repeat toggle.
-5. "Next" FAB appears at 90% audio progress or scroll-to-bottom.
+7. Audio player shows progress, seek ±10s, repeat toggle.
+8. "Next" FAB appears at 90% audio progress or scroll-to-bottom.
 
 ### 2.4 My Daily Puja
 
@@ -98,12 +102,13 @@
 
 1. Theme mode (System / Light / Dark).
 2. Text scale (0.8×–1.6×).
-3. Script mode (Devanagari / Roman / Gujarati).
-4. Notification toggle + time picker.
-5. Crossfade duration (0–3s).
-6. User name edit.
-7. Diagnostics actions: view Activity Log, share log export, and clear log.
-8. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
+3. App language (English / Hindi / Gujarati).
+4. Script language (Devanagari / English / Gujarati).
+5. Notification toggle + time picker.
+6. Crossfade duration (0–3s).
+7. User name edit.
+8. Diagnostics actions: view Activity Log, share log export, and clear log.
+9. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
 
 ---
 
@@ -118,6 +123,10 @@
 | Festival calendar | Pre-calculated dates for 2026–2028. Supports single-day and multi-day ranges. |
 | Audio default | All aartis share a default audio URL if no specific URL is provided. |
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
+| Script language default | First-run script language defaults to Devanagari. |
+| App language default | First-run app language defaults to English. |
+| Transliteration visibility | Transliteration is hidden when the selected script already matches the user's app-language reading script. |
+| Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
 | Offline | All content is bundled — the app works fully offline. |

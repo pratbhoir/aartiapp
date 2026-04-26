@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsRepository {
   static const _keyThemeMode = 'theme_mode';
   static const _keyTextScale = 'text_scale';
-  static const _keyScriptMode = 'script_mode'; // 0=devanagari, 1=roman, 2=gujarati
+  static const _keyScriptMode = 'script_mode'; // 0=devanagari, 1=english, 2=gujarati
   static const _keyUserName = 'user_name';
   static const _keyCrossfadeDuration = 'crossfade_duration'; // 0–3 seconds
   static const _keyAutoPlay = 'auto_play'; // puja session auto-play
@@ -105,7 +105,7 @@ class SettingsRepository {
 
   // --- Preferred Language ---
   String getPreferredLanguage() =>
-      _prefs.getString(_keyPreferredLanguage) ?? 'hi';
+      _prefs.getString(_keyPreferredLanguage) ?? 'en';
 
   Future<void> setPreferredLanguage(String lang) =>
       _prefs.setString(_keyPreferredLanguage, lang);

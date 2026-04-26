@@ -3,11 +3,19 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/utils/day_deity_mapper.dart';
 import '../../../data/models/aarti_item.dart';
+import '../../../shared/utils/aarti_language_resolver.dart';
 
 class TodayHeroCard extends StatefulWidget {
   final VoidCallback onTap;
   final AartiItem aarti;
-  const TodayHeroCard({super.key, required this.onTap, required this.aarti});
+  final int scriptMode;
+
+  const TodayHeroCard({
+    super.key,
+    required this.onTap,
+    required this.aarti,
+    required this.scriptMode,
+  });
 
   @override
   State<TodayHeroCard> createState() => _TodayHeroCardState();
@@ -34,6 +42,11 @@ class _TodayHeroCardState extends State<TodayHeroCard>
 
   @override
   Widget build(BuildContext context) {
+    final scriptTitle =
+        AartiLanguageResolver.resolveAartiTitle(widget.aarti, widget.scriptMode);
+    final showScriptTitle = scriptTitle.trim() != widget.aarti.title.trim();
+    final script = AartiLanguageResolver.scriptFromMode(widget.scriptMode);
+
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
@@ -121,12 +134,21 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                     color: AppColors.white,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(widget.aarti.devanagari,
-                    style: AppTypography.devanagari(
-                      size: 14,
-                      color: AppColors.white.withValues(alpha: 0.45),
-                    )),
+                if (showScriptTitle) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    scriptTitle,
+                    style: (script == AppScriptLanguage.english
+                            ? AppTypography.transliteration(
+                                size: 14,
+                                color: AppColors.white.withValues(alpha: 0.45),
+                              )
+                            : AppTypography.devanagari(
+                                size: 14,
+                                color: AppColors.white.withValues(alpha: 0.45),
+                              )),
+                  ),
+                ],
                 const SizedBox(height: 5),
                 Row(
                   children: [

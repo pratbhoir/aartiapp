@@ -22,6 +22,7 @@ class DiscoverScreen extends ConsumerWidget {
     final activeDeity = ref.watch(activeDeityProvider);
     final filteredIndices = ref.watch(filteredAartisProvider);
     final bookmarks = ref.watch(bookmarkProvider);
+    final scriptMode = ref.watch(scriptModeProvider);
     final catalog = AartiRepository.instance;
     final aartis = catalog.aartis;
     final deities = catalog.deities;
@@ -160,6 +161,7 @@ class DiscoverScreen extends ConsumerWidget {
                               final aarti = aartis[aartiIdx];
                               return AartiCard(
                                 aarti: aarti,
+                                scriptMode: scriptMode,
                                 isBookmarked: bookmarks.contains(aarti.id),
                                 delay: Duration(milliseconds: i * 60),
                                 onBookmark: () {

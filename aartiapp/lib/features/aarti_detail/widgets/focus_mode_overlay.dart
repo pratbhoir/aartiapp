@@ -4,17 +4,20 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/aarti_item.dart';
 import '../../../data/models/verse_data.dart';
+import '../../../shared/utils/aarti_language_resolver.dart';
 
 /// Full-screen distraction-free reading mode that advances one verse at a time.
 class FocusModeOverlay extends StatefulWidget {
   final AartiItem aarti;
   final List<VerseData> verses;
+  final int scriptMode;
   final VoidCallback onClose;
 
   const FocusModeOverlay({
     super.key,
     required this.aarti,
     required this.verses,
+    required this.scriptMode,
     required this.onClose,
   });
 
@@ -40,8 +43,11 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
         VerseData(
           label: 'Verse',
           lines: fallbackLines.isEmpty ? [widget.aarti.title] : fallbackLines,
-          transliteration: const [],
+          transliteration: [widget.aarti.title],
           meanings: const [],
+          gujarati: widget.aarti.gujarati.trim().isNotEmpty
+              ? [widget.aarti.gujarati]
+              : const [],
         ),
       ];
     }
@@ -133,12 +139,14 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         if (_currentVerseIdx > 0)
                           _FocusVerse(
                             verse: _displayVerses[_currentVerseIdx - 1],
+                            scriptMode: widget.scriptMode,
                             opacity: 0.3,
                             lineSize: 20,
                             lineVerticalPadding: AppSpacing.md,
                           ),
                         _FocusVerse(
                           verse: _displayVerses[_currentVerseIdx],
+                          scriptMode: widget.scriptMode,
                           opacity: 1.0,
                           lineSize: 22,
                           lineVerticalPadding: AppSpacing.md,
@@ -147,6 +155,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         if (_currentVerseIdx < _displayVerses.length - 1)
                           _FocusVerse(
                             verse: _displayVerses[_currentVerseIdx + 1],
+                            scriptMode: widget.scriptMode,
                             opacity: 0.3,
                             lineSize: 20,
                             lineVerticalPadding: AppSpacing.md,
@@ -154,6 +163,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
                         if (_currentVerseIdx < _displayVerses.length - 2)
                           _FocusVerse(
                             verse: _displayVerses[_currentVerseIdx + 2],
+                            scriptMode: widget.scriptMode,
                             opacity: 0.15,
                             lineSize: 18,
                             lineVerticalPadding: AppSpacing.sm,
@@ -184,6 +194,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
 
 class _FocusVerse extends StatelessWidget {
   final VerseData verse;
+  final int scriptMode;
   final double opacity;
   final double lineSize;
   final double lineVerticalPadding;
@@ -191,6 +202,7 @@ class _FocusVerse extends StatelessWidget {
 
   const _FocusVerse({
     required this.verse,
+    required this.scriptMode,
     required this.opacity,
     required this.lineSize,
     required this.lineVerticalPadding,
@@ -202,17 +214,26 @@ class _FocusVerse extends StatelessWidget {
     final Color textColor = isCurrent
         ? AppColors.saffronLight
         : AppColors.white.withValues(alpha: opacity);
-    final TextStyle lineTextStyle = AppTypography.devanagari(
-      size: lineSize,
-      color: textColor,
-    ).copyWith(height: 1.5);
+    final displayedLines =
+        AartiLanguageResolver.resolveLyricsLines(verse, scriptMode);
+    final script = AartiLanguageResolver.scriptFromMode(scriptMode);
+    final TextStyle lineTextStyle = (script == AppScriptLanguage.english
+            ? AppTypography.transliteration(
+                size: lineSize,
+                color: textColor,
+              )
+            : AppTypography.devanagari(
+                size: lineSize,
+                color: textColor,
+              ))
+        .copyWith(height: 1.5);
     final TextDirection textDirection = Directionality.of(context);
     final TextScaler textScaler = MediaQuery.textScalerOf(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final List<Widget> lineWidgets = <Widget>[];
-        final bool shouldForceBalancedSplit = verse.lines.any(
+        final bool shouldForceBalancedSplit = displayedLines.any(
           (line) => _shouldBalanceLine(
             line,
             style: lineTextStyle,
@@ -222,9 +243,9 @@ class _FocusVerse extends StatelessWidget {
           ),
         );
 
-        for (int index = 0; index < verse.lines.length; index++) {
+        for (int index = 0; index < displayedLines.length; index++) {
           final List<String> renderedSegments = _balanceLine(
-            verse.lines[index],
+            displayedLines[index],
             style: lineTextStyle,
             maxWidth: constraints.maxWidth,
             textDirection: textDirection,
@@ -235,7 +256,8 @@ class _FocusVerse extends StatelessWidget {
           lineWidgets.add(
             Padding(
               padding: EdgeInsets.only(
-                bottom: index < verse.lines.length - 1 ? lineVerticalPadding : 0,
+                bottom:
+                    index < displayedLines.length - 1 ? lineVerticalPadding : 0,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

@@ -3,9 +3,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 import '../../../data/models/aarti_item.dart';
+import '../../../shared/utils/aarti_language_resolver.dart';
 
 class PujaListItem extends StatelessWidget {
   final AartiItem aarti;
+  final int scriptMode;
   final int index;
   final bool isPlaying;
   final Duration delay;
@@ -15,6 +17,7 @@ class PujaListItem extends StatelessWidget {
   const PujaListItem({
     super.key,
     required this.aarti,
+    required this.scriptMode,
     required this.index,
     required this.isPlaying,
     required this.delay,
@@ -24,6 +27,9 @@ class PujaListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(aarti, scriptMode);
+    final showScriptTitle = scriptTitle.trim() != aarti.title.trim();
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
@@ -85,9 +91,14 @@ class PujaListItem extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(aarti.devanagari,
+                    if (showScriptTitle)
+                      Text(
+                        scriptTitle,
                         style: AppTypography.devanagari(
-                            size: 11, color: AppColors.ink3)),
+                          size: 11,
+                          color: AppColors.ink3,
+                        ),
+                      ),
                   ],
                 ),
               ),

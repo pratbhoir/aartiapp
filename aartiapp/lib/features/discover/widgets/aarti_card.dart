@@ -3,9 +3,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/theme_aware_colors.dart';
 import '../../../data/models/aarti_item.dart';
+import '../../../shared/utils/aarti_language_resolver.dart';
 
 class AartiCard extends StatelessWidget {
   final AartiItem aarti;
+  final int scriptMode;
   final bool isBookmarked;
   final Duration delay;
   final VoidCallback onBookmark;
@@ -14,6 +16,7 @@ class AartiCard extends StatelessWidget {
   const AartiCard({
     super.key,
     required this.aarti,
+    required this.scriptMode,
     required this.isBookmarked,
     required this.delay,
     required this.onBookmark,
@@ -22,6 +25,13 @@ class AartiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(aarti, scriptMode);
+    final showScriptTitle = scriptTitle.trim() != aarti.title.trim();
+    final script = AartiLanguageResolver.scriptFromMode(scriptMode);
+    final subtitleStyle = script == AppScriptLanguage.english
+        ? AppTypography.transliteration(size: 12, color: AppColors.ink3)
+        : AppTypography.devanagari(size: 12, color: AppColors.ink3);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -65,12 +75,13 @@ class AartiCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              aarti.devanagari,
-              style: AppTypography.devanagari(size: 12, color: AppColors.ink3),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            if (showScriptTitle)
+              Text(
+                scriptTitle,
+                style: subtitleStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             const SizedBox(height: 8),
             Row(
               children: [

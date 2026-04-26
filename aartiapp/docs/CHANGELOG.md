@@ -4,6 +4,30 @@ All notable changes to the Aarti Sangrah project are documented here.
 
 ---
 
+## [2026-04-26] — App Language + Script Language Unification
+
+### Added
+- `lib/shared/utils/aarti_language_resolver.dart` — Added a shared resolver for script-aware titles, lyric lines, transliteration tab visibility, and English meaning fallback.
+
+### Modified
+- `lib/data/repositories/settings_repository.dart` — Changed the default app language to English while keeping Devanagari as the default script language.
+- `lib/providers/app_providers.dart` — Clarified provider-backed script language semantics alongside the existing app language preference.
+- `lib/features/settings/settings_screen.dart` — Added a dedicated App Language selector and renamed script wording to English / Devanagari / Gujarati.
+- `lib/features/onboarding/onboarding_screen.dart` — Defaulted app language to English and aligned script labels with the new wording.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Refactored detail tabs to dynamic Lyrics / Transliteration / Meaning content driven by global app-language and script-language settings.
+- `lib/features/aarti_detail/widgets/verse_block.dart` — Switched verse rendering to the shared resolver for lyrics, transliteration, and English meaning fallback.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Made Focus Mode respect the selected script language while preserving verse-based progression and balanced line splitting.
+- `lib/features/discover/discover_screen.dart` — Passed the selected script language into discovery card previews.
+- `lib/features/discover/widgets/aarti_card.dart` — Rendered script-aware aarti subtitle previews.
+- `lib/features/discover/widgets/today_hero_card.dart` — Rendered script-aware subtitle previews for the Aarti of the Day card.
+- `lib/features/home/home_screen.dart` — Applied script-aware recent and hero preview wiring.
+- `lib/features/my_puja/my_puja_screen.dart` — Passed the selected script language into puja list items.
+- `lib/features/my_puja/widgets/puja_list_item.dart` — Rendered script-aware aarti subtitle previews.
+- `lib/features/my_puja/puja_session_screen.dart` — Rendered script-aware title subtitles and verse previews during puja sessions.
+- `docs/FILE_REGISTRY.md` — Registered the shared resolver and updated touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented the shared language resolver pattern and the split app-language/script-language state model.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the new settings, defaults, dynamic transliteration rule, and English meaning fallback.
+
 ## [2026-04-26] — Verse-Based Focus Mode
 
 ### Modified

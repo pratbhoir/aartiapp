@@ -54,7 +54,8 @@ lib/
 │   │   └── section_label.dart         # Uppercase tracked section label
 │   ├── painters/
 │   │   └── mala_painter.dart          # CustomPainter for Mala bead ring
-│   ├── utils/                         # (reserved for shared formatters, validators)
+│   ├── utils/
+│   │   └── aarti_language_resolver.dart # Shared script/app-language selection rules for titles, lyrics, tabs, and fallbacks
 │   ├── extensions/                    # (reserved for Dart extension methods)
 │   └── models/                        # (reserved for shared DTOs)
 ├── features/
@@ -93,6 +94,10 @@ Each feature lives under `lib/features/<feature_name>/` with optional `data/`, `
 
 Screens are composed from small, focused widgets. Feature-specific widgets live in `features/<name>/widgets/`. Cross-feature reusable widgets live in `shared/widgets/`.
 
+### Shared Language Resolution
+
+Script-language and app-language display rules are centralized in `shared/utils/aarti_language_resolver.dart`. Reading surfaces should resolve titles, lyric lines, transliteration visibility, and meaning fallbacks through that utility instead of duplicating `scriptMode` or `preferredLanguage` branching locally.
+
 ---
 
 ## 3. State Management
@@ -107,6 +112,10 @@ Screens are composed from small, focused widgets. Feature-specific widgets live 
 | `StateNotifierProvider<N, T>` | Mutable state with business logic | `themeModeProvider`, `bookmarkProvider`, `pujaOrderProvider` |
 | `StateProvider<T>` | Simple mutable state | `searchQueryProvider`, `activeDeityProvider` |
 | `Provider<T>` (computed) | Derived/filtered data | `filteredAartisProvider` |
+
+User reading preferences are split into two persisted provider-backed settings:
+- `scriptModeProvider` controls the script used for lyric surfaces: Devanagari, English, or Gujarati.
+- `preferredLanguageProvider` controls the app language used for translated meaning surfaces and tab visibility decisions.
 
 ### Injection Strategy
 

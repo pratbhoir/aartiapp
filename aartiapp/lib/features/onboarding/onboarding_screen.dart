@@ -20,8 +20,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _pageCtrl = PageController();
   int _currentPage = 0;
   final _nameCtrl = TextEditingController();
-  int _selectedScript = 0; // 0=Devanagari, 1=Roman, 2=Gujarati
-  String _selectedLang = 'hi'; // hi=Hindi, gu=Gujarati, en=English
+  int _selectedScript = 0; // 0=Devanagari, 1=English, 2=Gujarati
+  String _selectedLang = 'en'; // hi=Hindi, gu=Gujarati, en=English
   bool _enableNotifications = true;
   TimeOfDay _notifTime = const TimeOfDay(hour: 6, minute: 0);
 
@@ -316,8 +316,8 @@ class _ScriptPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _ScriptOption(
-            title: 'Roman',
-            subtitle: 'Transliteration',
+            title: 'English',
+            subtitle: 'Roman Script',
             example: 'Om Jai Jagdish Hare',
             isSelected: selectedScript == 1,
             onTap: () => onScriptChanged(1),

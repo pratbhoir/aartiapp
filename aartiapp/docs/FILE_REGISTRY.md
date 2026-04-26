@@ -61,14 +61,14 @@
 | `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled Hindu calendar JSON (2026–2028) | 2026-04-20 |
 | `lib/data/repositories/puja_repository.dart` | `PujaRepository` — Hive-backed ordered puja list persistence | 2026-04-20 |
 | `lib/data/repositories/recently_played_repository.dart` | `RecentlyPlayedRepository` — Hive-backed recently-viewed aarti tracking (max 20) | 2026-04-20 |
-| `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for all user settings | 2026-04-20 |
+| `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, script language, app language, and other user settings | 2026-04-26 |
 | `lib/data/repositories/user_aarti_repository.dart` | `UserAartiRepository` — Hive-backed CRUD for user-created private Aartis | 2026-04-20 |
 
 ## Providers
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, bookmarks, puja order, search, etc. | 2026-04-20 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, script language, app language, bookmarks, puja order, search, etc. | 2026-04-26 |
 
 ## Navigation
 
@@ -86,6 +86,12 @@
 | `lib/shared/widgets/gradient_divider.dart` | `GradientDivider` — saffron-to-transparent horizontal divider | 2026-04-20 |
 | `lib/shared/widgets/section_label.dart` | `SectionLabel` — uppercase tracked section header text | 2026-04-20 |
 
+## Shared / Utils
+
+| File Path | Purpose | Last Updated |
+|-----------|---------|--------------|
+| `lib/shared/utils/aarti_language_resolver.dart` | `AartiLanguageResolver` — central script/app-language resolver for aarti titles, verse lines, tab visibility, and English meaning fallback | 2026-04-26 |
+
 ## Shared / Painters
 
 | File Path | Purpose | Last Updated |
@@ -96,33 +102,33 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with deity filter, search, festival filters, and aarti grid | 2026-04-25 |
-| `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, Devanagari subtitle, duration, bookmark | 2026-04-20 |
+| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with deity filter, search, festival filters, and script-aware aarti grid | 2026-04-26 |
+| `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, script-aware subtitle, duration, bookmark | 2026-04-26 |
 | `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
 | `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable festival tag chips | 2026-04-20 |
 | `lib/features/discover/widgets/festive_banner.dart` | `FestiveBanner` — seasonal festival banner card with emoji and countdown | 2026-04-20 |
 | `lib/features/discover/widgets/search_bar.dart` | `AartiSearchBar` — text input with search icon and clear button | 2026-04-20 |
-| `lib/features/discover/widgets/today_hero_card.dart` | `TodayHeroCard` — dark pulsing hero card for "Aarti of the Day" | 2026-04-20 |
+| `lib/features/discover/widgets/today_hero_card.dart` | `TodayHeroCard` — dark pulsing hero card for "Aarti of the Day" with script-aware subtitle preview | 2026-04-26 |
 
 ## Features / Aarti Detail
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with lyrics, audio player, bookmark, puja controls, and audio init warning logging | 2026-04-26 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with global script-aware lyrics, dynamic tabs, audio player, bookmark, puja controls, and audio init warning logging | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc. | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat | 2026-04-20 |
-| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free verse-by-verse reading with verse-wide balanced line splits and configurable separated line blocks | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — full-screen dark overlay for distraction-free verse-by-verse reading using the selected script, verse-wide balanced line splits, and configurable separated line blocks | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics and configurable count | 2026-04-20 |
 | `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — 3-segment control switching Lyrics / Transliteration / Meaning views | 2026-04-20 |
-| `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders verse content based on selected script/view mode | 2026-04-20 |
+| `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, transliteration, and meaning using the shared script/app-language resolver | 2026-04-26 |
 
 ## Features / My Puja
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder and session launcher | 2026-04-25 |
-| `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls | 2026-04-20 |
-| `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, title, and remove button | 2026-04-20 |
+| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, session launcher, and script-aware preview items | 2026-04-26 |
+| `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, and script-aware verse preview | 2026-04-26 |
+| `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, title, script-aware subtitle, and remove button | 2026-04-26 |
 
 ## Features / Contribute
 
@@ -134,19 +140,19 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and recently played | 2026-04-25 |
+| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and script-aware recently played previews | 2026-04-26 |
 
 ## Features / Onboarding
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/onboarding/onboarding_screen.dart` | `OnboardingScreen` — multi-step welcome flow (name, language, notification time, deity selection) | 2026-04-20 |
+| `lib/features/onboarding/onboarding_screen.dart` | `OnboardingScreen` — multi-step welcome flow with default English app language and Devanagari script selection | 2026-04-26 |
 
 ## Features / Settings
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme/script/notification/session settings plus diagnostics entries for DevTools navigation and Activity Log actions | 2026-04-26 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, script language, notification, session settings, and diagnostics entries | 2026-04-26 |
 | `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
 
 ## Assets

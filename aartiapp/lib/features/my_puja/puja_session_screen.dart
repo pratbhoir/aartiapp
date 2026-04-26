@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/aarti_item.dart';
 import '../../providers/app_providers.dart';
+import '../../shared/utils/aarti_language_resolver.dart';
 import '../aarti_detail/widgets/audio_player_widget.dart';
 
 /// Puja session mode: plays through the "My Daily Puja" list sequentially
@@ -163,9 +164,20 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
     final autoPlay = ref.watch(autoPlayProvider);
     final repeatCurrent = ref.watch(repeatCurrentProvider);
     final crossfade = ref.watch(crossfadeProvider);
+    final scriptMode = ref.watch(scriptModeProvider);
     _autoPlay = autoPlay;
     _repeatCurrent = repeatCurrent;
     _crossfadeSec = crossfade;
+    final scriptTitle =
+        AartiLanguageResolver.resolveAartiTitle(_currentAarti, scriptMode);
+    final showScriptTitle = scriptTitle.trim() != _currentAarti.title.trim();
+    final previewLines = _currentAarti.verses.isNotEmpty
+        ? AartiLanguageResolver.resolveLyricsLines(
+            _currentAarti.verses.first,
+            scriptMode,
+          )
+        : const <String>[];
+    final script = AartiLanguageResolver.scriptFromMode(scriptMode);
 
     return Scaffold(
       backgroundColor: AppColors.ink,
@@ -273,15 +285,22 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        _currentAarti.devanagari,
-                        style: AppTypography.devanagari(
-                          size: 18,
-                          color: AppColors.white.withValues(alpha: 0.4),
+                      if (showScriptTitle) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          scriptTitle,
+                          style: (script == AppScriptLanguage.english
+                                  ? AppTypography.transliteration(
+                                      size: 18,
+                                      color: AppColors.white.withValues(alpha: 0.4),
+                                    )
+                                  : AppTypography.devanagari(
+                                      size: 18,
+                                      color: AppColors.white.withValues(alpha: 0.4),
+                                    )),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
+                      ],
                       const SizedBox(height: 24),
 
                       // Verse preview (first verse if available)
@@ -303,18 +322,24 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                                     size: 9, color: AppColors.ink3),
                               ),
                               const SizedBox(height: 8),
-                              ...(_currentAarti.verses.first.lines
+                              ...(previewLines
                                   .take(3)
                                   .map((line) => Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 4),
                                         child: Text(
                                           line,
-                                          style: AppTypography.devanagari(
-                                            size: 16,
-                                            color: AppColors.white
-                                                .withValues(alpha: 0.7),
-                                          ),
+                                          style: (script == AppScriptLanguage.english
+                                                  ? AppTypography.transliteration(
+                                                      size: 16,
+                                                      color: AppColors.white
+                                                          .withValues(alpha: 0.7),
+                                                    )
+                                                  : AppTypography.devanagari(
+                                                      size: 16,
+                                                      color: AppColors.white
+                                                          .withValues(alpha: 0.7),
+                                                    )),
                                           textAlign: TextAlign.center,
                                         ),
                                       ))),

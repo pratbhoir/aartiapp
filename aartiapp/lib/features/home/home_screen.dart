@@ -8,6 +8,7 @@ import '../../data/models/aarti_item.dart';
 import '../../data/repositories/aarti_repository.dart';
 import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
+import '../../shared/utils/aarti_language_resolver.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
 import '../../shared/widgets/section_label.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
@@ -29,6 +30,7 @@ class HomeScreen extends ConsumerWidget {
     final userName = ref.watch(userNameProvider);
     final userAartis = ref.watch(userAartiProvider);
     final recentIds = ref.watch(recentlyPlayedProvider);
+    final scriptMode = ref.watch(scriptModeProvider);
     final todayIdx = DayDeityMapper.todayAartiIndex();
     final catalog = AartiRepository.instance;
     final aartis = catalog.aartis;
@@ -95,6 +97,7 @@ class HomeScreen extends ConsumerWidget {
                         const SizedBox(height: 13),
                         TodayHeroCard(
                           aarti: aartis[todayIdx],
+                          scriptMode: scriptMode,
                           onTap: () {
                             ref
                                 .read(recentlyPlayedProvider.notifier)
@@ -172,6 +175,7 @@ class HomeScreen extends ConsumerWidget {
                                   final ra = recentAartis[i];
                                   return _RecentlyPlayedCard(
                                     aarti: ra,
+                                    scriptMode: scriptMode,
                                     onTap: () {
                                       ref
                                           .read(recentlyPlayedProvider.notifier)
@@ -205,12 +209,20 @@ class HomeScreen extends ConsumerWidget {
 
 class _RecentlyPlayedCard extends StatelessWidget {
   final AartiItem aarti;
+  final int scriptMode;
   final VoidCallback onTap;
 
-  const _RecentlyPlayedCard({required this.aarti, required this.onTap});
+  const _RecentlyPlayedCard({
+    required this.aarti,
+    required this.scriptMode,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(aarti, scriptMode);
+    final showScriptTitle = scriptTitle.trim() != aarti.title.trim();
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -249,6 +261,16 @@ class _RecentlyPlayedCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (showScriptTitle)
+              Text(
+                scriptTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.devanagari(
+                  size: 11,
+                  color: AppColors.ink3,
+                ),
+              ),
           ],
         ),
       ),

@@ -148,7 +148,7 @@ class TextScaleNotifier extends StateNotifier<double> {
 
 // ─── Script Mode State ──────────────────────────────────────────────────────
 
-/// 0 = Devanagari, 1 = Roman Transliteration, 2 = Gujarati
+/// 0 = Devanagari, 1 = English, 2 = Gujarati
 final scriptModeProvider =
     StateNotifierProvider<ScriptModeNotifier, int>((ref) {
   final repo = ref.watch(settingsRepoProvider);

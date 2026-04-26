@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../data/repositories/aarti_repository.dart';
+import '../../shared/utils/aarti_language_resolver.dart';
 import 'dev_tools_screen.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
@@ -19,6 +20,7 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final textScale = ref.watch(textScaleProvider);
     final scriptMode = ref.watch(scriptModeProvider);
+    final appLanguage = ref.watch(preferredLanguageProvider);
     final userName = ref.watch(userNameProvider);
 
     return SafeArea(
@@ -129,7 +131,19 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.translate_outlined,
-                  title: 'Default Script',
+                  title: 'App Language',
+                  subtitle: _appLanguageLabel(appLanguage),
+                  trailing: _AppLanguageSelector(
+                    languageCode: appLanguage,
+                    onChanged: (languageCode) => ref
+                        .read(preferredLanguageProvider.notifier)
+                        .set(languageCode),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _SettingsTile(
+                  icon: Icons.language_outlined,
+                  title: 'Script Language',
                   subtitle: _scriptModeLabel(scriptMode),
                   trailing: _ScriptModeSelector(
                     mode: scriptMode,
@@ -347,16 +361,11 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   String _scriptModeLabel(int mode) {
-    switch (mode) {
-      case 0:
-        return 'Devanagari';
-      case 1:
-        return 'Roman Transliteration';
-      case 2:
-        return 'Gujarati';
-      default:
-        return 'Devanagari';
-    }
+    return AartiLanguageResolver.scriptLabel(mode);
+  }
+
+  String _appLanguageLabel(String code) {
+    return AartiLanguageResolver.appLanguageLabel(code);
   }
 
   void _showNameDialog(BuildContext context, WidgetRef ref, String current) {
@@ -802,7 +811,7 @@ class _ScriptModeSelector extends StatelessWidget {
 
   const _ScriptModeSelector({required this.mode, required this.onChanged});
 
-  static const _labels = ['अ', 'Aa', 'અ'];
+  static const _labels = ['अ', 'EN', 'અ'];
 
   @override
   Widget build(BuildContext context) {
@@ -838,6 +847,68 @@ class _ScriptModeSelector extends StatelessWidget {
               child: Center(
                 child: Text(
                   _labels[i],
+                  style: AppTypography.body(
+                    size: 14,
+                    color: isActive ? AppColors.saffron : AppColors.ink3,
+                    weight: isActive ? FontWeight.w500 : FontWeight.w300,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _AppLanguageSelector extends StatelessWidget {
+  final String languageCode;
+  final ValueChanged<String> onChanged;
+
+  const _AppLanguageSelector({
+    required this.languageCode,
+    required this.onChanged,
+  });
+
+  static const _codes = ['en', 'hi', 'gu'];
+  static const _labels = ['EN', 'हि', 'ગુ'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: AppColors.stone2,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(_codes.length, (index) {
+          final String code = _codes[index];
+          final bool isActive = languageCode == code;
+          return GestureDetector(
+            onTap: () => onChanged(code),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 36,
+              height: 32,
+              decoration: BoxDecoration(
+                color: isActive ? context.surface : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: AppColors.ink.withValues(alpha: 0.08),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
+                        )
+                      ]
+                    : null,
+              ),
+              child: Center(
+                child: Text(
+                  _labels[index],
                   style: AppTypography.body(
                     size: 14,
                     color: isActive ? AppColors.saffron : AppColors.ink3,

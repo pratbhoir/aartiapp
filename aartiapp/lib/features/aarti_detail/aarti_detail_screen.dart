@@ -10,6 +10,7 @@ import '../../core/theme/theme_aware_colors.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../providers/app_providers.dart';
+import '../../shared/utils/aarti_language_resolver.dart';
 import 'widgets/action_chip.dart' as app;
 import 'widgets/toggle_bar.dart';
 import 'widgets/verse_block.dart';
@@ -27,7 +28,7 @@ class AartiDetailScreen extends ConsumerStatefulWidget {
 
 class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     with TickerProviderStateMixin {
-  int _viewMode = 0; // 0=lyrics, 1=roman, 2=meaning
+  AartiDetailContentMode _contentMode = AartiDetailContentMode.lyrics;
   bool _focusMode = false;
   bool _showCounter = false;
   final ScrollController _scrollController = ScrollController();
@@ -172,11 +173,34 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
   @override
   Widget build(BuildContext context) {
     final textScale = ref.watch(textScaleProvider);
+    final scriptMode = ref.watch(scriptModeProvider);
+    final appLanguageCode = ref.watch(preferredLanguageProvider);
     final bookmarks = ref.watch(bookmarkProvider);
     final isBookmarked = bookmarks.contains(widget.aarti.id);
     final verses = widget.aarti.verses;
     final verseCount = verses.isNotEmpty ? verses.length : 0;
     final hasAudioUrl = widget.aarti.audioUrl.trim().isNotEmpty;
+    final scriptTitle =
+        AartiLanguageResolver.resolveAartiTitle(widget.aarti, scriptMode);
+    final showScriptTitle =
+        scriptTitle.trim().isNotEmpty && scriptTitle.trim() != widget.aarti.title.trim();
+    final showTransliteration = AartiLanguageResolver.shouldShowTransliteration(
+      scriptMode: scriptMode,
+      appLanguageCode: appLanguageCode,
+      verses: verses,
+    );
+    final showMeaning = AartiLanguageResolver.hasMeaning(verses);
+    final availableModes = <AartiDetailContentMode>[
+      AartiDetailContentMode.lyrics,
+      if (showTransliteration) AartiDetailContentMode.transliteration,
+      if (showMeaning) AartiDetailContentMode.meaning,
+    ];
+    final selectedMode = availableModes.contains(_contentMode)
+        ? _contentMode
+        : availableModes.first;
+    final toggleLabels = availableModes
+        .map((mode) => _contentModeLabel(mode))
+        .toList(growable: false);
 
     return Scaffold(
       backgroundColor: context.scaffoldBg,
@@ -341,10 +365,16 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   letterSpacing: -0.5,
                                 ),
                               ),
-                              const SizedBox(height: 6),
-                              Text(widget.aarti.devanagari,
-                                  style: AppTypography.devanagari(
-                                      size: 17 * textScale)),
+                              if (showScriptTitle) ...[
+                                const SizedBox(height: 6),
+                                Text(
+                                  scriptTitle,
+                                  style: _scriptTitleStyle(
+                                    scriptMode: scriptMode,
+                                    textScale: textScale,
+                                  ),
+                                ),
+                              ],
                               const SizedBox(height: 16),
 
                               // Verse progress indicator
@@ -399,22 +429,18 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                         ),
                       ),
 
-                      // Toggle bar
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                          child: ToggleBar(
-                            labels: const [
-                              'Lyrics',
-                              'Transliteration',
-                              'Meaning',
-                              'ગુજરાતી',
-                            ],
-                            activeIndex: _viewMode,
-                            onSelect: (i) => setState(() => _viewMode = i),
+                      if (toggleLabels.length > 1)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                            child: ToggleBar(
+                              labels: toggleLabels,
+                              activeIndex: availableModes.indexOf(selectedMode),
+                              onSelect: (i) =>
+                                  setState(() => _contentMode = availableModes[i]),
+                            ),
                           ),
                         ),
-                      ),
 
                       // Verses
                       verses.isEmpty
@@ -439,7 +465,9 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   (_, i) => VerseBlock(
                                     verse: verses[i],
                                     isFirst: i == 0,
-                                    viewMode: _viewMode,
+                                    contentMode: selectedMode,
+                                    scriptMode: scriptMode,
+                                    appLanguageCode: appLanguageCode,
                                     textScale: textScale,
                                   ),
                                   childCount: verses.length,
@@ -499,6 +527,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             FocusModeOverlay(
               aarti: widget.aarti,
               verses: verses,
+              scriptMode: scriptMode,
               onClose: () => setState(() => _focusMode = false),
             ),
 
@@ -509,6 +538,35 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             ),
         ],
       ),
+    );
+  }
+
+  String _contentModeLabel(AartiDetailContentMode mode) {
+    switch (mode) {
+      case AartiDetailContentMode.lyrics:
+        return 'Lyrics';
+      case AartiDetailContentMode.transliteration:
+        return 'Transliteration';
+      case AartiDetailContentMode.meaning:
+        return 'Meaning';
+    }
+  }
+
+  TextStyle _scriptTitleStyle({
+    required int scriptMode,
+    required double textScale,
+  }) {
+    final script = AartiLanguageResolver.scriptFromMode(scriptMode);
+    if (script == AppScriptLanguage.english) {
+      return AppTypography.transliteration(
+        size: 16 * textScale,
+        color: AppColors.ink3,
+      );
+    }
+
+    return AppTypography.devanagari(
+      size: 17 * textScale,
+      color: AppColors.ink,
     );
   }
 

@@ -18,6 +18,7 @@ class MyPujaScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pujaIds = ref.watch(pujaOrderProvider);
     final userAartis = ref.watch(userAartiProvider);
+    final scriptMode = ref.watch(scriptModeProvider);
     final pujaAartis =
         ref.watch(pujaOrderProvider.notifier).getPujaAartis(userAartis: userAartis);
 
@@ -178,6 +179,7 @@ class MyPujaScreen extends ConsumerWidget {
                     itemBuilder: (_, i) => PujaListItem(
                       key: ValueKey(pujaIds[i]),
                       aarti: pujaAartis[i],
+                      scriptMode: scriptMode,
                       index: i + 1,
                       isPlaying: false,
                       delay: Duration(milliseconds: i * 60),
