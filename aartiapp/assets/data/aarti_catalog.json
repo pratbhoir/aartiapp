@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 5,
   "deities": [
     {
       "emoji": "🕉️",
@@ -36,12 +36,37 @@
     {
       "emoji": "🙏",
       "label": "Vishnu"
+    },
+    {
+      "emoji": "🪔",
+      "label": "Vitthal"
+    },
+    {
+      "emoji": "🧘",
+      "label": "Dattatreya"
+    },
+    {
+      "emoji": "🕯️",
+      "label": "Sai Baba"
+    },
+    {
+      "emoji": "☀️",
+      "label": "Surya"
+    },
+    {
+      "emoji": "🌸",
+      "label": "Saraswati"
+    },
+    {
+      "emoji": "🪐",
+      "label": "Shani"
     }
   ],
   "aartis": [
     {
       "id": "om_jai_shiv_omkara",
       "title": "Om Jai Shiv Omkara",
+      "type": "aarti",
       "devanagari": "ॐ जय शिव ओंकारा",
       "deity": "Shiva",
       "duration": "7:32",
@@ -174,6 +199,7 @@
     {
       "id": "jai_ganesh_deva",
       "title": "Jai Ganesh Deva",
+      "type": "aarti",
       "devanagari": "जय गणेश देव",
       "deity": "Ganesha",
       "duration": "5:14",
@@ -288,6 +314,7 @@
     {
       "id": "om_jai_lakshmi_mata",
       "title": "Om Jai Lakshmi Mata",
+      "type": "aarti",
       "devanagari": "ॐ जय लक्ष्मी माता",
       "deity": "Lakshmi",
       "duration": "6:02",
@@ -440,6 +467,7 @@
     {
       "id": "aarti_hanuman",
       "title": "Aarti Kije Hanuman Lala Ki",
+      "type": "aarti",
       "devanagari": "आरती कीजे हनुमान लला की",
       "deity": "Hanuman",
       "duration": "4:45",
@@ -553,6 +581,7 @@
     {
       "id": "aarti_kunj_bihari",
       "title": "Aarti Kunj Bihari Ki",
+      "type": "aarti",
       "devanagari": "आरती कुंज बिहारी की",
       "deity": "Krishna",
       "duration": "6:30",
@@ -685,6 +714,7 @@
     {
       "id": "om_jai_jagdish_hare",
       "title": "Om Jai Jagdish Hare",
+      "type": "aarti",
       "devanagari": "ॐ जय जगदीश हरे",
       "deity": "Vishnu",
       "duration": "8:15",
@@ -855,6 +885,7 @@
     {
       "id": "durga_aarti",
       "title": "Jai Ambe Gauri",
+      "type": "aarti",
       "devanagari": "जय अम्बे गौरी",
       "deity": "Durga",
       "duration": "5:48",
@@ -969,6 +1000,7 @@
     {
       "id": "ram_aarti",
       "title": "Shri Ramchandra Kripalu Bhaj Man",
+      "type": "stotra",
       "devanagari": "श्री रामचन्द्र कृपालु भज मन",
       "deity": "Rama",
       "duration": "7:10",
@@ -1064,8 +1096,9 @@
     {
       "id": "saraswati_aarti",
       "title": "Jai Saraswati Mata",
+      "type": "aarti",
       "devanagari": "जय सरस्वती माता",
-      "deity": "Durga",
+      "deity": "Saraswati",
       "duration": "5:20",
       "tags": [
         "Vasant Panchami",
@@ -1176,8 +1209,9 @@
     {
       "id": "shani_aarti",
       "title": "Jai Jai Shani Dev Maharaj",
+      "type": "aarti",
       "devanagari": "जय जय शनि देव महाराज",
-      "deity": "Hanuman",
+      "deity": "Shani",
       "duration": "4:30",
       "tags": [
         "Shanivar",
@@ -1267,6 +1301,7 @@
     {
       "id": "vishnu_aarti",
       "title": "Aarti Shri Vishnu Ji Ki",
+      "type": "aarti",
       "devanagari": "आरती श्री विष्णु जी की",
       "deity": "Vishnu",
       "duration": "5:55",
@@ -1398,6 +1433,7 @@
     {
       "id": "shiv_chalisa",
       "title": "Shiv Chalisa",
+      "type": "chalisa",
       "devanagari": "शिव चालीसा",
       "deity": "Shiva",
       "duration": "12:30",
@@ -1564,6 +1600,1572 @@
         }
       ],
       "gujarati": "શિવ ચાલીસા"
+    },
+    {
+      "id": "sukhkarta_dukhharta",
+      "title": "Sukhkarta Dukhharta",
+      "type": "aarti",
+      "devanagari": "सुखकर्ता दुःखहर्ता",
+      "deity": "Ganesha",
+      "duration": "4:12",
+      "tags": [
+        "Ganesh Chaturthi",
+        "Budhvar",
+        "Sankashti Chaturthi"
+      ],
+      "festivalTags": [
+        "Ganesh Chaturthi"
+      ],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "सुखकर्ता दुःखहर्ता वार्ता विघ्नाची।",
+            "नुरवी पुरवी प्रेम कृपा जयाची॥",
+            "सर्वांगी सुंदर उटी शेंदुराची।",
+            "कंठी झळके माळ मुक्ताफळांची॥"
+          ],
+          "transliteration": [
+            "Sukhkarta Dukhharta Varta Vighnachi.",
+            "Nurvi Purvi Prem Krupa Jayachi.",
+            "Sarvangi Sundar Uti Shendurachi.",
+            "Kanthi Jhalake Maal Muktafalanchi."
+          ],
+          "meanings": [
+            "O giver of joy and remover of sorrow, you end every obstacle.",
+            "You bestow love, grace, and victory in abundance.",
+            "Your entire form shines beautifully, adorned with vermilion paste.",
+            "A garland of pearls glitters around your neck."
+          ],
+          "gujarati": [
+            "સુખકર્તા દુઃખહર્તા વાર્તા વિઘ્નાચી।",
+            "નુરવી પુરવી પ્રેમ કૃપા જયાચી॥",
+            "સર્વાંગી સુંદર ઉટી શેંદુરાચી।",
+            "કંઠી ઝળકે માળ મુક્તાફળાંચી॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "जय देव जय देव जय मंगलमूर्ति।",
+            "दर्शनमात्रे मनकामना पूर्ती॥"
+          ],
+          "transliteration": [
+            "Jai Dev Jai Dev Jai Mangal Murti.",
+            "Darshanmatre Mankamana Purti."
+          ],
+          "meanings": [
+            "Glory to the auspicious divine form.",
+            "A single glimpse of you fulfills the heart's deepest wish."
+          ],
+          "gujarati": [
+            "જય દેવ જય દેવ જય મંગલમૂર્તિ।",
+            "દર્શનમાત્રે મનકામના પૂર્તિ॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "रत्नखचित फरा तुज गौरीकुमरा।",
+            "चंदनाची उटी कुंकुमकेशरा॥",
+            "हिरेजडित मुकुट शोभतो बरा।",
+            "रुणझुणती नूपुरे चरणी घागरिया॥"
+          ],
+          "transliteration": [
+            "Ratnakhachit Phara Tuj Gaurikumara.",
+            "Chandanachi Uti Kunkumkeshara.",
+            "Hirejadit Mukut Shobhato Bara.",
+            "Runjhunati Nupure Charani Ghagariya."
+          ],
+          "meanings": [
+            "O son of Gauri, your forehead shines with embedded jewels.",
+            "Sandalwood paste and saffron adorn you.",
+            "A diamond-studded crown suits you beautifully.",
+            "Anklets ring melodiously at your feet."
+          ],
+          "gujarati": [
+            "રત્નખચિત ફરા તુજ ગૌરીકુમરા।",
+            "ચંદનાચી ઉટી કુંકુમકેશરા॥",
+            "હિરેજડિત મુકુટ શોભતો બરા।",
+            "રુણઝુણતી નૂપુરે ચરણી ઘાગરિયા॥"
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "लंबोदर पीतांबर फणिवरबंधना।",
+            "सरळ सोंड वक्रतुंड त्रिनयना॥",
+            "दास रामाचा वाट पाहे सदना।",
+            "संकटी पावावे निर्वाणी रक्षावे सुरवरवंदना॥"
+          ],
+          "transliteration": [
+            "Lambodar Pitambar Phanivar Bandhana.",
+            "Saral Sond Vakratund Trinayana.",
+            "Das Ramacha Vaat Pahe Sadana.",
+            "Sankati Pavave Nirvani Rakshave Survar Vandana."
+          ],
+          "meanings": [
+            "O pot-bellied one in yellow robes, adorned with the noble serpent.",
+            "With straight trunk, curved tusk, and three eyes, you shine uniquely.",
+            "Your servant Ramdas waits at your door.",
+            "In times of crisis, come quickly, protect us, and grant liberation."
+          ],
+          "gujarati": [
+            "લંબોદર પીતાંબર ફણિવરબંધના।",
+            "સરળ સોંડ વક્રતુન્ડ ત્રિનયના॥",
+            "દાસ રામાચા વાટ પાહે સદના।",
+            "સંકટી પાવાવે નિર્વાણી રક્ષાવે સુરવરવંદના॥"
+          ]
+        }
+      ],
+      "gujarati": "સુખકર્તા દુઃખહર્તા"
+    },
+    {
+      "id": "vakratunda_mahakaya",
+      "title": "Vakratunda Mahakaya",
+      "type": "shloka",
+      "devanagari": "वक्रतुण्ड महाकाय",
+      "deity": "Ganesha",
+      "duration": "1:05",
+      "tags": [
+        "Ganesh Chaturthi",
+        "Sankashti Chaturthi",
+        "Budhvar"
+      ],
+      "festivalTags": [
+        "Ganesh Chaturthi"
+      ],
+      "verses": [
+        {
+          "label": "Shloka",
+          "lines": [
+            "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।",
+            "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥"
+          ],
+          "transliteration": [
+            "Vakratunda Mahakaya Suryakoti Samaprabha.",
+            "Nirvighnam Kuru Me Deva Sarvakaryeshu Sarvada."
+          ],
+          "meanings": [
+            "O curved-trunked, mighty-bodied Lord whose brilliance equals millions of suns.",
+            "Please remove every obstacle from all my undertakings, always."
+          ],
+          "gujarati": [
+            "વક્રતુન્ડ મહાકાય સૂર્યકોટિ સમપ્રભ।",
+            "નિર્વિઘ્નં કુરુ મે દેવ સર્વકાર્યેષુ સર્વદા॥"
+          ]
+        }
+      ],
+      "gujarati": "વક્રતુન્ડ મહાકાય"
+    },
+    {
+      "id": "karpoor_gauram",
+      "title": "Karpoor Gauram",
+      "type": "shloka",
+      "devanagari": "कर्पूरगौरम्",
+      "deity": "Shiva",
+      "duration": "1:18",
+      "tags": [
+        "Somvar",
+        "Shravan",
+        "Maha Shivaratri"
+      ],
+      "festivalTags": [
+        "Maha Shivaratri"
+      ],
+      "verses": [
+        {
+          "label": "Shloka",
+          "lines": [
+            "कर्पूरगौरं करुणावतारं, संसारसारं भुजगेन्द्रहारम्।",
+            "सदा वसन्तं हृदयारविन्दे, भवं भवानीसहितं नमामि॥"
+          ],
+          "transliteration": [
+            "Karpoor Gauram Karunavataram, Sansar Saram Bhujagendra Haram.",
+            "Sada Vasantam Hridayaravinde, Bhavam Bhavanisahitam Namami."
+          ],
+          "meanings": [
+            "I bow to Shiva, fair as camphor, the embodiment of compassion, essence of the world, adorned with the king of serpents.",
+            "I salute the Lord who forever dwells in the lotus of the heart together with Mother Bhavani."
+          ],
+          "gujarati": [
+            "કર્પૂરગૌરં કરુણાવતારં, સંસારસારં ભુજગેન્દ્રહારમ્।",
+            "સદા વસંતં હૃદયારવિંદે, ભવં ભવાનીસહિતં નમામિ॥"
+          ]
+        }
+      ],
+      "gujarati": "કર્પૂરગૌરમ્"
+    },
+    {
+      "id": "ambe_tu_hai_jagdambe_kali",
+      "title": "Ambe Tu Hai Jagdambe Kali",
+      "type": "aarti",
+      "devanagari": "अम्बे तू है जगदम्बे काली",
+      "deity": "Durga",
+      "duration": "4:05",
+      "tags": [
+        "Navratri",
+        "Durga Puja",
+        "Ashtami"
+      ],
+      "festivalTags": [
+        "Navratri",
+        "Dussehra"
+      ],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "अम्बे तू है जगदम्बे काली, जय दुर्गे खप्परवाली।",
+            "तेरे ही गुण गावें भारती, ओ मैया हम सब उतारें तेरी आरती॥"
+          ],
+          "transliteration": [
+            "Ambe Tu Hai Jagdambe Kali, Jai Durge Khapparwali.",
+            "Tere Hi Gun Gaven Bharati, O Maiya Hum Sab Utaren Teri Aarti."
+          ],
+          "meanings": [
+            "O Mother Amba, you are Jagadamba Kali, victory to Durga who bears the sacred bowl.",
+            "The goddess of speech sings only your virtues, O Mother, and we perform your aarti."
+          ],
+          "gujarati": [
+            "અમ્બે તૂ હૈ જગદમ્બે કાલી, જય દુર્ગે ખપ્પરવાલી।",
+            "તેરે હી ગુણ ગાવે ભારતી, ઓ મૈયા હમ સબ ઉતારેં તેરી આરતી॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "तेरे भक्त जनों पर माता, भीड़ पड़ी है भारी।",
+            "दानव दल पर टूट पड़ो माँ, करके सिंह सवारी॥"
+          ],
+          "transliteration": [
+            "Tere Bhakt Janon Par Mata, Bheed Padi Hai Bhari.",
+            "Danav Dal Par Toot Pado Maa, Karke Singh Sawari."
+          ],
+          "meanings": [
+            "O Mother, your devotees are surrounded by great distress.",
+            "Ride forth on your lion and destroy the forces of evil."
+          ],
+          "gujarati": [
+            "તેરે ભક્ત જનોં પર માતા, ભીડ પડી હૈ ભારી।",
+            "દાનવ દલ પર તૂટ પડો માં, કરકે સિંહ સવારી॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "सौ सौ सिंहों से है बलशाली, दस भुजाओं वाली।",
+            "दुखियों के दुखड़े निवारती, ओ मैया हम सब उतारें तेरी आरती॥"
+          ],
+          "transliteration": [
+            "Sau Sau Singhon Se Hai Balshali, Das Bhujahon Wali.",
+            "Dukhiyon Ke Dukhde Nivarti, O Maiya Hum Sab Utaren Teri Aarti."
+          ],
+          "meanings": [
+            "You are stronger than hundreds of lions, the Mother with ten arms.",
+            "You remove the sorrows of the suffering, and we offer you this aarti."
+          ],
+          "gujarati": [
+            "સૌ સૌ સિંહોં સે હૈ બલશાલી, દસ ભુજાઓં વાલી।",
+            "દુખિયોં કે દુખડે નિવારતી, ઓ મૈયા હમ સબ ઉતારેં તેરી આરતી॥"
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "माँ बेटे का है जग में नाता, निर्मल और निराला।",
+            "पूत कपूत सुने हैं पर ना माता सुनी कुमाता॥"
+          ],
+          "transliteration": [
+            "Maa Bete Ka Hai Jag Mein Nata, Nirmal Aur Nirala.",
+            "Poot Kapoot Sune Hain Par Na Mata Suni Kumata."
+          ],
+          "meanings": [
+            "The bond between mother and child in this world is pure and incomparable.",
+            "One may hear of an erring child, but never of a cruel mother."
+          ],
+          "gujarati": [
+            "માં બેટે કા હૈ જગ મેં નાતા, નિર્મલ ઔર નિરાલા।",
+            "પૂત કપુત સુને હૈં પર ના માતા સુની કુમાતા॥"
+          ]
+        }
+      ],
+      "gujarati": "અમ્બે તૂ હૈ જગદમ્બે કાલી"
+    },
+    {
+      "id": "gayatri_mantra",
+      "title": "Gayatri Mantra",
+      "type": "mantra",
+      "devanagari": "गायत्री मंत्र",
+      "deity": "Surya",
+      "duration": "1:12",
+      "tags": [
+        "Ravivar",
+        "Makar Sankranti",
+        "Surya Arghya"
+      ],
+      "festivalTags": [
+        "Makar Sankranti"
+      ],
+      "verses": [
+        {
+          "label": "Mantra",
+          "lines": [
+            "ॐ भूर् भुवः स्वः।",
+            "तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि।",
+            "धियो यो नः प्रचोदयात्॥"
+          ],
+          "transliteration": [
+            "Om Bhur Bhuvah Svah.",
+            "Tat Savitur Varenyam Bhargo Devasya Dhimahi.",
+            "Dhiyo Yo Nah Prachodayat."
+          ],
+          "meanings": [
+            "We meditate upon the sacred light of the divine source present in all planes of existence.",
+            "May that radiant splendor of Savita, the divine sun, illumine us.",
+            "May it inspire and guide our intellects."
+          ],
+          "gujarati": [
+            "ૐ ભૂર્ ભુવઃ સ્વઃ।",
+            "તત્સવિતુર્વરેણ્યં ભર્ગો દેવસ્ય ધીમહિ।",
+            "ધિયો યો નઃ પ્રચોદયાત્॥"
+          ]
+        }
+      ],
+      "gujarati": "ગાયત્રી મંત્ર"
+    },
+    {
+      "id": "ya_kundendu_tusharahara_dhavala",
+      "title": "Ya Kundendu Tusharahara Dhavala",
+      "type": "vandana",
+      "devanagari": "या कुन्देन्दुतुषारहारधवला",
+      "deity": "Saraswati",
+      "duration": "1:16",
+      "tags": [
+        "Vasant Panchami",
+        "Saraswati Puja",
+        "Vidyarambh"
+      ],
+      "festivalTags": [
+        "Vasant Panchami"
+      ],
+      "verses": [
+        {
+          "label": "Vandana",
+          "lines": [
+            "या कुन्देन्दुतुषारहारधवला, या शुभ्रवस्त्रावृता।",
+            "या वीणावरदण्डमण्डितकरा, या श्वेतपद्मासना॥",
+            "या ब्रह्माच्युतशंकरप्रभृतिभिर्देवैः सदा वन्दिता।",
+            "सा मां पातु सरस्वती भगवती निःशेषजाड्यापहा॥"
+          ],
+          "transliteration": [
+            "Ya Kundendu Tusharahara Dhavala, Ya Shubhravastravrita.",
+            "Ya Veena Varadanda Manditakara, Ya Shvetapadmasana.",
+            "Ya Brahmachyuta Shankara Prabhritibhir Devaih Sada Vandita.",
+            "Sa Mam Patu Saraswati Bhagavati Nihshesha Jadyapaha."
+          ],
+          "meanings": [
+            "May Goddess Saraswati, who is white like jasmine, the moon, and a garland of snow, protect me.",
+            "She is clothed in pure white, holds the veena, and is seated upon a white lotus.",
+            "She is worshipped always by Brahma, Vishnu, Shiva, and the other gods.",
+            "May that divine Mother remove every trace of dullness and ignorance from me."
+          ],
+          "gujarati": [
+            "યા કુન્દેન્દુતુષારહારધવલા, યા શુભ્રવસ્ત્રાવૃતા।",
+            "યા વીણાવરદંડમંડિતકરા, યા શ્વેતપદ્માસના॥",
+            "યા બ્રહ્માચ્યૂતશંકરપ્રભૃતિભિર્દેવૈઃ સદા વંદિતા।",
+            "સા માં પાતુ સરસ્વતી ભગવતી નિઃશેષજાડ્યાપહા॥"
+          ]
+        }
+      ],
+      "gujarati": "યા કુન્દેન્દુતુષારહારધવલા"
+    },
+    {
+      "id": "nilanjana_samabhasam",
+      "title": "Nilanjana Samabhasam",
+      "type": "stotra",
+      "devanagari": "नीलांजनसमाभासम्",
+      "deity": "Shani",
+      "duration": "1:02",
+      "tags": [
+        "Shanivar",
+        "Shani Jayanti",
+        "Shani Pradosh"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Stotra",
+          "lines": [
+            "नीलांजनसमाभासं रविपुत्रं यमाग्रजम्।",
+            "छायामार्तण्डसम्भूतं तं नमामि शनैश्चरम्॥"
+          ],
+          "transliteration": [
+            "Nilanjana Samabhasam Raviputram Yamagrajam.",
+            "Chhaya Martanda Sambhutam Tam Namami Shanaishcharam."
+          ],
+          "meanings": [
+            "I bow to Shani, dark and radiant like blue-black collyrium, son of the Sun and elder brother of Yama.",
+            "Born of Chhaya and Martanda, I salute the slow-moving divine ग्रह."
+          ],
+          "gujarati": [
+            "નીલાંજનસમાભાસં રવિપુત્રં યમાગ્રજમ્।",
+            "છાયામાર્તંડસમ્ભૂતં તં નમામિ શનૈશ્ચરમ્॥"
+          ]
+        }
+      ],
+      "gujarati": "નીલાંજનસમાભાસમ્"
+    },
+    {
+      "id": "vitthal_vitthal_jai_hari_vitthal",
+      "title": "Vitthal Vitthal Jai Hari Vitthal",
+      "type": "chant",
+      "devanagari": "विठ्ठल विठ्ठल जय हरी विठ्ठल",
+      "deity": "Vitthal",
+      "duration": "1:20",
+      "tags": [
+        "Ashadhi Ekadashi",
+        "Kartiki Ekadashi",
+        "Wari"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Chant",
+          "lines": [
+            "विठ्ठल विठ्ठल जय हरी विठ्ठल।",
+            "पांडुरंग विठ्ठल जय जय विठ्ठल॥"
+          ],
+          "transliteration": [
+            "Vitthal Vitthal Jai Hari Vitthal.",
+            "Pandurang Vitthal Jai Jai Vitthal."
+          ],
+          "meanings": [
+            "Victory to Lord Vitthal, who is Hari himself.",
+            "Glory again and again to Panduranga Vitthal."
+          ],
+          "gujarati": [
+            "વિઠ્ઠલ વિઠ્ઠલ જય હરી વિઠ્ઠલ।",
+            "પાંડુરંગ વિઠ્ઠલ જય જય વિઠ્ઠલ॥"
+          ]
+        }
+      ],
+      "gujarati": "વિઠ્ઠલ વિઠ્ઠલ જય હરી વિઠ્ઠલ"
+    },
+    {
+      "id": "digambara_digambara",
+      "title": "Digambara Digambara",
+      "type": "chant",
+      "devanagari": "दिगंबरा दिगंबरा",
+      "deity": "Dattatreya",
+      "duration": "1:08",
+      "tags": [
+        "Guruvar",
+        "Datta Jayanti",
+        "Parayan"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Chant",
+          "lines": [
+            "दिगंबरा दिगंबरा श्रीपाद वल्लभ दिगंबरा।",
+            "अवधूत चिदानंद श्रीगुरुदत्त दिगंबरा॥"
+          ],
+          "transliteration": [
+            "Digambara Digambara Shripad Vallabh Digambara.",
+            "Avadhut Chidanand Shri Gurudatt Digambara."
+          ],
+          "meanings": [
+            "Salutations to the sky-clad Lord Shripad Vallabh, the radiant Dattatreya.",
+            "Glory to the blissful avadhuta, Shri Guru Dattatreya."
+          ],
+          "gujarati": [
+            "દિગંબરા દિગંબરા શ્રીપાદ વલ્લભ દિગંબરા।",
+            "અવધૂત ચિદાનંદ શ્રીગુરુદત્ત દિગંબરા॥"
+          ]
+        }
+      ],
+      "gujarati": "દિગંબરા દિગંબરા"
+    },
+    {
+      "id": "om_sai_namo_namah",
+      "title": "Om Sai Namo Namah",
+      "type": "chant",
+      "devanagari": "ॐ साईं नमो नमः",
+      "deity": "Sai Baba",
+      "duration": "1:06",
+      "tags": [
+        "Guruvar",
+        "Sai Baba",
+        "Shraddha"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Chant",
+          "lines": [
+            "ॐ साईं नमो नमः, श्री साईं नमो नमः।",
+            "जय जय साईं नमो नमः, सद्गुरु साईं नमो नमः॥"
+          ],
+          "transliteration": [
+            "Om Sai Namo Namah, Shri Sai Namo Namah.",
+            "Jai Jai Sai Namo Namah, Sadguru Sai Namo Namah."
+          ],
+          "meanings": [
+            "Salutations to Sai, salutations to revered Sai.",
+            "Victory to Sai, the true Guru who guides and protects devotees."
+          ],
+          "gujarati": [
+            "ૐ સાઈં નમો નમઃ, શ્રી સાઈં નમો નમઃ।",
+            "જય જય સાઈં નમો નમઃ, સદ્ગુરુ સાઈં નમો નમઃ॥"
+          ]
+        }
+      ],
+      "gujarati": "ૐ સાઈં નમો નમઃ"
+    },
+    {
+      "id": "shendur_lal_chadhayo",
+      "title": "Shendur Lal Chadhayo",
+      "type": "aarti",
+      "devanagari": "शेंदूर लाल चढ़ायो",
+      "deity": "Ganesha",
+      "duration": "4:28",
+      "tags": [
+        "Ganesh Chaturthi",
+        "Budhvar",
+        "Sankashti Chaturthi"
+      ],
+      "festivalTags": [
+        "Ganesh Chaturthi"
+      ],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "शेंदूर लाल चढ़ायो अच्छा गजमुख को।",
+            "दोंदिल लाल बिराजे सुत गौरीहर को॥"
+          ],
+          "transliteration": [
+            "Shendur Lal Chadhayo Achchha Gajamukh Ko.",
+            "Dondil Lal Biraje Sut Gaurihar Ko."
+          ],
+          "meanings": [
+            "Vermilion is lovingly offered to the beautiful elephant-faced Lord.",
+            "The red-hued, pot-bellied son of Gauri and Shiva shines resplendently."
+          ],
+          "gujarati": [
+            "શેંદૂર લાલ ચઢાયો અચ્છા ગજમુખ કો।",
+            "દોંદિલ લાલ બિરાજે સુત ગૌરીહર કો॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "हाथ लिए गुड़ लड्डू साईं सुरवर को।",
+            "महिमा कहे न जाय लागत हूँ पद को॥"
+          ],
+          "transliteration": [
+            "Hath Liye Gud Laddu Sai Survar Ko.",
+            "Mahima Kahe Na Jay Lagat Hoon Pad Ko."
+          ],
+          "meanings": [
+            "In your hands are jaggery sweets and laddus, delighting even the gods.",
+            "Your glory cannot be fully described; I bow at your feet in devotion."
+          ],
+          "gujarati": [
+            "હાથ લીધે ગૂડ લાડ્ડૂ સાંઈ સુરવર કો।",
+            "મહિમા કહે ન જાય લાગત હૂં પદ કો॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "जय जय जी गणराज विद्या सुखदाता।",
+            "धन्य तुम्हारा दर्शन मेरा मन रमता॥"
+          ],
+          "transliteration": [
+            "Jai Jai Ji Ganaraj Vidya Sukhdata.",
+            "Dhanya Tumhara Darshan Mera Man Ramta."
+          ],
+          "meanings": [
+            "Victory to the king of ganas, giver of wisdom and happiness.",
+            "Blessed is your darshan, in which my mind finds joy and rest."
+          ],
+          "gujarati": [
+            "જય જય જી ગણરાજ વિદ્યાસુખદાતા।",
+            "ધન્ય તમ્હારો દર્શન મેરા મન રમતા॥"
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "अष्ट सिद्धि दासी संकट के बैरी।",
+            "विघ्न विनाशन मंगल मूरत अधिकारी॥"
+          ],
+          "transliteration": [
+            "Ashta Siddhi Dasi Sankat Ke Bairi.",
+            "Vighna Vinashan Mangal Murat Adhikari."
+          ],
+          "meanings": [
+            "The eight spiritual powers stand in service to you, enemy of all distress.",
+            "You are the auspicious form who destroys obstacles and protects devotees."
+          ],
+          "gujarati": [
+            "અષ્ટ સિદ્ધિ દાસી સંકટ કે બેરી।",
+            "વિઘ્ન વિનાશન મંગલ મૂરત અધિકારી॥"
+          ]
+        }
+      ],
+      "gujarati": "શેંદૂર લાલ ચઢાયો"
+    },
+    {
+      "id": "surya_narayan_aarti",
+      "title": "Surya Narayan Aarti",
+      "type": "aarti",
+      "devanagari": "सूर्य नारायण आरती",
+      "deity": "Surya",
+      "duration": "3:18",
+      "tags": [
+        "Ravivar",
+        "Makar Sankranti",
+        "Surya Arghya"
+      ],
+      "festivalTags": [
+        "Makar Sankranti"
+      ],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "जय सूर्य नारायण स्वामी, जय आदित्य देवा।",
+            "भक्त जनों के संकट पल में दूर करेवा॥"
+          ],
+          "transliteration": [
+            "Jai Surya Narayan Swami, Jai Aditya Deva.",
+            "Bhakt Janon Ke Sankat Pal Mein Door Kareva."
+          ],
+          "meanings": [
+            "Victory to Lord Surya Narayan, the radiant Aditya.",
+            "You remove the troubles of devotees in but a moment."
+          ],
+          "gujarati": [
+            "જય સૂર્યનારાયણ સ્વામી, જય આદિત્ય દેવા।",
+            "ભક્ત જનોં કે સંકટ પલ મેં દૂર કરેવા॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "सात घोड़ों के रथ पर प्रतिदिन तुम आओ।",
+            "अंधकार को हरकर जग में प्रकाश फैलाओ॥"
+          ],
+          "transliteration": [
+            "Saat Ghodon Ke Rath Par Pratidin Tum Aao.",
+            "Andhakar Ko Harkar Jag Mein Prakash Phailao."
+          ],
+          "meanings": [
+            "Each day you arrive upon your chariot drawn by seven horses.",
+            "Driving away darkness, you spread light through the world."
+          ],
+          "gujarati": [
+            "સાત ઘોડોં કે રથ પર પ્રતિદિન તુમ આવો।",
+            "અંધકાર કો હરકર જગ મેં પ્રકાશ ફેલાવો॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "कश्यप नन्दन दिनकर, जगत के तू नेत्र।",
+            "तेरी कृपा से खिलते जीवन के सब क्षेत्र॥"
+          ],
+          "transliteration": [
+            "Kashyap Nandan Dinkar, Jagat Ke Tu Netra.",
+            "Teri Kripa Se Khilte Jeevan Ke Sab Kshetra."
+          ],
+          "meanings": [
+            "O son of Kashyapa, O day-maker, you are the eye of the universe.",
+            "By your grace, every field of life blossoms and thrives."
+          ],
+          "gujarati": [
+            "કશ્યપ નંદન દિનકર, જગત કે તૂ નેત્ર।",
+            "તેરી કૃપા સે ખિલતે જીવન કે સબ ક્ષેત્ર॥"
+          ]
+        },
+        {
+          "label": "Verse 3",
+          "lines": [
+            "आरोग्य, तेज, विवेक और साहस के दाता।",
+            "सूर्यदेव की आरती गावे, पावे फल विधाता॥"
+          ],
+          "transliteration": [
+            "Arogya, Tej, Vivek Aur Sahas Ke Data.",
+            "Suryadev Ki Aarti Gave, Pave Phal Vidhata."
+          ],
+          "meanings": [
+            "You bestow health, brilliance, wisdom, and courage.",
+            "Whoever sings this aarti of Surya receives your ordained blessings."
+          ],
+          "gujarati": [
+            "આરોગ્ય, તેજ, વિવેક ઔર સાહસ કે દાતા।",
+            "સૂર્યદેવ કી આરતી ગાવે, પાવે ફલ વિધાતા॥"
+          ]
+        }
+      ],
+      "gujarati": "સૂર્યનારાયણ આરતી"
+    },
+    {
+      "id": "yuge_atthavis_vitevari_ubha",
+      "title": "Yuge Atthavis Vitevari Ubha",
+      "type": "abhang",
+      "devanagari": "युगे अट्ठावीस विटेवरी उभा",
+      "deity": "Vitthal",
+      "duration": "3:42",
+      "tags": [
+        "Ashadhi Ekadashi",
+        "Kartiki Ekadashi",
+        "Wari"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "युगे अट्ठावीस विटेवरी उभा।",
+            "वामांगी रखुमाई दिसे दिव्य शोभा॥"
+          ],
+          "transliteration": [
+            "Yuge Atthavis Vitevari Ubha.",
+            "Vamangi Rakhumai Dise Divya Shobha."
+          ],
+          "meanings": [
+            "For countless ages the Lord has stood upon the sacred brick.",
+            "Rakhumai stands at his side, adding divine beauty to his form."
+          ],
+          "gujarati": [
+            "યુગે અઠ્ઠાવીસ વિટેવરી ઉભા।",
+            "વામાંગી રખુમાઈ દિસે દિવ્ય શોભા॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "पुंडलिकाचे भेटी परब्रह्म आले गा।",
+            "चरणी वाहे भीमा उद्धरी जगा॥"
+          ],
+          "transliteration": [
+            "Pundalikache Bheti Parabrahma Ale Ga.",
+            "Charani Vahe Bhima Uddhari Jaga."
+          ],
+          "meanings": [
+            "The Supreme Brahman came in answer to Pundalik's devotion.",
+            "At his feet flows the Bhima river, sanctifying the world."
+          ],
+          "gujarati": [
+            "પુંડલિકાચે ભેટી પરબ્રહ્મ આલે ગા।",
+            "ચરણી વહે ભીમા ઉદ્ધરી જગા॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "जय देव जय देव जय पांडुरंगा।",
+            "रखुमाई वल्लभा राहीच्या वल्लभा पावे जिवलगा॥"
+          ],
+          "transliteration": [
+            "Jai Dev Jai Dev Jai Panduranga.",
+            "Rakhumai Vallabha Rahichya Vallabha Pave Jivalaga."
+          ],
+          "meanings": [
+            "Glory to Panduranga again and again.",
+            "Beloved of Rakhumai, beloved of devotees, come close to the soul."
+          ],
+          "gujarati": [
+            "જય દેવ જય દેવ જય પાંડુરંગા।",
+            "રખુમાઈ વલ્લભા રાહીચ્યા વલ્લભા પાવે જીવલગા॥"
+          ]
+        }
+      ],
+      "gujarati": "યુગે અઠ્ઠાવીસ વિટેવરી ઉભા"
+    },
+    {
+      "id": "yei_ho_vitthale",
+      "title": "Yei Ho Vitthale",
+      "type": "abhang",
+      "devanagari": "येई हो विठ्ठले",
+      "deity": "Vitthal",
+      "duration": "2:54",
+      "tags": [
+        "Ashadhi Ekadashi",
+        "Kartiki Ekadashi",
+        "Wari"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "येई हो विठ्ठले माझे माउली ये।",
+            "निढळावरी कर ठेवूनिया ये॥"
+          ],
+          "transliteration": [
+            "Yei Ho Vitthale Majhe Mauli Ye.",
+            "Nidhalavari Kar Thevuniyā Ye."
+          ],
+          "meanings": [
+            "Come, O Vitthal, my divine motherly Lord, come near.",
+            "Place your compassionate hand upon my forehead and bless me."
+          ],
+          "gujarati": [
+            "યેઈ હો વિઠ્ઠલે માઝે માઉલી યે।",
+            "નિઢળાવરી કર ઠેવૂનિયા યે॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "चंद्रभागेतीरी उभा विटेवरी।",
+            "दर्शन दे मजला करुणाकरी॥"
+          ],
+          "transliteration": [
+            "Chandrabhagetiri Ubha Vitevari.",
+            "Darshan De Majala Karunakari."
+          ],
+          "meanings": [
+            "You stand upon the brick by the banks of the Chandrabhaga.",
+            "Grant me your दर्शन, O compassionate Lord."
+          ],
+          "gujarati": [
+            "ચંદ્રભાગેતીરી ઉભા વિટેવરી।",
+            "દર્શન દે મજલા કરુણાકરી॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "भक्तजनांची भेट घ्यावया ये।",
+            "पांडुरंगा रुख्मिणीवल्लभा ये॥"
+          ],
+          "transliteration": [
+            "Bhaktajananchi Bhet Ghyavaya Ye.",
+            "Panduranga Rukhminivallabha Ye."
+          ],
+          "meanings": [
+            "Come to meet your devotees who wait with longing.",
+            "Come, O Panduranga, beloved of Rukmini."
+          ],
+          "gujarati": [
+            "ભક્તજનાંચી ભેટ ઘ્યાવયા યે।",
+            "પાંડુરંગા રુખ્મિણિવલ્લભા યે॥"
+          ]
+        }
+      ],
+      "gujarati": "યેઈ હો વિઠ્ઠલે"
+    },
+    {
+      "id": "kakad_aarti_sai_baba",
+      "title": "Kakad Aarti",
+      "type": "aarti",
+      "devanagari": "काकड़ आरती",
+      "deity": "Sai Baba",
+      "duration": "4:22",
+      "tags": [
+        "Guruvar",
+        "Sai Baba",
+        "Morning Prayer"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Opening",
+          "lines": [
+            "उठा उठा श्री साईंनाथ गुरु चरण कमल दाखवा।",
+            "आधि व्याधि भवताप वारुनी तारा जडजीवा॥"
+          ],
+          "transliteration": [
+            "Utha Utha Shri Sainath Guru Charan Kamal Dakhava.",
+            "Adhi Vyadhi Bhavatap Varuni Tara Jad Jeeva."
+          ],
+          "meanings": [
+            "Arise, O Shri Sainath, and reveal the lotus feet of the Guru.",
+            "Remove worldly suffering, disease, and affliction, and carry bound souls across."
+          ],
+          "gujarati": [
+            "ઉઠા ઉઠા શ્રી સાંઈનાથ ગુરુ ચરણ કમલ દાખવા।",
+            "આધિ વ્યાધિ ભવતાપ વારુની તારા જડજીવા॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "गेली तुम्हां सोडुनिया भवतिमिररजनी विलया।",
+            "परी ही अज्ञानासी तुमची भुलवी योगमाया॥"
+          ],
+          "transliteration": [
+            "Geli Tumha Soduniya Bhavatimir Rajani Vilaya.",
+            "Pari Hi Ajnanasi Tumchi Bhulavi Yogamaya."
+          ],
+          "meanings": [
+            "The night of worldly darkness departs when you are remembered.",
+            "Yet the delusion of ignorance still confuses beings through maya."
+          ],
+          "gujarati": [
+            "ગેલી તમ્હાં સોડુનિયા ભવતિમિરરજની વિલયા।",
+            "પરી હી અજ્ઞાનાસી તુમચી ભુલવી યોગમાયા॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "शक्ति न आम्हां यत्किंचितही तिजला साराया।",
+            "तुम्हीच तीते सारुनी द्यावा मुखजन ताराया॥"
+          ],
+          "transliteration": [
+            "Shakti Na Amha Yatkinchitahi Tijala Saraya.",
+            "Tumhich Tite Saruni Dyava Mukhjan Taraya."
+          ],
+          "meanings": [
+            "We have no power of our own to overcome this delusion.",
+            "Only you can remove it and redeem those who turn toward you."
+          ],
+          "gujarati": [
+            "શક્તિ ન અમ્હાં યત્કિંચિતહી તિજલા સારાયા।",
+            "તુમ્હીચ તીતે સારુની દ્યાવા મુખજન તારાયા॥"
+          ]
+        }
+      ],
+      "gujarati": "કાકડ આરતી"
+    },
+    {
+      "id": "madhyan_aarti_sai_baba",
+      "title": "Madhyan Aarti",
+      "type": "aarti",
+      "devanagari": "माध्यान आरती",
+      "deity": "Sai Baba",
+      "duration": "4:10",
+      "tags": [
+        "Guruvar",
+        "Sai Baba",
+        "Noon Prayer"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "आरती साईं बाबा, सौख्यदातारा जीवा।",
+            "चरणराजतळीं द्यावा दासा विसावा, भक्तां विसावा॥"
+          ],
+          "transliteration": [
+            "Aarti Sai Baba, Saukhyadatara Jeeva.",
+            "Charanrajatalin Dyava Dasa Visava, Bhaktan Visava."
+          ],
+          "meanings": [
+            "We perform the aarti of Sai Baba, giver of peace and joy to every soul.",
+            "Grant rest at the dust of your feet to your servants and to all devotees."
+          ],
+          "gujarati": [
+            "આરતી સાંઈ બાબા, સૌખ્યદાતારા જીવા।",
+            "ચરણરાજતળીં દ્યાવા દાસા વિસાવા, ભક્તાં વિસાવા॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "जाळुनियां अनंग स्वस्वरूपी राहे दंग।",
+            "मुमुक्षु जना दावी निजडोळा श्रीरंग॥"
+          ],
+          "transliteration": [
+            "Jaluniya Anang Svasvarupi Rahe Dang.",
+            "Mumukshu Jana Davi Nijdola Shrirang."
+          ],
+          "meanings": [
+            "Burning away desire, you remain absorbed in your own true nature.",
+            "To seekers of liberation, you reveal the Lord through your own eyes."
+          ],
+          "gujarati": [
+            "જાળુનિયા અનંગ સ્વસ્વરૂપિ રાહે દંગ।",
+            "મુમુક્ષુ જન દાવી નિજડોળા શ્રીરંગ॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "जया मनी जैसा भाव तया तैसा अनुभव।",
+            "दाविसी दयाघना ऐसी तुझी ही माव॥"
+          ],
+          "transliteration": [
+            "Jaya Mani Jaisa Bhav Taya Taisa Anubhav.",
+            "Davisi Dayaghana Aisi Tuzhi Hi Mav."
+          ],
+          "meanings": [
+            "As the feeling in a devotee's heart, so is the experience you grant.",
+            "O ocean of compassion, such is your tender motherly grace."
+          ],
+          "gujarati": [
+            "જયા મની જેસા ભાવ તયા તૈસા અનુભવ।",
+            "દાવિસી દયાઘના એસી તુઝી હી માવ॥"
+          ]
+        }
+      ],
+      "gujarati": "માધ્યાન આરતી"
+    },
+    {
+      "id": "dhoop_aarti_sai_baba",
+      "title": "Dhoop Aarti",
+      "type": "aarti",
+      "devanagari": "धूप आरती",
+      "deity": "Sai Baba",
+      "duration": "3:40",
+      "tags": [
+        "Guruvar",
+        "Sai Baba",
+        "Evening Prayer"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "शिर्डी माझे पंढरपूर, साईबाबा रमावर।",
+            "बाबा रमावर, साईबाबा रमावर॥"
+          ],
+          "transliteration": [
+            "Shirdi Majhe Pandharpur, Saibaba Ramavar.",
+            "Baba Ramavar, Saibaba Ramavar."
+          ],
+          "meanings": [
+            "Shirdi is my Pandharpur, and Sai Baba is the Lord who dwells there.",
+            "Again and again I remember Sai Baba as the one who abides in the heart."
+          ],
+          "gujarati": [
+            "શિર્ડી માઝે પંઢરપુર, સાંઈબાબા રમાવર।",
+            "બાબા રમાવર, સાંઈબાબા રમાવર॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "शुद्ध भक्ती चंद्रभागा, भाव पुंडलीक जागा।",
+            "पुंडलीक जागा, भाव पुंडलीक जागा॥"
+          ],
+          "transliteration": [
+            "Shuddha Bhakti Chandrabhaga, Bhav Pundalik Jaga.",
+            "Pundalik Jaga, Bhav Pundalik Jaga."
+          ],
+          "meanings": [
+            "Pure devotion is the Chandrabhaga river, and awakened feeling is Pundalik's spirit.",
+            "Let that inner devotion awaken fully within the heart."
+          ],
+          "gujarati": [
+            "શુદ્ધ ભક્તી ચંદ્રભાગા, ભાવ પુંડલીક જાગા।",
+            "પુંડલીક જાગા, ભાવ પુંડલીક જાગા॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "या हो या हो अवघे जन, करू बाबांसी वंदन।",
+            "साईसी वंदन, करू बाबांसी वंदन॥"
+          ],
+          "transliteration": [
+            "Ya Ho Ya Ho Avaghe Jan, Karu Babansi Vandan.",
+            "Saaisi Vandan, Karu Babansi Vandan."
+          ],
+          "meanings": [
+            "Come one and all, let us bow before Baba.",
+            "Let us offer reverence to Sai with one-pointed devotion."
+          ],
+          "gujarati": [
+            "યા હો યા હો અવઘે જન, કરૂ બાબાંસી વંદન।",
+            "સાઈસી વંદન, કરૂ બાબાંસી વંદન॥"
+          ]
+        }
+      ],
+      "gujarati": "ધૂપ આરતી"
+    },
+    {
+      "id": "shej_aarti_sai_baba",
+      "title": "Shej Aarti",
+      "type": "aarti",
+      "devanagari": "शेज आरती",
+      "deity": "Sai Baba",
+      "duration": "4:02",
+      "tags": [
+        "Guruvar",
+        "Sai Baba",
+        "Night Prayer"
+      ],
+      "festivalTags": [],
+      "verses": [
+        {
+          "label": "Opening",
+          "lines": [
+            "जय जय साईनाथ आता पहुडावे मंदिरि हो।",
+            "आळवितो सप्रेमे तुजला आरती घेऊनि करि हो॥"
+          ],
+          "transliteration": [
+            "Jai Jai Sainath Ata Pahudave Mandiri Ho.",
+            "Alavito Sapreme Tujala Aarti Gheuni Kari Ho."
+          ],
+          "meanings": [
+            "Victory to Sai Nath; now we prepare your resting place in the temple.",
+            "With loving devotion we invite you and perform this final aarti."
+          ],
+          "gujarati": [
+            "જય જય સાંઈનાથ આતા પહૂડાવે મંદિરી હો।",
+            "આળવિતો સપ્રેમે તુઝલા આરતી ઘેઉની કરી હો॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "रंजविसी तू मधुर बोलुनी माय जशी निज मुला हो।",
+            "भोगिसी व्याधी तूंच हरुनिया निज सेवक दुःखाला हो॥"
+          ],
+          "transliteration": [
+            "Ranjavisi Tu Madhur Boluni May Jashi Nij Mula Ho.",
+            "Bhogisi Vyadhi Tunch Haruniya Nij Sevak Dukkhala Ho."
+          ],
+          "meanings": [
+            "You comfort devotees with sweet words like a mother soothing her own child.",
+            "You take upon yourself their suffering and remove the sorrows of your servants."
+          ],
+          "gujarati": [
+            "રંજવિસી તૂ મધુર બોલુની માય જશી નિજ મુલા હો।",
+            "ભોગિસી વ્યાધી તૂંચ હરુનિયા નિજ સેવક દુઃખાલા હો॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "क्षमा शयन सुंदर ही शोभा सुमनशेज त्यावरी हो।",
+            "घ्यावी थोडी भक्तजनांची पूजनादि चाकरी हो॥"
+          ],
+          "transliteration": [
+            "Kshama Shayan Sundar Hi Shobha Suman Shej Tyavari Ho.",
+            "Ghyavi Thodi Bhaktajanchi Pujanadi Chakari Ho."
+          ],
+          "meanings": [
+            "Your bed of forgiveness and flowers shines with serene beauty.",
+            "Please accept this little service of worship from your devotees."
+          ],
+          "gujarati": [
+            "ક્ષમા શયન સુંદર હી શોભા સુમનશેજ ત્યાવરી હો।",
+            "ઘ્યાવી થોડી ભક્તજનાંચી પૂજનાદિ ચાકરી હો॥"
+          ]
+        }
+      ],
+      "gujarati": "શેજ આરતી"
+    },
+    {
+      "id": "gajananam_bhutaganadi_sevitam",
+      "title": "Gajananam Bhutaganadi Sevitam",
+      "type": "shloka",
+      "devanagari": "गजाननं भूतगणादि सेवितम्",
+      "deity": "Ganesha",
+      "duration": "1:10",
+      "tags": [
+        "Ganesh Chaturthi",
+        "Budhvar",
+        "Sankashti Chaturthi"
+      ],
+      "festivalTags": [
+        "Ganesh Chaturthi"
+      ],
+      "verses": [
+        {
+          "label": "Shloka",
+          "lines": [
+            "गजाननं भूतगणादि सेवितं, कपित्थ जम्बूफलचारु भक्षणम्।",
+            "उमासुतं शोकविनाशकारकं, नमामि विघ्नेश्वर पादपङ्कजम्॥"
+          ],
+          "transliteration": [
+            "Gajananam Bhutaganadi Sevitam, Kapittha Jambuphala Charu Bhakshanam.",
+            "Umasutam Shokavinashakarakam, Namami Vighneshwara Padapankajam."
+          ],
+          "meanings": [
+            "I bow to the elephant-faced Lord, served by hosts of divine beings, who delights in wood-apple and rose-apple fruits.",
+            "He is the son of Uma, destroyer of sorrow, and I salute the lotus feet of Vighneshwara."
+          ],
+          "gujarati": [
+            "ગજાનનં ભૂતગણાદિ સેવિતં, કપિત્થ જંબૂફલચારુ ભક્ષણમ્।",
+            "ઉમાસુતં શોકવિનાશકારકં, નમામિ વિઘ્નેશ્વર પાદપંકજમ્॥"
+          ]
+        }
+      ],
+      "gujarati": "ગજાનનં ભૂતગણાદિ સેવિતમ્"
+    },
+    {
+      "id": "ganesh_gayatri_mantra",
+      "title": "Ganesh Gayatri Mantra",
+      "type": "mantra",
+      "devanagari": "गणेश गायत्री मंत्र",
+      "deity": "Ganesha",
+      "duration": "0:58",
+      "tags": [
+        "Ganesh Chaturthi",
+        "Budhvar",
+        "Sankashti Chaturthi"
+      ],
+      "festivalTags": [
+        "Ganesh Chaturthi"
+      ],
+      "verses": [
+        {
+          "label": "Mantra",
+          "lines": [
+            "ॐ एकदन्ताय विद्महे।",
+            "वक्रतुण्डाय धीमहि।",
+            "तन्नो दन्तिः प्रचोदयात्॥"
+          ],
+          "transliteration": [
+            "Om Ekadantaya Vidmahe.",
+            "Vakratundaya Dhimahi.",
+            "Tanno Dantih Prachodayat."
+          ],
+          "meanings": [
+            "We contemplate the one-tusked Lord Ganesha.",
+            "We meditate upon the curved-trunked deity.",
+            "May that divine Danti inspire and illumine our minds."
+          ],
+          "gujarati": [
+            "ૐ એકદંતાય વિદ્મહે।",
+            "વક્રતુન્ડાય ધીમહિ।",
+            "તન્નો દંતિઃ પ્રચોદયાત્॥"
+          ]
+        }
+      ],
+      "gujarati": "ગણેશ ગાયત્રી મંત્ર"
+    },
+    {
+      "id": "manojavam_marutatulya_vegam",
+      "title": "Manojavam Marutatulya Vegam",
+      "type": "shloka",
+      "devanagari": "मनोजवं मारुततुल्यवेगम्",
+      "deity": "Hanuman",
+      "duration": "1:05",
+      "tags": [
+        "Mangalvar",
+        "Shanivar",
+        "Hanuman Jayanti"
+      ],
+      "festivalTags": [
+        "Hanuman Jayanti"
+      ],
+      "verses": [
+        {
+          "label": "Dhyana Mantra",
+          "lines": [
+            "मनोजवं मारुततुल्यवेगं, जितेन्द्रियं बुद्धिमतां वरिष्ठम्।",
+            "वातात्मजं वानरयूथमुख्यं, श्रीरामदूतं शरणं प्रपद्ये॥"
+          ],
+          "transliteration": [
+            "Manojavam Marutatulya Vegam, Jitendriyam Buddhimatam Varishtham.",
+            "Vatatmajam Vanarayuthamukhyam, Shri Ramadutam Sharanam Prapadye."
+          ],
+          "meanings": [
+            "I take refuge in Hanuman, swift as the mind and as fast as the wind, master of the senses and foremost among the wise.",
+            "He is the son of Vayu, chief among the vanaras, and the noble messenger of Shri Rama."
+          ],
+          "gujarati": [
+            "મનોજવં મારુતતુલ્યવેગં, જિતેન્દ્રિયં બુદ્ધિમતાં વરિષ્ઠમ્।",
+            "વાતાત્મજં વાનરયૂથમુખ્યં, શ્રીરામદૂતં શરણં પ્રપદ્યે॥"
+          ]
+        }
+      ],
+      "gujarati": "મનોજવં મારુતતુલ્યવેગમ્"
+    },
+    {
+      "id": "hanuman_gayatri_mantra",
+      "title": "Hanuman Gayatri Mantra",
+      "type": "mantra",
+      "devanagari": "हनुमान गायत्री मंत्र",
+      "deity": "Hanuman",
+      "duration": "0:56",
+      "tags": [
+        "Mangalvar",
+        "Shanivar",
+        "Hanuman Jayanti"
+      ],
+      "festivalTags": [
+        "Hanuman Jayanti"
+      ],
+      "verses": [
+        {
+          "label": "Mantra",
+          "lines": [
+            "ॐ आञ्जनेयाय विद्महे।",
+            "वायुपुत्राय धीमहि।",
+            "तन्नो हनुमान् प्रचोदयात्॥"
+          ],
+          "transliteration": [
+            "Om Anjaneyaya Vidmahe.",
+            "Vayuputraya Dhimahi.",
+            "Tanno Hanuman Prachodayat."
+          ],
+          "meanings": [
+            "We contemplate Anjaneya, the son of Mother Anjani.",
+            "We meditate upon the son of the Wind God.",
+            "May Hanuman inspire and strengthen our minds."
+          ],
+          "gujarati": [
+            "ૐ આંજનેયાય વિદ્મહે।",
+            "વાયુપુત્રાય ધીમહિ।",
+            "તન્નો હનુમાન્ પ્રચોદયાત્॥"
+          ]
+        }
+      ],
+      "gujarati": "હનુમાન ગાયત્રી મંત્ર"
+    },
+    {
+      "id": "mahalakshmi_aarti",
+      "title": "Mahalakshmi Aarti",
+      "type": "aarti",
+      "devanagari": "महालक्ष्मी आरती",
+      "deity": "Lakshmi",
+      "duration": "3:26",
+      "tags": [
+        "Diwali",
+        "Dhanteras",
+        "Shukravar"
+      ],
+      "festivalTags": [
+        "Diwali"
+      ],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "जय देवी जय देवी जय महालक्ष्मी।",
+            "वससी व्यापक रूपे तू स्थूलसूक्ष्मी॥"
+          ],
+          "transliteration": [
+            "Jai Devi Jai Devi Jai Mahalakshmi.",
+            "Vasasi Vyapak Roope Tu Sthoolasookshmee."
+          ],
+          "meanings": [
+            "Victory to Goddess Mahalakshmi again and again.",
+            "You pervade all creation in both gross and subtle forms."
+          ],
+          "gujarati": [
+            "જય દેવી જય દેવી જય મહાલક્ષ્મી।",
+            "વસસી વ્યાપક રૂપે તૂ સ્થૂલસૂક્ષ્મી॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "करवीरपुरवासिनी सुरवरमुनिमाता।",
+            "पुरवरवरदायिनी मुरहरप्रियकांता॥"
+          ],
+          "transliteration": [
+            "Karaveerapuravasini Suravara Munimata.",
+            "Puravaravaradayini Murahara Priyakanta."
+          ],
+          "meanings": [
+            "You dwell in Karveerpur and are revered by gods and sages as their mother.",
+            "You grant boons to noble souls and are the beloved consort of Vishnu, the slayer of Mura."
+          ],
+          "gujarati": [
+            "કરવીરપુરવાસિની સુરવરમુનિમાતા।",
+            "પુરવરવરદાયિની મુરહરપ્રિયકાંતા॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "कमलाकरे जठरीं जननी ब्रह्मांडा।",
+            "पापसंग्रहभंजन करुणा रसकांडा॥"
+          ],
+          "transliteration": [
+            "Kamalakare Jatharin Janani Brahmanda.",
+            "Papasangrahabhanjan Karuna Rasakanda."
+          ],
+          "meanings": [
+            "O lotus-handed mother, the cosmos itself rests within your being.",
+            "You destroy accumulated sin and are the very source of compassion."
+          ],
+          "gujarati": [
+            "કમલાકરે જઠરીં જનની બ્રહ્માંડા।",
+            "પાપસંગ્રહભંજન કરુણા રસકાંડા॥"
+          ]
+        }
+      ],
+      "gujarati": "મહાલક્ષ્મી આરતી"
+    },
+    {
+      "id": "lakshmi_gayatri_mantra",
+      "title": "Lakshmi Gayatri Mantra",
+      "type": "mantra",
+      "devanagari": "लक्ष्मी गायत्री मंत्र",
+      "deity": "Lakshmi",
+      "duration": "0:54",
+      "tags": [
+        "Diwali",
+        "Dhanteras",
+        "Shukravar"
+      ],
+      "festivalTags": [
+        "Diwali"
+      ],
+      "verses": [
+        {
+          "label": "Mantra",
+          "lines": [
+            "ॐ महालक्ष्म्यै च विद्महे।",
+            "विष्णुपत्न्यै च धीमहि।",
+            "तन्नो लक्ष्मीः प्रचोदयात्॥"
+          ],
+          "transliteration": [
+            "Om Mahalakshmyai Cha Vidmahe.",
+            "Vishnupatnyai Cha Dhimahi.",
+            "Tanno Lakshmih Prachodayat."
+          ],
+          "meanings": [
+            "We contemplate the great Goddess Lakshmi.",
+            "We meditate upon the consort of Lord Vishnu.",
+            "May that divine Lakshmi inspire and guide us."
+          ],
+          "gujarati": [
+            "ૐ મહાલક્ષ્મ્યૈ ચ વિદ્મહે।",
+            "વિષ્ણુપત્ન્યૈ ચ ધીમહિ।",
+            "તન્નો લક્ષ્મીઃ પ્રચોદયાત્॥"
+          ]
+        }
+      ],
+      "gujarati": "લક્ષ્મી ગાયત્રી મંત્ર"
+    },
+    {
+      "id": "aarti_shri_ramayan_ji_ki",
+      "title": "Aarti Shri Ramayan Ji Ki",
+      "type": "aarti",
+      "devanagari": "आरती श्री रामायण जी की",
+      "deity": "Rama",
+      "duration": "3:12",
+      "tags": [
+        "Ram Navami",
+        "Dussehra",
+        "Ravivar"
+      ],
+      "festivalTags": [
+        "Ram Navami",
+        "Dussehra"
+      ],
+      "verses": [
+        {
+          "label": "Dhruva Pad",
+          "lines": [
+            "आरती श्री रामायण जी की।",
+            "कीर्ति कलित ललित सिय पी की॥"
+          ],
+          "transliteration": [
+            "Aarti Shri Ramayan Ji Ki.",
+            "Keerti Kalit Lalit Siya Pi Ki."
+          ],
+          "meanings": [
+            "Let us perform the aarti of the sacred Ramayana.",
+            "It shines with the graceful glory of Sita and Rama."
+          ],
+          "gujarati": [
+            "આરતી શ્રી રામાયણ જી કી।",
+            "કીર્તિ કલિત લલિત સિય પી કી॥"
+          ]
+        },
+        {
+          "label": "Verse 1",
+          "lines": [
+            "गावत ब्रह्मादिक मुनि नारद।",
+            "वाल्मीकि विज्ञान बिसारद॥"
+          ],
+          "transliteration": [
+            "Gavat Brahmadik Muni Narad.",
+            "Valmiki Vigyan Bisarad."
+          ],
+          "meanings": [
+            "Brahma, Narada, and the sages sing its praise.",
+            "Valmiki, master of sacred wisdom, revealed its essence."
+          ],
+          "gujarati": [
+            "ગાવત બ્રહ્માદિક મુનિ નારદ।",
+            "વાલ્મીકિ વિજ્ઞાન બિસારદ॥"
+          ]
+        },
+        {
+          "label": "Verse 2",
+          "lines": [
+            "शुक सनकादिक शेष अरु सारद।",
+            "बरनि पवनसुत कीर्ति नीकी॥"
+          ],
+          "transliteration": [
+            "Shuk Sanakadik Shesh Aru Sarad.",
+            "Barani Pavansut Keerti Neeki."
+          ],
+          "meanings": [
+            "Shuka, Sanaka, Shesha, and Saraswati speak of its greatness.",
+            "Even Hanuman, son of the Wind, celebrates its noble glory."
+          ],
+          "gujarati": [
+            "શુક સનકાદિક શેષ અરુ સારદ।",
+            "બરની પવનસુત કીર્તિ નીકી॥"
+          ]
+        }
+      ],
+      "gujarati": "આરતી શ્રી રામાયણ જી કી"
+    },
+    {
+      "id": "raghupati_raghav_raja_ram",
+      "title": "Raghupati Raghav Raja Ram",
+      "type": "bhajan",
+      "devanagari": "रघुपति राघव राजा राम",
+      "deity": "Rama",
+      "duration": "2:08",
+      "tags": [
+        "Ram Navami",
+        "Ravivar",
+        "Bhajan"
+      ],
+      "festivalTags": [
+        "Ram Navami"
+      ],
+      "verses": [
+        {
+          "label": "Bhajan",
+          "lines": [
+            "रघुपति राघव राजा राम।",
+            "पतित पावन सीता राम॥",
+            "सीता राम सीता राम।",
+            "भज प्यारे तू सीता राम॥",
+            "ईश्वर अल्लाह तेरो नाम।",
+            "सबको सन्मति दे भगवान॥"
+          ],
+          "transliteration": [
+            "Raghupati Raghav Raja Ram.",
+            "Patit Pavan Sita Ram.",
+            "Sita Ram Sita Ram.",
+            "Bhaj Pyare Tu Sita Ram.",
+            "Ishwar Allah Tero Nam.",
+            "Sabko Sanmati De Bhagavan."
+          ],
+          "meanings": [
+            "Glory to Lord Rama, scion of the Raghu lineage.",
+            "Sita-Rama purify and uplift the fallen.",
+            "Keep repeating the holy name of Sita and Rama.",
+            "O dear one, devote yourself lovingly to Sita-Rama.",
+            "The Divine is known by many names, including Ishwar and Allah.",
+            "May God grant wisdom and right understanding to all."
+          ],
+          "gujarati": [
+            "રઘુપતિ રાઘવ રાજા રામ।",
+            "પતિત પાવન સીતારામ॥",
+            "સીતારામ સીતારામ।",
+            "ભજ પ્યારે તૂ સીતારામ॥",
+            "ઈશ્વર અલ્લાહ તેરો નામ।",
+            "સબકો સન્મતિ દે ભગવાન॥"
+          ]
+        }
+      ],
+      "gujarati": "રઘુપતિ રાઘવ રાજા રામ"
     }
   ]
 }

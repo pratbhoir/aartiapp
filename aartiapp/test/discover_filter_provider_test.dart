@@ -71,7 +71,20 @@ void main() {
       expect(state.searchQuery, isEmpty);
       expect(state.activeDeityIndex, 0);
       expect(state.activeFestivalTag, isEmpty);
-      expect(container.read(filteredAartisProvider), const [0, 1, 2]);
+      expect(container.read(filteredAartisProvider), const [0, 1, 2, 3]);
+    });
+
+    test('new deity labels remain filterable through catalog order', () async {
+      final container = await _buildContainer();
+      addTearDown(container.dispose);
+
+      final notifier = container.read(discoverFilterProvider.notifier);
+      notifier.selectDeity(4);
+
+      final state = container.read(discoverFilterProvider);
+      expect(state.mode, DiscoverFilterMode.deity);
+      expect(state.activeDeityIndex, 4);
+      expect(container.read(filteredAartisProvider), const [3]);
     });
   });
 }
@@ -107,6 +120,10 @@ const String _catalogFixture = '''
     {
       "emoji": "🌺",
       "label": "Durga"
+    },
+    {
+      "emoji": "🌸",
+      "label": "Saraswati"
     }
   ],
   "aartis": [
@@ -149,6 +166,20 @@ const String _catalogFixture = '''
       ],
       "festivalTags": [
         "Navratri"
+      ],
+      "verses": []
+    },
+    {
+      "id": "saraswati_vandana",
+      "title": "Jai Saraswati Mata",
+      "devanagari": "जय सरस्वती माता",
+      "deity": "Saraswati",
+      "duration": "2:10",
+      "tags": [
+        "Vasant Panchami"
+      ],
+      "festivalTags": [
+        "Vasant Panchami"
       ],
       "verses": []
     }

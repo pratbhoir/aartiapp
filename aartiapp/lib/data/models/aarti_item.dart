@@ -3,6 +3,7 @@ import 'verse_data.dart';
 class AartiItem {
   final String id;
   final String title;
+  final String type;
   final String devanagari;
   final String gujarati; // Gujarati script title
   final String deity;
@@ -17,11 +18,13 @@ class AartiItem {
 
   /// Default audio URL for all aartis.
   static const String defaultAudioUrl = '';
+  static const String defaultType = '';
   // static const String defaultAudioUrl = 'https://smt.foozylab.com/aarti/aarti01.mp3';
 
   const AartiItem({
     required this.id,
     required this.title,
+    this.type = defaultType,
     required this.devanagari,
     this.gujarati = '',
     required this.deity,
@@ -41,6 +44,7 @@ class AartiItem {
     return AartiItem(
       id: json['id'] as String,
       title: json['title'] as String,
+      type: (json['type'] as String?) ?? defaultType,
       devanagari: json['devanagari'] as String,
       gujarati: (json['gujarati'] as String?) ?? '',
       deity: json['deity'] as String,
@@ -65,6 +69,7 @@ class AartiItem {
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
+      'type': type,
         'devanagari': devanagari,
         'gujarati': gujarati,
         'deity': deity,
@@ -78,6 +83,7 @@ class AartiItem {
   AartiItem copyWith({
     String? id,
     String? title,
+    String? type,
     String? devanagari,
     String? gujarati,
     String? deity,
@@ -93,6 +99,7 @@ class AartiItem {
     return AartiItem(
       id: id ?? this.id,
       title: title ?? this.title,
+      type: type ?? this.type,
       devanagari: devanagari ?? this.devanagari,
       gujarati: gujarati ?? this.gujarati,
       deity: deity ?? this.deity,
