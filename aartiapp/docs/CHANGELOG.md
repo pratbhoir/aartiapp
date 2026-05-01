@@ -1,3 +1,21 @@
+## [2026-05-01] — Centralized Snackbar Helper
+
+### Added
+- `lib/core/utils/snackbar_helper.dart` — Added a centralized semantic snackbar helper with success, error, info, and warning entry points plus replace-current behavior.
+- `test/snackbar_helper_test.dart` — Added focused widget coverage for snackbar severity rendering, action support, and replacement behavior.
+
+### Modified
+- `lib/core/theme/app_colors.dart` — Added semantic snackbar feedback color tokens aligned to the app palette.
+- `lib/core/theme/app_theme.dart` — Added shared floating snackbar theme defaults for shape, inset padding, typography, and action contrast.
+- `lib/features/settings/feedback_screen.dart` — Switched feedback submission failures to the centralized snackbar helper.
+- `lib/features/contribute/contribute_screen.dart` — Switched contribution validation and save success feedback to the centralized snackbar helper.
+- `lib/features/settings/settings_screen.dart` — Switched content-refresh and activity-log feedback to the centralized snackbar helper.
+- `lib/features/settings/dev_tools_screen.dart` — Switched activity-log clear feedback to the centralized snackbar helper.
+- `docs/FILE_REGISTRY.md` — Registered the new snackbar helper and refreshed touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented the shared snackbar feedback pattern and updated the folder structure.
+- `docs/THEME_AND_DESIGN.md` — Added semantic snackbar tokens and shared snackbar styling guidance.
+- `docs/FUNCTIONAL_SPEC.md` — Added the centralized snackbar business rule.
+
 ## [2026-05-01] — Cache-Backed Content Sync
 
 ### Added

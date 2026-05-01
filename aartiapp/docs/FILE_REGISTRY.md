@@ -16,10 +16,10 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/core/theme/app_colors.dart` | All colour tokens (light + dark) — single source of truth for the palette | 2026-04-20 |
+| `lib/core/theme/app_colors.dart` | All colour tokens (light + dark) — single source of truth for the palette, including semantic snackbar feedback fills | 2026-05-01 |
 | `lib/core/theme/app_typography.dart` | All text style factory methods (`AppTypography`) — Lora, Noto Serif Devanagari, system sans | 2026-04-20 |
 | `lib/core/theme/app_spacing.dart` | All spacing / padding / margin / radius tokens (`AppSpacing`) | 2026-04-20 |
-| `lib/core/theme/app_theme.dart` | `ThemeData` assembly for light and dark modes | 2026-04-20 |
+| `lib/core/theme/app_theme.dart` | `ThemeData` assembly for light and dark modes, including shared floating snackbar defaults | 2026-05-01 |
 | `lib/core/theme/theme_aware_colors.dart` | `BuildContext` extension resolving colours by brightness | 2026-04-20 |
 
 ## Core / Constants
@@ -49,6 +49,7 @@
 | `lib/core/utils/device_info_helper.dart` | `DeviceInfoHelper` — normalized cross-platform device snapshot builder for outbound sync payloads | 2026-05-01 |
 | `lib/core/utils/day_deity_mapper.dart` | `DayDeityMapper` — maps weekday → deity for "Aarti of the Day" | 2026-04-20 |
 | `lib/core/utils/search_engine.dart` | `SearchEngine` — full-text local search + deity/festival filtering | 2026-04-20 |
+| `lib/core/utils/snackbar_helper.dart` | `SnackBarHelper` — centralized semantic snackbar utility with replace-current behavior and theme-aligned severity mapping | 2026-05-01 |
 
 ## Data / Models
 
@@ -142,7 +143,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/contribute/contribute_screen.dart` | `ContributeScreen` — form to create and save personal Aartis locally | 2026-04-25 |
+| `lib/features/contribute/contribute_screen.dart` | `ContributeScreen` — form to create and save personal Aartis locally with centralized validation and success snackbar feedback | 2026-05-01 |
 
 ## Features / Home
 
@@ -161,8 +162,8 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, manual content refresh tile, feedback entrypoint, diagnostics entries, and theme-aware control chrome | 2026-05-01 |
-| `lib/features/settings/feedback_screen.dart` | `FeedbackScreen` — devotional feedback form with efficient stacked category chips, softer placeholder styling, a large message field, keyboard-aware page scrolling, validation, submit loading state, and dedicated success state | 2026-05-01 |
-| `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
+| `lib/features/settings/feedback_screen.dart` | `FeedbackScreen` — devotional feedback form with efficient stacked category chips, softer placeholder styling, a large message field, keyboard-aware page scrolling, validation, submit loading state, dedicated success state, and centralized error snackbar feedback | 2026-05-01 |
+| `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions using centralized snackbar feedback for log clear actions | 2026-05-01 |
 
 ## Assets
 
@@ -194,7 +195,7 @@
 |-----------|---------|--------------|
 | `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-05-01 |
 | `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions, and runtime integration guidance | 2026-05-01 |
-| `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing | 2026-04-20 |
+| `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing, and component feedback styling | 2026-05-01 |
 | `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria, and feedback submission rules | 2026-05-01 |
 | `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions, including planned feedback events | 2026-05-01 |
 | `docs/CHANGELOG.md` | Chronological log of all changes | 2026-05-01 |
@@ -208,4 +209,5 @@
 | `test/feedback_service_test.dart` | Focused service tests for feedback payload generation, identity backfill, and failure semantics | 2026-05-01 |
 | `test/feedback_screen_test.dart` | Focused widget tests for feedback form validation and success-state behavior | 2026-05-01 |
 | `test/festival_repository_test.dart` | Focused repository tests for upcoming-only festival filter ordering, duplicate-tag collapsing, and the 5-chip limit | 2026-04-27 |
+| `test/snackbar_helper_test.dart` | Focused widget tests for semantic snackbar severity rendering, action support, and replace-current behavior | 2026-05-01 |
 | `test/user_sync_service_test.dart` | Focused service tests for sync payload generation, identity backfill, debounce, force sync, and failure semantics | 2026-05-01 |

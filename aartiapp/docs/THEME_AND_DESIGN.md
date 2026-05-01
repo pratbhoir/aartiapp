@@ -33,6 +33,15 @@ All colours are defined in `lib/core/theme/app_colors.dart`. No colour should be
 | `darkSurface` | `#2C2420` | Dark card backgrounds |
 | `darkBorder` | `#3D3530` | Dark borders |
 
+### Feedback Surfaces
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `snackBarSuccess` | `#476A52` | Success feedback fill for completed actions |
+| `snackBarError` | `#8E3E35` | Error feedback fill for validation and submission failures |
+| `snackBarWarning` | `#9A6116` | Warning feedback fill for cautionary or destructive acknowledgements |
+| `snackBarInfo` | `#3F5F78` | Informational feedback fill for neutral notices |
+
 ### Theme-Aware Colours (via `ThemeAwareColors` extension)
 
 Access these on any `BuildContext`:
@@ -124,6 +133,14 @@ Defined in `lib/core/theme/app_theme.dart`:
 - Background matches scaffold
 - No elevation, no scroll-under shadow
 - Icon colour matches text colour
+
+### Snackbar
+- Floating behavior with shared inset padding of 16 px horizontal and 12 px vertical
+- No elevation, 12 px border radius
+- Background color selected by `SnackBarHelper` severity tokens
+- Body text uses `AppTypography.body(size: 13, weight: w400)` with `white` foreground
+- Layout uses a 20 px leading icon and 10 px icon-to-message gap
+- Current snackbar is always replaced before the next one is shown
 
 ### Page Transitions
 - Cupertino-style on both Android and iOS

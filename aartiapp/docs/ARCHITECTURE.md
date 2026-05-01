@@ -42,7 +42,8 @@ lib/
 │   └── utils/
 │       ├── device_info_helper.dart    # Cross-platform device metadata for sync payloads
 │       ├── day_deity_mapper.dart      # Weekday → deity mapping
-│       └── search_engine.dart         # Full-text local search + filter
+│       ├── search_engine.dart         # Full-text local search + filter
+│       └── snackbar_helper.dart       # Centralized semantic snackbar feedback helper
 ├── data/
 │   ├── models/
 │   │   ├── aarti_item.dart            # AartiItem data class
@@ -125,6 +126,10 @@ Temporary focus-mode controls that are shared across those flows live in `shared
 
 Script-language and app-language display rules are centralized in `shared/utils/aarti_language_resolver.dart`. Reading surfaces should resolve titles, lyric lines, derived secondary-script surfaces, and meaning fallbacks through that utility instead of duplicating `scriptMode` or `preferredLanguage` branching locally.
 
+### Shared UI Feedback
+
+Transient in-app feedback is centralized in `core/utils/snackbar_helper.dart`. Feature screens should choose semantic intent (`showSuccess`, `showError`, `showInfo`, `showWarning`) and message timing only; the helper owns severity-to-color/icon mapping, optional action styling, and the replace-current behavior so snackbars do not queue stale messages.
+
 ---
 
 ## 3. State Management
@@ -188,6 +193,7 @@ Content workflows follow the same in-repo contract approach, but they currently 
 - **Audio playback:** `try/catch` around URL loading; silently degrades if network unreachable.
 - **Notifications:** Fail-silent on permission denial or scheduling errors.
 - **Feedback submission:** `FeedbackService` logs failures and rethrows a user-facing exception so the UI can show a snackbar without swallowing the error silently.
+- **UI feedback:** User-facing transient notices should route through `SnackBarHelper`, which replaces the current snackbar before showing the next one.
 - **User sync:** `UserSyncService` treats n8n sync as best-effort telemetry. Non-2xx responses, timeouts, and transport failures are logged through `ActivityLogService` and never block UX.
 - **Content sync:** `ContentSyncService` refreshes festival and aarti datasets independently. Each dataset keeps its last good bundled-or-cached state when the remote request fails, times out, or returns invalid JSON.
 - **JSON parsing:** Null-safe with fallback defaults in `fromJson` factories.
@@ -213,7 +219,7 @@ No declarative router (e.g., `go_router`) is currently used. Consider adopting o
 1. **All colours** come from `lib/core/theme/app_colors.dart`. Never use inline `Color(0xFF...)`.
 2. **All text styles** come from `lib/core/theme/app_typography.dart`. Never use inline `TextStyle(...)`.
 3. **All spacing** values come from `lib/core/theme/app_spacing.dart`. Prefer `AppSpacing.xl` over raw `24`.
-4. **Component themes** are defined in `lib/core/theme/app_theme.dart`.
+4. **Component themes** are defined in `lib/core/theme/app_theme.dart`, including shared snackbar defaults.
 5. **Theme-aware colours** are accessed via the `ThemeAwareColors` extension: `context.surface`, `context.textPrimary`, etc.
 
 See [THEME_AND_DESIGN.md](THEME_AND_DESIGN.md) for the full token catalogue.

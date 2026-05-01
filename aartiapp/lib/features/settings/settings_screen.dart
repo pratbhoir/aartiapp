@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../core/utils/snackbar_helper.dart';
 import '../../shared/utils/aarti_language_resolver.dart';
 import 'feedback_screen.dart';
 import 'dev_tools_screen.dart';
@@ -408,24 +409,18 @@ class SettingsScreen extends ConsumerWidget {
                           }
 
                           final latestState = ref.read(contentSyncProvider);
-                          final message =
-                              latestState.statusMessage ?? 'Content refreshed.';
                           final hasError = latestState.lastError != null;
+                          final message =
+                              latestState.statusMessage ??
+                              (hasError
+                                  ? 'Content refresh failed.'
+                                  : 'Content refreshed.');
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                message,
-                                style: AppTypography.body(
-                                  size: 13,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                              backgroundColor: hasError
-                                  ? AppColors.saffronDark
-                                  : AppColors.ink,
-                            ),
-                          );
+                          if (hasError) {
+                            SnackBarHelper.showError(context, message);
+                          } else {
+                            SnackBarHelper.showSuccess(context, message);
+                          }
                         },
                 ),
               ]),
@@ -615,17 +610,9 @@ class SettingsScreen extends ConsumerWidget {
                             await ActivityLogService.clear();
                             modalSetState(rows.clear);
                             if (!modalContext.mounted) return;
-                            ScaffoldMessenger.of(modalContext).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Activity log cleared',
-                                  style: AppTypography.body(
-                                    size: 13,
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                                backgroundColor: AppColors.ink,
-                              ),
+                            SnackBarHelper.showSuccess(
+                              modalContext,
+                              'Activity log cleared',
                             );
                           },
                         ),

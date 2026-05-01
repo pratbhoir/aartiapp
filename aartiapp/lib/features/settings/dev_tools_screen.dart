@@ -4,6 +4,7 @@ import '../../core/services/activity_log_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../core/utils/snackbar_helper.dart';
 
 /// Development diagnostics hub.
 class DevToolsScreen extends StatelessWidget {
@@ -110,8 +111,9 @@ class DevToolsScreen extends StatelessWidget {
               height: MediaQuery.of(modalContext).size.height * 0.78,
               decoration: BoxDecoration(
                 color: modalContext.surface,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
               ),
               child: Column(
                 children: [
@@ -157,17 +159,9 @@ class DevToolsScreen extends StatelessWidget {
                             await ActivityLogService.clear();
                             modalSetState(rows.clear);
                             if (!modalContext.mounted) return;
-                            ScaffoldMessenger.of(modalContext).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Activity log cleared',
-                                  style: AppTypography.body(
-                                    size: 13,
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                                backgroundColor: AppColors.ink,
-                              ),
+                            SnackBarHelper.showSuccess(
+                              modalContext,
+                              'Activity log cleared',
                             );
                           },
                         ),
@@ -296,7 +290,11 @@ class _ActivityLogEntryTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(_iconForLevel(level), size: 16, color: _colorForLevel(level)),
+              Icon(
+                _iconForLevel(level),
+                size: 16,
+                color: _colorForLevel(level),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(

@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
+import 'app_spacing.dart';
+import 'app_typography.dart';
 
 /// Builds ThemeData for Light, Dark, and System modes.
 class AppTheme {
   AppTheme._();
 
   static ThemeData light() => _build(
-        brightness: Brightness.light,
-        scaffoldBg: AppColors.stone,
-        surface: AppColors.white,
-        primary: AppColors.saffron,
-        onPrimary: AppColors.white,
-        textColor: AppColors.ink,
-        secondaryText: AppColors.ink3,
-        cardBorder: AppColors.stone2,
-      );
+    brightness: Brightness.light,
+    scaffoldBg: AppColors.stone,
+    surface: AppColors.white,
+    primary: AppColors.saffron,
+    onPrimary: AppColors.white,
+    textColor: AppColors.ink,
+    secondaryText: AppColors.ink3,
+    cardBorder: AppColors.stone2,
+  );
 
   static ThemeData dark() => _build(
-        brightness: Brightness.dark,
-        scaffoldBg: AppColors.darkBg,
-        surface: AppColors.darkSurface,
-        primary: AppColors.saffronLight,
-        onPrimary: AppColors.darkBg,
-        textColor: AppColors.white,
-        secondaryText: AppColors.ink3,
-        cardBorder: AppColors.darkBorder,
-      );
+    brightness: Brightness.dark,
+    scaffoldBg: AppColors.darkBg,
+    surface: AppColors.darkSurface,
+    primary: AppColors.saffronLight,
+    onPrimary: AppColors.darkBg,
+    textColor: AppColors.white,
+    secondaryText: AppColors.ink3,
+    cardBorder: AppColors.darkBorder,
+  );
 
   static ThemeData _build({
     required Brightness brightness,
@@ -82,8 +84,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: cardBorder),
@@ -96,6 +100,23 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: primary, width: 1.5),
         ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        elevation: 0,
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.md,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        contentTextStyle: AppTypography.body(
+          size: 13,
+          color: AppColors.white,
+          weight: FontWeight.w400,
+        ),
+        actionTextColor: AppColors.white,
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

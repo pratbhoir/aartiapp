@@ -191,6 +191,7 @@
 | Feedback contact email | Contact email is optional and validated only when the user enters a value. |
 | Feedback failure policy | Feedback submission failures are surfaced to the user; they are not treated as silent telemetry. |
 | Feedback success state | Successful feedback clears the form and replaces it with a dedicated success surface. |
+| Snackbar feedback contract | User-facing transient feedback uses a centralized snackbar helper with semantic success/error/info/warning variants and replace-current behavior. |
 | Secondary script rule | Secondary-script surfaces use the app-language reading script; if that script already matches the selected lyric script, they fall back to Devanagari. |
 | Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines; taps above the highlighted verse move to the previous verse, and taps on or below it move to the next verse. |

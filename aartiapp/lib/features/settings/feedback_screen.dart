@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../core/utils/snackbar_helper.dart';
 import '../../providers/app_providers.dart';
 
 /// Feedback form for devotional content issues, bugs, and suggestions.
@@ -143,15 +144,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
       }
 
       setState(() => _isSubmitting = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            error.message,
-            style: AppTypography.body(size: 13, color: AppColors.white),
-          ),
-          backgroundColor: AppColors.ink,
-        ),
-      );
+      SnackBarHelper.showError(context, error.message);
     }
   }
 

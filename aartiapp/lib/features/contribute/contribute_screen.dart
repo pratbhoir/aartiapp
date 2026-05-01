@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../core/utils/snackbar_helper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../data/models/verse_data.dart';
 import '../../providers/app_providers.dart';
@@ -57,10 +58,12 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     _titleCtrl.text = aarti.title;
     _devTitleCtrl.text = aarti.devanagari;
     _lyricsCtrl.text = aarti.verses.map((v) => v.lines.join('\n')).join('\n\n');
-    _translitCtrl.text =
-        aarti.verses.map((v) => v.transliteration.join('\n')).join('\n\n');
-    _gujaratiCtrl.text =
-        aarti.verses.map((v) => v.gujarati.join('\n')).join('\n\n');
+    _translitCtrl.text = aarti.verses
+        .map((v) => v.transliteration.join('\n'))
+        .join('\n\n');
+    _gujaratiCtrl.text = aarti.verses
+        .map((v) => v.gujarati.join('\n'))
+        .join('\n\n');
     _festivalTagsCtrl.text = aarti.festivalTags.join(', ');
     _editingId = aarti.id;
     setState(() => _showForm = true);
@@ -76,14 +79,9 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     final festivalTagsRaw = _festivalTagsCtrl.text.trim();
 
     if (title.isEmpty || deity.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please fill in at least Deity and Title.'),
-          backgroundColor: Colors.red.shade700,
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
+      SnackBarHelper.showError(
+        context,
+        'Please fill in at least Deity and Title.',
       );
       return;
     }
@@ -91,42 +89,48 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     // Build verses from lyrics (split by double newline for verse blocks)
     final verseBlocks = lyrics.isNotEmpty
         ? lyrics
-            .split(RegExp(r'\n\s*\n'))
-            .where((b) => b.trim().isNotEmpty)
-            .toList()
+              .split(RegExp(r'\n\s*\n'))
+              .where((b) => b.trim().isNotEmpty)
+              .toList()
         : <String>[];
     final translitBlocks = translit.isNotEmpty
         ? translit
-            .split(RegExp(r'\n\s*\n'))
-            .where((b) => b.trim().isNotEmpty)
-            .toList()
+              .split(RegExp(r'\n\s*\n'))
+              .where((b) => b.trim().isNotEmpty)
+              .toList()
         : <String>[];
     final gujaratiBlocks = gujarati.isNotEmpty
         ? gujarati
-            .split(RegExp(r'\n\s*\n'))
-            .where((b) => b.trim().isNotEmpty)
-            .toList()
+              .split(RegExp(r'\n\s*\n'))
+              .where((b) => b.trim().isNotEmpty)
+              .toList()
         : <String>[];
 
     // Parse festival tags (comma separated)
     final festivalTags = festivalTagsRaw.isNotEmpty
-        ? festivalTagsRaw.split(',').map((t) => t.trim()).where((t) => t.isNotEmpty).toList()
+        ? festivalTagsRaw
+              .split(',')
+              .map((t) => t.trim())
+              .where((t) => t.isNotEmpty)
+              .toList()
         : <String>[];
 
     final verses = verseBlocks.asMap().entries.map((e) {
-      final lines =
-          e.value.split('\n').where((l) => l.trim().isNotEmpty).toList();
+      final lines = e.value
+          .split('\n')
+          .where((l) => l.trim().isNotEmpty)
+          .toList();
       final tLines = (e.key < translitBlocks.length)
           ? translitBlocks[e.key]
-              .split('\n')
-              .where((l) => l.trim().isNotEmpty)
-              .toList()
+                .split('\n')
+                .where((l) => l.trim().isNotEmpty)
+                .toList()
           : <String>[];
       final gLines = (e.key < gujaratiBlocks.length)
           ? gujaratiBlocks[e.key]
-              .split('\n')
-              .where((l) => l.trim().isNotEmpty)
-              .toList()
+                .split('\n')
+                .where((l) => l.trim().isNotEmpty)
+                .toList()
           : <String>[];
       return VerseData(
         label: e.key == 0 ? 'Dhruva Pad' : 'Verse ${e.key}',
@@ -157,16 +161,11 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     setState(() => _showForm = false);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_editingId != null
-              ? 'Aarti updated! 🙏'
-              : 'Aarti saved to your collection! 🙏'),
-          backgroundColor: AppColors.ink,
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
+      SnackBarHelper.showSuccess(
+        context,
+        _editingId != null
+            ? 'Aarti updated! 🙏'
+            : 'Aarti saved to your collection! 🙏',
       );
     }
   }
@@ -188,234 +187,261 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-          // Header
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('MY COLLECTION',
-                      style:
-                          AppTypography.label(size: 10, color: AppColors.ink3)),
-                  const SizedBox(height: 6),
-                  RichText(
-                    text: TextSpan(
-                      style: AppTypography.displayLarge(context).copyWith(
-                        fontSize: 34,
-                      ),
-                      children: const [
-                        TextSpan(text: 'Personal '),
-                        TextSpan(
-                          text: 'Collection',
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: AppColors.saffron,
+                // Header
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'MY COLLECTION',
+                          style: AppTypography.label(
+                            size: 10,
+                            color: AppColors.ink3,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        RichText(
+                          text: TextSpan(
+                            style: AppTypography.displayLarge(
+                              context,
+                            ).copyWith(fontSize: 34),
+                            children: const [
+                              TextSpan(text: 'Personal '),
+                              TextSpan(
+                                text: 'Collection',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: AppColors.saffron,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${savedAartis.length} saved · Private to you',
+                          style: AppTypography.body(
+                            size: 13,
+                            color: AppColors.ink3,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${savedAartis.length} saved · Private to you',
-                    style:
-                        AppTypography.body(size: 13, color: AppColors.ink3),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Add button / toggle form
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  if (_showForm) {
-                    _clearForm();
-                  }
-                  setState(() => _showForm = !_showForm);
-                },
-                icon: Icon(
-                  _showForm ? Icons.close : Icons.add_rounded,
-                  size: 18,
                 ),
-                label: Text(_showForm
-                    ? 'Cancel'
-                    : (_editingId != null ? 'Editing Aarti' : 'Add New Aarti')),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.saffron,
-                  side: const BorderSide(color: AppColors.saffron),
-                  minimumSize: const Size(double.infinity, 48),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
-                ),
-              ),
-            ),
-          ),
 
-          // Form (expandable)
-          if (_showForm)
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  _FormField(
-                    label: 'Deity Name',
-                    hint: 'e.g. Ganesha, Shiva, Lakshmi…',
-                    controller: _deityCtrl,
-                  ),
-                  const SizedBox(height: 14),
-                  _FormField(
-                    label: 'Aarti Title (English)',
-                    hint: 'e.g. Jai Ganesh Deva',
-                    controller: _titleCtrl,
-                  ),
-                  const SizedBox(height: 14),
-                  _FormField(
-                    label: 'Title in Devanagari',
-                    hint: 'e.g. जय गणेश देव',
-                    controller: _devTitleCtrl,
-                  ),
-                  const SizedBox(height: 14),
-                  _FormField(
-                    label: 'Lyrics (Devanagari)',
-                    hint:
-                        'ॐ जय जगदीश हरे…\n\n(separate verses with a blank line)',
-                    maxLines: 6,
-                    controller: _lyricsCtrl,
-                  ),
-                  const SizedBox(height: 14),
-                  _FormField(
-                    label: 'Transliteration (Roman)',
-                    hint:
-                        'Om Jai Jagdish Hare…\n\n(match verse structure above)',
-                    maxLines: 6,
-                    controller: _translitCtrl,
-                  ),
-                  const SizedBox(height: 14),
-                  _FormField(
-                    label: 'Gujarati Script (Optional)',
-                    hint:
-                        'ૐ જય જગદીશ હરે…\n\n(match verse structure above)',
-                    maxLines: 6,
-                    controller: _gujaratiCtrl,
-                  ),
-                  const SizedBox(height: 14),
-                  _FormField(
-                    label: 'Festival Tags (comma separated)',
-                    hint: 'e.g. Diwali, Navratri, Ganesh Chaturthi',
-                    controller: _festivalTagsCtrl,
-                  ),
-                  const SizedBox(height: 18),
-                  ElevatedButton.icon(
-                    onPressed: _saveAarti,
-                    icon: Icon(
-                        _editingId != null
-                            ? Icons.check_outlined
-                            : Icons.save_outlined,
-                        size: 16),
-                    label: Text(_editingId != null
-                        ? 'Update Aarti'
-                        : 'Save to My Collection'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.ink,
-                      foregroundColor: AppColors.white,
-                      minimumSize: const Size(double.infinity, 52),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14)),
-                      textStyle: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w400),
-                      elevation: 0,
+                // Add button / toggle form
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        if (_showForm) {
+                          _clearForm();
+                        }
+                        setState(() => _showForm = !_showForm);
+                      },
+                      icon: Icon(
+                        _showForm ? Icons.close : Icons.add_rounded,
+                        size: 18,
+                      ),
+                      label: Text(
+                        _showForm
+                            ? 'Cancel'
+                            : (_editingId != null
+                                  ? 'Editing Aarti'
+                                  : 'Add New Aarti'),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.saffron,
+                        side: const BorderSide(color: AppColors.saffron),
+                        minimumSize: const Size(double.infinity, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
                     ),
                   ),
-                ]),
-              ),
-            ),
-
-          // Saved Collection List
-          if (savedAartis.isEmpty && !_showForm)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(48),
-                child: Column(
-                  children: [
-                    Icon(Icons.library_music_outlined,
-                        size: 48,
-                        color: AppColors.ink3.withValues(alpha: 0.4)),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No saved Aartis yet',
-                      style: AppTypography.serifBody(
-                          size: 18, color: context.textPrimary),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Tap "Add New Aarti" to create your\nfirst personal prayer.',
-                      textAlign: TextAlign.center,
-                      style: AppTypography.body(
-                          size: 13, color: AppColors.ink3),
-                    ),
-                  ],
                 ),
-              ),
-            ),
 
-          if (savedAartis.isNotEmpty) ...[
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
-                child: Text('SAVED AARTIS',
-                    style:
-                        AppTypography.label(size: 10, color: AppColors.ink3)),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 60),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (ctx, i) {
-                    final aarti = savedAartis[i];
-                    final isInPuja = ref.watch(
-                        pujaOrderProvider.notifier).isInPuja(aarti.id);
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: _SavedAartiTile(
-                        aarti: aarti,
-                        isInPuja: isInPuja,
-                        onTap: () => Navigator.push(
-                          ctx,
-                          MaterialPageRoute(
-                            builder: (_) => AartiDetailScreen(aarti: aarti),
+                // Form (expandable)
+                if (_showForm)
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        _FormField(
+                          label: 'Deity Name',
+                          hint: 'e.g. Ganesha, Shiva, Lakshmi…',
+                          controller: _deityCtrl,
+                        ),
+                        const SizedBox(height: 14),
+                        _FormField(
+                          label: 'Aarti Title (English)',
+                          hint: 'e.g. Jai Ganesh Deva',
+                          controller: _titleCtrl,
+                        ),
+                        const SizedBox(height: 14),
+                        _FormField(
+                          label: 'Title in Devanagari',
+                          hint: 'e.g. जय गणेश देव',
+                          controller: _devTitleCtrl,
+                        ),
+                        const SizedBox(height: 14),
+                        _FormField(
+                          label: 'Lyrics (Devanagari)',
+                          hint:
+                              'ॐ जय जगदीश हरे…\n\n(separate verses with a blank line)',
+                          maxLines: 6,
+                          controller: _lyricsCtrl,
+                        ),
+                        const SizedBox(height: 14),
+                        _FormField(
+                          label: 'Transliteration (Roman)',
+                          hint:
+                              'Om Jai Jagdish Hare…\n\n(match verse structure above)',
+                          maxLines: 6,
+                          controller: _translitCtrl,
+                        ),
+                        const SizedBox(height: 14),
+                        _FormField(
+                          label: 'Gujarati Script (Optional)',
+                          hint:
+                              'ૐ જય જગદીશ હરે…\n\n(match verse structure above)',
+                          maxLines: 6,
+                          controller: _gujaratiCtrl,
+                        ),
+                        const SizedBox(height: 14),
+                        _FormField(
+                          label: 'Festival Tags (comma separated)',
+                          hint: 'e.g. Diwali, Navratri, Ganesh Chaturthi',
+                          controller: _festivalTagsCtrl,
+                        ),
+                        const SizedBox(height: 18),
+                        ElevatedButton.icon(
+                          onPressed: _saveAarti,
+                          icon: Icon(
+                            _editingId != null
+                                ? Icons.check_outlined
+                                : Icons.save_outlined,
+                            size: 16,
+                          ),
+                          label: Text(
+                            _editingId != null
+                                ? 'Update Aarti'
+                                : 'Save to My Collection',
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.ink,
+                            foregroundColor: AppColors.white,
+                            minimumSize: const Size(double.infinity, 52),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            elevation: 0,
                           ),
                         ),
-                        onEdit: () => _populateFormForEdit(aarti),
-                        onTogglePuja: () {
-                          if (isInPuja) {
-                            ref.read(pujaOrderProvider.notifier)
-                                .removeAarti(aarti.id);
-                          } else {
-                            ref.read(pujaOrderProvider.notifier)
-                                .addAarti(aarti.id);
-                          }
-                        },
-                        onDelete: () {
-                          ref
-                              .read(userAartiProvider.notifier)
-                              .delete(aarti.id);
-                        },
+                      ]),
+                    ),
+                  ),
+
+                // Saved Collection List
+                if (savedAartis.isEmpty && !_showForm)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(48),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.library_music_outlined,
+                            size: 48,
+                            color: AppColors.ink3.withValues(alpha: 0.4),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No saved Aartis yet',
+                            style: AppTypography.serifBody(
+                              size: 18,
+                              color: context.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Tap "Add New Aarti" to create your\nfirst personal prayer.',
+                            textAlign: TextAlign.center,
+                            style: AppTypography.body(
+                              size: 13,
+                              color: AppColors.ink3,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                  childCount: savedAartis.length,
-                ),
-              ),
+                    ),
+                  ),
+
+                if (savedAartis.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
+                      child: Text(
+                        'SAVED AARTIS',
+                        style: AppTypography.label(
+                          size: 10,
+                          color: AppColors.ink3,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 60),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate((ctx, i) {
+                        final aarti = savedAartis[i];
+                        final isInPuja = ref
+                            .watch(pujaOrderProvider.notifier)
+                            .isInPuja(aarti.id);
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: _SavedAartiTile(
+                            aarti: aarti,
+                            isInPuja: isInPuja,
+                            onTap: () => Navigator.push(
+                              ctx,
+                              MaterialPageRoute(
+                                builder: (_) => AartiDetailScreen(aarti: aarti),
+                              ),
+                            ),
+                            onEdit: () => _populateFormForEdit(aarti),
+                            onTogglePuja: () {
+                              if (isInPuja) {
+                                ref
+                                    .read(pujaOrderProvider.notifier)
+                                    .removeAarti(aarti.id);
+                              } else {
+                                ref
+                                    .read(pujaOrderProvider.notifier)
+                                    .addAarti(aarti.id);
+                              }
+                            },
+                            onDelete: () {
+                              ref
+                                  .read(userAartiProvider.notifier)
+                                  .delete(aarti.id);
+                            },
+                          ),
+                        );
+                      }, childCount: savedAartis.length),
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
-        ],
-      ),
           ),
         ],
       ),
@@ -460,26 +486,41 @@ class _SavedAartiTile extends StatelessWidget {
                 color: AppColors.saffronGlow,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.music_note_outlined,
-                  size: 18, color: AppColors.saffron),
+              child: const Icon(
+                Icons.music_note_outlined,
+                size: 18,
+                color: AppColors.saffron,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(aarti.deity.toUpperCase(),
-                      style:
-                          AppTypography.label(size: 9, color: AppColors.saffron)),
+                  Text(
+                    aarti.deity.toUpperCase(),
+                    style: AppTypography.label(
+                      size: 9,
+                      color: AppColors.saffron,
+                    ),
+                  ),
                   const SizedBox(height: 1),
-                  Text(aarti.title,
-                      style: AppTypography.serifBody(
-                          size: 15, color: context.textPrimary),
-                      overflow: TextOverflow.ellipsis),
-                  Text(aarti.devanagari,
-                      style:
-                          AppTypography.devanagari(size: 11, color: AppColors.ink3),
-                      overflow: TextOverflow.ellipsis),
+                  Text(
+                    aarti.title,
+                    style: AppTypography.serifBody(
+                      size: 15,
+                      color: context.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    aarti.devanagari,
+                    style: AppTypography.devanagari(
+                      size: 11,
+                      color: AppColors.ink3,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   if (aarti.festivalTags.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -487,26 +528,35 @@ class _SavedAartiTile extends StatelessWidget {
                         spacing: 4,
                         children: aarti.festivalTags
                             .take(3)
-                            .map((t) => Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.saffronGlow,
-                                    borderRadius: BorderRadius.circular(4),
+                            .map(
+                              (t) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.saffronGlow,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  t,
+                                  style: AppTypography.body(
+                                    size: 9,
+                                    color: AppColors.saffronDark,
                                   ),
-                                  child: Text(t,
-                                      style: AppTypography.body(
-                                          size: 9,
-                                          color: AppColors.saffronDark)),
-                                ))
+                                ),
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
                 ],
               ),
             ),
-            Text(aarti.versesLabel,
-                style: AppTypography.body(size: 11, color: AppColors.ink3)),
+            Text(
+              aarti.versesLabel,
+              style: AppTypography.body(size: 11, color: AppColors.ink3),
+            ),
             const SizedBox(width: 6),
             GestureDetector(
               onTap: onEdit,
@@ -517,8 +567,11 @@ class _SavedAartiTile extends StatelessWidget {
                   color: context.border,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.edit_outlined,
-                    size: 14, color: AppColors.ink3),
+                child: const Icon(
+                  Icons.edit_outlined,
+                  size: 14,
+                  color: AppColors.ink3,
+                ),
               ),
             ),
             const SizedBox(width: 6),
@@ -532,9 +585,7 @@ class _SavedAartiTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
-                  isInPuja
-                      ? Icons.auto_awesome
-                      : Icons.auto_awesome_outlined,
+                  isInPuja ? Icons.auto_awesome : Icons.auto_awesome_outlined,
                   size: 14,
                   color: isInPuja ? AppColors.saffron : AppColors.ink3,
                 ),
@@ -550,8 +601,11 @@ class _SavedAartiTile extends StatelessWidget {
                   color: context.border,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.delete_outline,
-                    size: 14, color: AppColors.ink3),
+                child: const Icon(
+                  Icons.delete_outline,
+                  size: 14,
+                  color: AppColors.ink3,
+                ),
               ),
             ),
           ],
@@ -579,8 +633,10 @@ class _FormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label.toUpperCase(),
-            style: AppTypography.label(size: 10, color: AppColors.ink3)),
+        Text(
+          label.toUpperCase(),
+          style: AppTypography.label(size: 10, color: AppColors.ink3),
+        ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -591,8 +647,10 @@ class _FormField extends StatelessWidget {
             hintStyle: AppTypography.body(size: 14, color: AppColors.ink3),
             filled: true,
             fillColor: context.surface,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: context.borderSubtle),
@@ -603,8 +661,10 @@ class _FormField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-                  const BorderSide(color: AppColors.saffron, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.saffron,
+                width: 1.5,
+              ),
             ),
           ),
         ),
