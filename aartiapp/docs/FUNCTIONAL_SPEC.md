@@ -33,6 +33,7 @@
 | Daily notification reminder | ✅ Done | v1.5 | `NotificationService` |
 | Lightweight user profile/settings sync | ✅ Done | v2.5 | `UserSyncService` |
 | In-app feedback submission | ✅ Done | v2.5 | `FeedbackScreen` |
+| Remote content cache sync (n8n-backed festivals + aartis) | ✅ Done | v2.6 | `SettingsScreen`, app bootstrap |
 | Festival banner (bundled calendar 2026–2028) | ✅ Done | v1.5 | `FestiveBanner` |
 | Festival tag filtering | ✅ Done | v1.5 | `FestivalFilterChips` |
 | "Next" FAB for My Puja sequence (90% audio or scroll-to-bottom) | ✅ Done | v2.2 | `AartiDetailScreen` |
@@ -126,7 +127,8 @@
 8. User name edit.
 9. Support action opens a dedicated feedback form for devotional corrections, bugs, feature requests, and general feedback.
 10. Diagnostics actions: view Activity Log, share log export, and clear log.
-11. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
+11. Content tile shows content counts/source metadata and triggers an immediate content refresh when tapped.
+12. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
 
 ### 2.7 User Sync
 
@@ -150,6 +152,16 @@
 9. On success, the screen shows a dedicated success state rather than only a snackbar.
 10. On failure, the screen shows an error snackbar and keeps the form contents intact for retry.
 
+### 2.9 Content Refresh
+
+1. App startup restores devotional content from local cache when available, otherwise bundled assets are used.
+2. After startup, the app checks whether festival and aarti content are stale using a 24-hour refresh window.
+3. When the app resumes from the background, it repeats the same stale check.
+4. If either dataset is stale, the app fetches the corresponding n8n GET endpoint and replaces only the successful datasets in memory.
+5. Successful responses are cached locally as raw JSON and reused on the next launch.
+6. User can open Settings and tap the Content tile to force an immediate refresh regardless of the stale window.
+7. The Content tile shows counts, whether the app is using bundled or cached/remote data, and the last refresh time when one exists.
+
 ---
 
 ## 3. Business Rules
@@ -172,6 +184,9 @@
 | User sync debounce | Settings-driven sync uses a trailing debounce of 5 seconds. |
 | User sync startup refresh | Returning users trigger a forced sync on app launch after onboarding is already complete. |
 | User sync privacy boundary | Sync exports lightweight profile and setting state only; it excludes aarti content and personal devotional collections. |
+| Content refresh cadence | Festival and aarti content refresh on startup or resume only when the last successful dataset refresh is at least 24 hours old, unless the user manually forces refresh from Settings. |
+| Content refresh scope | Festival and aarti payloads refresh independently; one dataset can succeed and replace local content even when the other request fails. |
+| Content cache fallback | The app prefers last-good cached content at startup and falls back to bundled assets when cache is missing or invalid. |
 | Feedback categories | Feedback categories are devotional-content aware and include Incorrect Lyrics, Translation Issue, Feature Request, Bug Report, and General Feedback. |
 | Feedback contact email | Contact email is optional and validated only when the user enters a value. |
 | Feedback failure policy | Feedback submission failures are surfaced to the user; they are not treated as silent telemetry. |
@@ -185,7 +200,7 @@
 | Puja Focus Session progression | In Puja Focus Session, reaching the first verse can offer a `Previous Aarti` handoff when a prior puja item exists, and reaching the final verse shows `Next Aarti` for intermediate items or `Complete Session` for the final puja item. |
 | Puja Focus Session settings | Active script surface and text size are local to the active Focus Session only. Each new Focus Session starts from the current main app settings, the Reading Surface row labels each button with the resolved language name, and the secondary-script surface continues to follow the same derived-script fallback rule. |
 | Repeat mode | Loops current Aarti's audio indefinitely until toggled off. |
-| Offline | All content is bundled — the app works fully offline. |
+| Offline | The app works offline with bundled content and last-good cached remote content when available. |
 | Theme-aware chrome | Settings controls, My Puja list controls, and Home recently played cards resolve neutral fills, borders, and captions from the current theme instead of fixed light-only tokens. |
 
 ---
@@ -197,6 +212,8 @@
 | No aartis match the active Discover filter | Empty state shown with message |
 | Audio URL unreachable | Fail silently — player shows but audio doesn't play |
 | Festival calendar exhausted (after 2028) | Festival features degrade gracefully — no banner shown |
+| Festival or aarti content webhook unavailable | The failing dataset keeps the last good cached or bundled content while the successful dataset can still update |
+| Cached content JSON becomes invalid | The app falls back to bundled assets for that dataset and logs the failure locally |
 | Feedback webhook unavailable or returns non-2xx | Form remains visible, snackbar explains the failure, and the user can retry without retyping from scratch |
 | Invalid contact email entered in feedback form | Submission is blocked until the email is valid or cleared |
 | User hasn't completed onboarding | Redirect to `OnboardingScreen` before `HomeShell` |

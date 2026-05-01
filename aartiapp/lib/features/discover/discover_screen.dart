@@ -40,6 +40,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(contentRevisionProvider);
     ref.listen<DiscoverFilterState>(discoverFilterProvider, (_, next) {
       if (_searchController.text == next.searchQuery) {
         return;

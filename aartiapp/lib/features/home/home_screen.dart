@@ -28,6 +28,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(contentRevisionProvider);
     final userName = ref.watch(userNameProvider);
     final userAartis = ref.watch(userAartiProvider);
     final recentIds = ref.watch(recentlyPlayedProvider);

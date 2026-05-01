@@ -17,6 +17,10 @@ class AartiRepository {
   int _version = 0;
   int get version => _version;
 
+  /// Origin of the currently loaded catalog.
+  String _dataSource = 'bundled';
+  String get dataSource => _dataSource;
+
   /// All aartis loaded from the catalog.
   List<AartiItem> _aartis = const [];
   List<AartiItem> get aartis => _aartis;
@@ -35,31 +39,36 @@ class AartiRepository {
   /// Safe to call multiple times — subsequent calls are no-ops.
   Future<void> load() async {
     if (_loaded) return;
-    final jsonStr =
-        await rootBundle.loadString('assets/data/aarti_catalog.json');
-    loadFromJsonString(jsonStr);
+    final jsonStr = await rootBundle.loadString(
+      'assets/data/aarti_catalog.json',
+    );
+    loadFromJsonString(jsonStr, source: 'bundled');
   }
 
   /// Parse raw JSON string into in-memory models.
   /// Exposed so tests / API layers can feed data without rootBundle.
-  void loadFromJsonString(String jsonStr) {
-    final Map<String, dynamic> root = json.decode(jsonStr) as Map<String, dynamic>;
-    _version = (root['version'] as int?) ?? 1;
+  void loadFromJsonString(String jsonStr, {String source = 'runtime'}) {
+    final Map<String, dynamic> root =
+        json.decode(jsonStr) as Map<String, dynamic>;
 
-    _deities = ((root['deities'] as List<dynamic>?) ?? [])
-        .map((d) {
-          final m = d as Map<String, dynamic>;
-          return <String, String>{
-            'emoji': m['emoji'] as String,
-            'label': m['label'] as String,
-          };
-        })
-        .toList();
+    final version = (root['version'] as int?) ?? 1;
 
-    _aartis = ((root['aartis'] as List<dynamic>?) ?? [])
+    final deities = ((root['deities'] as List<dynamic>?) ?? []).map((d) {
+      final m = d as Map<String, dynamic>;
+      return <String, String>{
+        'emoji': m['emoji'] as String,
+        'label': m['label'] as String,
+      };
+    }).toList();
+
+    final aartis = ((root['aartis'] as List<dynamic>?) ?? [])
         .map((a) => AartiItem.fromJson(a as Map<String, dynamic>))
         .toList();
 
+    _version = version;
+    _deities = deities;
+    _aartis = aartis;
+    _dataSource = source;
     _loaded = true;
   }
 
@@ -80,8 +89,10 @@ class AartiRepository {
   }
 
   /// Unique deity labels (excluding "All").
-  List<String> get deityLabels =>
-      _deities.where((d) => d['label'] != 'All').map((d) => d['label']!).toList();
+  List<String> get deityLabels => _deities
+      .where((d) => d['label'] != 'All')
+      .map((d) => d['label']!)
+      .toList();
 
   /// Get all aartis matching a festival tag (e.g. "Navratri").
   List<AartiItem> getAartisForFestival(String festivalTag) {

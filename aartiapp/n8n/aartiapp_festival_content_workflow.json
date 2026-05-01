@@ -1,0 +1,155 @@
+{
+  "name": "Aarti Sangrah — Festival Content Reader",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Aarti Sangrah — Festival Content Reader\n\n**Flow**\n`Flutter App` → GET `Webhook` → `Read Local Festival JSON` → `Respond 200 OK`\n\n**To activate after import:**\n1. Open **Read Local Festival JSON**\n2. Replace `D:\\\\AartiApp\\\\content\\\\hindu_calendar_2026_2028.json` with the actual local file path\n3. Keep the response payload identical to the app asset shape: top-level `version` + `festivals`\n4. Toggle the workflow **Active**\n5. Copy the production webhook URL and pass it into the app using `--dart-define=AARTI_FESTIVAL_CONTENT_WEBHOOK_URL=<url>`\n\n**Notes:**\n- This workflow intentionally reads from a local file for now; there is no DataTable or Postgres storage in this version\n- The Flutter app caches the response locally and refreshes it on startup/resume after 24 hours or when the user taps Settings → Content\n- If your n8n Code node cannot use `require('fs')`, replace it with a file-read node that outputs the same parsed JSON object",
+        "height": 360,
+        "width": 760,
+        "color": 4
+      },
+      "id": "f77a5a89-2e4e-4e85-8c1d-d0ed39d6dc01",
+      "name": "📋 Setup Guide",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "content": "```javascript\nconst fs = require('fs');\nconst filePath = 'D:\\\\AartiApp\\\\content\\\\hindu_calendar_2026_2028.json';\nconst raw = fs.readFileSync(filePath, 'utf8');\nconst payload = JSON.parse(raw);\nreturn [{ json: payload }];\n```",
+        "height": 220,
+        "width": 520,
+        "color": 5
+      },
+      "id": "5d1ee79b-dfa0-4b83-aad0-83f29af70682",
+      "name": "🗂 Local File Path",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        816,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "aartiapp-festival-content",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "f9af7e11-a18b-4e9d-8732-8eeb0cbe9d49",
+      "name": "GET /aartiapp-festival-content",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        352
+      ],
+      "webhookId": "aartiapp-festival-content-00000000"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const fs = require('fs');\nconst filePath = 'D:\\\\AartiApp\\\\content\\\\hindu_calendar_2026_2028.json';\nconst raw = fs.readFileSync(filePath, 'utf8');\nconst payload = JSON.parse(raw);\nreturn [{ json: payload }];"
+      },
+      "id": "ca29e516-5666-46cf-b5e5-fc1f0c17e1c0",
+      "name": "Read Local Festival JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "8b9588e3-a0a1-4b39-b20f-bd9d8deea021",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        352
+      ]
+    }
+  ],
+  "pinData": {
+    "GET /aartiapp-festival-content": [
+      {
+        "json": {
+          "query": {},
+          "params": {},
+          "headers": {},
+          "webhookUrl": "https://example.com/webhook/aartiapp-festival-content",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "GET /aartiapp-festival-content": {
+      "main": [
+        [
+          {
+            "node": "Read Local Festival JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Local Festival JSON": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "14cb13b7-bc31-41d0-8ad4-68f7994d5ef7",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "aartiappFestivalContentWorkflow",
+  "tags": [
+    {
+      "name": "content"
+    },
+    {
+      "name": "festivals"
+    },
+    {
+      "name": "aartiapp"
+    }
+  ]
+}

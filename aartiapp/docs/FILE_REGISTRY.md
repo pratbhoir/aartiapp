@@ -9,8 +9,8 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/main.dart` | App entry point — initialises Activity Log, Hive, repositories, notifications, global error hooks, and runs `ProviderScope` | 2026-04-26 |
-| `lib/app.dart` | Root `AartiSangrahApp` — configures `MaterialApp`, the onboarding gate, and returning-user startup sync | 2026-05-01 |
+| `lib/main.dart` | App entry point — initialises Activity Log, Hive, cache-first devotional content bootstrap, notifications, repositories, global error hooks, and runs `ProviderScope` | 2026-05-01 |
+| `lib/app.dart` | Root `AartiSangrahApp` — configures `MaterialApp`, the onboarding gate, returning-user startup sync, and lifecycle-driven content refresh checks | 2026-05-01 |
 
 ## Core / Theme
 
@@ -27,7 +27,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/constants/app_constants.dart` | App-level constants for cross-cutting services (including Activity Log retention + file name) | 2026-04-26 |
-| `lib/core/constants/app_sync_config.dart` | Compile-time config for user sync and feedback webhook URLs plus request timing values | 2026-05-01 |
+| `lib/core/constants/app_sync_config.dart` | Compile-time config for user sync, feedback, and content refresh webhook URLs plus request timing values | 2026-05-01 |
 | `lib/core/constants/haptics.dart` | `AppHaptics` — scoped haptic feedback definitions (light, medium, selection, completion) | 2026-04-20 |
 
 ## Core / Services
@@ -35,6 +35,8 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/services/activity_log_service.dart` | `ActivityLogService` static utility — JSONL-backed runtime log with init/write/read/clear/share APIs | 2026-04-26 |
+| `lib/core/services/content_cache_service.dart` | `ContentCacheService` — application-documents JSON cache for the aarti catalog and festival calendar payloads | 2026-05-01 |
+| `lib/core/services/content_sync_service.dart` | `ContentSyncService` — n8n-backed refresh service for festival and aarti content with per-dataset caching, timestamps, and partial-failure tolerance | 2026-05-01 |
 | `lib/core/services/feedback_service.dart` | `FeedbackService` — user-visible feedback submission service that posts devotional issues and suggestions to n8n with device and identity context | 2026-05-01 |
 | `lib/core/services/notification_service.dart` | `NotificationService` singleton — daily puja reminder scheduling via `flutter_local_notifications` | 2026-04-20 |
 | `lib/core/services/user_sync_service.dart` | `UserSyncService` — debounced best-effort sync of lightweight user profile and settings data to a configured n8n webhook | 2026-05-01 |
@@ -60,9 +62,9 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/data/repositories/aarti_repository.dart` | `AartiRepository` singleton — loads bundled `aarti_catalog.json`, provides query accessors | 2026-04-20 |
+| `lib/data/repositories/aarti_repository.dart` | `AartiRepository` singleton — loads bundled, cached, or remote `aarti_catalog.json`, tracks content version/source, and provides query accessors | 2026-05-01 |
 | `lib/data/repositories/bookmark_repository.dart` | `BookmarkRepository` — Hive-backed bookmark toggle/query | 2026-04-20 |
-| `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled Hindu calendar JSON (2026–2028) and returns up to 5 Discover festival tags in nearest current/upcoming order | 2026-04-27 |
+| `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled, cached, or remote Hindu calendar JSON (2026–2028), tracks content version/source, and returns up to 5 Discover festival tags in nearest current/upcoming order | 2026-05-01 |
 | `lib/data/repositories/puja_repository.dart` | `PujaRepository` — Hive-backed ordered puja list persistence | 2026-04-20 |
 | `lib/data/repositories/recently_played_repository.dart` | `RecentlyPlayedRepository` — Hive-backed recently-viewed aarti tracking (max 20) | 2026-04-20 |
 | `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, language, notifications, onboarding completion, and stable sync identity metadata | 2026-05-01 |
@@ -72,7 +74,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, bookmarks, puja order, Discover filters, provider-owned user sync triggers, and the feedback service | 2026-05-01 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, bookmarks, puja order, Discover filters, provider-owned user sync triggers, feedback service, and content sync state/revision invalidation | 2026-05-01 |
 
 ## Navigation
 
@@ -158,7 +160,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, feedback entrypoint, diagnostics entries, and theme-aware control chrome | 2026-05-01 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, manual content refresh tile, feedback entrypoint, diagnostics entries, and theme-aware control chrome | 2026-05-01 |
 | `lib/features/settings/feedback_screen.dart` | `FeedbackScreen` — devotional feedback form with efficient stacked category chips, softer placeholder styling, a large message field, keyboard-aware page scrolling, validation, submit loading state, and dedicated success state | 2026-05-01 |
 | `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
 
@@ -175,6 +177,8 @@
 |-----------|---------|--------------|
 | `n8n/aartiapp_user_sync_workflow.json` | Import-ready n8n workflow for AartiApp user profile/settings sync with DataTable primary storage and optional Postgres sink | 2026-05-01 |
 | `n8n/aartiapp_feedback_workflow.json` | Import-ready n8n workflow for AartiApp feedback submission with DataTable primary storage and optional Postgres sink | 2026-05-01 |
+| `n8n/aartiapp_festival_content_workflow.json` | Import-ready n8n workflow serving the festival calendar JSON directly from a local file over a GET webhook | 2026-05-01 |
+| `n8n/aartiapp_aarti_content_workflow.json` | Import-ready n8n workflow serving the aarti catalog JSON directly from a local file over a GET webhook | 2026-05-01 |
 
 ## Database
 
@@ -199,6 +203,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
+| `test/content_sync_service_test.dart` | Focused service tests for content refresh, stale-skip behavior, cache writes, and per-dataset partial success | 2026-05-01 |
 | `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
 | `test/feedback_service_test.dart` | Focused service tests for feedback payload generation, identity backfill, and failure semantics | 2026-05-01 |
 | `test/feedback_screen_test.dart` | Focused widget tests for feedback form validation and success-state behavior | 2026-05-01 |

@@ -6,7 +6,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
-import '../../data/repositories/aarti_repository.dart';
 import '../../shared/utils/aarti_language_resolver.dart';
 import 'feedback_screen.dart';
 import 'dev_tools_screen.dart';
@@ -24,6 +23,7 @@ class SettingsScreen extends ConsumerWidget {
     final scriptMode = ref.watch(scriptModeProvider);
     final appLanguage = ref.watch(preferredLanguageProvider);
     final userName = ref.watch(userNameProvider);
+    final contentSync = ref.watch(contentSyncProvider);
     final secondaryScriptMode =
         AartiLanguageResolver.resolveSecondaryScriptMode(
           scriptMode: scriptMode,
@@ -380,8 +380,53 @@ class SettingsScreen extends ConsumerWidget {
                 _SettingsTile(
                   icon: Icons.storage_outlined,
                   title: 'Content',
-                  subtitle:
-                      '${AartiRepository.instance.aartis.length} Aartis · All bundled offline',
+                  subtitle: _contentSubtitle(contentSync),
+                  trailing: contentSync.isRefreshing
+                      ? SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              _accentTextColor(context),
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          Icons.sync_rounded,
+                          size: 23,
+                          color: AppColors.saffronDark,
+                        ),
+                  onTap: contentSync.isRefreshing
+                      ? null
+                      : () async {
+                          await ref
+                              .read(contentSyncProvider.notifier)
+                              .refreshNow();
+                          if (!context.mounted) {
+                            return;
+                          }
+
+                          final latestState = ref.read(contentSyncProvider);
+                          final message =
+                              latestState.statusMessage ?? 'Content refreshed.';
+                          final hasError = latestState.lastError != null;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                message,
+                                style: AppTypography.body(
+                                  size: 13,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                              backgroundColor: hasError
+                                  ? AppColors.saffronDark
+                                  : AppColors.ink,
+                            ),
+                          );
+                        },
                 ),
               ]),
             ),
@@ -424,6 +469,46 @@ class SettingsScreen extends ConsumerWidget {
       return '$secondaryLabel · Fallback when app and primary scripts match';
     }
     return '$secondaryLabel · Used in secondary reading mode and focus mode';
+  }
+
+  String _contentSubtitle(ContentSyncState state) {
+    final syncTime = _latestContentSync(state);
+    final syncTimeLabel = syncTime == null
+        ? '${_contentSourceLabel(state)}'
+        : 'Last refresh ${_formatClock(syncTime)}';
+
+    return '${state.aartiCount} Aartis · ${state.festivalCount} Festivals · \n$syncTimeLabel';
+  }
+
+  String _contentSourceLabel(ContentSyncState state) {
+    final sources = <String>{state.aartiSource, state.festivalSource};
+    if (sources.contains('remote')) {
+      return 'Cached remote content';
+    }
+    if (sources.contains('cache')) {
+      return 'Cached offline content';
+    }
+    return 'Bundled offline content';
+  }
+
+  DateTime? _latestContentSync(ContentSyncState state) {
+    final timestamps = <DateTime>[
+      if (state.aartiLastSync != null) state.aartiLastSync!,
+      if (state.festivalLastSync != null) state.festivalLastSync!,
+    ];
+    if (timestamps.isEmpty) {
+      return null;
+    }
+
+    timestamps.sort();
+    return timestamps.last;
+  }
+
+  String _formatClock(DateTime timestamp) {
+    final local = timestamp.toLocal();
+    final hour = local.hour.toString().padLeft(2, '0');
+    final minute = local.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 
   void _showNameDialog(BuildContext context, WidgetRef ref, String current) {

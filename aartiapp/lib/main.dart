@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
 import 'core/services/activity_log_service.dart';
+import 'core/services/content_cache_service.dart';
 import 'core/services/notification_service.dart';
 import 'data/repositories/aarti_repository.dart';
 import 'data/repositories/bookmark_repository.dart';
@@ -43,17 +44,14 @@ Future<void> main() async {
       // Initialize Hive for local storage
       await Hive.initFlutter();
 
-      // Load aarti catalog from bundled JSON
-      await AartiRepository.instance.load();
-
-      // Load festival calendar (v1.5)
-      await FestivalRepository.instance.load();
+      // Initialize repositories
+      final prefs = await SharedPreferences.getInstance();
+      final contentCacheService = ContentCacheService();
+      await _loadCachedOrBundledContent(contentCacheService);
 
       // Initialize notification service (v1.5)
       await NotificationService.instance.init();
 
-      // Initialize repositories
-      final prefs = await SharedPreferences.getInstance();
       final pujaRepo = PujaRepository();
       await pujaRepo.init();
       final bookmarkRepo = BookmarkRepository();
@@ -93,4 +91,57 @@ Future<void> main() async {
       ActivityLogService.error('Zone', error.toString(), stack);
     },
   );
+}
+
+Future<void> _loadCachedOrBundledContent(
+  ContentCacheService contentCacheService,
+) async {
+  await _loadAartiCatalog(contentCacheService);
+  await _loadFestivalCalendar(contentCacheService);
+}
+
+Future<void> _loadAartiCatalog(ContentCacheService contentCacheService) async {
+  try {
+    final cachedJson = await contentCacheService.readAartiContent();
+    if (cachedJson != null) {
+      AartiRepository.instance.loadFromJsonString(cachedJson, source: 'cache');
+      ActivityLogService.info('Bootstrap', 'Loaded aarti catalog from cache');
+      return;
+    }
+  } catch (error, stack) {
+    ActivityLogService.warn(
+      'Bootstrap',
+      'Falling back to bundled aarti catalog after cache read failure: $error',
+      stack,
+    );
+  }
+
+  await AartiRepository.instance.load();
+}
+
+Future<void> _loadFestivalCalendar(
+  ContentCacheService contentCacheService,
+) async {
+  try {
+    final cachedJson = await contentCacheService.readFestivalContent();
+    if (cachedJson != null) {
+      FestivalRepository.instance.loadFromJsonString(
+        cachedJson,
+        source: 'cache',
+      );
+      ActivityLogService.info(
+        'Bootstrap',
+        'Loaded festival calendar from cache',
+      );
+      return;
+    }
+  } catch (error, stack) {
+    ActivityLogService.warn(
+      'Bootstrap',
+      'Falling back to bundled festival calendar after cache read failure: $error',
+      stack,
+    );
+  }
+
+  await FestivalRepository.instance.load();
 }

@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/services/content_cache_service.dart';
+import '../core/services/content_sync_service.dart';
 import '../core/services/feedback_service.dart';
 import '../core/services/user_sync_service.dart';
 import '../data/repositories/aarti_repository.dart';
+import '../data/repositories/festival_repository.dart';
 import '../data/repositories/settings_repository.dart';
 import '../data/repositories/puja_repository.dart';
 import '../data/repositories/bookmark_repository.dart';
@@ -41,6 +44,31 @@ final feedbackServiceProvider = Provider<FeedbackService>((ref) {
   return service;
 });
 
+final contentCacheServiceProvider = Provider<ContentCacheService>((ref) {
+  return ContentCacheService();
+});
+
+final contentSyncServiceProvider = Provider<ContentSyncService>((ref) {
+  final service = ContentSyncService(
+    settingsRepository: ref.watch(settingsRepoProvider),
+    cacheService: ref.watch(contentCacheServiceProvider),
+  );
+  ref.onDispose(service.dispose);
+  return service;
+});
+
+final contentSyncProvider =
+    StateNotifierProvider<ContentSyncNotifier, ContentSyncState>((ref) {
+      return ContentSyncNotifier(
+        settingsRepository: ref.watch(settingsRepoProvider),
+        service: ref.watch(contentSyncServiceProvider),
+      );
+    });
+
+final contentRevisionProvider = Provider<int>((ref) {
+  return ref.watch(contentSyncProvider).revision;
+});
+
 final pujaRepoProvider = Provider<PujaRepository>((ref) {
   throw UnimplementedError('Must be overridden in ProviderScope');
 });
@@ -56,6 +84,139 @@ final userAartiRepoProvider = Provider<UserAartiRepository>((ref) {
 final recentlyPlayedRepoProvider = Provider<RecentlyPlayedRepository>((ref) {
   throw UnimplementedError('Must be overridden in ProviderScope');
 });
+
+class ContentSyncNotifier extends StateNotifier<ContentSyncState> {
+  ContentSyncNotifier({
+    required SettingsRepository settingsRepository,
+    required ContentSyncService service,
+  }) : _settingsRepository = settingsRepository,
+       _service = service,
+       super(ContentSyncState.fromRepositories(settingsRepository));
+
+  final SettingsRepository _settingsRepository;
+  final ContentSyncService _service;
+
+  Future<void> refreshIfStale() async {
+    if (state.isRefreshing) {
+      return;
+    }
+
+    state = ContentSyncState.fromRepositories(
+      _settingsRepository,
+      revision: state.revision,
+      isRefreshing: true,
+      statusMessage: 'Checking for updated devotional content…',
+    );
+
+    final result = await _service.refreshIfStale();
+    state = ContentSyncState.fromRepositories(
+      _settingsRepository,
+      revision: state.revision + (result.didChange ? 1 : 0),
+      isRefreshing: false,
+      statusMessage: _buildStatusMessage(result),
+      lastError: result.hasErrors ? result.errors.join('\n') : null,
+    );
+  }
+
+  Future<void> refreshNow() async {
+    if (state.isRefreshing) {
+      return;
+    }
+
+    state = ContentSyncState.fromRepositories(
+      _settingsRepository,
+      revision: state.revision,
+      isRefreshing: true,
+      statusMessage: 'Refreshing devotional content…',
+    );
+
+    final result = await _service.refreshNow();
+    state = ContentSyncState.fromRepositories(
+      _settingsRepository,
+      revision: state.revision + (result.didChange ? 1 : 0),
+      isRefreshing: false,
+      statusMessage: _buildStatusMessage(result),
+      lastError: result.hasErrors ? result.errors.join('\n') : null,
+    );
+  }
+
+  String _buildStatusMessage(ContentRefreshResult result) {
+    if (result.skipped) {
+      return 'Content is already up to date.';
+    }
+
+    if (!result.hasErrors && result.festivalUpdated && result.aartiUpdated) {
+      return 'Festival calendar and aarti catalog refreshed.';
+    }
+
+    if (!result.hasErrors && result.festivalUpdated) {
+      return 'Festival calendar refreshed.';
+    }
+
+    if (!result.hasErrors && result.aartiUpdated) {
+      return 'Aarti catalog refreshed.';
+    }
+
+    if (result.festivalUpdated || result.aartiUpdated) {
+      return 'Content refreshed with partial success.';
+    }
+
+    return 'Content refresh failed.';
+  }
+}
+
+class ContentSyncState {
+  const ContentSyncState({
+    required this.revision,
+    required this.isRefreshing,
+    required this.aartiCount,
+    required this.festivalCount,
+    required this.aartiVersion,
+    required this.festivalVersion,
+    required this.aartiSource,
+    required this.festivalSource,
+    required this.aartiLastSync,
+    required this.festivalLastSync,
+    this.statusMessage,
+    this.lastError,
+  });
+
+  factory ContentSyncState.fromRepositories(
+    SettingsRepository settingsRepository, {
+    int revision = 0,
+    bool isRefreshing = false,
+    String? statusMessage,
+    String? lastError,
+  }) {
+    return ContentSyncState(
+      revision: revision,
+      isRefreshing: isRefreshing,
+      aartiCount: AartiRepository.instance.aartis.length,
+      festivalCount: FestivalRepository.instance.festivals.length,
+      aartiVersion: AartiRepository.instance.version,
+      festivalVersion: FestivalRepository.instance.version,
+      aartiSource: AartiRepository.instance.dataSource,
+      festivalSource: FestivalRepository.instance.dataSource,
+      aartiLastSync: settingsRepository.getAartiContentLastSync(),
+      festivalLastSync: settingsRepository.getFestivalContentLastSync(),
+      statusMessage: statusMessage,
+      lastError: lastError,
+    );
+  }
+
+  final int revision;
+  final bool isRefreshing;
+  final int aartiCount;
+  final int festivalCount;
+  final int aartiVersion;
+  final int festivalVersion;
+  final String aartiSource;
+  final String festivalSource;
+  final DateTime? aartiLastSync;
+  final DateTime? festivalLastSync;
+  final String? statusMessage;
+  final String? lastError;
+}
 
 // ─── User Aarti Collection State ────────────────────────────────────────────
 
@@ -420,6 +581,7 @@ final activeFestivalTagProvider = Provider<String>((ref) {
 });
 
 final filteredAartisProvider = Provider<List<int>>((ref) {
+  ref.watch(contentRevisionProvider);
   final discoverFilter = ref.watch(discoverFilterProvider);
   final aartis = AartiRepository.instance.aartis;
   final deities = AartiRepository.instance.deities;

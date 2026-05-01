@@ -14,8 +14,31 @@ class AartiSangrahApp extends ConsumerStatefulWidget {
   ConsumerState<AartiSangrahApp> createState() => _AartiSangrahAppState();
 }
 
-class _AartiSangrahAppState extends ConsumerState<AartiSangrahApp> {
+class _AartiSangrahAppState extends ConsumerState<AartiSangrahApp>
+    with WidgetsBindingObserver {
   bool _didQueueStartupSync = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(ref.read(contentSyncProvider.notifier).refreshIfStale());
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(ref.read(contentSyncProvider.notifier).refreshIfStale());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

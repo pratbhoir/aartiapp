@@ -23,6 +23,10 @@ class SettingsRepository {
   static const _keyOnboardingCompleted = 'onboarding_completed';
   static const _keyPreferredLanguage =
       'preferred_language'; // e.g. 'hi', 'gu', 'en'
+  static const _keyFestivalContentLastSync = 'festival_content_last_sync';
+  static const _keyAartiContentLastSync = 'aarti_content_last_sync';
+  static const _keyFestivalContentVersion = 'festival_content_version';
+  static const _keyAartiContentVersion = 'aarti_content_version';
 
   final SharedPreferences _prefs;
 
@@ -162,6 +166,41 @@ class SettingsRepository {
   Future<void> setPreferredLanguage(String lang) =>
       _prefs.setString(_keyPreferredLanguage, lang);
 
+  /// Returns the last successful festival content sync time, if any.
+  DateTime? getFestivalContentLastSync() =>
+      _readDateTime(_keyFestivalContentLastSync);
+
+  /// Returns the last successful aarti content sync time, if any.
+  DateTime? getAartiContentLastSync() =>
+      _readDateTime(_keyAartiContentLastSync);
+
+  /// Persists the last successful festival content sync time.
+  Future<void> setFestivalContentLastSync(DateTime timestamp) =>
+      _prefs.setString(
+        _keyFestivalContentLastSync,
+        timestamp.toUtc().toIso8601String(),
+      );
+
+  /// Persists the last successful aarti content sync time.
+  Future<void> setAartiContentLastSync(DateTime timestamp) => _prefs.setString(
+    _keyAartiContentLastSync,
+    timestamp.toUtc().toIso8601String(),
+  );
+
+  /// Returns the last synced festival content version, if known.
+  int? getFestivalContentVersion() => _prefs.getInt(_keyFestivalContentVersion);
+
+  /// Returns the last synced aarti content version, if known.
+  int? getAartiContentVersion() => _prefs.getInt(_keyAartiContentVersion);
+
+  /// Persists the last synced festival content version.
+  Future<void> setFestivalContentVersion(int version) =>
+      _prefs.setInt(_keyFestivalContentVersion, version);
+
+  /// Persists the last synced aarti content version.
+  Future<void> setAartiContentVersion(int version) =>
+      _prefs.setInt(_keyAartiContentVersion, version);
+
   /// Returns the serialized theme label used in sync payloads.
   String getThemeModeLabel() {
     switch (getThemeMode()) {
@@ -198,5 +237,14 @@ class SettingsRepository {
   bool isProfileComplete() {
     final normalizedName = getUserName().trim().toLowerCase();
     return normalizedName.isNotEmpty && normalizedName != 'bhakt';
+  }
+
+  DateTime? _readDateTime(String key) {
+    final raw = _prefs.getString(key);
+    if (raw == null || raw.trim().isEmpty) {
+      return null;
+    }
+
+    return DateTime.tryParse(raw)?.toUtc();
   }
 }

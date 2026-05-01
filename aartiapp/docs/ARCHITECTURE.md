@@ -9,15 +9,17 @@
 ```
 n8n/
 ├── aartiapp_user_sync_workflow.json   # Import-ready n8n workflow for profile/settings sync
-└── aartiapp_feedback_workflow.json    # Import-ready n8n workflow for user feedback ingestion
+├── aartiapp_feedback_workflow.json    # Import-ready n8n workflow for user feedback ingestion
+├── aartiapp_festival_content_workflow.json # Import-ready n8n workflow for festival JSON file serving
+└── aartiapp_aarti_content_workflow.json    # Import-ready n8n workflow for aarti catalog file serving
 database/
 ├── aartiapp.sql                       # Combined Postgres bootstrap for workflow sinks
 └── Tables/
   ├── UserProfiles.sql              # User sync table + upsert query
   └── appFeedback.sql               # Feedback table + insert query
 lib/
-├── main.dart                          # App entry point, repository init
-├── app.dart                           # Root MaterialApp configuration
+├── main.dart                          # App entry point, cache-first content bootstrap
+├── app.dart                           # Root MaterialApp configuration + lifecycle refresh checks
 ├── core/
 │   ├── theme/
 │   │   ├── app_colors.dart            # All colour tokens (single source of truth)
@@ -31,6 +33,8 @@ lib/
 │   │   └── haptics.dart               # AppHaptics — scoped haptic feedback
 │   ├── services/
 │   │   ├── activity_log_service.dart  # File-backed JSONL runtime activity log
+│   │   ├── content_cache_service.dart # Local JSON cache for devotional content payloads
+│   │   ├── content_sync_service.dart  # n8n-backed festival/aarti content refresh orchestration
 │   │   ├── feedback_service.dart      # User-visible feedback submission to n8n
 │   │   ├── notification_service.dart  # Local daily notification scheduling
 │   │   ├── user_sync_service.dart     # Debounced best-effort user/settings sync to n8n
@@ -45,9 +49,9 @@ lib/
 │   │   ├── festival.dart              # Festival data class
 │   │   └── verse_data.dart            # VerseData data class
 │   └── repositories/
-│       ├── aarti_repository.dart      # Bundled JSON catalog loader (singleton)
+│       ├── aarti_repository.dart      # Bundled/cache/remote catalog loader (singleton)
 │       ├── bookmark_repository.dart   # Hive-backed bookmarks
-│       ├── festival_repository.dart   # Bundled festival calendar (singleton)
+│       ├── festival_repository.dart   # Bundled/cache/remote festival calendar (singleton)
 │       ├── puja_repository.dart       # Hive-backed puja order
 │       ├── recently_played_repository.dart  # Hive-backed recent history
 │       ├── settings_repository.dart   # SharedPreferences wrapper + stable sync identity metadata
@@ -103,7 +107,11 @@ Each feature lives under `lib/features/<feature_name>/` with optional `data/`, `
 
 ### Singleton Repositories
 
-`AartiRepository` and `FestivalRepository` use the singleton pattern because they load immutable bundled data once at startup. Mutable repositories (`BookmarkRepository`, `PujaRepository`, etc.) are instantiated in `main()` and injected via Riverpod `Provider.overrideWithValue`.
+`AartiRepository` and `FestivalRepository` use the singleton pattern because their content is globally shared across the app. They now bootstrap from bundled assets or cached JSON at startup and can be replaced at runtime by remote content refreshes. Mutable repositories (`BookmarkRepository`, `PujaRepository`, etc.) are instantiated in `main()` and injected via Riverpod `Provider.overrideWithValue`.
+
+### Cache-Backed Content Bootstrap
+
+Devotional content now follows a cache-first bootstrap path. `main.dart` uses `ContentCacheService` to load cached aarti and festival JSON from the application documents directory before falling back to bundled assets. This preserves offline startup while allowing the app to adopt fresh content from previous n8n refreshes without requiring a new app build.
 
 ### Widget Composition
 
@@ -142,7 +150,7 @@ The app also derives a non-persisted secondary script from those two settings. S
 
 ### Injection Strategy
 
-Repositories that require async initialisation are created in `main()` and injected via `ProviderScope.overrides`. This avoids `FutureProvider` complexity at the root level.
+Repositories that require async initialisation are created in `main()` and injected via `ProviderScope.overrides`. This avoids `FutureProvider` complexity at the root level. Cache-backed devotional content is restored before `runApp`, while mutable repositories continue to be created in `main()` and injected once.
 
 ```dart
 ProviderScope(
@@ -160,6 +168,8 @@ ProviderScope(
 
 Best-effort user sync is intentionally attached to provider-backed setting mutators rather than individual widgets. Each notifier persists the new value first and then asks `UserSyncService` to schedule a debounced sync. This keeps the sync trigger surface aligned with the state ownership model and avoids duplicate widget-level callbacks.
 
+Content refresh is owned by `ContentSyncNotifier`, which exposes refresh state, content metadata, and a revision token through Riverpod. Direct singleton consumers such as Home, Discover, and Settings rebuild by watching that revision token instead of manually reloading repositories.
+
 ### Service-Backed Feedback Submission
 
 The feedback flow uses a dedicated `FeedbackService` exposed through Riverpod. Unlike user sync, feedback is a user-visible action, so the service throws `FeedbackSubmissionException` on non-2xx responses, timeouts, or transport failures after logging the error via `ActivityLogService`. The screen owns validation, loading state, and success-state rendering while the service owns payload construction and transport.
@@ -167,6 +177,8 @@ The feedback flow uses a dedicated `FeedbackService` exposed through Riverpod. U
 ### n8n + Database Contracts
 
 The app-to-automation contracts are versioned in-repo under `n8n/` and `database/`. The workflow JSON files mirror the exact payloads emitted by `UserSyncService` and `FeedbackService`, using n8n DataTables as the primary response path and optional Postgres nodes as a secondary sink. DataTable IDs and Postgres credentials are instance-specific, so those bindings must be selected after import even though the field mappings, SQL, webhook paths, and response payloads are already prepared.
+
+Content workflows follow the same in-repo contract approach, but they currently serve JSON directly from local files over GET webhooks. The festival and aarti endpoints intentionally mirror the bundled asset shape so Flutter can parse cached, bundled, and remote content through the same repository code paths.
 
 ---
 
@@ -177,6 +189,7 @@ The app-to-automation contracts are versioned in-repo under `n8n/` and `database
 - **Notifications:** Fail-silent on permission denial or scheduling errors.
 - **Feedback submission:** `FeedbackService` logs failures and rethrows a user-facing exception so the UI can show a snackbar without swallowing the error silently.
 - **User sync:** `UserSyncService` treats n8n sync as best-effort telemetry. Non-2xx responses, timeouts, and transport failures are logged through `ActivityLogService` and never block UX.
+- **Content sync:** `ContentSyncService` refreshes festival and aarti datasets independently. Each dataset keeps its last good bundled-or-cached state when the remote request fails, times out, or returns invalid JSON.
 - **JSON parsing:** Null-safe with fallback defaults in `fromJson` factories.
 - **Global uncaught failures:** `main.dart` wires `FlutterError.onError` and `runZonedGuarded` to `ActivityLogService.error(...)` for persistent diagnostics.
 - **Activity diagnostics:** Recoverable warnings (e.g., audio init/share failures) are captured by `ActivityLogService.warn(...)` for local inspection and export.

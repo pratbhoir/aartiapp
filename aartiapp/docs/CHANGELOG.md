@@ -1,3 +1,27 @@
+## [2026-05-01] — Cache-Backed Content Sync
+
+### Added
+- `lib/core/services/content_cache_service.dart` — Added a local JSON cache service for the festival calendar and aarti catalog payloads.
+- `lib/core/services/content_sync_service.dart` — Added an n8n-backed content refresh service with per-dataset refresh, cache writes, and partial-failure handling.
+- `n8n/aartiapp_festival_content_workflow.json` — Added a GET-based n8n workflow that serves the festival calendar JSON from a local file.
+- `n8n/aartiapp_aarti_content_workflow.json` — Added a GET-based n8n workflow that serves the aarti catalog JSON from a local file.
+- `test/content_sync_service_test.dart` — Added focused coverage for immediate refresh, stale-skip logic, cache writes, and partial success.
+
+### Modified
+- `lib/main.dart` — Switched devotional content bootstrap to cache-first loading with bundled fallback.
+- `lib/app.dart` — Added startup and resume-time stale checks for remote devotional content refresh.
+- `lib/core/constants/app_sync_config.dart` — Added compile-time content refresh webhook URLs, request timeout, and 24-hour refresh interval.
+- `lib/data/repositories/settings_repository.dart` — Added persisted content refresh timestamps and version metadata.
+- `lib/data/repositories/aarti_repository.dart` — Added runtime content replacement support plus source/version tracking.
+- `lib/data/repositories/festival_repository.dart` — Added runtime content replacement support plus source/version tracking.
+- `lib/providers/app_providers.dart` — Added Riverpod content sync service/state providers and a revision invalidation surface for singleton-backed catalog consumers.
+- `lib/features/home/home_screen.dart` — Subscribed Home to content revision changes so festival and catalog-driven surfaces repaint after refresh.
+- `lib/features/discover/discover_screen.dart` — Subscribed Discover to content revision changes so filters and catalog results repaint after refresh.
+- `lib/features/settings/settings_screen.dart` — Turned the Content tile into a manual refresh trigger and surfaced content counts/source/last refresh state.
+- `docs/FILE_REGISTRY.md` — Registered the new content sync files and updated touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented cache-first content bootstrap, runtime repository replacement, and content sync providers/workflows.
+- `docs/FUNCTIONAL_SPEC.md` — Added the remote content refresh feature, user flow, business rules, and failure handling.
+
 ## [2026-05-01] — In-App Feedback Submission
 
 ### Added

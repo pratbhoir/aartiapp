@@ -12,6 +12,13 @@ class FestivalRepository {
   List<Festival> _festivals = const [];
   List<Festival> get festivals => _festivals;
 
+  int _version = 0;
+  int get version => _version;
+
+  /// Origin of the currently loaded festival payload.
+  String _dataSource = 'bundled';
+  String get dataSource => _dataSource;
+
   bool _loaded = false;
   bool get isLoaded => _loaded;
 
@@ -19,21 +26,28 @@ class FestivalRepository {
   Future<void> load() async {
     if (_loaded) return;
     try {
-      final jsonStr = await rootBundle
-          .loadString('assets/data/festivals/hindu_calendar_2026_2028.json');
-      loadFromJsonString(jsonStr);
+      final jsonStr = await rootBundle.loadString(
+        'assets/data/festivals/hindu_calendar_2026_2028.json',
+      );
+      loadFromJsonString(jsonStr, source: 'bundled');
     } catch (_) {
       // Fail silently — festival features degrade gracefully.
       _loaded = true;
     }
   }
 
-  void loadFromJsonString(String jsonStr) {
+  void loadFromJsonString(String jsonStr, {String source = 'runtime'}) {
     final root = json.decode(jsonStr) as Map<String, dynamic>;
-    _festivals = ((root['festivals'] as List<dynamic>?) ?? [])
-        .map((f) => Festival.fromJson(f as Map<String, dynamic>))
-        .toList()
-      ..sort((a, b) => a.date.compareTo(b.date));
+    final version = (root['version'] as int?) ?? 1;
+    final festivals =
+        ((root['festivals'] as List<dynamic>?) ?? [])
+            .map((f) => Festival.fromJson(f as Map<String, dynamic>))
+            .toList()
+          ..sort((a, b) => a.date.compareTo(b.date));
+
+    _version = version;
+    _festivals = festivals;
+    _dataSource = source;
     _loaded = true;
   }
 
@@ -84,7 +98,8 @@ class FestivalRepository {
 
     for (final festival in _festivals) {
       final normalizedTag = festival.aartiTag.toLowerCase();
-      if (allowedTagMap.isNotEmpty && !allowedTagMap.containsKey(normalizedTag)) {
+      if (allowedTagMap.isNotEmpty &&
+          !allowedTagMap.containsKey(normalizedTag)) {
         continue;
       }
 
@@ -103,7 +118,8 @@ class FestivalRepository {
       }
     }
 
-    final ordered = upcomingByTag.values.toList()..sort(_compareFestivalTagOrder);
+    final ordered = upcomingByTag.values.toList()
+      ..sort(_compareFestivalTagOrder);
     return ordered.take(maxCount).map((entry) => entry.tag).toList();
   }
 
@@ -117,7 +133,9 @@ class FestivalRepository {
         tag: displayTag,
         normalizedTag: festival.aartiTag.toLowerCase(),
         priority: festival.isActiveOn(today) ? 0 : 1,
-        offsetDays: festival.isActiveOn(today) ? 0 : festival.daysUntil(from: today),
+        offsetDays: festival.isActiveOn(today)
+            ? 0
+            : festival.daysUntil(from: today),
       );
     }
 

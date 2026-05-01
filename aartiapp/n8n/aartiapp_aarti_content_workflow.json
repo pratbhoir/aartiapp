@@ -1,0 +1,155 @@
+{
+  "name": "Aarti Sangrah — Aarti Catalog Reader",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Aarti Sangrah — Aarti Catalog Reader\n\n**Flow**\n`Flutter App` → GET `Webhook` → `Read Local Aarti JSON` → `Respond 200 OK`\n\n**To activate after import:**\n1. Open **Read Local Aarti JSON**\n2. Replace `D:\\\\AartiApp\\\\content\\\\aarti_catalog.json` with the actual local file path\n3. Keep the response payload identical to the app asset shape: top-level `version` + `deities` + `aartis`\n4. Toggle the workflow **Active**\n5. Copy the production webhook URL and pass it into the app using `--dart-define=AARTI_AARTI_CONTENT_WEBHOOK_URL=<url>`\n\n**Notes:**\n- This workflow intentionally reads from a local file for now; there is no DataTable or Postgres storage in this version\n- The Flutter app caches the response locally and refreshes it on startup/resume after 24 hours or when the user taps Settings → Content\n- If your n8n Code node cannot use `require('fs')`, replace it with a file-read node that outputs the same parsed JSON object",
+        "height": 360,
+        "width": 760,
+        "color": 4
+      },
+      "id": "58d0d26f-dc82-4ec0-bc0f-534bbf10cf11",
+      "name": "📋 Setup Guide",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "content": "```javascript\nconst fs = require('fs');\nconst filePath = 'D:\\\\AartiApp\\\\content\\\\aarti_catalog.json';\nconst raw = fs.readFileSync(filePath, 'utf8');\nconst payload = JSON.parse(raw);\nreturn [{ json: payload }];\n```",
+        "height": 220,
+        "width": 520,
+        "color": 5
+      },
+      "id": "d8bd2ef2-98a2-40fb-9a66-f7b1120fd5be",
+      "name": "🗂 Local File Path",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        816,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "aartiapp-aarti-content",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "9a7a77f1-e5bc-4811-93db-ef014c4184d8",
+      "name": "GET /aartiapp-aarti-content",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        352
+      ],
+      "webhookId": "aartiapp-aarti-content-00000000"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const fs = require('fs');\nconst filePath = 'D:\\\\AartiApp\\\\content\\\\aarti_catalog.json';\nconst raw = fs.readFileSync(filePath, 'utf8');\nconst payload = JSON.parse(raw);\nreturn [{ json: payload }];"
+      },
+      "id": "00d2189f-79ea-4af8-b3f0-0c4ce40654d5",
+      "name": "Read Local Aarti JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "fa6d9ff4-5eeb-4707-b097-542dc3152381",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        352
+      ]
+    }
+  ],
+  "pinData": {
+    "GET /aartiapp-aarti-content": [
+      {
+        "json": {
+          "query": {},
+          "params": {},
+          "headers": {},
+          "webhookUrl": "https://example.com/webhook/aartiapp-aarti-content",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "GET /aartiapp-aarti-content": {
+      "main": [
+        [
+          {
+            "node": "Read Local Aarti JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Local Aarti JSON": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5ec4d4cb-03b4-40d9-8f62-915ec8b61a3f",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "aartiappAartiContentWorkflow",
+  "tags": [
+    {
+      "name": "content"
+    },
+    {
+      "name": "aartis"
+    },
+    {
+      "name": "aartiapp"
+    }
+  ]
+}
