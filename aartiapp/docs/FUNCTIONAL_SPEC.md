@@ -31,6 +31,7 @@
 | Crossfade duration (0–3s) | ✅ Done | v1.5 | `SettingsScreen` |
 | Sharing (text + image) | ✅ Done | v1.5 | `SharingService` |
 | Daily notification reminder | ✅ Done | v1.5 | `NotificationService` |
+| Lightweight user profile/settings sync | ✅ Done | v2.5 | `UserSyncService` |
 | Festival banner (bundled calendar 2026–2028) | ✅ Done | v1.5 | `FestiveBanner` |
 | Festival tag filtering | ✅ Done | v1.5 | `FestivalFilterChips` |
 | "Next" FAB for My Puja sequence (90% audio or scroll-to-bottom) | ✅ Done | v2.2 | `AartiDetailScreen` |
@@ -125,6 +126,15 @@
 9. Diagnostics actions: view Activity Log, share log export, and clear log.
 10. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
 
+### 2.7 User Sync
+
+1. Once onboarding is complete, the app maintains a stable local `user_id`, a durable `registration_date`, and a latest `onboarding_date` in `SettingsRepository`.
+2. On app startup, returning users trigger an immediate best-effort sync to the configured n8n webhook.
+3. Completing onboarding triggers the first forced sync immediately after the identity metadata is written.
+4. Updating display name, appearance, text scale, script language, app language, reminder settings, crossfade duration, auto-play, or repeat-current state schedules a trailing debounced sync.
+5. Sync payloads include lightweight profile, app-version, device, and settings context only; devotional content, bookmarks, puja lists, and verse data are not exported.
+6. Sync failures are logged locally and do not interrupt the user.
+
 ---
 
 ## 3. Business Rules
@@ -144,6 +154,9 @@
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
 | Script language default | First-run script language defaults to Devanagari. |
 | App language default | First-run app language defaults to English. |
+| User sync debounce | Settings-driven sync uses a trailing debounce of 5 seconds. |
+| User sync startup refresh | Returning users trigger a forced sync on app launch after onboarding is already complete. |
+| User sync privacy boundary | Sync exports lightweight profile and setting state only; it excludes aarti content and personal devotional collections. |
 | Secondary script rule | Secondary-script surfaces use the app-language reading script; if that script already matches the selected lyric script, they fall back to Devanagari. |
 | Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines; taps above the highlighted verse move to the previous verse, and taps on or below it move to the next verse. |

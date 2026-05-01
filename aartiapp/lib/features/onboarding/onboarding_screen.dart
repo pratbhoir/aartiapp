@@ -35,7 +35,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void _nextPage() {
     if (_currentPage < 3) {
       _pageCtrl.nextPage(
-          duration: const Duration(milliseconds: 350), curve: Curves.easeOut);
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+      );
     } else {
       _finishOnboarding();
     }
@@ -56,12 +58,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await NotificationService.instance.init();
       final granted = await NotificationService.instance.requestPermission();
       if (granted) {
-        await NotificationService.instance
-            .scheduleDailyReminder(time: _notifTime);
+        await NotificationService.instance.scheduleDailyReminder(
+          time: _notifTime,
+        );
       }
     }
 
-    ref.read(onboardingCompletedProvider.notifier).complete();
+    await ref.read(onboardingCompletedProvider.notifier).complete();
+    await ref.read(userSyncServiceProvider).sync(force: true);
     widget.onComplete();
   }
 
@@ -101,24 +105,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 onPageChanged: (i) => setState(() => _currentPage = i),
                 children: [
                   _WelcomePage(),
-                  _NamePage(
-                    controller: _nameCtrl,
-                  ),
+                  _NamePage(controller: _nameCtrl),
                   _ScriptPage(
                     selectedScript: _selectedScript,
                     selectedLang: _selectedLang,
-                    onScriptChanged: (s) =>
-                        setState(() => _selectedScript = s),
-                    onLangChanged: (l) =>
-                        setState(() => _selectedLang = l),
+                    onScriptChanged: (s) => setState(() => _selectedScript = s),
+                    onLangChanged: (l) => setState(() => _selectedLang = l),
                   ),
                   _NotificationPage(
                     enabled: _enableNotifications,
                     time: _notifTime,
                     onEnabledChanged: (v) =>
                         setState(() => _enableNotifications = v),
-                    onTimeChanged: (t) =>
-                        setState(() => _notifTime = t),
+                    onTimeChanged: (t) => setState(() => _notifTime = t),
                   ),
                 ],
               ),
@@ -132,19 +131,28 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   if (_currentPage > 0)
                     TextButton(
                       onPressed: () => _pageCtrl.previousPage(
-                          duration: const Duration(milliseconds: 350),
-                          curve: Curves.easeOut),
-                      child: Text('Back',
-                          style: AppTypography.body(
-                              size: 14, color: AppColors.ink3)),
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeOut,
+                      ),
+                      child: Text(
+                        'Back',
+                        style: AppTypography.body(
+                          size: 14,
+                          color: AppColors.ink3,
+                        ),
+                      ),
                     ),
                   const Spacer(),
                   if (_currentPage < 3)
                     TextButton(
                       onPressed: _finishOnboarding,
-                      child: Text('Skip',
-                          style: AppTypography.body(
-                              size: 14, color: AppColors.ink3)),
+                      child: Text(
+                        'Skip',
+                        style: AppTypography.body(
+                          size: 14,
+                          color: AppColors.ink3,
+                        ),
+                      ),
                     ),
                   const SizedBox(width: 12),
                   ElevatedButton(
@@ -154,13 +162,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       foregroundColor: AppColors.white,
                       minimumSize: const Size(120, 52),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14)),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                       elevation: 0,
                     ),
                     child: Text(
                       _currentPage == 3 ? 'Get Started' : 'Continue',
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ],
@@ -197,10 +208,9 @@ class _WelcomePage extends StatelessWidget {
           const SizedBox(height: 32),
           Text(
             'Aarti Sangrah',
-            style: AppTypography.displayLarge(context).copyWith(
-              fontSize: 36,
-              letterSpacing: -0.5,
-            ),
+            style: AppTypography.displayLarge(
+              context,
+            ).copyWith(fontSize: 36, letterSpacing: -0.5),
           ),
           const SizedBox(height: 12),
           Text(
@@ -212,7 +222,9 @@ class _WelcomePage extends StatelessWidget {
           Text(
             'आरती संग्रह',
             style: AppTypography.devanagari(
-                size: 22, color: AppColors.saffronDark),
+              size: 22,
+              color: AppColors.saffronDark,
+            ),
           ),
         ],
       ),
@@ -237,10 +249,9 @@ class _NamePage extends StatelessWidget {
           const SizedBox(height: 60),
           Text(
             'What should we\ncall you?',
-            style: AppTypography.displayLarge(context).copyWith(
-              fontSize: 32,
-              letterSpacing: -0.5,
-            ),
+            style: AppTypography.displayLarge(
+              context,
+            ).copyWith(fontSize: 32, letterSpacing: -0.5),
           ),
           const SizedBox(height: 8),
           Text(
@@ -252,11 +263,15 @@ class _NamePage extends StatelessWidget {
             controller: controller,
             autofocus: true,
             style: AppTypography.serifBody(
-                size: 24, color: context.textPrimary),
+              size: 24,
+              color: context.textPrimary,
+            ),
             decoration: InputDecoration(
               hintText: 'Your name',
               hintStyle: AppTypography.serifBody(
-                  size: 24, color: AppColors.ink3.withValues(alpha: 0.4)),
+                size: 24,
+                color: AppColors.ink3.withValues(alpha: 0.4),
+              ),
               border: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppColors.stone3),
               ),
@@ -296,10 +311,9 @@ class _ScriptPage extends StatelessWidget {
           const SizedBox(height: 60),
           Text(
             'Choose your\npreferred script',
-            style: AppTypography.displayLarge(context).copyWith(
-              fontSize: 32,
-              letterSpacing: -0.5,
-            ),
+            style: AppTypography.displayLarge(
+              context,
+            ).copyWith(fontSize: 32, letterSpacing: -0.5),
           ),
           const SizedBox(height: 8),
           Text(
@@ -331,28 +345,33 @@ class _ScriptPage extends StatelessWidget {
             onTap: () => onScriptChanged(2),
           ),
           const SizedBox(height: 28),
-          Text('PREFERRED LANGUAGE',
-              style: AppTypography.label(size: 10, color: AppColors.ink3)),
+          Text(
+            'PREFERRED LANGUAGE',
+            style: AppTypography.label(size: 10, color: AppColors.ink3),
+          ),
           const SizedBox(height: 12),
           Row(
             children: [
               _LangChip(
-                  label: 'हिन्दी',
-                  code: 'hi',
-                  isSelected: selectedLang == 'hi',
-                  onTap: () => onLangChanged('hi')),
+                label: 'हिन्दी',
+                code: 'hi',
+                isSelected: selectedLang == 'hi',
+                onTap: () => onLangChanged('hi'),
+              ),
               const SizedBox(width: 10),
               _LangChip(
-                  label: 'ગુજરાતી',
-                  code: 'gu',
-                  isSelected: selectedLang == 'gu',
-                  onTap: () => onLangChanged('gu')),
+                label: 'ગુજરાતી',
+                code: 'gu',
+                isSelected: selectedLang == 'gu',
+                onTap: () => onLangChanged('gu'),
+              ),
               const SizedBox(width: 10),
               _LangChip(
-                  label: 'English',
-                  code: 'en',
-                  isSelected: selectedLang == 'en',
-                  onTap: () => onLangChanged('en')),
+                label: 'English',
+                code: 'en',
+                isSelected: selectedLang == 'en',
+                onTap: () => onLangChanged('en'),
+              ),
             ],
           ),
         ],
@@ -397,22 +416,29 @@ class _ScriptOption extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: AppTypography.devanagari(
-                          size: 18,
-                          color: isSelected
-                              ? AppColors.saffronDark
-                              : context.textPrimary)),
-                  Text(subtitle,
-                      style: AppTypography.body(
-                          size: 12, color: AppColors.ink3)),
+                  Text(
+                    title,
+                    style: AppTypography.devanagari(
+                      size: 18,
+                      color: isSelected
+                          ? AppColors.saffronDark
+                          : context.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: AppTypography.body(size: 12, color: AppColors.ink3),
+                  ),
                   const SizedBox(height: 4),
-                  Text(example,
-                      style: AppTypography.body(
-                          size: 13,
-                          color: isSelected
-                              ? AppColors.saffronDark
-                              : AppColors.ink3)),
+                  Text(
+                    example,
+                    style: AppTypography.body(
+                      size: 13,
+                      color: isSelected
+                          ? AppColors.saffronDark
+                          : AppColors.ink3,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -426,8 +452,7 @@ class _ScriptOption extends StatelessWidget {
                   color: isSelected ? AppColors.saffron : AppColors.stone3,
                   width: 2,
                 ),
-                color:
-                    isSelected ? AppColors.saffron : Colors.transparent,
+                color: isSelected ? AppColors.saffron : Colors.transparent,
               ),
               child: isSelected
                   ? const Icon(Icons.check, size: 14, color: AppColors.white)
@@ -505,10 +530,9 @@ class _NotificationPage extends StatelessWidget {
           const SizedBox(height: 60),
           Text(
             'Daily puja\nreminder',
-            style: AppTypography.displayLarge(context).copyWith(
-              fontSize: 32,
-              letterSpacing: -0.5,
-            ),
+            style: AppTypography.displayLarge(
+              context,
+            ).copyWith(fontSize: 32, letterSpacing: -0.5),
           ),
           const SizedBox(height: 8),
           Text(
@@ -532,25 +556,34 @@ class _NotificationPage extends StatelessWidget {
                     color: AppColors.saffronGlow,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.notifications_outlined,
-                      size: 20, color: AppColors.saffron),
+                  child: const Icon(
+                    Icons.notifications_outlined,
+                    size: 20,
+                    color: AppColors.saffron,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Daily Reminder',
-                          style: AppTypography.body(
-                              size: 15,
-                              color: context.textPrimary,
-                              weight: FontWeight.w400)),
                       Text(
-                          enabled
-                              ? 'Remind at ${time.format(context)}'
-                              : 'Disabled',
-                          style: AppTypography.body(
-                              size: 12, color: AppColors.ink3)),
+                        'Daily Reminder',
+                        style: AppTypography.body(
+                          size: 15,
+                          color: context.textPrimary,
+                          weight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        enabled
+                            ? 'Remind at ${time.format(context)}'
+                            : 'Disabled',
+                        style: AppTypography.body(
+                          size: 12,
+                          color: AppColors.ink3,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -590,29 +623,41 @@ class _NotificationPage extends StatelessWidget {
                         color: AppColors.saffronGlow,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.schedule_outlined,
-                          size: 20, color: AppColors.saffron),
+                      child: const Icon(
+                        Icons.schedule_outlined,
+                        size: 20,
+                        color: AppColors.saffron,
+                      ),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Reminder Time',
-                              style: AppTypography.body(
-                                  size: 15,
-                                  color: context.textPrimary,
-                                  weight: FontWeight.w400)),
-                          Text('Tap to change',
-                              style: AppTypography.body(
-                                  size: 12, color: AppColors.ink3)),
+                          Text(
+                            'Reminder Time',
+                            style: AppTypography.body(
+                              size: 15,
+                              color: context.textPrimary,
+                              weight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            'Tap to change',
+                            style: AppTypography.body(
+                              size: 12,
+                              color: AppColors.ink3,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     Text(
                       time.format(context),
                       style: AppTypography.serifBody(
-                          size: 20, color: AppColors.saffron),
+                        size: 20,
+                        color: AppColors.saffron,
+                      ),
                     ),
                   ],
                 ),
@@ -634,7 +679,9 @@ class _NotificationPage extends StatelessWidget {
                   child: Text(
                     'Start each day with a moment of devotion and inner peace.',
                     style: AppTypography.body(
-                        size: 13, color: AppColors.saffronDark),
+                      size: 13,
+                      color: AppColors.saffronDark,
+                    ),
                   ),
                 ),
               ],

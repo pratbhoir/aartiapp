@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/services/user_sync_service.dart';
 import '../data/repositories/aarti_repository.dart';
 import '../data/repositories/settings_repository.dart';
 import '../data/repositories/puja_repository.dart';
@@ -19,6 +22,14 @@ final sharedPrefsProvider = Provider<SharedPreferences>((ref) {
 
 final settingsRepoProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository(ref.watch(sharedPrefsProvider));
+});
+
+final userSyncServiceProvider = Provider<UserSyncService>((ref) {
+  final service = UserSyncService(
+    settingsRepository: ref.watch(settingsRepoProvider),
+  );
+  ref.onDispose(service.dispose);
+  return service;
 });
 
 final pujaRepoProvider = Provider<PujaRepository>((ref) {
@@ -107,22 +118,34 @@ final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
   ref,
 ) {
   final repo = ref.watch(settingsRepoProvider);
-  return ThemeModeNotifier(repo);
+  final syncService = ref.watch(userSyncServiceProvider);
+  return ThemeModeNotifier(repo, syncService);
 });
 
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   final SettingsRepository _repo;
-  ThemeModeNotifier(this._repo) : super(_repo.getThemeMode());
+  final UserSyncService _syncService;
+  ThemeModeNotifier(this._repo, this._syncService)
+    : super(_repo.getThemeMode());
 
   void setTheme(ThemeMode mode) {
+    if (state == mode) {
+      return;
+    }
+
     state = mode;
-    _repo.setThemeMode(mode);
+    unawaited(_persistAndSync(mode));
   }
 
   void cycle() {
     final modes = [ThemeMode.system, ThemeMode.light, ThemeMode.dark];
     final next = modes[(modes.indexOf(state) + 1) % modes.length];
     setTheme(next);
+  }
+
+  Future<void> _persistAndSync(ThemeMode mode) async {
+    await _repo.setThemeMode(mode);
+    await _syncService.sync();
   }
 }
 
@@ -132,20 +155,33 @@ final textScaleProvider = StateNotifierProvider<TextScaleNotifier, double>((
   ref,
 ) {
   final repo = ref.watch(settingsRepoProvider);
-  return TextScaleNotifier(repo);
+  final syncService = ref.watch(userSyncServiceProvider);
+  return TextScaleNotifier(repo, syncService);
 });
 
 class TextScaleNotifier extends StateNotifier<double> {
   final SettingsRepository _repo;
-  TextScaleNotifier(this._repo) : super(_repo.getTextScale());
+  final UserSyncService _syncService;
+  TextScaleNotifier(this._repo, this._syncService)
+    : super(_repo.getTextScale());
 
   void setScale(double scale) {
-    state = scale.clamp(0.8, 1.6);
-    _repo.setTextScale(state);
+    final nextScale = scale.clamp(0.8, 1.6);
+    if (state == nextScale) {
+      return;
+    }
+
+    state = nextScale;
+    unawaited(_persistAndSync(nextScale));
   }
 
   void increase() => setScale(state + 0.1);
   void decrease() => setScale(state - 0.1);
+
+  Future<void> _persistAndSync(double scale) async {
+    await _repo.setTextScale(scale);
+    await _syncService.sync();
+  }
 }
 
 // ─── Script Mode State ──────────────────────────────────────────────────────
@@ -155,19 +191,32 @@ final scriptModeProvider = StateNotifierProvider<ScriptModeNotifier, int>((
   ref,
 ) {
   final repo = ref.watch(settingsRepoProvider);
-  return ScriptModeNotifier(repo);
+  final syncService = ref.watch(userSyncServiceProvider);
+  return ScriptModeNotifier(repo, syncService);
 });
 
 class ScriptModeNotifier extends StateNotifier<int> {
   final SettingsRepository _repo;
-  ScriptModeNotifier(this._repo) : super(_repo.getScriptMode());
+  final UserSyncService _syncService;
+  ScriptModeNotifier(this._repo, this._syncService)
+    : super(_repo.getScriptMode());
 
   void setMode(int mode) {
-    state = mode.clamp(0, 2);
-    _repo.setScriptMode(mode);
+    final nextMode = mode.clamp(0, 2);
+    if (state == nextMode) {
+      return;
+    }
+
+    state = nextMode;
+    unawaited(_persistAndSync(nextMode));
   }
 
   void cycle() => setMode((state + 1) % 3);
+
+  Future<void> _persistAndSync(int mode) async {
+    await _repo.setScriptMode(mode);
+    await _syncService.sync();
+  }
 }
 
 // ─── Bookmark State ─────────────────────────────────────────────────────────
@@ -391,16 +440,27 @@ final filteredAartisProvider = Provider<List<int>>((ref) {
 
 final userNameProvider = StateNotifierProvider<UserNameNotifier, String>((ref) {
   final repo = ref.watch(settingsRepoProvider);
-  return UserNameNotifier(repo);
+  final syncService = ref.watch(userSyncServiceProvider);
+  return UserNameNotifier(repo, syncService);
 });
 
 class UserNameNotifier extends StateNotifier<String> {
   final SettingsRepository _repo;
-  UserNameNotifier(this._repo) : super(_repo.getUserName());
+  final UserSyncService _syncService;
+  UserNameNotifier(this._repo, this._syncService) : super(_repo.getUserName());
 
   void setName(String name) {
+    if (state == name) {
+      return;
+    }
+
     state = name;
-    _repo.setUserName(name);
+    unawaited(_persistAndSync(name));
+  }
+
+  Future<void> _persistAndSync(String name) async {
+    await _repo.setUserName(name);
+    await _syncService.sync();
   }
 }
 
@@ -408,16 +468,29 @@ class UserNameNotifier extends StateNotifier<String> {
 
 final crossfadeProvider = StateNotifierProvider<CrossfadeNotifier, int>((ref) {
   final repo = ref.watch(settingsRepoProvider);
-  return CrossfadeNotifier(repo);
+  final syncService = ref.watch(userSyncServiceProvider);
+  return CrossfadeNotifier(repo, syncService);
 });
 
 class CrossfadeNotifier extends StateNotifier<int> {
   final SettingsRepository _repo;
-  CrossfadeNotifier(this._repo) : super(_repo.getCrossfadeDuration());
+  final UserSyncService _syncService;
+  CrossfadeNotifier(this._repo, this._syncService)
+    : super(_repo.getCrossfadeDuration());
 
   void set(int seconds) {
-    state = seconds.clamp(0, 3);
-    _repo.setCrossfadeDuration(state);
+    final nextSeconds = seconds.clamp(0, 3);
+    if (state == nextSeconds) {
+      return;
+    }
+
+    state = nextSeconds;
+    unawaited(_persistAndSync(nextSeconds));
+  }
+
+  Future<void> _persistAndSync(int seconds) async {
+    await _repo.setCrossfadeDuration(seconds);
+    await _syncService.sync();
   }
 }
 
@@ -425,21 +498,32 @@ class CrossfadeNotifier extends StateNotifier<int> {
 
 final autoPlayProvider = StateNotifierProvider<AutoPlayNotifier, bool>((ref) {
   final repo = ref.watch(settingsRepoProvider);
-  return AutoPlayNotifier(repo);
+  final syncService = ref.watch(userSyncServiceProvider);
+  return AutoPlayNotifier(repo, syncService);
 });
 
 class AutoPlayNotifier extends StateNotifier<bool> {
   final SettingsRepository _repo;
-  AutoPlayNotifier(this._repo) : super(_repo.getAutoPlay());
+  final UserSyncService _syncService;
+  AutoPlayNotifier(this._repo, this._syncService) : super(_repo.getAutoPlay());
 
   void toggle() {
     state = !state;
-    _repo.setAutoPlay(state);
+    unawaited(_persistAndSync(state));
   }
 
   void set(bool value) {
+    if (state == value) {
+      return;
+    }
+
     state = value;
-    _repo.setAutoPlay(value);
+    unawaited(_persistAndSync(value));
+  }
+
+  Future<void> _persistAndSync(bool value) async {
+    await _repo.setAutoPlay(value);
+    await _syncService.sync();
   }
 }
 
@@ -448,16 +532,24 @@ class AutoPlayNotifier extends StateNotifier<bool> {
 final repeatCurrentProvider =
     StateNotifierProvider<RepeatCurrentNotifier, bool>((ref) {
       final repo = ref.watch(settingsRepoProvider);
-      return RepeatCurrentNotifier(repo);
+      final syncService = ref.watch(userSyncServiceProvider);
+      return RepeatCurrentNotifier(repo, syncService);
     });
 
 class RepeatCurrentNotifier extends StateNotifier<bool> {
   final SettingsRepository _repo;
-  RepeatCurrentNotifier(this._repo) : super(_repo.getRepeatCurrent());
+  final UserSyncService _syncService;
+  RepeatCurrentNotifier(this._repo, this._syncService)
+    : super(_repo.getRepeatCurrent());
 
   void toggle() {
     state = !state;
-    _repo.setRepeatCurrent(state);
+    unawaited(_persistAndSync(state));
+  }
+
+  Future<void> _persistAndSync(bool value) async {
+    await _repo.setRepeatCurrent(value);
+    await _syncService.sync();
   }
 }
 
@@ -466,33 +558,56 @@ class RepeatCurrentNotifier extends StateNotifier<bool> {
 final notificationEnabledProvider =
     StateNotifierProvider<NotificationEnabledNotifier, bool>((ref) {
       final repo = ref.watch(settingsRepoProvider);
-      return NotificationEnabledNotifier(repo);
+      final syncService = ref.watch(userSyncServiceProvider);
+      return NotificationEnabledNotifier(repo, syncService);
     });
 
 class NotificationEnabledNotifier extends StateNotifier<bool> {
   final SettingsRepository _repo;
-  NotificationEnabledNotifier(this._repo)
+  final UserSyncService _syncService;
+  NotificationEnabledNotifier(this._repo, this._syncService)
     : super(_repo.getNotificationEnabled());
 
   void set(bool value) {
+    if (state == value) {
+      return;
+    }
+
     state = value;
-    _repo.setNotificationEnabled(value);
+    unawaited(_persistAndSync(value));
+  }
+
+  Future<void> _persistAndSync(bool value) async {
+    await _repo.setNotificationEnabled(value);
+    await _syncService.sync();
   }
 }
 
 final notificationTimeProvider =
     StateNotifierProvider<NotificationTimeNotifier, TimeOfDay>((ref) {
       final repo = ref.watch(settingsRepoProvider);
-      return NotificationTimeNotifier(repo);
+      final syncService = ref.watch(userSyncServiceProvider);
+      return NotificationTimeNotifier(repo, syncService);
     });
 
 class NotificationTimeNotifier extends StateNotifier<TimeOfDay> {
   final SettingsRepository _repo;
-  NotificationTimeNotifier(this._repo) : super(_repo.getNotificationTime());
+  final UserSyncService _syncService;
+  NotificationTimeNotifier(this._repo, this._syncService)
+    : super(_repo.getNotificationTime());
 
   void set(TimeOfDay time) {
+    if (state == time) {
+      return;
+    }
+
     state = time;
-    _repo.setNotificationTime(time);
+    unawaited(_persistAndSync(time));
+  }
+
+  Future<void> _persistAndSync(TimeOfDay time) async {
+    await _repo.setNotificationTime(time);
+    await _syncService.sync();
   }
 }
 
@@ -509,9 +624,9 @@ class OnboardingCompletedNotifier extends StateNotifier<bool> {
   OnboardingCompletedNotifier(this._repo)
     : super(_repo.getOnboardingCompleted());
 
-  void complete() {
+  Future<void> complete() async {
     state = true;
-    _repo.setOnboardingCompleted(true);
+    await _repo.completeOnboarding();
   }
 }
 
@@ -520,15 +635,27 @@ class OnboardingCompletedNotifier extends StateNotifier<bool> {
 final preferredLanguageProvider =
     StateNotifierProvider<PreferredLanguageNotifier, String>((ref) {
       final repo = ref.watch(settingsRepoProvider);
-      return PreferredLanguageNotifier(repo);
+      final syncService = ref.watch(userSyncServiceProvider);
+      return PreferredLanguageNotifier(repo, syncService);
     });
 
 class PreferredLanguageNotifier extends StateNotifier<String> {
   final SettingsRepository _repo;
-  PreferredLanguageNotifier(this._repo) : super(_repo.getPreferredLanguage());
+  final UserSyncService _syncService;
+  PreferredLanguageNotifier(this._repo, this._syncService)
+    : super(_repo.getPreferredLanguage());
 
   void set(String lang) {
+    if (state == lang) {
+      return;
+    }
+
     state = lang;
-    _repo.setPreferredLanguage(lang);
+    unawaited(_persistAndSync(lang));
+  }
+
+  Future<void> _persistAndSync(String lang) async {
+    await _repo.setPreferredLanguage(lang);
+    await _syncService.sync();
   }
 }

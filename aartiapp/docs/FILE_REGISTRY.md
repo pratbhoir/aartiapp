@@ -10,7 +10,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/main.dart` | App entry point — initialises Activity Log, Hive, repositories, notifications, global error hooks, and runs `ProviderScope` | 2026-04-26 |
-| `lib/app.dart` | Root `AartiSangrahApp` `ConsumerWidget` — configures `MaterialApp` with light/dark theme and onboarding gate | 2026-04-20 |
+| `lib/app.dart` | Root `AartiSangrahApp` — configures `MaterialApp`, the onboarding gate, and returning-user startup sync | 2026-05-01 |
 
 ## Core / Theme
 
@@ -27,6 +27,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/constants/app_constants.dart` | App-level constants for cross-cutting services (including Activity Log retention + file name) | 2026-04-26 |
+| `lib/core/constants/app_sync_config.dart` | Compile-time config for user sync webhook URL, debounce delay, and request timeout | 2026-05-01 |
 | `lib/core/constants/haptics.dart` | `AppHaptics` — scoped haptic feedback definitions (light, medium, selection, completion) | 2026-04-20 |
 
 ## Core / Services
@@ -35,12 +36,14 @@
 |-----------|---------|--------------|
 | `lib/core/services/activity_log_service.dart` | `ActivityLogService` static utility — JSONL-backed runtime log with init/write/read/clear/share APIs | 2026-04-26 |
 | `lib/core/services/notification_service.dart` | `NotificationService` singleton — daily puja reminder scheduling via `flutter_local_notifications` | 2026-04-20 |
+| `lib/core/services/user_sync_service.dart` | `UserSyncService` — debounced best-effort sync of lightweight user profile and settings data to a configured n8n webhook | 2026-05-01 |
 | `lib/core/services/sharing_service.dart` | `SharingService` singleton — share Aarti as text or rendered image via `share_plus`, with Activity Log failure reporting | 2026-04-26 |
 
 ## Core / Utils
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
+| `lib/core/utils/device_info_helper.dart` | `DeviceInfoHelper` — normalized cross-platform device snapshot builder for outbound sync payloads | 2026-05-01 |
 | `lib/core/utils/day_deity_mapper.dart` | `DayDeityMapper` — maps weekday → deity for "Aarti of the Day" | 2026-04-20 |
 | `lib/core/utils/search_engine.dart` | `SearchEngine` — full-text local search + deity/festival filtering | 2026-04-20 |
 
@@ -61,14 +64,14 @@
 | `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled Hindu calendar JSON (2026–2028) and returns up to 5 Discover festival tags in nearest current/upcoming order | 2026-04-27 |
 | `lib/data/repositories/puja_repository.dart` | `PujaRepository` — Hive-backed ordered puja list persistence | 2026-04-20 |
 | `lib/data/repositories/recently_played_repository.dart` | `RecentlyPlayedRepository` — Hive-backed recently-viewed aarti tracking (max 20) | 2026-04-20 |
-| `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, script language, app language, and other user settings | 2026-04-26 |
+| `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, language, notifications, onboarding completion, and stable sync identity metadata | 2026-05-01 |
 | `lib/data/repositories/user_aarti_repository.dart` | `UserAartiRepository` — Hive-backed CRUD for user-created private Aartis | 2026-04-20 |
 
 ## Providers
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, script language, app language, bookmarks, puja order, and the mutually exclusive Discover filter controller | 2026-04-27 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, bookmarks, puja order, Discover filters, and provider-owned user sync triggers | 2026-05-01 |
 
 ## Navigation
 
@@ -148,7 +151,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/onboarding/onboarding_screen.dart` | `OnboardingScreen` — multi-step welcome flow with default English app language and Devanagari script selection | 2026-04-26 |
+| `lib/features/onboarding/onboarding_screen.dart` | `OnboardingScreen` — multi-step welcome flow that persists identity metadata and triggers the first forced user sync on completion | 2026-05-01 |
 
 ## Features / Settings
 
@@ -168,12 +171,12 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-04-27 |
-| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-04-27 |
+| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-05-01 |
+| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-05-01 |
 | `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing | 2026-04-20 |
-| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-04-27 |
+| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-05-01 |
 | `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions | 2026-04-26 |
-| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-04-27 |
+| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-05-01 |
 
 ## Testing
 
@@ -181,3 +184,4 @@
 |-----------|---------|--------------|
 | `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
 | `test/festival_repository_test.dart` | Focused repository tests for upcoming-only festival filter ordering, duplicate-tag collapsing, and the 5-chip limit | 2026-04-27 |
+| `test/user_sync_service_test.dart` | Focused service tests for sync payload generation, identity backfill, debounce, force sync, and failure semantics | 2026-05-01 |

@@ -1,3 +1,21 @@
+## [2026-05-01] — User Profile And Settings Sync
+
+### Added
+- `lib/core/constants/app_sync_config.dart` — Added compile-time config for the user sync webhook URL, debounce window, and request timeout.
+- `lib/core/services/user_sync_service.dart` — Added a best-effort debounced n8n sync service for lightweight user profile and settings payloads.
+- `lib/core/utils/device_info_helper.dart` — Added a cross-platform device snapshot helper used by outbound sync payloads.
+- `test/user_sync_service_test.dart` — Added focused coverage for payload generation, identity backfill, debounce, force sync, and failure semantics.
+
+### Modified
+- `pubspec.yaml` — Added `http`, `device_info_plus`, `package_info_plus`, and `uuid` dependencies for the new sync flow.
+- `lib/data/repositories/settings_repository.dart` — Added stable `user_id`, `registration_date`, `onboarding_date`, and sync-friendly serialization helpers.
+- `lib/providers/app_providers.dart` — Wired provider-owned settings mutations to schedule debounced user sync after persistence.
+- `lib/features/onboarding/onboarding_screen.dart` — Forced the first user sync immediately after onboarding completion.
+- `lib/app.dart` — Added returning-user startup sync on app launch.
+- `docs/FILE_REGISTRY.md` — Registered the new sync files and refreshed touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented the sync service, provider-owned trigger model, and added dependencies.
+- `docs/FUNCTIONAL_SPEC.md` — Added the user sync feature flow and business rules.
+
 ## [2026-04-27] — Exclusive Discover Filters
 
 ### Added

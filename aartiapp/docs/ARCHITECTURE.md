@@ -19,12 +19,15 @@ lib/
 │   │   └── theme_aware_colors.dart    # BuildContext extension for theme-aware colours
 │   ├── constants/
 │   │   ├── app_constants.dart         # App-level shared constants (log retention/file names)
+│   │   ├── app_sync_config.dart       # Compile-time user sync webhook + timing config
 │   │   └── haptics.dart               # AppHaptics — scoped haptic feedback
 │   ├── services/
 │   │   ├── activity_log_service.dart  # File-backed JSONL runtime activity log
 │   │   ├── notification_service.dart  # Local daily notification scheduling
+│   │   ├── user_sync_service.dart     # Debounced best-effort user/settings sync to n8n
 │   │   └── sharing_service.dart       # Share lyrics as text or image
 │   └── utils/
+│       ├── device_info_helper.dart    # Cross-platform device metadata for sync payloads
 │       ├── day_deity_mapper.dart      # Weekday → deity mapping
 │       └── search_engine.dart         # Full-text local search + filter
 ├── data/
@@ -38,7 +41,7 @@ lib/
 │       ├── festival_repository.dart   # Bundled festival calendar (singleton)
 │       ├── puja_repository.dart       # Hive-backed puja order
 │       ├── recently_played_repository.dart  # Hive-backed recent history
-│       ├── settings_repository.dart   # SharedPreferences wrapper
+│       ├── settings_repository.dart   # SharedPreferences wrapper + stable sync identity metadata
 │       └── user_aarti_repository.dart # Hive-backed user-created aartis
 ├── providers/
 │   └── app_providers.dart             # All Riverpod providers & StateNotifiers
@@ -143,6 +146,10 @@ ProviderScope(
 )
 ```
 
+### Provider-Owned Sync Triggers
+
+Best-effort user sync is intentionally attached to provider-backed setting mutators rather than individual widgets. Each notifier persists the new value first and then asks `UserSyncService` to schedule a debounced sync. This keeps the sync trigger surface aligned with the state ownership model and avoids duplicate widget-level callbacks.
+
 ---
 
 ## 4. Error Handling
@@ -150,6 +157,7 @@ ProviderScope(
 - **Repository layer:** Catches exceptions internally; methods return empty collections on failure rather than throwing.
 - **Audio playback:** `try/catch` around URL loading; silently degrades if network unreachable.
 - **Notifications:** Fail-silent on permission denial or scheduling errors.
+- **User sync:** `UserSyncService` treats n8n sync as best-effort telemetry. Non-2xx responses, timeouts, and transport failures are logged through `ActivityLogService` and never block UX.
 - **JSON parsing:** Null-safe with fallback defaults in `fromJson` factories.
 - **Global uncaught failures:** `main.dart` wires `FlutterError.onError` and `runZonedGuarded` to `ActivityLogService.error(...)` for persistent diagnostics.
 - **Activity diagnostics:** Recoverable warnings (e.g., audio init/share failures) are captured by `ActivityLogService.warn(...)` for local inspection and export.
@@ -206,6 +214,10 @@ See [THEME_AND_DESIGN.md](THEME_AND_DESIGN.md) for the full token catalogue.
 | `path_provider` | ^2.1.5 | Resolve app document/temp directories for Activity Log persistence/export |
 | `flutter_local_notifications` | ^18.0.1 | Daily puja reminder notifications |
 | `timezone` | ^0.10.0 | Timezone-aware notification scheduling |
+| `http` | ^1.4.0 | JSON POST transport for n8n user sync |
+| `device_info_plus` | ^11.5.0 | Cross-platform device metadata for sync payloads |
+| `package_info_plus` | ^8.3.1 | Runtime app version lookup for sync payloads |
+| `uuid` | ^4.5.1 | Stable local `user_id` generation |
 | `screenshot` | ^3.0.0 | Widget-to-image capture for sharing |
 
 ---
@@ -226,11 +238,11 @@ See [THEME_AND_DESIGN.md](THEME_AND_DESIGN.md) for the full token catalogue.
 flutter pub get
 
 # Run debug build
-flutter run
+flutter run --dart-define=AARTI_USER_SYNC_WEBHOOK_URL=https://example.com/webhook
 
 # Run tests
 flutter test
 
 # Build release APK
-flutter build apk --release
+flutter build apk --release --dart-define=AARTI_USER_SYNC_WEBHOOK_URL=https://example.com/webhook
 ```
