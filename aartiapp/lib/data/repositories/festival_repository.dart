@@ -27,7 +27,7 @@ class FestivalRepository {
     if (_loaded) return;
     try {
       final jsonStr = await rootBundle.loadString(
-        'assets/data/festivals/hindu_calendar_2026_2028.json',
+        'assets/data/festival_catalog.json',
       );
       loadFromJsonString(jsonStr, source: 'bundled');
     } catch (_) {
