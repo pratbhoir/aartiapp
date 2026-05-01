@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/activity_log_service.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
 import '../../data/repositories/aarti_repository.dart';
 import '../../shared/utils/aarti_language_resolver.dart';
+import 'feedback_screen.dart';
 import 'dev_tools_screen.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
@@ -313,6 +315,24 @@ class SettingsScreen extends ConsumerWidget {
                   },
                 ),
                 const SizedBox(height: 24),
+
+                // --- Support ---
+                _SectionHeader('Support'),
+                const SizedBox(height: AppSpacing.md),
+                _SettingsTile(
+                  icon: Icons.rate_review_outlined,
+                  title: 'Send Feedback',
+                  subtitle:
+                      'Report issues, suggest improvements, or share devotional feedback',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const FeedbackScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: AppSpacing.xl),
 
                 // --- Diagnostics ---
                 _SectionHeader('Diagnostics'),

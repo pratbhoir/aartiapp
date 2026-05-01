@@ -27,7 +27,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/constants/app_constants.dart` | App-level constants for cross-cutting services (including Activity Log retention + file name) | 2026-04-26 |
-| `lib/core/constants/app_sync_config.dart` | Compile-time config for user sync webhook URL, debounce delay, and request timeout | 2026-05-01 |
+| `lib/core/constants/app_sync_config.dart` | Compile-time config for user sync and feedback webhook URLs plus request timing values | 2026-05-01 |
 | `lib/core/constants/haptics.dart` | `AppHaptics` — scoped haptic feedback definitions (light, medium, selection, completion) | 2026-04-20 |
 
 ## Core / Services
@@ -35,6 +35,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/services/activity_log_service.dart` | `ActivityLogService` static utility — JSONL-backed runtime log with init/write/read/clear/share APIs | 2026-04-26 |
+| `lib/core/services/feedback_service.dart` | `FeedbackService` — user-visible feedback submission service that posts devotional issues and suggestions to n8n with device and identity context | 2026-05-01 |
 | `lib/core/services/notification_service.dart` | `NotificationService` singleton — daily puja reminder scheduling via `flutter_local_notifications` | 2026-04-20 |
 | `lib/core/services/user_sync_service.dart` | `UserSyncService` — debounced best-effort sync of lightweight user profile and settings data to a configured n8n webhook | 2026-05-01 |
 | `lib/core/services/sharing_service.dart` | `SharingService` singleton — share Aarti as text or rendered image via `share_plus`, with Activity Log failure reporting | 2026-04-26 |
@@ -71,7 +72,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, bookmarks, puja order, Discover filters, and provider-owned user sync triggers | 2026-05-01 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, bookmarks, puja order, Discover filters, provider-owned user sync triggers, and the feedback service | 2026-05-01 |
 
 ## Navigation
 
@@ -157,7 +158,8 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, diagnostics entries, and theme-aware control chrome | 2026-04-27 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, feedback entrypoint, diagnostics entries, and theme-aware control chrome | 2026-05-01 |
+| `lib/features/settings/feedback_screen.dart` | `FeedbackScreen` — devotional feedback form with efficient stacked category chips, softer placeholder styling, a large message field, keyboard-aware page scrolling, validation, submit loading state, and dedicated success state | 2026-05-01 |
 | `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions | 2026-04-26 |
 
 ## Assets
@@ -167,15 +169,30 @@
 | `assets/data/aarti_catalog.json` | Bundled aarti catalog with all metadata, verses, and tags | 2026-04-20 |
 | `assets/data/festivals/hindu_calendar_2026_2028.json` | Bundled Hindu festival calendar (2026–2028) | 2026-04-20 |
 
+## Integration Assets
+
+| File Path | Purpose | Last Updated |
+|-----------|---------|--------------|
+| `n8n/aartiapp_user_sync_workflow.json` | Import-ready n8n workflow for AartiApp user profile/settings sync with DataTable primary storage and optional Postgres sink | 2026-05-01 |
+| `n8n/aartiapp_feedback_workflow.json` | Import-ready n8n workflow for AartiApp feedback submission with DataTable primary storage and optional Postgres sink | 2026-05-01 |
+
+## Database
+
+| File Path | Purpose | Last Updated |
+|-----------|---------|--------------|
+| `database/aartiapp.sql` | Combined SQL bootstrap for the AartiApp user-sync and feedback tables plus helpful indexes and query references | 2026-05-01 |
+| `database/Tables/UserProfiles.sql` | SQL schema and Postgres upsert query for the AartiApp user-sync storage table | 2026-05-01 |
+| `database/Tables/appFeedback.sql` | SQL schema, indexes, and insert query for the AartiApp feedback storage table | 2026-05-01 |
+
 ## Documentation
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-05-01 |
-| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions | 2026-05-01 |
+| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions, and runtime integration guidance | 2026-05-01 |
 | `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing | 2026-04-20 |
-| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria | 2026-05-01 |
-| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions | 2026-04-26 |
+| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria, and feedback submission rules | 2026-05-01 |
+| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions, including planned feedback events | 2026-05-01 |
 | `docs/CHANGELOG.md` | Chronological log of all changes | 2026-05-01 |
 
 ## Testing
@@ -183,5 +200,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
+| `test/feedback_service_test.dart` | Focused service tests for feedback payload generation, identity backfill, and failure semantics | 2026-05-01 |
+| `test/feedback_screen_test.dart` | Focused widget tests for feedback form validation and success-state behavior | 2026-05-01 |
 | `test/festival_repository_test.dart` | Focused repository tests for upcoming-only festival filter ordering, duplicate-tag collapsing, and the 5-chip limit | 2026-04-27 |
 | `test/user_sync_service_test.dart` | Focused service tests for sync payload generation, identity backfill, debounce, force sync, and failure semantics | 2026-05-01 |

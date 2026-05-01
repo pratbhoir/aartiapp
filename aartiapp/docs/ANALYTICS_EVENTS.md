@@ -78,9 +78,19 @@
 | `settings_script_mode_changed` | User changes script | `mode` (0/1/2) | Settings |
 | `settings_notification_toggled` | User enables/disables notification | `enabled`, `hour`, `minute` | Settings |
 | `settings_crossfade_changed` | User changes crossfade duration | `duration_s` | Settings |
+| `settings_feedback_opened` | User opens the feedback form from settings | — | Settings |
 | `settings_activity_log_opened` | User opens Activity Log viewer | `entry_count` | Settings |
 | `settings_activity_log_shared` | User exports Activity Log | `entry_count` | Settings |
 | `settings_activity_log_cleared` | User clears Activity Log | `entry_count_before` | Settings |
+
+### Feedback
+
+| Event Name | Trigger | Parameters | Screen |
+|------------|---------|------------|--------|
+| `feedback_screen_viewed` | Feedback screen loaded | — | Feedback |
+| `feedback_type_selected` | User changes the selected feedback category | `feedback_type` | Feedback |
+| `feedback_submitted` | Feedback submission succeeds | `feedback_type`, `email_provided` | Feedback |
+| `feedback_submission_failed` | Feedback submission fails after user submit | `feedback_type`, `error_kind` | Feedback |
 
 ### Onboarding
 

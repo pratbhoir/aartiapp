@@ -7,6 +7,14 @@
 ## 1. Folder Structure
 
 ```
+n8n/
+├── aartiapp_user_sync_workflow.json   # Import-ready n8n workflow for profile/settings sync
+└── aartiapp_feedback_workflow.json    # Import-ready n8n workflow for user feedback ingestion
+database/
+├── aartiapp.sql                       # Combined Postgres bootstrap for workflow sinks
+└── Tables/
+  ├── UserProfiles.sql              # User sync table + upsert query
+  └── appFeedback.sql               # Feedback table + insert query
 lib/
 ├── main.dart                          # App entry point, repository init
 ├── app.dart                           # Root MaterialApp configuration
@@ -19,10 +27,11 @@ lib/
 │   │   └── theme_aware_colors.dart    # BuildContext extension for theme-aware colours
 │   ├── constants/
 │   │   ├── app_constants.dart         # App-level shared constants (log retention/file names)
-│   │   ├── app_sync_config.dart       # Compile-time user sync webhook + timing config
+│   │   ├── app_sync_config.dart       # Compile-time user sync / feedback webhook + timing config
 │   │   └── haptics.dart               # AppHaptics — scoped haptic feedback
 │   ├── services/
 │   │   ├── activity_log_service.dart  # File-backed JSONL runtime activity log
+│   │   ├── feedback_service.dart      # User-visible feedback submission to n8n
 │   │   ├── notification_service.dart  # Local daily notification scheduling
 │   │   ├── user_sync_service.dart     # Debounced best-effort user/settings sync to n8n
 │   │   └── sharing_service.dart       # Share lyrics as text or image
@@ -80,6 +89,7 @@ lib/
 │   │   └── onboarding_screen.dart
 │   └── settings/
 │       ├── settings_screen.dart
+│       ├── feedback_screen.dart
 │       └── dev_tools_screen.dart
 ```
 
@@ -117,7 +127,7 @@ Script-language and app-language display rules are centralized in `shared/utils/
 
 | Provider Type | Purpose | Example |
 |---------------|---------|---------|
-| `Provider<T>` | Expose singleton repos | `sharedPrefsProvider`, `settingsRepoProvider` |
+| `Provider<T>` | Expose singleton repos and services | `sharedPrefsProvider`, `settingsRepoProvider`, `feedbackServiceProvider` |
 | `StateNotifierProvider<N, T>` | Mutable state with business logic | `themeModeProvider`, `bookmarkProvider`, `pujaOrderProvider`, `discoverFilterProvider` |
 | `StateProvider<T>` | Simple mutable state | transient UI values with no coordination rules |
 | `Provider<T>` (computed) | Derived/filtered data | `filteredAartisProvider` |
@@ -150,6 +160,14 @@ ProviderScope(
 
 Best-effort user sync is intentionally attached to provider-backed setting mutators rather than individual widgets. Each notifier persists the new value first and then asks `UserSyncService` to schedule a debounced sync. This keeps the sync trigger surface aligned with the state ownership model and avoids duplicate widget-level callbacks.
 
+### Service-Backed Feedback Submission
+
+The feedback flow uses a dedicated `FeedbackService` exposed through Riverpod. Unlike user sync, feedback is a user-visible action, so the service throws `FeedbackSubmissionException` on non-2xx responses, timeouts, or transport failures after logging the error via `ActivityLogService`. The screen owns validation, loading state, and success-state rendering while the service owns payload construction and transport.
+
+### n8n + Database Contracts
+
+The app-to-automation contracts are versioned in-repo under `n8n/` and `database/`. The workflow JSON files mirror the exact payloads emitted by `UserSyncService` and `FeedbackService`, using n8n DataTables as the primary response path and optional Postgres nodes as a secondary sink. DataTable IDs and Postgres credentials are instance-specific, so those bindings must be selected after import even though the field mappings, SQL, webhook paths, and response payloads are already prepared.
+
 ---
 
 ## 4. Error Handling
@@ -157,6 +175,7 @@ Best-effort user sync is intentionally attached to provider-backed setting mutat
 - **Repository layer:** Catches exceptions internally; methods return empty collections on failure rather than throwing.
 - **Audio playback:** `try/catch` around URL loading; silently degrades if network unreachable.
 - **Notifications:** Fail-silent on permission denial or scheduling errors.
+- **Feedback submission:** `FeedbackService` logs failures and rethrows a user-facing exception so the UI can show a snackbar without swallowing the error silently.
 - **User sync:** `UserSyncService` treats n8n sync as best-effort telemetry. Non-2xx responses, timeouts, and transport failures are logged through `ActivityLogService` and never block UX.
 - **JSON parsing:** Null-safe with fallback defaults in `fromJson` factories.
 - **Global uncaught failures:** `main.dart` wires `FlutterError.onError` and `runZonedGuarded` to `ActivityLogService.error(...)` for persistent diagnostics.
@@ -214,10 +233,10 @@ See [THEME_AND_DESIGN.md](THEME_AND_DESIGN.md) for the full token catalogue.
 | `path_provider` | ^2.1.5 | Resolve app document/temp directories for Activity Log persistence/export |
 | `flutter_local_notifications` | ^18.0.1 | Daily puja reminder notifications |
 | `timezone` | ^0.10.0 | Timezone-aware notification scheduling |
-| `http` | ^1.4.0 | JSON POST transport for n8n user sync |
+| `http` | ^1.4.0 | JSON POST transport for n8n user sync and feedback submission |
 | `device_info_plus` | ^11.5.0 | Cross-platform device metadata for sync payloads |
-| `package_info_plus` | ^8.3.1 | Runtime app version lookup for sync payloads |
-| `uuid` | ^4.5.1 | Stable local `user_id` generation |
+| `package_info_plus` | ^8.3.1 | Runtime app version lookup for sync and feedback payloads |
+| `uuid` | ^4.5.1 | Stable local `user_id` generation and feedback submission ids |
 | `screenshot` | ^3.0.0 | Widget-to-image capture for sharing |
 
 ---
@@ -238,11 +257,11 @@ See [THEME_AND_DESIGN.md](THEME_AND_DESIGN.md) for the full token catalogue.
 flutter pub get
 
 # Run debug build
-flutter run --dart-define=AARTI_USER_SYNC_WEBHOOK_URL=https://example.com/webhook
+flutter run --dart-define=AARTI_USER_SYNC_WEBHOOK_URL=https://example.com/user-sync --dart-define=AARTI_FEEDBACK_WEBHOOK_URL=https://example.com/feedback
 
 # Run tests
 flutter test
 
 # Build release APK
-flutter build apk --release --dart-define=AARTI_USER_SYNC_WEBHOOK_URL=https://example.com/webhook
+flutter build apk --release --dart-define=AARTI_USER_SYNC_WEBHOOK_URL=https://example.com/user-sync --dart-define=AARTI_FEEDBACK_WEBHOOK_URL=https://example.com/feedback
 ```

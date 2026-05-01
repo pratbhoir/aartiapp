@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/services/feedback_service.dart';
 import '../core/services/user_sync_service.dart';
 import '../data/repositories/aarti_repository.dart';
 import '../data/repositories/settings_repository.dart';
@@ -26,6 +27,14 @@ final settingsRepoProvider = Provider<SettingsRepository>((ref) {
 
 final userSyncServiceProvider = Provider<UserSyncService>((ref) {
   final service = UserSyncService(
+    settingsRepository: ref.watch(settingsRepoProvider),
+  );
+  ref.onDispose(service.dispose);
+  return service;
+});
+
+final feedbackServiceProvider = Provider<FeedbackService>((ref) {
+  final service = FeedbackService(
     settingsRepository: ref.watch(settingsRepoProvider),
   );
   ref.onDispose(service.dispose);
