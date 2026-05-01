@@ -9,8 +9,8 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/main.dart` | App entry point — initialises Activity Log, Hive, cache-first devotional content bootstrap, notifications, repositories, global error hooks, and runs `ProviderScope` | 2026-05-01 |
-| `lib/app.dart` | Root `AartiSangrahApp` — configures `MaterialApp`, the onboarding gate, returning-user startup sync, and lifecycle-driven content refresh checks | 2026-05-01 |
+| `lib/main.dart` | App entry point — initialises Activity Log, cache-first devotional content bootstrap, repositories, notifications, global error hooks, and configures analytics before `runApp` | 2026-05-01 |
+| `lib/app.dart` | Root `AartiSangrahApp` — configures `MaterialApp`, the onboarding gate, returning-user startup sync, startup analytics identify, and lifecycle-driven content refresh checks | 2026-05-01 |
 
 ## Core / Theme
 
@@ -27,6 +27,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/constants/app_constants.dart` | App-level constants for cross-cutting services (including Activity Log retention + file name) | 2026-04-26 |
+| `lib/core/constants/app_analytics_config.dart` | Compile-time config for the direct Umami analytics endpoint, website ID, hostname, timeout, and User-Agent | 2026-05-01 |
 | `lib/core/constants/app_sync_config.dart` | Compile-time config for user sync, feedback, and content refresh webhook URLs plus request timing values | 2026-05-01 |
 | `lib/core/constants/haptics.dart` | `AppHaptics` — scoped haptic feedback definitions (light, medium, selection, completion) | 2026-04-20 |
 
@@ -35,10 +36,12 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/services/activity_log_service.dart` | `ActivityLogService` static utility — JSONL-backed runtime log with init/write/read/clear/share APIs | 2026-04-26 |
+| `lib/core/services/analytics_service.dart` | `AnalyticsService` static utility — direct Umami-over-HTTP event transport with screen dedupe, identify payloads, enablement gating, and 5xx retry handling | 2026-05-01 |
 | `lib/core/services/content_cache_service.dart` | `ContentCacheService` — application-documents JSON cache for the aarti catalog and festival calendar payloads | 2026-05-01 |
 | `lib/core/services/content_sync_service.dart` | `ContentSyncService` — n8n-backed refresh service for festival and aarti content with per-dataset caching, timestamps, and partial-failure tolerance | 2026-05-01 |
-| `lib/core/services/feedback_service.dart` | `FeedbackService` — user-visible feedback submission service that posts devotional issues and suggestions to n8n with device and identity context | 2026-05-01 |
+| `lib/core/services/feedback_service.dart` | `FeedbackService` — user-visible feedback submission service that posts devotional issues and suggestions to n8n with device and identity context while emitting analytics success/failure events | 2026-05-01 |
 | `lib/core/services/notification_service.dart` | `NotificationService` singleton — daily puja reminder scheduling via `flutter_local_notifications` | 2026-04-20 |
+| `lib/core/services/user_profile_snapshot.dart` | `UserProfileSnapshot` — shared lightweight identity, app, and device metadata snapshot reused by user sync and analytics identify payloads | 2026-05-01 |
 | `lib/core/services/user_sync_service.dart` | `UserSyncService` — debounced best-effort sync of lightweight user profile and settings data to a configured n8n webhook | 2026-05-01 |
 | `lib/core/services/sharing_service.dart` | `SharingService` singleton — share Aarti as text or rendered image via `share_plus`, with Activity Log failure reporting | 2026-04-26 |
 
@@ -68,20 +71,20 @@
 | `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled, cached, or remote Hindu calendar JSON (2026–2028), tracks content version/source, and returns up to 5 Discover festival tags in nearest current/upcoming order | 2026-05-01 |
 | `lib/data/repositories/puja_repository.dart` | `PujaRepository` — Hive-backed ordered puja list persistence | 2026-04-20 |
 | `lib/data/repositories/recently_played_repository.dart` | `RecentlyPlayedRepository` — Hive-backed recently-viewed aarti tracking (max 20) | 2026-04-20 |
-| `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, language, notifications, onboarding completion, and stable sync identity metadata | 2026-05-01 |
+| `lib/data/repositories/settings_repository.dart` | `SettingsRepository` — SharedPreferences wrapper for theme, text scale, language, notifications, onboarding completion, analytics enablement, and stable sync/analytics identity metadata | 2026-05-01 |
 | `lib/data/repositories/user_aarti_repository.dart` | `UserAartiRepository` — Hive-backed CRUD for user-created private Aartis | 2026-04-20 |
 
 ## Providers
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, bookmarks, puja order, Discover filters, provider-owned user sync triggers, feedback service, and content sync state/revision invalidation | 2026-05-01 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, analytics enablement, bookmarks, puja order, Discover filters, provider-owned user sync and analytics re-identify triggers, feedback service, and content sync state/revision invalidation | 2026-05-01 |
 
 ## Navigation
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/navigation/home_shell.dart` | `HomeShell` — top-level `Scaffold` with Temple Dock bottom navigation and `AnimatedSwitcher` screen transitions | 2026-04-25 |
+| `lib/navigation/home_shell.dart` | `HomeShell` — top-level `Scaffold` with Temple Dock bottom navigation, `AnimatedSwitcher` screen transitions, and tab-level screen analytics | 2026-05-01 |
 | `lib/navigation/app_drawer.dart` | `AppDrawer` — dark-themed side navigation drawer component (legacy, currently not mounted by `HomeShell`) | 2026-04-25 |
 | `lib/navigation/widgets/app_bottom_nav.dart` | `AppBottomNav` — Temple Dock style bottom navigation used for primary app sections | 2026-04-25 |
 
@@ -110,7 +113,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with mutually exclusive search, deity, and festival filters plus a script-aware aarti grid | 2026-04-27 |
+| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with mutually exclusive search, deity, and festival filters plus a script-aware aarti grid and discover interaction analytics, including bookmark saves | 2026-05-01 |
 | `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, script-aware subtitle, duration, bookmark | 2026-04-26 |
 | `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
 | `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable Discover festival tag chips showing only actual festival entries | 2026-04-27 |
@@ -122,11 +125,11 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, and session-style focus mode with temporary reading-surface and text-size overrides | 2026-04-27 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, temporary focus settings, and detailed interaction analytics including bookmark saves | 2026-05-01 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with tap-zone navigation, derived secondary-script rendering, centered session-style header support, puja boundary handoff CTAs, and balanced line splits | 2026-04-27 |
-| `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, and theme-aware modal chrome | 2026-04-26 |
+| `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, completion callback, and theme-aware modal chrome | 2026-05-01 |
 | `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — segmented control switching Lyrics / Transliteration / Meaning views with theme-aware surfaces | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, derived secondary-script lines, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-27 |
 
@@ -134,36 +137,36 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, audio/focus session launchers, and script-aware preview items | 2026-04-26 |
-| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local reading-surface and text-size overrides powered by the shared focus settings sheet, progress dots, and previous/next aarti handoff | 2026-04-27 |
-| `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, and script-aware verse preview | 2026-04-26 |
+| `lib/features/my_puja/my_puja_screen.dart` | `MyPujaScreen` — daily puja playlist with drag-to-reorder, audio/focus session launchers, script-aware preview items, and puja list analytics | 2026-05-01 |
+| `lib/features/my_puja/puja_focus_session_screen.dart` | `PujaFocusSessionScreen` — sequential full-screen reading session for the My Daily Puja order with session-local reading-surface and text-size overrides, progress dots, previous/next handoff, and focus-session lifecycle analytics | 2026-05-01 |
+| `lib/features/my_puja/puja_session_screen.dart` | `PujaSessionScreen` — sequential audio puja session with auto-play, crossfade, controls, script-aware verse preview, and session completion/exit analytics | 2026-05-01 |
 | `lib/features/my_puja/widgets/puja_list_item.dart` | `PujaListItem` — reorderable puja entry with deity badge, script-aware subtitle, and theme-aware sequence/remove controls | 2026-04-26 |
 
 ## Features / Contribute
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/contribute/contribute_screen.dart` | `ContributeScreen` — form to create and save personal Aartis locally with centralized validation and success snackbar feedback | 2026-05-01 |
+| `lib/features/contribute/contribute_screen.dart` | `ContributeScreen` — form to create and save personal Aartis locally with centralized validation, success snackbar feedback, and collection analytics including explicit My Puja adds | 2026-05-01 |
 
 ## Features / Home
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, and Discover handoff that reuses the centralized filter controller | 2026-04-27 |
+| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with greeting, Aarti of the Day, festive banner, Discover handoff, and hero-card analytics | 2026-05-01 |
 
 ## Features / Onboarding
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/onboarding/onboarding_screen.dart` | `OnboardingScreen` — multi-step welcome flow that persists identity metadata and triggers the first forced user sync on completion | 2026-05-01 |
+| `lib/features/onboarding/onboarding_screen.dart` | `OnboardingScreen` — four-step welcome flow that persists identity metadata, emits onboarding analytics milestones, and triggers the first forced user sync on completion | 2026-05-01 |
 
 ## Features / Settings
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, app language, primary/secondary script overview, notification, session settings, manual content refresh tile, feedback entrypoint, diagnostics entries, and theme-aware control chrome | 2026-05-01 |
-| `lib/features/settings/feedback_screen.dart` | `FeedbackScreen` — devotional feedback form with efficient stacked category chips, softer placeholder styling, a large message field, keyboard-aware page scrolling, validation, submit loading state, dedicated success state, and centralized error snackbar feedback | 2026-05-01 |
-| `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log and Share Activity Log actions using centralized snackbar feedback for log clear actions | 2026-05-01 |
+| `lib/features/settings/settings_screen.dart` | `SettingsScreen` — theme, analytics opt-out, app language, primary/secondary script overview, notification, session settings, manual content refresh, feedback entrypoint, diagnostics actions, and settings analytics instrumentation | 2026-05-01 |
+| `lib/features/settings/feedback_screen.dart` | `FeedbackScreen` — devotional feedback form with efficient stacked category chips, keyboard-aware submission UX, success state, snackbar failures, and feedback analytics hooks | 2026-05-01 |
+| `lib/features/settings/dev_tools_screen.dart` | `DevToolsScreen` — diagnostics hub page with Activity Log open/share/clear actions and analytics instrumentation for those diagnostics flows | 2026-05-01 |
 
 ## Assets
 
@@ -197,7 +200,7 @@
 | `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions, and runtime integration guidance | 2026-05-01 |
 | `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing, and component feedback styling | 2026-05-01 |
 | `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria, and feedback submission rules | 2026-05-01 |
-| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions, including planned feedback events | 2026-05-01 |
+| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions for the implemented direct Umami event surface | 2026-05-01 |
 | `docs/CHANGELOG.md` | Chronological log of all changes | 2026-05-01 |
 
 ## Testing
@@ -205,6 +208,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `test/content_sync_service_test.dart` | Focused service tests for content refresh, stale-skip behavior, cache writes, and per-dataset partial success | 2026-05-01 |
+| `test/analytics_service_test.dart` | Focused service tests for Umami payload shaping, send gating, screen dedupe, and retry behavior | 2026-05-01 |
 | `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
 | `test/feedback_service_test.dart` | Focused service tests for feedback payload generation, identity backfill, and failure semantics | 2026-05-01 |
 | `test/feedback_screen_test.dart` | Focused widget tests for feedback form validation and success-state behavior | 2026-05-01 |

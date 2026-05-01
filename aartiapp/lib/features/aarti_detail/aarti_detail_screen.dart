@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../core/constants/haptics.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/services/activity_log_service.dart';
 import '../../core/services/sharing_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -83,6 +84,20 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
       _initAudio();
     }
     _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackScreen(
+        '/aarti/${widget.aarti.id}',
+        title: widget.aarti.title,
+      );
+      AnalyticsService.trackEvent(
+        'aarti_detail',
+        data: <String, Object>{
+          'aarti_id': widget.aarti.id,
+          'deity_name': widget.aarti.deity,
+        },
+        path: '/aarti/${widget.aarti.id}',
+      );
+    });
   }
 
   Future<void> _initAudio() async {
@@ -186,8 +201,21 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
 
   void _togglePlay() {
     if (_isPlaying) {
+      AnalyticsService.trackEvent(
+        'detail_audio_pause_tapped',
+        data: <String, Object>{
+          'aarti_id': widget.aarti.id,
+          'position_ms': _position.inMilliseconds,
+        },
+        path: '/aarti/${widget.aarti.id}',
+      );
       _audioPlayer.pause();
     } else {
+      AnalyticsService.trackEvent(
+        'detail_audio_play_tapped',
+        data: <String, Object>{'aarti_id': widget.aarti.id},
+        path: '/aarti/${widget.aarti.id}',
+      );
       _audioPlayer.play();
     }
   }
@@ -212,6 +240,11 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     required double textScale,
     required AartiDetailContentMode selectedMode,
   }) {
+    AnalyticsService.trackEvent(
+      'detail_focus_mode_entered',
+      data: <String, Object>{'aarti_id': widget.aarti.id},
+      path: '/aarti/${widget.aarti.id}',
+    );
     setState(() {
       _focusScriptMode = scriptMode;
       _focusTextScale = textScale;
@@ -382,6 +415,25 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                         child: GestureDetector(
                                           onTap: () {
                                             AppHaptics.selection();
+                                            AnalyticsService.trackEvent(
+                                              'bookmark_toggled',
+                                              data: <String, Object>{
+                                                'source': 'detail_screen',
+                                                'aarti_id': widget.aarti.id,
+                                                'deity_name': widget.aarti.deity,
+                                                'is_bookmarked': !isBookmarked,
+                                              },
+                                            );
+                                            // if (!isBookmarked) {
+                                            //   AnalyticsService.trackEvent(
+                                            //     'detail_aarti_bookmarked',
+                                            //     data: <String, Object>{
+                                            //       'aarti_id': widget.aarti.id,
+                                            //       'deity_name': widget.aarti.deity,
+                                            //     },
+                                            //     path: '/aarti/${widget.aarti.id}',
+                                            //   );
+                                            // }
                                             ref
                                                 .read(bookmarkProvider.notifier)
                                                 .toggle(widget.aarti.id);
@@ -489,8 +541,16 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     app.ActionChip(
                                       icon: Icons.track_changes_outlined,
                                       label: 'Mantra Counter',
-                                      onTap: () =>
-                                          setState(() => _showCounter = true),
+                                      onTap: () {
+                                        AnalyticsService.trackEvent(
+                                          'detail_mantra_counter_opened',
+                                          data: <String, Object>{
+                                            'aarti_id': widget.aarti.id,
+                                            'target_count': 108,
+                                          },
+                                        );
+                                        setState(() => _showCounter = true);
+                                      },
                                     ),
                                     const SizedBox(width: 8),
                                     app.ActionChip(
@@ -514,9 +574,17 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                             child: ToggleBar(
                               labels: toggleLabels,
                               activeIndex: availableModes.indexOf(selectedMode),
-                              onSelect: (i) => setState(
-                                () => _contentMode = availableModes[i],
-                              ),
+                              onSelect: (i) {
+                                AnalyticsService.trackEvent(
+                                  'detail_view_mode_toggled',
+                                  data: <String, Object>{
+                                    'mode': availableModes[i].name,
+                                  },
+                                );
+                                setState(
+                                  () => _contentMode = availableModes[i],
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -599,7 +667,16 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             Positioned(
               bottom: hasAudioUrl ? 140 : 24,
               right: 24,
-              child: _NextFab(onTap: () => _openAarti(nextPujaAarti)),
+              child: _NextFab(
+                onTap: () {
+                  AnalyticsService.trackEvent(
+                    'detail_next_fab_tapped',
+                    data: <String, Object>{'aarti_id': widget.aarti.id},
+                    path: '/aarti/${widget.aarti.id}',
+                  );
+                  _openAarti(nextPujaAarti);
+                },
+              ),
             ),
 
           // Focus mode overlay
@@ -630,6 +707,16 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
           if (_showCounter)
             MantraCounterOverlay(
               onClose: () => setState(() => _showCounter = false),
+              onCompleted: (count) {
+                AnalyticsService.trackEvent(
+                  'detail_mantra_counter_completed',
+                  data: <String, Object>{
+                    'aarti_id': widget.aarti.id,
+                    'count': count,
+                  },
+                  path: '/aarti/${widget.aarti.id}',
+                );
+              },
             ),
         ],
       ),
@@ -754,6 +841,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                     icon: Icons.text_snippet_outlined,
                     label: 'As Text',
                     onTap: () {
+                      AnalyticsService.trackEvent(
+                        'detail_share_tapped',
+                        data: <String, Object>{
+                          'aarti_id': widget.aarti.id,
+                          'share_type': 'text',
+                        },
+                        path: '/aarti/${widget.aarti.id}',
+                      );
                       Navigator.pop(ctx);
                       SharingService.instance.shareAsText(widget.aarti);
                     },
@@ -765,6 +860,14 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                     icon: Icons.image_outlined,
                     label: 'As Image',
                     onTap: () {
+                      AnalyticsService.trackEvent(
+                        'detail_share_tapped',
+                        data: <String, Object>{
+                          'aarti_id': widget.aarti.id,
+                          'share_type': 'image',
+                        },
+                        path: '/aarti/${widget.aarti.id}',
+                      );
                       Navigator.pop(ctx);
                       SharingService.instance.shareAsImage(_lyricsRepaintKey);
                     },
@@ -777,6 +880,17 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
         ),
       ),
     );
+  }
+}
+
+int _contentModeIndex(AartiDetailContentMode mode) {
+  switch (mode) {
+    case AartiDetailContentMode.lyrics:
+      return 0;
+    case AartiDetailContentMode.transliteration:
+      return 1;
+    case AartiDetailContentMode.meaning:
+      return 2;
   }
 }
 

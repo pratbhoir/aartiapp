@@ -1,3 +1,35 @@
+## [2026-05-01] — Direct Umami Analytics
+
+### Added
+- `lib/core/constants/app_analytics_config.dart` — Added compile-time Umami analytics endpoint, website ID, hostname, timeout, and User-Agent configuration.
+- `lib/core/services/analytics_service.dart` — Added a centralized direct Umami-over-HTTP analytics service with pageview tracking, identify payloads, send gating, and retry-on-5xx behavior.
+- `lib/core/services/user_profile_snapshot.dart` — Added a shared lightweight identity/device/app snapshot reused by analytics and user sync.
+- `test/analytics_service_test.dart` — Added focused coverage for analytics payload shaping, send gating, screen dedupe, and retry behavior.
+
+### Modified
+- `lib/main.dart` — Configured analytics during bootstrap with a persisted analytics session/install ID.
+- `lib/app.dart` — Added startup analytics identify once onboarding is complete.
+- `lib/data/repositories/settings_repository.dart` — Added persisted analytics enablement and analytics session/install ID helpers.
+- `lib/providers/app_providers.dart` — Added an analytics opt-out provider, analytics re-identify hooks for persisted settings, and content-sync analytics events.
+- `lib/navigation/home_shell.dart` — Added shell-level pageview tracking for bottom-nav tab changes.
+- `lib/features/onboarding/onboarding_screen.dart` — Added onboarding started, step-complete, skip, and completion analytics.
+- `lib/features/home/home_screen.dart` — Added hero-card analytics for Aarti of the Day opens.
+- `lib/features/discover/discover_screen.dart` — Added discover screen, filter, search, aarti-card analytics, and bookmark-save analytics.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Added detail screen, view-mode, bookmark, bookmark-save, audio, focus mode, mantra counter, share, and next-CTA analytics.
+- `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` — Added completion callback support so mantra-finish analytics can be emitted from the owning detail screen.
+- `lib/features/my_puja/my_puja_screen.dart` — Added puja screen view, session launch, reorder, and remove analytics.
+- `lib/features/my_puja/puja_session_screen.dart` — Added puja audio session pageview plus completion and exit analytics, and guarded explicit close so exit is only tracked once.
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Added puja focus-session pageview plus mode-change, completion, and exit analytics, and guarded explicit close so exit is only tracked once.
+- `lib/features/contribute/contribute_screen.dart` — Added collection screen, save, explicit My Puja add, and delete analytics.
+- `lib/core/services/feedback_service.dart` — Added analytics success/failure events alongside feedback submissions.
+- `lib/features/settings/feedback_screen.dart` — Added feedback screen and type-selection analytics.
+- `lib/features/settings/settings_screen.dart` — Added settings screen analytics, an analytics opt-out toggle, and diagnostics action analytics.
+- `lib/features/settings/dev_tools_screen.dart` — Added diagnostics analytics for activity-log actions.
+- `docs/FILE_REGISTRY.md` — Registered the new analytics files and refreshed touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented the direct Umami analytics architecture and tracking model.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the analytics feature, Settings opt-out, updated onboarding flow, and bookmark/My Puja save analytics coverage.
+- `docs/ANALYTICS_EVENTS.md` — Updated the event registry to match the implemented analytics surface, content-sync events, and bookmark/My Puja save events.
+
 ## [2026-05-01] — Centralized Snackbar Helper
 
 ### Added

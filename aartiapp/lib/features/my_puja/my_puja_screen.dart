@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/haptics.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
@@ -11,12 +12,35 @@ import 'puja_focus_session_screen.dart';
 import 'puja_session_screen.dart';
 import 'widgets/puja_list_item.dart';
 
-class MyPujaScreen extends ConsumerWidget {
+class MyPujaScreen extends ConsumerStatefulWidget {
   final VoidCallback onOpenDrawer;
   const MyPujaScreen({super.key, required this.onOpenDrawer});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyPujaScreen> createState() => _MyPujaScreenState();
+}
+
+class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackScreen(
+        '/my-puja',
+        title: 'My Puja',
+      );
+      // AnalyticsService.trackEvent(
+      //   'puja_screen_viewed',
+      //   data: <String, Object>{
+      //     'puja_count': ref.read(pujaOrderProvider).length,
+      //   },
+      //   path: '/my-puja',
+      // );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final pujaIds = ref.watch(pujaOrderProvider);
     final userAartis = ref.watch(userAartiProvider);
     final scriptMode = ref.watch(scriptModeProvider);
@@ -37,7 +61,7 @@ class MyPujaScreen extends ConsumerWidget {
       child: Column(
         children: [
           AartiAppBar(
-            onMenuTap: onOpenDrawer,
+            onMenuTap: widget.onOpenDrawer,
             showMenu: false,
             showLogoTitle: true,
             title: 'My Daily Puja',
@@ -84,6 +108,13 @@ class MyPujaScreen extends ConsumerWidget {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
+                                AnalyticsService.trackEvent(
+                                  'puja_session_started',
+                                  data: <String, Object>{
+                                    'puja_count': pujaAartis.length,
+                                  },
+                                  path: '/my-puja',
+                                );
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -117,6 +148,13 @@ class MyPujaScreen extends ConsumerWidget {
                             ),
                             ElevatedButton.icon(
                               onPressed: () {
+                                AnalyticsService.trackEvent(
+                                  'puja_focus_session_started',
+                                  data: <String, Object>{
+                                    'puja_count': pujaAartis.length,
+                                  },
+                                  path: '/my-puja',
+                                );
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -257,6 +295,18 @@ class MyPujaScreen extends ConsumerWidget {
                     },
                     onReorder: (oldIndex, newIndex) {
                       AppHaptics.reorder();
+                      final adjustedNewIndex = newIndex > oldIndex
+                          ? newIndex - 1
+                          : newIndex;
+                      AnalyticsService.trackEvent(
+                        'puja_item_reordered',
+                        data: <String, Object>{
+                          'aarti_id': pujaAartis[oldIndex].id,
+                          'old_index': oldIndex,
+                          'new_index': adjustedNewIndex,
+                        },
+                        path: '/my-puja',
+                      );
                       ref
                           .read(pujaOrderProvider.notifier)
                           .reorder(oldIndex, newIndex);
@@ -270,6 +320,11 @@ class MyPujaScreen extends ConsumerWidget {
                       isPlaying: false,
                       delay: Duration(milliseconds: i * 60),
                       onRemove: () {
+                        AnalyticsService.trackEvent(
+                          'puja_item_removed',
+                          data: <String, Object>{'aarti_id': pujaAartis[i].id},
+                          path: '/my-puja',
+                        );
                         ref
                             .read(pujaOrderProvider.notifier)
                             .removeAarti(pujaAartis[i].id);

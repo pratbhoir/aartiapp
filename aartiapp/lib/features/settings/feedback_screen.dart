@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/services/analytics_service.dart';
 import '../../core/services/feedback_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -34,6 +35,15 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
   String _selectedType = _feedbackTypes.first;
   bool _isSubmitting = false;
   bool _didSubmit = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackScreen('/feedback', title: 'Feedback');
+      //AnalyticsService.trackEvent('feedback_screen_viewed', path: '/feedback');
+    });
+  }
 
   @override
   void dispose() {
@@ -101,6 +111,13 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                         isSubmitting: _isSubmitting,
                         feedbackTypes: _feedbackTypes,
                         onTypeSelected: (String value) {
+                          if (value != _selectedType) {
+                            AnalyticsService.trackEvent(
+                              'feedback_type_selected',
+                              data: <String, Object>{'feedback_type': value},
+                              path: '/feedback',
+                            );
+                          }
                           setState(() => _selectedType = value);
                         },
                         onSubmit: _submit,

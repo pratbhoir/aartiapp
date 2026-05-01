@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/services/activity_log_service.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
@@ -73,7 +74,16 @@ class DevToolsScreen extends StatelessWidget {
                       title: 'Activity Log',
                       subtitle:
                           '${ActivityLogService.length} entries · View runtime activity',
-                      onTap: () => _showActivityLog(context),
+                      onTap: () {
+                        AnalyticsService.trackEvent(
+                          'settings_activity_log_opened',
+                          data: <String, Object>{
+                            'entry_count': ActivityLogService.length,
+                          },
+                          path: '/devtools',
+                        );
+                        _showActivityLog(context);
+                      },
                     ),
                     const SizedBox(height: 12),
                     _DiagnosticsTile(
@@ -81,6 +91,13 @@ class DevToolsScreen extends StatelessWidget {
                       title: 'Share Activity Log',
                       subtitle: 'Export diagnostics file for troubleshooting',
                       onTap: () async {
+                        AnalyticsService.trackEvent(
+                          'settings_activity_log_shared',
+                          data: <String, Object>{
+                            'entry_count': ActivityLogService.length,
+                          },
+                          path: '/devtools',
+                        );
                         await ActivityLogService.share();
                       },
                     ),
@@ -146,6 +163,13 @@ class DevToolsScreen extends StatelessWidget {
                             color: AppColors.ink2,
                           ),
                           onPressed: () async {
+                            AnalyticsService.trackEvent(
+                              'settings_activity_log_shared',
+                              data: <String, Object>{
+                                'entry_count': rows.length,
+                              },
+                              path: '/devtools',
+                            );
                             await ActivityLogService.share();
                           },
                         ),
@@ -156,6 +180,13 @@ class DevToolsScreen extends StatelessWidget {
                             color: AppColors.ink2,
                           ),
                           onPressed: () async {
+                            AnalyticsService.trackEvent(
+                              'settings_activity_log_cleared',
+                              data: <String, Object>{
+                                'entry_count_before': rows.length,
+                              },
+                              path: '/devtools',
+                            );
                             await ActivityLogService.clear();
                             modalSetState(rows.clear);
                             if (!modalContext.mounted) return;

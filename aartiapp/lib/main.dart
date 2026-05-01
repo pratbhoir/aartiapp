@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'core/services/analytics_service.dart';
 import 'core/services/activity_log_service.dart';
 import 'core/services/content_cache_service.dart';
 import 'core/services/notification_service.dart';
@@ -16,6 +17,7 @@ import 'data/repositories/festival_repository.dart';
 import 'data/repositories/puja_repository.dart';
 import 'data/repositories/user_aarti_repository.dart';
 import 'data/repositories/recently_played_repository.dart';
+import 'data/repositories/settings_repository.dart';
 import 'providers/app_providers.dart';
 
 Future<void> main() async {
@@ -46,8 +48,21 @@ Future<void> main() async {
 
       // Initialize repositories
       final prefs = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(prefs);
+      await settingsRepository.ensureUserIdentity();
+      final analyticsSessionId = await settingsRepository
+          .ensureAnalyticsSessionId();
       final contentCacheService = ContentCacheService();
       await _loadCachedOrBundledContent(contentCacheService);
+
+      AnalyticsService.configure(
+        settingsRepository: settingsRepository,
+        analyticsEnabled: settingsRepository.getAnalyticsEnabled(),
+        sessionId: analyticsSessionId,
+        locale: settingsRepository.getPreferredLanguage(),
+        name: settingsRepository.getUserName(),
+        userId: settingsRepository.getUserId(),
+      );
 
       // Initialize notification service (v1.5)
       await NotificationService.instance.init();

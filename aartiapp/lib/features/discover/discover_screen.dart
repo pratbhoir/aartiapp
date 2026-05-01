@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/repositories/aarti_repository.dart';
@@ -30,6 +31,13 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
     _searchController = TextEditingController(
       text: ref.read(discoverFilterProvider).searchQuery,
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // AnalyticsService.trackEvent('discover_screen_viewed', path: '/discover');
+      AnalyticsService.trackScreen(
+        '/discover',
+        title: 'Discover',
+      );
+    });
   }
 
   @override
@@ -107,6 +115,14 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                                             DiscoverFilterMode.deity &&
                                         discoverFilter.activeDeityIndex == i,
                               onTap: () {
+                                AnalyticsService.trackEvent(
+                                  'discover_deity_filter_tapped',
+                                  data: <String, Object>{
+                                    'deity_name': deities[i]['label']!,
+                                    'index': i,
+                                  },
+                                  path: '/discover',
+                                );
                                 ref
                                     .read(discoverFilterProvider.notifier)
                                     .selectDeity(i);
@@ -126,6 +142,14 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     child: app.SearchBar(
                       controller: _searchController,
                       onChanged: (query) {
+                        final normalized = query.trim();
+                        if (normalized.isNotEmpty) {
+                          AnalyticsService.trackEvent(
+                            'discover_search_performed',
+                            data: <String, Object>{'query': normalized},
+                            path: '/discover',
+                          );
+                        }
                         ref
                             .read(discoverFilterProvider.notifier)
                             .applySearch(query);
@@ -150,6 +174,11 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                           festivalTags: festivalTags,
                           activeTag: discoverFilter.activeFestivalTag,
                           onSelect: (tag) {
+                            AnalyticsService.trackEvent(
+                              'discover_festival_filter_tapped',
+                              data: <String, Object>{'festival_tag': tag},
+                              path: '/discover',
+                            );
                             ref
                                 .read(discoverFilterProvider.notifier)
                                 .selectFestival(tag);
@@ -216,11 +245,29 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                               isBookmarked: bookmarks.contains(aarti.id),
                               delay: Duration(milliseconds: i * 60),
                               onBookmark: () {
+                                AnalyticsService.trackEvent(
+                                  'bookmark_toggled',
+                                  data: <String, Object>{
+                                    'source': 'discover_screen',
+                                    'aarti_id': aarti.id,
+                                    'deity_name': aarti.deity,
+                                    'is_bookmarked': !bookmarks.contains(aarti.id),
+                                  },
+                                );
+
                                 ref
                                     .read(bookmarkProvider.notifier)
                                     .toggle(aarti.id);
                               },
                               onTap: () {
+                                AnalyticsService.trackEvent(
+                                  'discover_aarti_card_tapped',
+                                  data: <String, Object>{
+                                    'aarti_id': aarti.id,
+                                    'deity_name': aarti.deity,
+                                  },
+                                  path: '/discover',
+                                );
                                 ref
                                     .read(recentlyPlayedProvider.notifier)
                                     .addRecent(aarti.id);

@@ -29,14 +29,17 @@ lib/
 │   │   └── theme_aware_colors.dart    # BuildContext extension for theme-aware colours
 │   ├── constants/
 │   │   ├── app_constants.dart         # App-level shared constants (log retention/file names)
+│   │   ├── app_analytics_config.dart  # Compile-time Umami endpoint + website config
 │   │   ├── app_sync_config.dart       # Compile-time user sync / feedback webhook + timing config
 │   │   └── haptics.dart               # AppHaptics — scoped haptic feedback
 │   ├── services/
 │   │   ├── activity_log_service.dart  # File-backed JSONL runtime activity log
+│   │   ├── analytics_service.dart     # Direct Umami-over-HTTP analytics service
 │   │   ├── content_cache_service.dart # Local JSON cache for devotional content payloads
 │   │   ├── content_sync_service.dart  # n8n-backed festival/aarti content refresh orchestration
 │   │   ├── feedback_service.dart      # User-visible feedback submission to n8n
 │   │   ├── notification_service.dart  # Local daily notification scheduling
+│   │   ├── user_profile_snapshot.dart # Shared sync/analytics identity snapshot builder
 │   │   ├── user_sync_service.dart     # Debounced best-effort user/settings sync to n8n
 │   │   └── sharing_service.dart       # Share lyrics as text or image
 │   └── utils/
@@ -173,6 +176,8 @@ ProviderScope(
 
 Best-effort user sync is intentionally attached to provider-backed setting mutators rather than individual widgets. Each notifier persists the new value first and then asks `UserSyncService` to schedule a debounced sync. This keeps the sync trigger surface aligned with the state ownership model and avoids duplicate widget-level callbacks.
 
+Analytics re-identification follows the same ownership rule. Persisted settings that materially change session properties update the centralized `AnalyticsService` runtime state and then trigger a best-effort `identify` refresh once onboarding is complete. Analytics opt-out is exposed as a dedicated provider-backed persisted toggle.
+
 Content refresh is owned by `ContentSyncNotifier`, which exposes refresh state, content metadata, and a revision token through Riverpod. Direct singleton consumers such as Home, Discover, and Settings rebuild by watching that revision token instead of manually reloading repositories.
 
 ### Service-Backed Feedback Submission
@@ -185,6 +190,12 @@ The app-to-automation contracts are versioned in-repo under `n8n/` and `database
 
 Content workflows follow the same in-repo contract approach, but they currently serve JSON directly from local files over GET webhooks. The festival and aarti endpoints intentionally mirror the bundled asset shape so Flutter can parse cached, bundled, and remote content through the same repository code paths.
 
+### Direct Umami Analytics
+
+Analytics does not flow through n8n. `AnalyticsService` posts directly to Umami over HTTP using compile-time endpoint and website configuration from `app_analytics_config.dart`. The service is configured during `main.dart` bootstrap, keeps send gating and identity state in one place, silently logs failures through `ActivityLogService`, and retries only 5xx responses with exponential backoff.
+
+Top-level page tracking is adapted to the app’s current navigation model rather than using a router observer. `HomeShell` emits page views when the active bottom-nav tab changes, while pushed screens such as Aarti Detail, Feedback, Puja Session, and Puja Focus Session track themselves explicitly from their owning state objects.
+
 ---
 
 ## 4. Error Handling
@@ -195,6 +206,7 @@ Content workflows follow the same in-repo contract approach, but they currently 
 - **Feedback submission:** `FeedbackService` logs failures and rethrows a user-facing exception so the UI can show a snackbar without swallowing the error silently.
 - **UI feedback:** User-facing transient notices should route through `SnackBarHelper`, which replaces the current snackbar before showing the next one.
 - **User sync:** `UserSyncService` treats n8n sync as best-effort telemetry. Non-2xx responses, timeouts, and transport failures are logged through `ActivityLogService` and never block UX.
+- **Analytics:** `AnalyticsService` treats Umami dispatch as best-effort telemetry. Missing config, non-2xx responses, timeouts, and transport failures are logged through `ActivityLogService` and never block UX.
 - **Content sync:** `ContentSyncService` refreshes festival and aarti datasets independently. Each dataset keeps its last good bundled-or-cached state when the remote request fails, times out, or returns invalid JSON.
 - **JSON parsing:** Null-safe with fallback defaults in `fromJson` factories.
 - **Global uncaught failures:** `main.dart` wires `FlutterError.onError` and `runZonedGuarded` to `ActivityLogService.error(...)` for persistent diagnostics.
@@ -209,6 +221,8 @@ No formal `Result<T, E>` or `Either` pattern is used. Consider adopting one as c
 **Approach:** Imperative `Navigator.push()` / `Navigator.pop()` for in-flow pages, plus index-based shell navigation for top-level sections.
 
 The `HomeShell` widget acts as a shell around the 5 top-level screens (Home, Discover, My Puja, My Collection, Settings). Screen switching uses `AnimatedSwitcher` with combined Fade + Slide transitions. Primary navigation is handled by `AppBottomNav` (Temple Dock style) at the bottom of the screen.
+
+Analytics pageview tracking follows that same structure: the shell emits pageviews for the five primary tabs, and pushed pages emit their own pageviews directly when mounted.
 
 No declarative router (e.g., `go_router`) is currently used. Consider adopting one if deep linking or web navigation is needed.
 

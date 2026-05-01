@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/services/activity_log_service.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -13,18 +14,33 @@ import 'dev_tools_screen.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   final VoidCallback onOpenDrawer;
   const SettingsScreen({super.key, required this.onOpenDrawer});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // AnalyticsService.trackEvent('settings_screen_viewed', path: '/settings');
+      AnalyticsService.trackScreen('/settings', title: 'Settings');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
     final textScale = ref.watch(textScaleProvider);
     final scriptMode = ref.watch(scriptModeProvider);
     final appLanguage = ref.watch(preferredLanguageProvider);
     final userName = ref.watch(userNameProvider);
     final contentSync = ref.watch(contentSyncProvider);
+    final analyticsEnabled = ref.watch(analyticsEnabledProvider);
     final secondaryScriptMode =
         AartiLanguageResolver.resolveSecondaryScriptMode(
           scriptMode: scriptMode,
@@ -37,7 +53,7 @@ class SettingsScreen extends ConsumerWidget {
         slivers: [
           SliverToBoxAdapter(
             child: AartiAppBar(
-              onMenuTap: onOpenDrawer,
+              onMenuTap: widget.onOpenDrawer,
               showMenu: false,
               showLogoTitle: true,
               title: 'Settings',
@@ -89,7 +105,7 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.person_outline,
                   title: 'Display Name',
                   subtitle: userName,
-                  onTap: () => _showNameDialog(context, ref, userName),
+                  onTap: () => _showNameDialog(context, userName),
                 ),
                 const SizedBox(height: 24),
 
@@ -102,8 +118,16 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: _themeModeLabel(themeMode),
                   trailing: _ThemeToggle(
                     mode: themeMode,
-                    onChanged: (mode) =>
-                        ref.read(themeModeProvider.notifier).setTheme(mode),
+                    onChanged: (mode) {
+                      AnalyticsService.trackEvent(
+                        'settings_theme_changed',
+                        data: <String, Object>{
+                          'theme_mode': _themeModeLabel(mode).toLowerCase(),
+                        },
+                        path: '/settings',
+                      );
+                      ref.read(themeModeProvider.notifier).setTheme(mode);
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -118,8 +142,18 @@ class SettingsScreen extends ConsumerWidget {
                     children: [
                       _ScaleButton(
                         label: 'A-',
-                        onTap: () =>
-                            ref.read(textScaleProvider.notifier).decrease(),
+                        onTap: () {
+                          final nextScale = (textScale - 0.1).clamp(0.8, 1.6);
+                          if (nextScale == textScale) {
+                            return;
+                          }
+                          AnalyticsService.trackEvent(
+                            'settings_text_scale_changed',
+                            data: <String, Object>{'scale': nextScale},
+                            path: '/settings',
+                          );
+                          ref.read(textScaleProvider.notifier).decrease();
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -133,8 +167,18 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       _ScaleButton(
                         label: 'A+',
-                        onTap: () =>
-                            ref.read(textScaleProvider.notifier).increase(),
+                        onTap: () {
+                          final nextScale = (textScale + 0.1).clamp(0.8, 1.6);
+                          if (nextScale == textScale) {
+                            return;
+                          }
+                          AnalyticsService.trackEvent(
+                            'settings_text_scale_changed',
+                            data: <String, Object>{'scale': nextScale},
+                            path: '/settings',
+                          );
+                          ref.read(textScaleProvider.notifier).increase();
+                        },
                       ),
                     ],
                   ),
@@ -150,9 +194,16 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: _appLanguageLabel(appLanguage),
                   trailing: _AppLanguageSelector(
                     languageCode: appLanguage,
-                    onChanged: (languageCode) => ref
-                        .read(preferredLanguageProvider.notifier)
-                        .set(languageCode),
+                    onChanged: (languageCode) {
+                      AnalyticsService.trackEvent(
+                        'settings_language_changed',
+                        data: <String, Object>{'language_code': languageCode},
+                        path: '/settings',
+                      );
+                      ref
+                          .read(preferredLanguageProvider.notifier)
+                          .set(languageCode);
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -162,8 +213,14 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: _scriptModeLabel(scriptMode),
                   trailing: _ScriptModeSelector(
                     mode: scriptMode,
-                    onChanged: (mode) =>
-                        ref.read(scriptModeProvider.notifier).setMode(mode),
+                    onChanged: (mode) {
+                      AnalyticsService.trackEvent(
+                        'settings_script_mode_changed',
+                        data: <String, Object>{'mode': mode},
+                        path: '/settings',
+                      );
+                      ref.read(scriptModeProvider.notifier).setMode(mode);
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -208,6 +265,15 @@ class SettingsScreen extends ConsumerWidget {
                                         notificationEnabledProvider.notifier,
                                       )
                                       .set(true);
+                                  AnalyticsService.trackEvent(
+                                    'settings_notification_toggled',
+                                    data: <String, Object>{
+                                      'enabled': true,
+                                      'hour': notifTime.hour,
+                                      'minute': notifTime.minute,
+                                    },
+                                    path: '/settings',
+                                  );
                                   await NotificationService.instance
                                       .scheduleDailyReminder(time: notifTime);
                                 }
@@ -215,6 +281,15 @@ class SettingsScreen extends ConsumerWidget {
                                 ref
                                     .read(notificationEnabledProvider.notifier)
                                     .set(false);
+                                AnalyticsService.trackEvent(
+                                  'settings_notification_toggled',
+                                  data: <String, Object>{
+                                    'enabled': false,
+                                    'hour': notifTime.hour,
+                                    'minute': notifTime.minute,
+                                  },
+                                  path: '/settings',
+                                );
                                 await NotificationService.instance.cancelAll();
                               }
                             },
@@ -235,6 +310,14 @@ class SettingsScreen extends ConsumerWidget {
                                 ref
                                     .read(notificationTimeProvider.notifier)
                                     .set(picked);
+                                AnalyticsService.trackEvent(
+                                  'settings_notification_time_changed',
+                                  data: <String, Object>{
+                                    'hour': picked.hour,
+                                    'minute': picked.minute,
+                                  },
+                                  path: '/settings',
+                                );
                                 await NotificationService.instance
                                     .scheduleDailyReminder(time: picked);
                               }
@@ -277,8 +360,17 @@ class SettingsScreen extends ConsumerWidget {
                             children: List.generate(4, (i) {
                               final isActive = crossfade == i;
                               return GestureDetector(
-                                onTap: () =>
-                                    ref.read(crossfadeProvider.notifier).set(i),
+                                onTap: () {
+                                  if (crossfade == i) {
+                                    return;
+                                  }
+                                  AnalyticsService.trackEvent(
+                                    'settings_crossfade_changed',
+                                    data: <String, Object>{'duration_s': i},
+                                    path: '/settings',
+                                  );
+                                  ref.read(crossfadeProvider.notifier).set(i);
+                                },
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 200),
                                   width: 32,
@@ -317,6 +409,23 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24),
 
+                _SectionHeader('Privacy'),
+                const SizedBox(height: 12),
+                _SettingsTile(
+                  icon: Icons.insights_outlined,
+                  title: 'Usage Analytics',
+                  subtitle: analyticsEnabled
+                      ? 'Enabled for screen and feature insights'
+                      : 'Disabled on this device',
+                  trailing: Switch.adaptive(
+                    value: analyticsEnabled,
+                    activeTrackColor: AppColors.saffron,
+                    onChanged: (value) =>
+                        ref.read(analyticsEnabledProvider.notifier).set(value),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
                 // --- Support ---
                 _SectionHeader('Support'),
                 const SizedBox(height: AppSpacing.md),
@@ -326,6 +435,10 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle:
                       'Report issues, suggest improvements, or share devotional feedback',
                   onTap: () {
+                    AnalyticsService.trackEvent(
+                      'settings_feedback_opened',
+                      path: '/settings',
+                    );
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
                         builder: (_) => const FeedbackScreen(),
@@ -356,7 +469,16 @@ class SettingsScreen extends ConsumerWidget {
                   title: 'Activity Log',
                   subtitle:
                       '${ActivityLogService.length} entries · View runtime activity',
-                  onTap: () => _showActivityLog(context),
+                  onTap: () {
+                    AnalyticsService.trackEvent(
+                      'settings_activity_log_opened',
+                      data: <String, Object>{
+                        'entry_count': ActivityLogService.length,
+                      },
+                      path: '/settings',
+                    );
+                    _showActivityLog(context);
+                  },
                 ),
                 const SizedBox(height: 12),
                 _SettingsTile(
@@ -364,6 +486,13 @@ class SettingsScreen extends ConsumerWidget {
                   title: 'Share Activity Log',
                   subtitle: 'Export diagnostics file for troubleshooting',
                   onTap: () async {
+                    AnalyticsService.trackEvent(
+                      'settings_activity_log_shared',
+                      data: <String, Object>{
+                        'entry_count': ActivityLogService.length,
+                      },
+                      path: '/settings',
+                    );
                     await ActivityLogService.share();
                   },
                 ),
@@ -469,7 +598,7 @@ class SettingsScreen extends ConsumerWidget {
   String _contentSubtitle(ContentSyncState state) {
     final syncTime = _latestContentSync(state);
     final syncTimeLabel = syncTime == null
-        ? '${_contentSourceLabel(state)}'
+        ? _contentSourceLabel(state)
         : 'Last refresh ${_formatClock(syncTime)}';
 
     return '${state.aartiCount} Aartis · ${state.festivalCount} Festivals · \n$syncTimeLabel';
@@ -506,7 +635,7 @@ class SettingsScreen extends ConsumerWidget {
     return '$hour:$minute';
   }
 
-  void _showNameDialog(BuildContext context, WidgetRef ref, String current) {
+  void _showNameDialog(BuildContext context, String current) {
     final controller = TextEditingController(text: current);
     showDialog(
       context: context,
@@ -597,6 +726,13 @@ class SettingsScreen extends ConsumerWidget {
                             color: modalContext.textSecondary,
                           ),
                           onPressed: () async {
+                            AnalyticsService.trackEvent(
+                              'settings_activity_log_shared',
+                              data: <String, Object>{
+                                'entry_count': rows.length,
+                              },
+                              path: '/settings',
+                            );
                             await ActivityLogService.share();
                           },
                         ),
@@ -607,6 +743,13 @@ class SettingsScreen extends ConsumerWidget {
                             color: modalContext.textSecondary,
                           ),
                           onPressed: () async {
+                            AnalyticsService.trackEvent(
+                              'settings_activity_log_cleared',
+                              data: <String, Object>{
+                                'entry_count_before': rows.length,
+                              },
+                              path: '/settings',
+                            );
                             await ActivityLogService.clear();
                             modalSetState(rows.clear);
                             if (!modalContext.mounted) return;

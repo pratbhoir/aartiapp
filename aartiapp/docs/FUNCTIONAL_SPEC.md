@@ -25,13 +25,14 @@
 | App language setting (English / Hindi / Gujarati) | ✅ Done | v2.2 | `SettingsScreen` |
 | Verse progress indicator | ✅ Done | v1.0 | `AartiDetailScreen` |
 | Haptic feedback (scoped) | ✅ Done | v1.0 | `AppHaptics` |
-| Onboarding flow (name, language, notification, deity) | ✅ Done | v2.0 | `OnboardingScreen` |
+| Onboarding flow (name, language, notification) | ✅ Done | v2.0 | `OnboardingScreen` |
 | Audio playback (`just_audio`) | ✅ Done | v1.5 | `AudioPlayerWidget` |
 | Auto-play in Puja session | ✅ Done | v1.5 | `PujaSessionScreen` |
 | Crossfade duration (0–3s) | ✅ Done | v1.5 | `SettingsScreen` |
 | Sharing (text + image) | ✅ Done | v1.5 | `SharingService` |
 | Daily notification reminder | ✅ Done | v1.5 | `NotificationService` |
 | Lightweight user profile/settings sync | ✅ Done | v2.5 | `UserSyncService` |
+| Direct Umami analytics with Settings opt-out | ✅ Done | v2.7 | `AnalyticsService` |
 | In-app feedback submission | ✅ Done | v2.5 | `FeedbackScreen` |
 | Remote content cache sync (n8n-backed festivals + aartis) | ✅ Done | v2.6 | `SettingsScreen`, app bootstrap |
 | Festival banner (bundled calendar 2026–2028) | ✅ Done | v1.5 | `FestiveBanner` |
@@ -62,7 +63,7 @@
 3. **Step 2 — Name:** User enters their name (stored in `SettingsRepository`).
 4. **Step 3 — Language:** User selects preferred script (Devanagari / English / Gujarati) and app language (English / Hindi / Gujarati).
 5. **Step 4 — Notification:** User sets daily puja reminder time (optional).
-6. **Step 5 — Deity:** User selects favourite deity (sets initial filter).
+6. User can skip from any non-welcome step, which persists the current selections and finishes onboarding immediately.
 7. Onboarding marked complete → `HomeShell` displayed with Home tab active.
 
 ### 2.2 Discover
@@ -118,6 +119,7 @@
 ### 2.6 Settings
 
 1. Theme mode (System / Light / Dark).
+2. Usage analytics toggle (enabled by default, opt-out persisted locally).
 2. Text scale (0.8×–1.6×).
 3. App language (English / Hindi / Gujarati).
 4. Primary script language (Devanagari / English / Gujarati).
@@ -129,6 +131,14 @@
 10. Diagnostics actions: view Activity Log, share log export, and clear log.
 11. Content tile shows content counts/source metadata and triggers an immediate content refresh when tapped.
 12. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
+
+### 2.10 Analytics
+
+1. Analytics is configured during app bootstrap using a stable local analytics session/install ID and the existing stable `user_id`.
+2. The app tracks shell tab pageviews centrally from `HomeShell` and tracks pushed pages from their owning screen state.
+3. Onboarding, discover, detail, puja, contribute, settings, feedback, and diagnostics actions emit structured analytics events defined in `docs/ANALYTICS_EVENTS.md`, including bookmark saves and explicit My Puja adds.
+4. Analytics errors are never shown to the user.
+5. Disabling analytics from Settings suppresses future sends on that device.
 
 ### 2.7 User Sync
 
@@ -184,6 +194,9 @@
 | User sync debounce | Settings-driven sync uses a trailing debounce of 5 seconds. |
 | User sync startup refresh | Returning users trigger a forced sync on app launch after onboarding is already complete. |
 | User sync privacy boundary | Sync exports lightweight profile and setting state only; it excludes aarti content and personal devotional collections. |
+| Analytics enablement | Analytics is enabled by default and can be disabled from Settings via a persisted opt-out toggle. |
+| Analytics navigation model | Bottom-nav pageviews are emitted from `HomeShell`, while pushed pages track themselves from their owning screen state. |
+| Analytics failure policy | Analytics transport is best-effort only and never surfaces user-facing errors. |
 | Content refresh cadence | Festival and aarti content refresh on startup or resume only when the last successful dataset refresh is at least 24 hours old, unless the user manually forces refresh from Settings. |
 | Content refresh scope | Festival and aarti payloads refresh independently; one dataset can succeed and replace local content even when the other request fails. |
 | Content cache fallback | The app prefers last-good cached content at startup and falls back to bundled assets when cache is missing or invalid. |

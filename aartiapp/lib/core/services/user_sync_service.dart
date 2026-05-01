@@ -8,6 +8,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../constants/app_sync_config.dart';
 import '../utils/device_info_helper.dart';
 import 'activity_log_service.dart';
+import 'user_profile_snapshot.dart';
 
 /// Best-effort sync of lightweight user profile and app settings to n8n.
 class UserSyncService {
@@ -102,19 +103,18 @@ class UserSyncService {
 
   Future<void> _doSync() async {
     try {
-      await _settingsRepository.ensureUserIdentity();
-      final deviceSnapshot = await _deviceInfoLoader();
-      final appVersion = await _appVersionLoader();
-      final payload = _buildPayload(
-        deviceSnapshot: deviceSnapshot,
-        appVersion: appVersion,
+      final snapshot = await UserProfileSnapshot.load(
+        settingsRepository: _settingsRepository,
+        deviceInfoLoader: _deviceInfoLoader,
+        appVersionLoader: _appVersionLoader,
+        now: _now,
       );
 
       final response = await _client
           .post(
             Uri.parse(_webhookUrl),
             headers: const {'Content-Type': 'application/json'},
-            body: jsonEncode(payload),
+            body: jsonEncode(snapshot.toUserSyncPayload()),
           )
           .timeout(_requestTimeout);
 
@@ -137,40 +137,6 @@ class UserSyncService {
         stack,
       );
     }
-  }
-
-  Map<String, dynamic> _buildPayload({
-    required DeviceSnapshot deviceSnapshot,
-    required String appVersion,
-  }) {
-    final nowIso = _now().toUtc().toIso8601String();
-    final registrationDate =
-        _settingsRepository.getRegistrationDate() ??
-        _settingsRepository.getOnboardingDate() ??
-        nowIso;
-
-    return <String, dynamic>{
-      'user_id': _settingsRepository.getUserId() ?? 'anonymous',
-      'user_name': _settingsRepository.getUserName(),
-      'registration_date': registrationDate,
-      'onboarding_date': _settingsRepository.getOnboardingDate() ?? '',
-      'device_model': deviceSnapshot.model,
-      'os_version': deviceSnapshot.osVersion,
-      'platform': deviceSnapshot.platform,
-      'app_version': appVersion,
-      'theme_mode': _settingsRepository.getThemeModeLabel(),
-      'text_scale': _settingsRepository.getTextScale(),
-      'script_mode': _settingsRepository.getScriptModeLabel(),
-      'app_language': _settingsRepository.getPreferredLanguage(),
-      'notification_enabled': _settingsRepository.getNotificationEnabled(),
-      'notification_time': _settingsRepository.getNotificationTimeLabel(),
-      'auto_play_enabled': _settingsRepository.getAutoPlay(),
-      'repeat_current_enabled': _settingsRepository.getRepeatCurrent(),
-      'crossfade_duration_seconds': _settingsRepository.getCrossfadeDuration(),
-      'onboarding_completed': _settingsRepository.getOnboardingCompleted(),
-      'profile_complete': _settingsRepository.isProfileComplete(),
-      'last_updated': nowIso,
-    };
   }
 
   void _logMissingWebhook() {

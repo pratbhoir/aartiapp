@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
@@ -103,6 +104,14 @@ class HomeScreen extends ConsumerWidget {
                           aarti: aartis[todayIdx],
                           scriptMode: scriptMode,
                           onTap: () {
+                            AnalyticsService.trackEvent(
+                              'discover_hero_card_tapped',
+                              data: <String, Object>{
+                                'aarti_id': aartis[todayIdx].id,
+                                'deity_name': aartis[todayIdx].deity,
+                              },
+                              path: '/home',
+                            );
                             ref
                                 .read(recentlyPlayedProvider.notifier)
                                 .addRecent(aartis[todayIdx].id);

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/services/analytics_service.dart';
 import 'core/theme/app_theme.dart';
 import 'navigation/home_shell.dart';
 import 'features/onboarding/onboarding_screen.dart';
@@ -17,6 +18,7 @@ class AartiSangrahApp extends ConsumerStatefulWidget {
 class _AartiSangrahAppState extends ConsumerState<AartiSangrahApp>
     with WidgetsBindingObserver {
   bool _didQueueStartupSync = false;
+  bool _didQueueAnalyticsIdentify = false;
 
   @override
   void initState() {
@@ -46,6 +48,7 @@ class _AartiSangrahAppState extends ConsumerState<AartiSangrahApp>
     final onboardingDone = ref.watch(onboardingCompletedProvider);
 
     _queueStartupSyncIfNeeded(onboardingDone);
+    _queueAnalyticsIdentifyIfNeeded(onboardingDone);
 
     return MaterialApp(
       title: 'Aarti Sangrah',
@@ -77,6 +80,22 @@ class _AartiSangrahAppState extends ConsumerState<AartiSangrahApp>
     _didQueueStartupSync = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       unawaited(ref.read(userSyncServiceProvider).sync(force: true));
+    });
+  }
+
+  void _queueAnalyticsIdentifyIfNeeded(bool onboardingDone) {
+    if (!onboardingDone) {
+      _didQueueAnalyticsIdentify = false;
+      return;
+    }
+
+    if (_didQueueAnalyticsIdentify) {
+      return;
+    }
+
+    _didQueueAnalyticsIdentify = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(AnalyticsService.identifySession());
     });
   }
 }

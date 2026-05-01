@@ -9,6 +9,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../constants/app_sync_config.dart';
 import '../utils/device_info_helper.dart';
 import 'activity_log_service.dart';
+import 'analytics_service.dart';
 
 /// Submits user-visible feedback to a configured n8n webhook.
 class FeedbackService {
@@ -100,13 +101,38 @@ class FeedbackService {
         final error = FeedbackSubmissionException(
           'Feedback submission failed with status ${response.statusCode}.',
         );
+        AnalyticsService.trackEvent(
+          'feedback_submission_failed',
+          data: <String, Object>{
+            'feedback_type': trimmedType,
+            'error_kind': 'server',
+          },
+          path: '/feedback',
+        );
         ActivityLogService.error(
           'FeedbackService',
           'Feedback submission failed with status ${response.statusCode}: ${response.body}',
         );
         throw error;
       }
+
+      AnalyticsService.trackEvent(
+        'feedback_submitted',
+        data: <String, Object>{
+          'feedback_type': trimmedType,
+          'email_provided': trimmedEmail.isNotEmpty,
+        },
+        path: '/feedback',
+      );
     } on TimeoutException catch (error, stack) {
+      AnalyticsService.trackEvent(
+        'feedback_submission_failed',
+        data: <String, Object>{
+          'feedback_type': trimmedType,
+          'error_kind': 'timeout',
+        },
+        path: '/feedback',
+      );
       ActivityLogService.error(
         'FeedbackService',
         'Feedback submission timed out after ${_requestTimeout.inSeconds}s: $error',
@@ -118,6 +144,14 @@ class FeedbackService {
     } on FeedbackSubmissionException {
       rethrow;
     } catch (error, stack) {
+      AnalyticsService.trackEvent(
+        'feedback_submission_failed',
+        data: <String, Object>{
+          'feedback_type': trimmedType,
+          'error_kind': 'transport',
+        },
+        path: '/feedback',
+      );
       ActivityLogService.error(
         'FeedbackService',
         'Feedback submission failed: $error',

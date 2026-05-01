@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/services/content_cache_service.dart';
 import '../core/services/content_sync_service.dart';
 import '../core/services/feedback_service.dart';
+import '../core/services/analytics_service.dart';
 import '../core/services/user_sync_service.dart';
 import '../data/repositories/aarti_repository.dart';
 import '../data/repositories/festival_repository.dart';
@@ -69,6 +70,14 @@ final contentRevisionProvider = Provider<int>((ref) {
   return ref.watch(contentSyncProvider).revision;
 });
 
+void _reidentifyAnalyticsIfReady(SettingsRepository settingsRepository) {
+  if (!settingsRepository.getOnboardingCompleted()) {
+    return;
+  }
+
+  unawaited(AnalyticsService.identifySession());
+}
+
 final pujaRepoProvider = Provider<PujaRepository>((ref) {
   throw UnimplementedError('Must be overridden in ProviderScope');
 });
@@ -101,6 +110,12 @@ class ContentSyncNotifier extends StateNotifier<ContentSyncState> {
       return;
     }
 
+    AnalyticsService.trackEvent(
+      'content_sync_started',
+      data: const <String, Object>{'trigger': 'automatic'},
+      path: '/settings',
+    );
+
     state = ContentSyncState.fromRepositories(
       _settingsRepository,
       revision: state.revision,
@@ -109,6 +124,7 @@ class ContentSyncNotifier extends StateNotifier<ContentSyncState> {
     );
 
     final result = await _service.refreshIfStale();
+    _trackContentSyncResult(result, trigger: 'automatic');
     state = ContentSyncState.fromRepositories(
       _settingsRepository,
       revision: state.revision + (result.didChange ? 1 : 0),
@@ -123,6 +139,12 @@ class ContentSyncNotifier extends StateNotifier<ContentSyncState> {
       return;
     }
 
+    AnalyticsService.trackEvent(
+      'content_sync_started',
+      data: const <String, Object>{'trigger': 'manual'},
+      path: '/settings',
+    );
+
     state = ContentSyncState.fromRepositories(
       _settingsRepository,
       revision: state.revision,
@@ -131,6 +153,7 @@ class ContentSyncNotifier extends StateNotifier<ContentSyncState> {
     );
 
     final result = await _service.refreshNow();
+    _trackContentSyncResult(result, trigger: 'manual');
     state = ContentSyncState.fromRepositories(
       _settingsRepository,
       revision: state.revision + (result.didChange ? 1 : 0),
@@ -162,6 +185,50 @@ class ContentSyncNotifier extends StateNotifier<ContentSyncState> {
     }
 
     return 'Content refresh failed.';
+  }
+
+  void _trackContentSyncResult(
+    ContentRefreshResult result, {
+    required String trigger,
+  }) {
+    final data = <String, Object>{
+      'trigger': trigger,
+      'aarti_updated': result.aartiUpdated,
+      'festival_updated': result.festivalUpdated,
+    };
+
+    if (result.skipped) {
+      AnalyticsService.trackEvent(
+        'content_sync_skipped',
+        data: data,
+        path: '/settings',
+      );
+      return;
+    }
+
+    if (!result.hasErrors) {
+      AnalyticsService.trackEvent(
+        'content_sync_completed_success',
+        data: data,
+        path: '/settings',
+      );
+      return;
+    }
+
+    if (result.festivalUpdated || result.aartiUpdated) {
+      AnalyticsService.trackEvent(
+        'content_sync_completed_partial',
+        data: data,
+        path: '/settings',
+      );
+      return;
+    }
+
+    AnalyticsService.trackEvent(
+      'content_sync_failed',
+      data: data,
+      path: '/settings',
+    );
   }
 }
 
@@ -631,7 +698,37 @@ class UserNameNotifier extends StateNotifier<String> {
 
   Future<void> _persistAndSync(String name) async {
     await _repo.setUserName(name);
+    AnalyticsService.updateIdentity(name: name, userId: _repo.getUserId());
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
+  }
+}
+
+final analyticsEnabledProvider =
+    StateNotifierProvider<AnalyticsEnabledNotifier, bool>((ref) {
+      final repo = ref.watch(settingsRepoProvider);
+      return AnalyticsEnabledNotifier(repo);
+    });
+
+class AnalyticsEnabledNotifier extends StateNotifier<bool> {
+  final SettingsRepository _repo;
+  AnalyticsEnabledNotifier(this._repo) : super(_repo.getAnalyticsEnabled());
+
+  void set(bool value) {
+    if (state == value) {
+      return;
+    }
+
+    state = value;
+    AnalyticsService.setEnabled(value);
+    unawaited(_persist(value));
+  }
+
+  Future<void> _persist(bool value) async {
+    await _repo.setAnalyticsEnabled(value);
+    if (value) {
+      _reidentifyAnalyticsIfReady(_repo);
+    }
   }
 }
 
@@ -662,6 +759,7 @@ class CrossfadeNotifier extends StateNotifier<int> {
   Future<void> _persistAndSync(int seconds) async {
     await _repo.setCrossfadeDuration(seconds);
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }
 
@@ -695,6 +793,7 @@ class AutoPlayNotifier extends StateNotifier<bool> {
   Future<void> _persistAndSync(bool value) async {
     await _repo.setAutoPlay(value);
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }
 
@@ -721,6 +820,7 @@ class RepeatCurrentNotifier extends StateNotifier<bool> {
   Future<void> _persistAndSync(bool value) async {
     await _repo.setRepeatCurrent(value);
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }
 
@@ -751,6 +851,7 @@ class NotificationEnabledNotifier extends StateNotifier<bool> {
   Future<void> _persistAndSync(bool value) async {
     await _repo.setNotificationEnabled(value);
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }
 
@@ -779,6 +880,7 @@ class NotificationTimeNotifier extends StateNotifier<TimeOfDay> {
   Future<void> _persistAndSync(TimeOfDay time) async {
     await _repo.setNotificationTime(time);
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }
 
@@ -798,6 +900,12 @@ class OnboardingCompletedNotifier extends StateNotifier<bool> {
   Future<void> complete() async {
     state = true;
     await _repo.completeOnboarding();
+    AnalyticsService.updateIdentity(
+      name: _repo.getUserName(),
+      userId: _repo.getUserId(),
+    );
+    AnalyticsService.updateLocale(_repo.getPreferredLanguage());
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }
 
@@ -827,6 +935,8 @@ class PreferredLanguageNotifier extends StateNotifier<String> {
 
   Future<void> _persistAndSync(String lang) async {
     await _repo.setPreferredLanguage(lang);
+    AnalyticsService.updateLocale(lang);
     await _syncService.sync();
+    _reidentifyAnalyticsIfReady(_repo);
   }
 }

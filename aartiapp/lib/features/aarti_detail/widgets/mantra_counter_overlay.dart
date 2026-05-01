@@ -8,7 +8,12 @@ import '../../../shared/painters/mala_painter.dart';
 
 class MantraCounterOverlay extends StatefulWidget {
   final VoidCallback onClose;
-  const MantraCounterOverlay({super.key, required this.onClose});
+  final ValueChanged<int>? onCompleted;
+  const MantraCounterOverlay({
+    super.key,
+    required this.onClose,
+    this.onCompleted,
+  });
 
   @override
   State<MantraCounterOverlay> createState() => _MantraCounterOverlayState();
@@ -28,10 +33,13 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
   void initState() {
     super.initState();
     _tapCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 100));
-    _tapScale = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _tapCtrl, curve: Curves.easeInOut),
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
     );
+    _tapScale = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _tapCtrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -49,6 +57,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
         if (_count >= _total && !_completed) {
           _completed = true;
           AppHaptics.completion();
+          widget.onCompleted?.call(_total);
         }
       });
     }
@@ -57,8 +66,9 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final accentTextColor =
-        isDark ? AppColors.saffronLight : AppColors.saffronDark;
+    final accentTextColor = isDark
+        ? AppColors.saffronLight
+        : AppColors.saffronDark;
     final accentSurfaceColor = isDark
         ? AppColors.saffron.withValues(alpha: 0.18)
         : AppColors.saffronGlow;
@@ -114,9 +124,13 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text('Tap to count · $_total chants',
-                      style:
-                          AppTypography.body(size: 12, color: context.textCaption)),
+                  Text(
+                    'Tap to count · $_total chants',
+                    style: AppTypography.body(
+                      size: 12,
+                      color: context.textCaption,
+                    ),
+                  ),
 
                   // Configurable count presets
                   const SizedBox(height: 12),
@@ -136,7 +150,9 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
                           decoration: BoxDecoration(
                             color: isActive
                                 ? accentSurfaceColor
@@ -176,22 +192,27 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                         CustomPaint(
                           size: const Size(180, 180),
                           painter: MalaPainter(
-                              count: _count, total: _total, beads: _beads),
+                            count: _count,
+                            total: _total,
+                            beads: _beads,
+                          ),
                         ),
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               '$_count',
-                              style: AppTypography.displayLarge(context)
-                                  .copyWith(
-                                fontSize: 44,
-                                height: 1,
+                              style: AppTypography.displayLarge(
+                                context,
+                              ).copyWith(fontSize: 44, height: 1),
+                            ),
+                            Text(
+                              '/ $_total',
+                              style: AppTypography.body(
+                                size: 14,
+                                color: context.textCaption,
                               ),
                             ),
-                            Text('/ $_total',
-                                style: AppTypography.body(
-                                    size: 14, color: context.textCaption)),
                           ],
                         ),
                       ],
@@ -204,7 +225,9 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                       padding: const EdgeInsets.only(top: 12),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: accentSurfaceColor,
                           borderRadius: BorderRadius.circular(12),
@@ -251,9 +274,13 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                       _count = 0;
                       _completed = false;
                     }),
-                    child: Text('Reset counter',
-                        style: AppTypography.body(
-                            size: 12, color: context.textCaption)),
+                    child: Text(
+                      'Reset counter',
+                      style: AppTypography.body(
+                        size: 12,
+                        color: context.textCaption,
+                      ),
+                    ),
                   ),
                 ],
               ),

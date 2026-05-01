@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/services/analytics_service.dart';
 import '../core/constants/haptics.dart';
 import '../core/theme/theme_aware_colors.dart';
 import '../features/home/home_screen.dart';
@@ -19,24 +20,36 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   int _currentIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _trackCurrentTabScreen();
+    });
+  }
+
   final List<NavItem> _navItems = const [
     NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
     NavItem(
-        icon: Icons.explore_outlined,
-        activeIcon: Icons.explore,
-        label: 'Discover'),
+      icon: Icons.explore_outlined,
+      activeIcon: Icons.explore,
+      label: 'Discover',
+    ),
     NavItem(
-        icon: Icons.auto_awesome_outlined,
-        activeIcon: Icons.auto_awesome,
-        label: 'My Puja'),
+      icon: Icons.auto_awesome_outlined,
+      activeIcon: Icons.auto_awesome,
+      label: 'My Puja',
+    ),
     NavItem(
-        icon: Icons.add_circle_outline,
-        activeIcon: Icons.add_circle,
-        label: 'Collection'),
+      icon: Icons.add_circle_outline,
+      activeIcon: Icons.add_circle,
+      label: 'Collection',
+    ),
     NavItem(
-        icon: Icons.settings_outlined,
-        activeIcon: Icons.settings,
-        label: 'Settings'),
+      icon: Icons.settings_outlined,
+      activeIcon: Icons.settings,
+      label: 'Settings',
+    ),
   ];
 
   void _openDrawer() {
@@ -47,10 +60,33 @@ class _HomeShellState extends State<HomeShell> {
     if (_currentIndex == index) return;
     AppHaptics.pageTransition();
     setState(() => _currentIndex = index);
+    _trackCurrentTabScreen();
   }
 
   void _openDiscoverTab() {
     _selectTab(1);
+  }
+
+  void _trackCurrentTabScreen() {
+    final screen = _screenForIndex(_currentIndex);
+    AnalyticsService.trackScreen(screen.$1, title: screen.$2);
+  }
+
+  (String, String) _screenForIndex(int index) {
+    switch (index) {
+      case 0:
+        return ('/home', 'Home');
+      case 1:
+        return ('/discover', 'Discover');
+      case 2:
+        return ('/my-puja', 'My Daily Puja');
+      case 3:
+        return ('/collection', 'My Collection');
+      case 4:
+        return ('/settings', 'Settings');
+      default:
+        return ('/home', 'Home');
+    }
   }
 
   Widget _buildScreen() {

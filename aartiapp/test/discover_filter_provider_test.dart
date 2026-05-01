@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:aartiapp/data/repositories/aarti_repository.dart';
 import 'package:aartiapp/providers/app_providers.dart';
@@ -8,8 +9,8 @@ void main() {
   group('DiscoverFilterNotifier', () {
     setUp(_loadCatalogFixture);
 
-    test('search clears deity and festival filters', () {
-      final container = ProviderContainer();
+    test('search clears deity and festival filters', () async {
+      final container = await _buildContainer();
       addTearDown(container.dispose);
 
       final notifier = container.read(discoverFilterProvider.notifier);
@@ -24,8 +25,8 @@ void main() {
       expect(container.read(filteredAartisProvider), const [1]);
     });
 
-    test('deity selection clears search and festival filters', () {
-      final container = ProviderContainer();
+    test('deity selection clears search and festival filters', () async {
+      final container = await _buildContainer();
       addTearDown(container.dispose);
 
       final notifier = container.read(discoverFilterProvider.notifier);
@@ -41,8 +42,8 @@ void main() {
       expect(container.read(filteredAartisProvider), const [0]);
     });
 
-    test('festival selection clears search and deity filters', () {
-      final container = ProviderContainer();
+    test('festival selection clears search and deity filters', () async {
+      final container = await _buildContainer();
       addTearDown(container.dispose);
 
       final notifier = container.read(discoverFilterProvider.notifier);
@@ -57,8 +58,8 @@ void main() {
       expect(container.read(filteredAartisProvider), const [1]);
     });
 
-    test('selecting All resets Discover to the full catalog', () {
-      final container = ProviderContainer();
+    test('selecting All resets Discover to the full catalog', () async {
+      final container = await _buildContainer();
       addTearDown(container.dispose);
 
       final notifier = container.read(discoverFilterProvider.notifier);
@@ -77,6 +78,14 @@ void main() {
 
 void _loadCatalogFixture() {
   AartiRepository.instance.loadFromJsonString(_catalogFixture);
+}
+
+Future<ProviderContainer> _buildContainer() async {
+  SharedPreferences.setMockInitialValues(const <String, Object>{});
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return ProviderContainer(
+    overrides: [sharedPrefsProvider.overrideWithValue(prefs)],
+  );
 }
 
 const String _catalogFixture = '''

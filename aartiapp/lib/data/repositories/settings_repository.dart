@@ -14,6 +14,8 @@ class SettingsRepository {
   static const _keyUserId = 'user_id';
   static const _keyRegistrationDate = 'registration_date';
   static const _keyOnboardingDate = 'onboarding_date';
+  static const _keyAnalyticsEnabled = 'analytics_enabled';
+  static const _keyAnalyticsSessionId = 'analytics_session_id';
   static const _keyCrossfadeDuration = 'crossfade_duration'; // 0–3 seconds
   static const _keyAutoPlay = 'auto_play'; // puja session auto-play
   static const _keyRepeatCurrent = 'repeat_current'; // repeat current aarti
@@ -95,6 +97,28 @@ class SettingsRepository {
         getOnboardingDate() ?? nowIso,
       );
     }
+  }
+
+  /// Returns whether analytics sending is enabled for this install.
+  bool getAnalyticsEnabled() => _prefs.getBool(_keyAnalyticsEnabled) ?? true;
+
+  /// Persists analytics enablement.
+  Future<void> setAnalyticsEnabled(bool value) =>
+      _prefs.setBool(_keyAnalyticsEnabled, value);
+
+  /// Returns the persisted analytics readiness identifier.
+  String? getAnalyticsSessionId() => _prefs.getString(_keyAnalyticsSessionId);
+
+  /// Ensures a stable analytics session/install identifier exists.
+  Future<String> ensureAnalyticsSessionId() async {
+    final existingSessionId = getAnalyticsSessionId();
+    if (existingSessionId != null && existingSessionId.trim().isNotEmpty) {
+      return existingSessionId;
+    }
+
+    final sessionId = _uuid.v4();
+    await _prefs.setString(_keyAnalyticsSessionId, sessionId);
+    return sessionId;
   }
 
   // --- Crossfade Duration (v1.5) ---

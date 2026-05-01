@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
@@ -29,6 +30,17 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
   final _festivalTagsCtrl = TextEditingController();
   bool _showForm = false;
   String? _editingId; // non-null when editing
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackEvent(
+        '',
+        path: '/collection',
+      );
+    });
+  }
 
   @override
   void dispose() {
@@ -152,18 +164,24 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
       festivalTags: festivalTags,
     );
 
+    final previousEditingId = _editingId;
     if (_editingId != null) {
       // Delete old and re-save for edit (Hive replaces at same key)
       await ref.read(userAartiProvider.notifier).delete(_editingId!);
     }
-    await ref.read(userAartiProvider.notifier).save(aarti);
+    final savedId = await ref.read(userAartiProvider.notifier).save(aarti);
+    AnalyticsService.trackEvent(
+      'contribute_aarti_saved',
+      data: <String, Object>{'deity': deity, 'aarti_title': title, 'verse_count': verses.length},
+      path: '/collection',
+    );
     _clearForm();
     setState(() => _showForm = false);
 
     if (mounted) {
       SnackBarHelper.showSuccess(
         context,
-        _editingId != null
+        previousEditingId != null
             ? 'Aarti updated! 🙏'
             : 'Aarti saved to your collection! 🙏',
       );
@@ -424,12 +442,22 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                                     .read(pujaOrderProvider.notifier)
                                     .removeAarti(aarti.id);
                               } else {
+                                AnalyticsService.trackEvent(
+                                  'contribute_aarti_added_to_puja',
+                                  data: <String, Object>{'aarti_id': aarti.id},
+                                  path: '/collection',
+                                );
                                 ref
                                     .read(pujaOrderProvider.notifier)
                                     .addAarti(aarti.id);
                               }
                             },
                             onDelete: () {
+                              AnalyticsService.trackEvent(
+                                'contribute_aarti_deleted',
+                                data: <String, Object>{'aarti_id': aarti.id},
+                                path: '/collection',
+                              );
                               ref
                                   .read(userAartiProvider.notifier)
                                   .delete(aarti.id);

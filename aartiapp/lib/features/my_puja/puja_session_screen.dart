@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../core/constants/haptics.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/aarti_item.dart';
@@ -35,6 +36,9 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
   bool _autoPlay = true;
   bool _repeatCurrent = false;
   int _crossfadeSec = 1;
+  late final DateTime _sessionStartedAt;
+  bool _didCompleteSession = false;
+  bool _didTrackExit = false;
 
   // Animation for verse display
   late AnimationController _fadeCtrl;
@@ -49,6 +53,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
   void initState() {
     super.initState();
     _currentIndex = widget.startIndex.clamp(0, widget.pujaAartis.length - 1);
+    _sessionStartedAt = DateTime.now();
     _audioPlayer = AudioPlayer();
 
     _fadeCtrl = AnimationController(
@@ -58,11 +63,16 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
     _fadeAnim = CurvedAnimation(parent: _fadeCtrl, curve: Curves.easeInOut);
     _fadeCtrl.forward();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackScreen('/puja-session', title: 'Puja Session');
+    });
+
     _loadAndPlay(_currentIndex);
   }
 
   @override
   void dispose() {
+    _trackExitIfNeeded();
     _audioPlayer.dispose();
     _fadeCtrl.dispose();
     super.dispose();
@@ -129,7 +139,42 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
     } else {
       _audioPlayer.seek(Duration.zero);
       _audioPlayer.pause();
+      if (!_hasNext && !_didCompleteSession) {
+        _didCompleteSession = true;
+        AnalyticsService.trackEvent(
+          'puja_session_completed',
+          data: <String, Object>{
+            'total_count': widget.pujaAartis.length,
+            'duration_s': DateTime.now()
+                .difference(_sessionStartedAt)
+                .inSeconds,
+          },
+          path: '/puja-session',
+        );
+      }
     }
+  }
+
+  void _trackExitIfNeeded() {
+    if (_didCompleteSession || _didTrackExit) {
+      return;
+    }
+
+    _didTrackExit = true;
+
+    AnalyticsService.trackEvent(
+      'puja_session_exited',
+      data: <String, Object>{
+        'current_index': _currentIndex,
+        'total_count': widget.pujaAartis.length,
+      },
+      path: '/puja-session',
+    );
+  }
+
+  void _closeSession() {
+    _trackExitIfNeeded();
+    Navigator.pop(context);
   }
 
   void _goNext() {
@@ -168,8 +213,10 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
     _autoPlay = autoPlay;
     _repeatCurrent = repeatCurrent;
     _crossfadeSec = crossfade;
-    final scriptTitle =
-        AartiLanguageResolver.resolveAartiTitle(_currentAarti, scriptMode);
+    final scriptTitle = AartiLanguageResolver.resolveAartiTitle(
+      _currentAarti,
+      scriptMode,
+    );
     final showScriptTitle = scriptTitle.trim() != _currentAarti.title.trim();
     final previewLines = _currentAarti.verses.isNotEmpty
         ? AartiLanguageResolver.resolveLyricsLines(
@@ -191,7 +238,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: _closeSession,
                     child: Container(
                       width: 44,
                       height: 44,
@@ -199,21 +246,28 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                         color: AppColors.darkSurface,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.close,
-                          size: 18, color: AppColors.ink3),
+                      child: const Icon(
+                        Icons.close,
+                        size: 18,
+                        color: AppColors.ink3,
+                      ),
                     ),
                   ),
                   Column(
                     children: [
-                      Text('PUJA SESSION',
-                          style: AppTypography.label(
-                              size: 10, color: AppColors.saffronLight)),
+                      Text(
+                        'PUJA SESSION',
+                        style: AppTypography.label(
+                          size: 10,
+                          color: AppColors.saffronLight,
+                        ),
+                      ),
                       Text(
                         '${_currentIndex + 1} of ${widget.pujaAartis.length}',
                         style: AppTypography.body(
-                            size: 12,
-                            color:
-                                AppColors.white.withValues(alpha: 0.5)),
+                          size: 12,
+                          color: AppColors.white.withValues(alpha: 0.5),
+                        ),
                       ),
                     ],
                   ),
@@ -227,8 +281,11 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                         color: AppColors.darkSurface,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.tune_outlined,
-                          size: 18, color: AppColors.ink3),
+                      child: const Icon(
+                        Icons.tune_outlined,
+                        size: 18,
+                        color: AppColors.ink3,
+                      ),
                     ),
                   ),
                 ],
@@ -250,8 +307,8 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       color: i == _currentIndex
                           ? AppColors.saffron
                           : i < _currentIndex
-                              ? AppColors.saffron.withValues(alpha: 0.4)
-                              : AppColors.darkBorder,
+                          ? AppColors.saffron.withValues(alpha: 0.4)
+                          : AppColors.darkBorder,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   );
@@ -272,7 +329,9 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       Text(
                         _currentAarti.deity.toUpperCase(),
                         style: AppTypography.label(
-                            size: 11, color: AppColors.saffronLight),
+                          size: 11,
+                          color: AppColors.saffronLight,
+                        ),
                       ),
                       const SizedBox(height: 12),
 
@@ -290,14 +349,14 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                         Text(
                           scriptTitle,
                           style: (script == AppScriptLanguage.english
-                                  ? AppTypography.transliteration(
-                                      size: 18,
-                                      color: AppColors.white.withValues(alpha: 0.4),
-                                    )
-                                  : AppTypography.devanagari(
-                                      size: 18,
-                                      color: AppColors.white.withValues(alpha: 0.4),
-                                    )),
+                              ? AppTypography.transliteration(
+                                  size: 18,
+                                  color: AppColors.white.withValues(alpha: 0.4),
+                                )
+                              : AppTypography.devanagari(
+                                  size: 18,
+                                  color: AppColors.white.withValues(alpha: 0.4),
+                                )),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -310,39 +369,41 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                           decoration: BoxDecoration(
                             color: AppColors.darkSurface,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColors.darkBorder,
-                            ),
+                            border: Border.all(color: AppColors.darkBorder),
                           ),
                           child: Column(
                             children: [
                               Text(
                                 _currentAarti.verses.first.label,
                                 style: AppTypography.label(
-                                    size: 9, color: AppColors.ink3),
+                                  size: 9,
+                                  color: AppColors.ink3,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               ...(previewLines
                                   .take(3)
-                                  .map((line) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 4),
-                                        child: Text(
-                                          line,
-                                          style: (script == AppScriptLanguage.english
-                                                  ? AppTypography.transliteration(
-                                                      size: 16,
-                                                      color: AppColors.white
-                                                          .withValues(alpha: 0.7),
-                                                    )
-                                                  : AppTypography.devanagari(
-                                                      size: 16,
-                                                      color: AppColors.white
-                                                          .withValues(alpha: 0.7),
-                                                    )),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ))),
+                                  .map(
+                                    (line) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 4),
+                                      child: Text(
+                                        line,
+                                        style:
+                                            (script == AppScriptLanguage.english
+                                            ? AppTypography.transliteration(
+                                                size: 16,
+                                                color: AppColors.white
+                                                    .withValues(alpha: 0.7),
+                                              )
+                                            : AppTypography.devanagari(
+                                                size: 16,
+                                                color: AppColors.white
+                                                    .withValues(alpha: 0.7),
+                                              )),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  )),
                             ],
                           ),
                         ),
@@ -383,8 +444,9 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
               decoration: BoxDecoration(
                 color: AppColors.darkSurface.withValues(alpha: 0.6),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
               ),
               child: _hasAudioUrl
                   ? Column(
@@ -395,9 +457,9 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                             Text(
                               _formatDuration(_position),
                               style: AppTypography.body(
-                                  size: 11,
-                                  color:
-                                      AppColors.white.withValues(alpha: 0.5)),
+                                size: 11,
+                                color: AppColors.white.withValues(alpha: 0.5),
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -407,22 +469,25 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                                   inactiveTrackColor: AppColors.darkBorder,
                                   thumbColor: AppColors.saffron,
                                   thumbShape: const RoundSliderThumbShape(
-                                      enabledThumbRadius: 5),
+                                    enabledThumbRadius: 5,
+                                  ),
                                   trackHeight: 2.5,
-                                  overlayShape:
-                                      SliderComponentShape.noOverlay,
+                                  overlayShape: SliderComponentShape.noOverlay,
                                 ),
                                 child: Slider(
                                   value: _duration.inMilliseconds > 0
                                       ? (_position.inMilliseconds /
-                                              _duration.inMilliseconds)
-                                          .clamp(0.0, 1.0)
+                                                _duration.inMilliseconds)
+                                            .clamp(0.0, 1.0)
                                       : 0.0,
                                   onChanged: (v) {
-                                    _audioPlayer.seek(Duration(
+                                    _audioPlayer.seek(
+                                      Duration(
                                         milliseconds:
                                             (v * _duration.inMilliseconds)
-                                                .round()));
+                                                .round(),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
@@ -431,9 +496,9 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                             Text(
                               _formatDuration(_duration),
                               style: AppTypography.body(
-                                  size: 11,
-                                  color:
-                                      AppColors.white.withValues(alpha: 0.5)),
+                                size: 11,
+                                color: AppColors.white.withValues(alpha: 0.5),
+                              ),
                             ),
                           ],
                         ),
@@ -464,11 +529,13 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
 
                             // Previous
                             IconButton(
-                              icon: Icon(Icons.skip_previous_rounded,
-                                  size: 32,
-                                  color: _hasPrev
-                                      ? AppColors.white
-                                      : AppColors.darkBorder),
+                              icon: Icon(
+                                Icons.skip_previous_rounded,
+                                size: 32,
+                                color: _hasPrev
+                                    ? AppColors.white
+                                    : AppColors.darkBorder,
+                              ),
                               onPressed: _hasPrev ? _goPrev : null,
                             ),
                             const SizedBox(width: 12),
@@ -482,11 +549,13 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
 
                             // Next
                             IconButton(
-                              icon: Icon(Icons.skip_next_rounded,
-                                  size: 32,
-                                  color: _hasNext
-                                      ? AppColors.white
-                                      : AppColors.darkBorder),
+                              icon: Icon(
+                                Icons.skip_next_rounded,
+                                size: 32,
+                                color: _hasNext
+                                    ? AppColors.white
+                                    : AppColors.darkBorder,
+                              ),
                               onPressed: _hasNext ? _goNext : null,
                             ),
                             const SizedBox(width: 12),
@@ -501,9 +570,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                                     : AppColors.ink3,
                               ),
                               onPressed: () {
-                                ref
-                                    .read(autoPlayProvider.notifier)
-                                    .toggle();
+                                ref.read(autoPlayProvider.notifier).toggle();
                               },
                             ),
                           ],
@@ -523,19 +590,23 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                         ),
                         const SizedBox(width: 8),
                         IconButton(
-                          icon: Icon(Icons.skip_previous_rounded,
-                              size: 30,
-                              color: _hasPrev
-                                  ? AppColors.white
-                                  : AppColors.darkBorder),
+                          icon: Icon(
+                            Icons.skip_previous_rounded,
+                            size: 30,
+                            color: _hasPrev
+                                ? AppColors.white
+                                : AppColors.darkBorder,
+                          ),
                           onPressed: _hasPrev ? _goPrev : null,
                         ),
                         IconButton(
-                          icon: Icon(Icons.skip_next_rounded,
-                              size: 30,
-                              color: _hasNext
-                                  ? AppColors.white
-                                  : AppColors.darkBorder),
+                          icon: Icon(
+                            Icons.skip_next_rounded,
+                            size: 30,
+                            color: _hasNext
+                                ? AppColors.white
+                                : AppColors.darkBorder,
+                          ),
                           onPressed: _hasNext ? _goNext : null,
                         ),
                       ],
@@ -558,113 +629,119 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
-        return StatefulBuilder(builder: (ctx, setSheetState) {
-          final crossfade = ref.watch(crossfadeProvider);
-          final autoPlay = ref.watch(autoPlayProvider);
-          final repeat = ref.watch(repeatCurrentProvider);
-          return Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: AppColors.darkSurface,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(24)),
-              border:
-                  Border.all(color: AppColors.darkBorder),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.darkBorder,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            final crossfade = ref.watch(crossfadeProvider);
+            final autoPlay = ref.watch(autoPlayProvider);
+            final repeat = ref.watch(repeatCurrentProvider);
+            return Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.darkSurface,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
                 ),
-                const SizedBox(height: 20),
-                Text('Session Settings',
+                border: Border.all(color: AppColors.darkBorder),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.darkBorder,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Session Settings',
                     style: AppTypography.serifBody(
-                        size: 18, color: AppColors.white)),
-                const SizedBox(height: 24),
-
-                _SessionSettingRow(
-                  label: 'Auto-play next',
-                  subtitle: 'Play next aarti automatically',
-                  trailing: Switch.adaptive(
-                    value: autoPlay,
-                    activeTrackColor: AppColors.saffron,
-                    onChanged: (v) {
-                      ref.read(autoPlayProvider.notifier).set(v);
-                      setSheetState(() {});
-                    },
+                      size: 18,
+                      color: AppColors.white,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
+                  const SizedBox(height: 24),
 
-                _SessionSettingRow(
-                  label: 'Repeat current',
-                  subtitle: 'Loop the current aarti',
-                  trailing: Switch.adaptive(
-                    value: repeat,
-                    activeTrackColor: AppColors.saffron,
-                    onChanged: (_) {
-                      ref.read(repeatCurrentProvider.notifier).toggle();
-                      setSheetState(() {});
-                    },
+                  _SessionSettingRow(
+                    label: 'Auto-play next',
+                    subtitle: 'Play next aarti automatically',
+                    trailing: Switch.adaptive(
+                      value: autoPlay,
+                      activeTrackColor: AppColors.saffron,
+                      onChanged: (v) {
+                        ref.read(autoPlayProvider.notifier).set(v);
+                        setSheetState(() {});
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
-                _SessionSettingRow(
-                  label: 'Crossfade',
-                  subtitle: '${crossfade}s gap between aartis',
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(4, (i) {
-                      final isActive = crossfade == i;
-                      return GestureDetector(
-                        onTap: () {
-                          ref.read(crossfadeProvider.notifier).set(i);
-                          setSheetState(() {});
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          width: 36,
-                          height: 32,
-                          margin: const EdgeInsets.only(left: 4),
-                          decoration: BoxDecoration(
-                            color: isActive
-                                ? AppColors.saffronGlow
-                                : AppColors.darkBg,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
+                  _SessionSettingRow(
+                    label: 'Repeat current',
+                    subtitle: 'Loop the current aarti',
+                    trailing: Switch.adaptive(
+                      value: repeat,
+                      activeTrackColor: AppColors.saffron,
+                      onChanged: (_) {
+                        ref.read(repeatCurrentProvider.notifier).toggle();
+                        setSheetState(() {});
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _SessionSettingRow(
+                    label: 'Crossfade',
+                    subtitle: '${crossfade}s gap between aartis',
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(4, (i) {
+                        final isActive = crossfade == i;
+                        return GestureDetector(
+                          onTap: () {
+                            ref.read(crossfadeProvider.notifier).set(i);
+                            setSheetState(() {});
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            width: 36,
+                            height: 32,
+                            margin: const EdgeInsets.only(left: 4),
+                            decoration: BoxDecoration(
                               color: isActive
-                                  ? AppColors.saffron
-                                  : AppColors.darkBorder,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${i}s',
-                              style: AppTypography.body(
-                                size: 11,
+                                  ? AppColors.saffronGlow
+                                  : AppColors.darkBg,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
                                 color: isActive
                                     ? AppColors.saffron
-                                    : AppColors.ink3,
+                                    : AppColors.darkBorder,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${i}s',
+                                style: AppTypography.body(
+                                  size: 11,
+                                  color: isActive
+                                      ? AppColors.saffron
+                                      : AppColors.ink3,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      }),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          );
-        });
+                  const SizedBox(height: 16),
+                ],
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -691,26 +768,25 @@ class _SessionChip extends StatelessWidget {
             : AppColors.darkSurface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color:
-              isActive ? AppColors.saffron : AppColors.darkBorder,
+          color: isActive ? AppColors.saffron : AppColors.darkBorder,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon,
-              size: 13,
-              color: isActive
-                  ? AppColors.saffronLight
-                  : AppColors.ink3),
+          Icon(
+            icon,
+            size: 13,
+            color: isActive ? AppColors.saffronLight : AppColors.ink3,
+          ),
           const SizedBox(width: 5),
-          Text(label,
-              style: AppTypography.body(
-                size: 12,
-                color: isActive
-                    ? AppColors.saffronLight
-                    : AppColors.ink3,
-              )),
+          Text(
+            label,
+            style: AppTypography.body(
+              size: 12,
+              color: isActive ? AppColors.saffronLight : AppColors.ink3,
+            ),
+          ),
         ],
       ),
     );
@@ -743,14 +819,18 @@ class _SessionSettingRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
-                    style: AppTypography.body(
-                        size: 14,
-                        color: AppColors.white,
-                        weight: FontWeight.w400)),
-                Text(subtitle,
-                    style: AppTypography.body(
-                        size: 11, color: AppColors.ink3)),
+                Text(
+                  label,
+                  style: AppTypography.body(
+                    size: 14,
+                    color: AppColors.white,
+                    weight: FontWeight.w400,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: AppTypography.body(size: 11, color: AppColors.ink3),
+                ),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/analytics_service.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -26,6 +27,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   TimeOfDay _notifTime = const TimeOfDay(hour: 6, minute: 0);
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackScreen('/onboarding', title: 'Onboarding');
+      AnalyticsService.trackEvent('onboarding_started', path: '/onboarding');
+    });
+  }
+
+  @override
   void dispose() {
     _pageCtrl.dispose();
     _nameCtrl.dispose();
@@ -34,16 +44,26 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _nextPage() {
     if (_currentPage < 3) {
+      AnalyticsService.trackEvent(
+        'onboarding_step_completed',
+        data: <String, Object>{'step': _currentPage + 1},
+        path: '/onboarding',
+      );
       _pageCtrl.nextPage(
         duration: const Duration(milliseconds: 350),
         curve: Curves.easeOut,
       );
     } else {
-      _finishOnboarding();
+      AnalyticsService.trackEvent(
+        'onboarding_step_completed',
+        data: <String, Object>{'step': _currentPage + 1},
+        path: '/onboarding',
+      );
+      _finishOnboarding(wasSkipped: false);
     }
   }
 
-  Future<void> _finishOnboarding() async {
+  Future<void> _finishOnboarding({required bool wasSkipped}) async {
     // Save all preferences
     final name = _nameCtrl.text.trim();
     if (name.isNotEmpty) {
@@ -65,8 +85,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
 
     await ref.read(onboardingCompletedProvider.notifier).complete();
+
+    if (wasSkipped) {
+      AnalyticsService.trackEvent(
+        'onboarding_skipped',
+        data: <String, Object>{'last_step': _currentPage + 1},
+        path: '/onboarding',
+      );
+    } else {
+      AnalyticsService.trackEvent(
+        'onboarding_completed',
+        data: <String, Object>{
+          'preferred_language': _selectedLang,
+          'notification_enabled': _enableNotifications,
+        },
+        path: '/onboarding',
+      );
+    }
+
     await ref.read(userSyncServiceProvider).sync(force: true);
     widget.onComplete();
+  }
+
+  Future<void> _skipOnboarding() async {
+    await _finishOnboarding(wasSkipped: true);
   }
 
   @override
@@ -145,7 +187,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   const Spacer(),
                   if (_currentPage < 3)
                     TextButton(
-                      onPressed: _finishOnboarding,
+                      onPressed: _skipOnboarding,
                       child: Text(
                         'Skip',
                         style: AppTypography.body(
