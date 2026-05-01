@@ -1,3 +1,34 @@
+## [2026-05-01] — In-App Feedback Submission
+
+### Added
+- `lib/core/services/feedback_service.dart` — Added an n8n-backed feedback submission service that sends devotional issue reports and suggestions with device and stable identity context.
+- `lib/features/settings/feedback_screen.dart` — Added a theme-consistent feedback form with category selection, optional contact email, validation, loading state, and dedicated success state.
+- `test/feedback_service_test.dart` — Added focused coverage for feedback payload generation, identity backfill, and failure semantics.
+- `test/feedback_screen_test.dart` — Added focused widget coverage for feedback validation and success-state behavior.
+
+### Modified
+- `lib/core/constants/app_sync_config.dart` — Added compile-time feedback webhook and request-timeout configuration.
+- `lib/providers/app_providers.dart` — Added a Riverpod provider for the new feedback service.
+- `lib/features/settings/settings_screen.dart` — Added a Settings support entrypoint that navigates to the new feedback screen.
+- `lib/features/settings/feedback_screen.dart` — Refined the feedback form with efficient stacked category chips, softer placeholder styling, a large message area, and keyboard-aware page scrolling so the form no longer compresses under the keyboard.
+- `docs/FILE_REGISTRY.md` — Registered the feedback files and refreshed touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented the feedback service, provider exposure, and updated runtime config examples.
+- `docs/FUNCTIONAL_SPEC.md` — Added the feedback feature, user flow, business rules, and edge cases.
+- `docs/ANALYTICS_EVENTS.md` — Added planned Settings and Feedback analytics event definitions.
+
+## [2026-05-01] — n8n Workflows And Database Contracts
+
+### Added
+- `n8n/aartiapp_user_sync_workflow.json` — Added an import-ready n8n workflow matching the live AartiApp user-sync payload and webhook path.
+- `n8n/aartiapp_feedback_workflow.json` — Added an import-ready n8n workflow matching the live AartiApp feedback payload and webhook path.
+- `database/aartiapp.sql` — Added a combined SQL bootstrap for the user-sync and feedback storage tables.
+- `database/Tables/UserProfiles.sql` — Added the AartiApp user profile sync schema and Postgres upsert query.
+- `database/Tables/appFeedback.sql` — Added the AartiApp feedback schema, indexes, and Postgres insert query.
+
+### Modified
+- `docs/FILE_REGISTRY.md` — Registered the new n8n and database assets.
+- `docs/ARCHITECTURE.md` — Documented the integration asset folders and in-repo workflow/database contracts.
+
 ## [2026-05-01] — User Profile And Settings Sync
 
 ### Added

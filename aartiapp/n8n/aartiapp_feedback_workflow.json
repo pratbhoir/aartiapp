@@ -1,0 +1,451 @@
+{
+  "name": "Aarti Sangrah — Feedback Receiver",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Aarti Sangrah — Feedback Receiver\n\n**Flow**\n`Flutter App` → POST JSON → `Webhook` → `Extract Payload` → `Insert row (DataTable)` → `Respond 200 OK`\n\n**To activate after import:**\n1. Create a DataTable named **AppFeedback** with the columns listed below\n2. Open **Insert row (DataTable)** and select your actual DataTable\n3. Optionally configure **Execute a SQL query** with your Postgres credential if you also want Postgres storage\n4. Toggle the workflow **Active**\n5. Copy the production webhook URL and pass it into the app using `--dart-define=AARTI_FEEDBACK_WEBHOOK_URL=<url>`\n\n**DataTable columns (14):**\n`feedback_id` · `user_id` · `user_name` · `email` · `registration_date` · `onboarding_date` · `device_model` · `os_version` · `platform` · `app_version` · `feedback_type` · `message` · `submitted_at` · `received_at_server`\n\n**Notes:**\n- This is an insert-only workflow: each feedback submission creates a new row\n- The app throws on non-2xx or timeout failures, so this workflow should always return a clean JSON 200 on success",
+        "height": 360,
+        "width": 720,
+        "color": 4
+      },
+      "id": "2c4dc7f6-c7d0-4926-bbd9-9d8ce13afaa4",
+      "name": "📋 Setup Guide",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "content": "```sql\nCREATE TABLE IF NOT EXISTS appFeedback (\n  Id                 SERIAL PRIMARY KEY,\n  FeedbackId         UUID NOT NULL UNIQUE,\n  UserId             TEXT,\n  UserName           TEXT,\n  Email              TEXT,\n  RegistrationDate   TEXT,\n  OnboardingDate     TEXT,\n  DeviceModel        TEXT,\n  OsVersion          TEXT,\n  Platform           TEXT,\n  AppVersion         TEXT,\n  FeedbackType       TEXT,\n  Message            TEXT,\n  SubmittedAt        TIMESTAMPTZ,\n  ReceivedAtServer   TIMESTAMPTZ DEFAULT NOW()\n);\n```",
+        "height": 360,
+        "width": 440,
+        "color": 5
+      },
+      "id": "0f03884e-f9c1-4758-b7c0-93ba9e8d03b8",
+      "name": "🐘 Postgres SQL",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        920,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aartiapp-feedback",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "5f1be7fe-3c63-44e1-bde4-c2bfa0bb9daf",
+      "name": "POST /aartiapp-feedback",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        352
+      ],
+      "webhookId": "aartiapp-feedback-00000000"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f01",
+              "name": "feedback_id",
+              "value": "={{ $json.body.feedback_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f02",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f03",
+              "name": "user_name",
+              "value": "={{ $json.body.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f04",
+              "name": "email",
+              "value": "={{ $json.body.email == \"\" ? null : $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "f05",
+              "name": "registration_date",
+              "value": "={{ $json.body.registration_date }}",
+              "type": "string"
+            },
+            {
+              "id": "f06",
+              "name": "onboarding_date",
+              "value": "={{ $json.body.onboarding_date }}",
+              "type": "string"
+            },
+            {
+              "id": "f07",
+              "name": "device_model",
+              "value": "={{ $json.body.device_model }}",
+              "type": "string"
+            },
+            {
+              "id": "f08",
+              "name": "os_version",
+              "value": "={{ $json.body.os_version }}",
+              "type": "string"
+            },
+            {
+              "id": "f09",
+              "name": "platform",
+              "value": "={{ $json.body.platform }}",
+              "type": "string"
+            },
+            {
+              "id": "f10",
+              "name": "app_version",
+              "value": "={{ $json.body.app_version }}",
+              "type": "string"
+            },
+            {
+              "id": "f11",
+              "name": "feedback_type",
+              "value": "={{ $json.body.feedback_type }}",
+              "type": "string"
+            },
+            {
+              "id": "f12",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "f13",
+              "name": "submitted_at",
+              "value": "={{ $json.body.submitted_at }}",
+              "type": "string"
+            },
+            {
+              "id": "f14",
+              "name": "received_at_server",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6d7a2f46-bbe2-4d77-a701-cd3f526673e3",
+      "name": "Extract Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_APP_FEEDBACK_DATATABLE_ID",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "feedback_id",
+              "displayName": "feedback_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "user_name",
+              "displayName": "user_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "registration_date",
+              "displayName": "registration_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "onboarding_date",
+              "displayName": "onboarding_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "device_model",
+              "displayName": "device_model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "os_version",
+              "displayName": "os_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "app_version",
+              "displayName": "app_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "feedback_type",
+              "displayName": "feedback_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "received_at_server",
+              "displayName": "received_at_server",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        352
+      ],
+      "id": "5f763834-0201-49e8-bbe3-b4a35f6fe3b1",
+      "name": "Insert row (DataTable)"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"ok\",\n  \"feedback_id\": \"{{ $('Extract Payload').item.json.feedback_id }}\",\n  \"received_at\": \"{{ $('Extract Payload').item.json.received_at_server }}\",\n  \"message\": \"Feedback received. Thank you!\"\n}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "ef0efb32-482c-4a4d-8292-77d34d60d5fb",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        736,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO appFeedback (\n  FeedbackId, UserId, UserName, Email, RegistrationDate, OnboardingDate, DeviceModel,\n  OsVersion, Platform, AppVersion, FeedbackType, Message, SubmittedAt, ReceivedAtServer\n) VALUES (\n  $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14\n)",
+        "options": {
+          "queryReplacement": "={{ $json.feedback_id }},{{ $json.user_id }},{{ $json.user_name }},{{ $json.email }},{{ $json.registration_date }},{{ $json.onboarding_date }},{{ $json.device_model }},{{ $json.os_version }},{{ $json.platform }},{{ $json.app_version }},{{ $json.feedback_type }},{{ $json.message }},{{ $json.submitted_at }},{{ $json.received_at_server }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        480,
+        528
+      ],
+      "id": "66e0c2ef-4f68-4f8e-808c-ee6cbf9db061",
+      "name": "Execute a SQL query"
+    }
+  ],
+  "pinData": {
+    "POST /aartiapp-feedback": [
+      {
+        "json": {
+          "body": {
+            "feedback_id": "feedback-123",
+            "user_id": "aarti-user-123",
+            "user_name": "Bhakt",
+            "email": "bhakt@example.com",
+            "registration_date": "2026-05-01T12:00:00.000Z",
+            "onboarding_date": "2026-05-01T12:05:00.000Z",
+            "device_model": "Google Pixel 7",
+            "os_version": "Android 16",
+            "platform": "android",
+            "app_version": "2.0.0",
+            "feedback_type": "Incorrect Lyrics",
+            "message": "One verse is missing on the Hanuman Aarti page.",
+            "submitted_at": "2026-05-01T12:10:00.000Z"
+          },
+          "webhookUrl": "https://example.com/webhook/aartiapp-feedback",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "POST /aartiapp-feedback": {
+      "main": [
+        [
+          {
+            "node": "Extract Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Payload": {
+      "main": [
+        [
+          {
+            "node": "Insert row (DataTable)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row (DataTable)": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a8304035-dbe0-45c0-b3a6-af87d4fd77fb",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "aartiappFeedbackWorkflow",
+  "tags": [
+    {
+      "name": "feedback"
+    },
+    {
+      "name": "aartiapp"
+    }
+  ]
+}

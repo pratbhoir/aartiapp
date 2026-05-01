@@ -32,6 +32,7 @@
 | Sharing (text + image) | ✅ Done | v1.5 | `SharingService` |
 | Daily notification reminder | ✅ Done | v1.5 | `NotificationService` |
 | Lightweight user profile/settings sync | ✅ Done | v2.5 | `UserSyncService` |
+| In-app feedback submission | ✅ Done | v2.5 | `FeedbackScreen` |
 | Festival banner (bundled calendar 2026–2028) | ✅ Done | v1.5 | `FestiveBanner` |
 | Festival tag filtering | ✅ Done | v1.5 | `FestivalFilterChips` |
 | "Next" FAB for My Puja sequence (90% audio or scroll-to-bottom) | ✅ Done | v2.2 | `AartiDetailScreen` |
@@ -123,8 +124,9 @@
 6. Notification toggle + time picker.
 7. Crossfade duration (0–3s).
 8. User name edit.
-9. Diagnostics actions: view Activity Log, share log export, and clear log.
-10. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
+9. Support action opens a dedicated feedback form for devotional corrections, bugs, feature requests, and general feedback.
+10. Diagnostics actions: view Activity Log, share log export, and clear log.
+11. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
 
 ### 2.7 User Sync
 
@@ -134,6 +136,19 @@
 4. Updating display name, appearance, text scale, script language, app language, reminder settings, crossfade duration, auto-play, or repeat-current state schedules a trailing debounced sync.
 5. Sync payloads include lightweight profile, app-version, device, and settings context only; devotional content, bookmarks, puja lists, and verse data are not exported.
 6. Sync failures are logged locally and do not interrupt the user.
+
+### 2.8 Feedback
+
+1. User opens the feedback form from Settings.
+2. User chooses a category from Incorrect Lyrics, Translation Issue, Feature Request, Bug Report, or General Feedback using compact selectable chips arranged in an efficient stacked layout.
+3. User can optionally provide a contact email for follow-up.
+4. User must enter a message and the message must stay within 1000 characters.
+5. Submitting feedback sends a payload with `feedback_id`, stable user identity, registration metadata, device context, app version, category, and message to the configured n8n webhook.
+6. While the request is in flight, the submit button shows a loading state and prevents duplicate submissions.
+7. The message field expands to use the remaining available vertical space in the form instead of leaving empty space below the textbox.
+8. When the keyboard opens, the feedback page becomes scrollable above the keyboard so the active input remains reachable without compressing the full form.
+9. On success, the screen shows a dedicated success state rather than only a snackbar.
+10. On failure, the screen shows an error snackbar and keeps the form contents intact for retry.
 
 ---
 
@@ -157,6 +172,10 @@
 | User sync debounce | Settings-driven sync uses a trailing debounce of 5 seconds. |
 | User sync startup refresh | Returning users trigger a forced sync on app launch after onboarding is already complete. |
 | User sync privacy boundary | Sync exports lightweight profile and setting state only; it excludes aarti content and personal devotional collections. |
+| Feedback categories | Feedback categories are devotional-content aware and include Incorrect Lyrics, Translation Issue, Feature Request, Bug Report, and General Feedback. |
+| Feedback contact email | Contact email is optional and validated only when the user enters a value. |
+| Feedback failure policy | Feedback submission failures are surfaced to the user; they are not treated as silent telemetry. |
+| Feedback success state | Successful feedback clears the form and replaces it with a dedicated success surface. |
 | Secondary script rule | Secondary-script surfaces use the app-language reading script; if that script already matches the selected lyric script, they fall back to Devanagari. |
 | Meaning fallback | English meanings are shown as the fallback until localized Hindi/Gujarati meaning data exists. |
 | Focus Mode progression | Manual focus mode navigation advances and highlights one full verse at a time, not individual lines; taps above the highlighted verse move to the previous verse, and taps on or below it move to the next verse. |
@@ -178,6 +197,8 @@
 | No aartis match the active Discover filter | Empty state shown with message |
 | Audio URL unreachable | Fail silently — player shows but audio doesn't play |
 | Festival calendar exhausted (after 2028) | Festival features degrade gracefully — no banner shown |
+| Feedback webhook unavailable or returns non-2xx | Form remains visible, snackbar explains the failure, and the user can retry without retyping from scratch |
+| Invalid contact email entered in feedback form | Submission is blocked until the email is valid or cleared |
 | User hasn't completed onboarding | Redirect to `OnboardingScreen` before `HomeShell` |
 | Bookmark an already-bookmarked aarti | Toggles off — removes from bookmarks and puja list |
 | Puja list empty | Empty state with CTA to discover aartis |

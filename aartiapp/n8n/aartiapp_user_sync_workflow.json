@@ -1,0 +1,571 @@
+{
+  "name": "Aarti Sangrah — User Sync (Register & Update)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Aarti Sangrah — User Sync Workflow\n\n**Flow**\n`Flutter App` → POST JSON → `Webhook` → `Extract Payload` → `Upsert row (DataTable)` → `Respond 200 OK`\n\n**When is this called from the app?**\n1. **First registration / onboarding completion** — immediately after onboarding completes (`force=true`)\n2. **App startup refresh** — returning users trigger an immediate forced sync\n3. **Settings updates** — display name, theme, text scale, script mode, app language, reminders, autoplay, repeat, and crossfade changes are debounced to 1 request per 5 seconds\n\n**Upsert key:** `user_id` — each install keeps one current profile row\n\n**To activate after import:**\n1. Create a DataTable named **UserProfiles** with the columns listed below\n2. Open **Upsert row (DataTable)** and select your actual DataTable\n3. Optionally configure **Execute a SQL query** with your Postgres credential if you also want Postgres storage\n4. Toggle the workflow **Active**\n5. Copy the production webhook URL and pass it into the app using `--dart-define=AARTI_USER_SYNC_WEBHOOK_URL=<url>`\n\n**DataTable columns (20):**\n`user_id` · `user_name` · `registration_date` · `onboarding_date` · `device_model` · `os_version` · `platform` · `app_version` · `theme_mode` · `text_scale` · `script_mode` · `app_language` · `notification_enabled` · `notification_time` · `auto_play_enabled` · `repeat_current_enabled` · `crossfade_duration_seconds` · `onboarding_completed` · `profile_complete` · `last_updated`\n\n**What is intentionally NOT collected:**\nAarti content, bookmarks, puja lists, user-created private aartis, verse text, or any other devotional content payloads.",
+        "height": 430,
+        "width": 760,
+        "color": 4
+      },
+      "id": "2ef8f7fb-ec55-4265-8b4f-7a3da3d0c101",
+      "name": "📋 Setup Guide",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "```sql\nCREATE TABLE IF NOT EXISTS UserProfiles (\n  Id                        SERIAL PRIMARY KEY,\n  UserId                    TEXT NOT NULL UNIQUE,\n  UserName                  TEXT,\n  RegistrationDate          TEXT,\n  OnboardingDate            TEXT,\n  DeviceModel               TEXT,\n  OsVersion                 TEXT,\n  Platform                  TEXT,\n  AppVersion                TEXT,\n  ThemeMode                 TEXT,\n  TextScale                 DOUBLE PRECISION,\n  ScriptMode                TEXT,\n  AppLanguage               TEXT,\n  NotificationEnabled       BOOLEAN,\n  NotificationTime          TEXT,\n  AutoPlayEnabled           BOOLEAN,\n  RepeatCurrentEnabled      BOOLEAN,\n  CrossfadeDurationSeconds  INTEGER,\n  OnboardingCompleted       BOOLEAN,\n  ProfileComplete           BOOLEAN,\n  LastUpdated               TIMESTAMPTZ,\n  FirstSeen                 TIMESTAMPTZ DEFAULT NOW()\n);\n```",
+        "height": 430,
+        "width": 470,
+        "color": 5
+      },
+      "id": "f31d0fd9-212f-4234-9ff6-d3d14e5d82f3",
+      "name": "🐘 Postgres SQL",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aartiapp-user-sync",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "d6b0594f-1b9f-41f8-a293-594d4d7d24c5",
+      "name": "POST /aartiapp-user-sync",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        560
+      ],
+      "webhookId": "aartiapp-user-sync-00000000"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "u01",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "u02",
+              "name": "user_name",
+              "value": "={{ $json.body.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "u03",
+              "name": "registration_date",
+              "value": "={{ $json.body.registration_date }}",
+              "type": "string"
+            },
+            {
+              "id": "u04",
+              "name": "onboarding_date",
+              "value": "={{ $json.body.onboarding_date }}",
+              "type": "string"
+            },
+            {
+              "id": "u05",
+              "name": "device_model",
+              "value": "={{ $json.body.device_model }}",
+              "type": "string"
+            },
+            {
+              "id": "u06",
+              "name": "os_version",
+              "value": "={{ $json.body.os_version }}",
+              "type": "string"
+            },
+            {
+              "id": "u07",
+              "name": "platform",
+              "value": "={{ $json.body.platform }}",
+              "type": "string"
+            },
+            {
+              "id": "u08",
+              "name": "app_version",
+              "value": "={{ $json.body.app_version }}",
+              "type": "string"
+            },
+            {
+              "id": "u09",
+              "name": "theme_mode",
+              "value": "={{ $json.body.theme_mode }}",
+              "type": "string"
+            },
+            {
+              "id": "u10",
+              "name": "text_scale",
+              "value": "={{ $json.body.text_scale }}",
+              "type": "number"
+            },
+            {
+              "id": "u11",
+              "name": "script_mode",
+              "value": "={{ $json.body.script_mode }}",
+              "type": "string"
+            },
+            {
+              "id": "u12",
+              "name": "app_language",
+              "value": "={{ $json.body.app_language }}",
+              "type": "string"
+            },
+            {
+              "id": "u13",
+              "name": "notification_enabled",
+              "value": "={{ $json.body.notification_enabled }}",
+              "type": "boolean"
+            },
+            {
+              "id": "u14",
+              "name": "notification_time",
+              "value": "={{ $json.body.notification_time }}",
+              "type": "string"
+            },
+            {
+              "id": "u15",
+              "name": "auto_play_enabled",
+              "value": "={{ $json.body.auto_play_enabled }}",
+              "type": "boolean"
+            },
+            {
+              "id": "u16",
+              "name": "repeat_current_enabled",
+              "value": "={{ $json.body.repeat_current_enabled }}",
+              "type": "boolean"
+            },
+            {
+              "id": "u17",
+              "name": "crossfade_duration_seconds",
+              "value": "={{ $json.body.crossfade_duration_seconds }}",
+              "type": "number"
+            },
+            {
+              "id": "u18",
+              "name": "onboarding_completed",
+              "value": "={{ $json.body.onboarding_completed }}",
+              "type": "boolean"
+            },
+            {
+              "id": "u19",
+              "name": "profile_complete",
+              "value": "={{ $json.body.profile_complete }}",
+              "type": "boolean"
+            },
+            {
+              "id": "u20",
+              "name": "last_updated",
+              "value": "={{ $json.body.last_updated }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f061db1e-bd20-4460-9b98-fb1c8b7ab418",
+      "name": "Extract Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_USER_PROFILES_DATATABLE_ID",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "user_id",
+              "keyValue": "={{ $json.user_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "notification_enabled": false,
+            "auto_play_enabled": false,
+            "repeat_current_enabled": false,
+            "onboarding_completed": false,
+            "profile_complete": false,
+            "text_scale": 1,
+            "crossfade_duration_seconds": 0
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "user_name",
+              "displayName": "user_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "registration_date",
+              "displayName": "registration_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "onboarding_date",
+              "displayName": "onboarding_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "device_model",
+              "displayName": "device_model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "os_version",
+              "displayName": "os_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "app_version",
+              "displayName": "app_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "theme_mode",
+              "displayName": "theme_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "text_scale",
+              "displayName": "text_scale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "script_mode",
+              "displayName": "script_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "app_language",
+              "displayName": "app_language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notification_enabled",
+              "displayName": "notification_enabled",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notification_time",
+              "displayName": "notification_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "auto_play_enabled",
+              "displayName": "auto_play_enabled",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "repeat_current_enabled",
+              "displayName": "repeat_current_enabled",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "crossfade_duration_seconds",
+              "displayName": "crossfade_duration_seconds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "onboarding_completed",
+              "displayName": "onboarding_completed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "profile_complete",
+              "displayName": "profile_complete",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "last_updated",
+              "displayName": "last_updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        528,
+        560
+      ],
+      "id": "67372df2-bfd9-460f-89a4-cbaf9dce24c6",
+      "name": "Upsert row (DataTable)"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"ok\",\n  \"user_id\": \"{{ $('Extract Payload').item.json.user_id }}\",\n  \"last_updated\": \"{{ $('Extract Payload').item.json.last_updated }}\",\n  \"message\": \"User profile synced successfully.\"\n}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "fb1bd751-aa8a-4ae5-90a7-bd4985de5b8f",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO UserProfiles (\n  UserId, UserName, RegistrationDate, OnboardingDate, DeviceModel, OsVersion,\n  Platform, AppVersion, ThemeMode, TextScale, ScriptMode, AppLanguage,\n  NotificationEnabled, NotificationTime, AutoPlayEnabled, RepeatCurrentEnabled,\n  CrossfadeDurationSeconds, OnboardingCompleted, ProfileComplete, LastUpdated\n) VALUES (\n  $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20\n)\nON CONFLICT (UserId) DO UPDATE SET\n  UserName                   = EXCLUDED.UserName,\n  RegistrationDate           = EXCLUDED.RegistrationDate,\n  OnboardingDate             = EXCLUDED.OnboardingDate,\n  DeviceModel                = EXCLUDED.DeviceModel,\n  OsVersion                  = EXCLUDED.OsVersion,\n  Platform                   = EXCLUDED.Platform,\n  AppVersion                 = EXCLUDED.AppVersion,\n  ThemeMode                  = EXCLUDED.ThemeMode,\n  TextScale                  = EXCLUDED.TextScale,\n  ScriptMode                 = EXCLUDED.ScriptMode,\n  AppLanguage                = EXCLUDED.AppLanguage,\n  NotificationEnabled        = EXCLUDED.NotificationEnabled,\n  NotificationTime           = EXCLUDED.NotificationTime,\n  AutoPlayEnabled            = EXCLUDED.AutoPlayEnabled,\n  RepeatCurrentEnabled       = EXCLUDED.RepeatCurrentEnabled,\n  CrossfadeDurationSeconds   = EXCLUDED.CrossfadeDurationSeconds,\n  OnboardingCompleted        = EXCLUDED.OnboardingCompleted,\n  ProfileComplete            = EXCLUDED.ProfileComplete,\n  LastUpdated                = EXCLUDED.LastUpdated;",
+        "options": {
+          "queryReplacement": "={{ $json.user_id }},{{ $json.user_name }},{{ $json.registration_date }},{{ $json.onboarding_date }},{{ $json.device_model }},{{ $json.os_version }},{{ $json.platform }},{{ $json.app_version }},{{ $json.theme_mode }},{{ $json.text_scale }},{{ $json.script_mode }},{{ $json.app_language }},{{ $json.notification_enabled }},{{ $json.notification_time }},{{ $json.auto_play_enabled }},{{ $json.repeat_current_enabled }},{{ $json.crossfade_duration_seconds }},{{ $json.onboarding_completed }},{{ $json.profile_complete }},{{ $json.last_updated }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        528,
+        736
+      ],
+      "id": "66b15be9-4d3f-4180-a9bb-aecf8d56c4bc",
+      "name": "Execute a SQL query"
+    }
+  ],
+  "pinData": {
+    "POST /aartiapp-user-sync": [
+      {
+        "json": {
+          "body": {
+            "user_id": "aarti-user-123",
+            "user_name": "Bhakt",
+            "registration_date": "2026-05-01T12:00:00.000Z",
+            "onboarding_date": "2026-05-01T12:05:00.000Z",
+            "device_model": "Google Pixel 7",
+            "os_version": "Android 16",
+            "platform": "android",
+            "app_version": "2.0.0",
+            "theme_mode": "dark",
+            "text_scale": 1.1,
+            "script_mode": "gujarati",
+            "app_language": "gu",
+            "notification_enabled": true,
+            "notification_time": "06:00",
+            "auto_play_enabled": true,
+            "repeat_current_enabled": false,
+            "crossfade_duration_seconds": 2,
+            "onboarding_completed": true,
+            "profile_complete": true,
+            "last_updated": "2026-05-01T12:10:00.000Z"
+          },
+          "webhookUrl": "https://example.com/webhook/aartiapp-user-sync",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "POST /aartiapp-user-sync": {
+      "main": [
+        [
+          {
+            "node": "Extract Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Payload": {
+      "main": [
+        [
+          {
+            "node": "Upsert row (DataTable)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row (DataTable)": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "83a233f8-4f84-4af9-86d9-d2bf598ef501",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "aartiappUserSyncWorkflow",
+  "tags": [
+    {
+      "name": "user-sync"
+    },
+    {
+      "name": "aartiapp"
+    }
+  ]
+}
