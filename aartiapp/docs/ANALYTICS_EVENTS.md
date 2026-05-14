@@ -10,7 +10,7 @@
 | Element | Convention | Example |
 |---------|-----------|---------|
 | Event name | `snake_case` | `aarti_detail_viewed` |
-| Category prefix | feature name | `discover_`, `puja_`, `detail_` |
+| Category prefix | feature name | `discover_`, `deity_`, `puja_`, `detail_` |
 | Action verbs | `viewed`, `tapped`, `toggled`, `completed`, `shared` | — |
 | Parameter keys | `snake_case` | `aarti_id`, `deity_name` |
 
@@ -29,6 +29,15 @@
 | `discover_aarti_bookmarked` | User bookmarks an aarti card | `aarti_id`, `deity_name` | Discover |
 | `discover_aarti_card_tapped` | User taps an aarti card | `aarti_id`, `deity_name` | Discover |
 | `discover_hero_card_tapped` | User taps "Aarti of the Day" | `aarti_id`, `deity_name` | Discover |
+
+### Deity Detail
+
+| Event Name | Trigger | Parameters | Screen |
+|------------|---------|------------|--------|
+| `deity_screen_viewed` | Screen loaded | `deity_name` | Deity Detail |
+| `deity_tab_changed` | User switches between deity tabs | `deity_name`, `tab_name` | Deity Detail |
+| `deity_aarti_tapped` | User taps a devotional item from the deity page | `aarti_id`, `deity_name`, `tab_name` | Deity Detail |
+| `deity_bookmark_toggled` | User toggles bookmark from the deity page | `source`, `aarti_id`, `deity_name`, `is_bookmarked` | Deity Detail |
 
 ### Aarti Detail
 
@@ -121,5 +130,5 @@
 ## 3. Screen Tracking
 
 - `HomeShell` sends Umami pageviews for `/home`, `/discover`, `/my-puja`, `/collection`, and `/settings` whenever the active tab changes.
-- `AartiDetailScreen`, `FeedbackScreen`, `PujaSessionScreen`, and `PujaFocusSessionScreen` send explicit pageviews when mounted.
+- `DeityDetailScreen`, `AartiDetailScreen`, `FeedbackScreen`, `PujaSessionScreen`, and `PujaFocusSessionScreen` send explicit pageviews when mounted.
 - Screen dedupe is path-based inside `AnalyticsService`.

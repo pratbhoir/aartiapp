@@ -134,6 +134,12 @@ Defined in `lib/core/theme/app_theme.dart`:
 - No elevation, no scroll-under shadow
 - Icon colour matches text colour
 
+### Segmented ToggleBar
+- Shared by Aarti Detail and Deity Detail for compact mode and tab switching
+- Height 42 px with 3 px outer inset padding and a theme-aware border track
+- Active segment uses `context.surface` with a subtle shadow; inactive segments stay transparent
+- Labels use `AppTypography.body(size: 12)` with active text at `context.textPrimary` and inactive text at `context.textCaption`
+
 ### Snackbar
 - Floating behavior with shared inset padding of 16 px horizontal and 12 px vertical
 - No elevation, 12 px border radius

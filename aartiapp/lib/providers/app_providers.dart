@@ -17,6 +17,7 @@ import '../data/repositories/bookmark_repository.dart';
 import '../data/repositories/user_aarti_repository.dart';
 import '../data/repositories/recently_played_repository.dart';
 import '../data/models/aarti_item.dart';
+import '../data/models/festival.dart';
 import '../core/utils/search_engine.dart';
 
 // ─── Repository Providers ───────────────────────────────────────────────────
@@ -672,6 +673,55 @@ final filteredAartisProvider = Provider<List<int>>((ref) {
     case DiscoverFilterMode.none:
       return List.generate(aartis.length, (index) => index);
   }
+});
+
+final deityMetadataProvider = Provider.family<Map<String, String>?, String>((
+  ref,
+  deityLabel,
+) {
+  ref.watch(contentRevisionProvider);
+  return AartiRepository.instance.getDeityByLabel(deityLabel);
+});
+
+final deityItemsProvider = Provider.family<List<AartiItem>, String>((
+  ref,
+  deityLabel,
+) {
+  ref.watch(contentRevisionProvider);
+  return AartiRepository.instance.getAartisForDeity(deityLabel);
+});
+
+final deityFestivalsProvider = Provider.family<List<Festival>, String>((
+  ref,
+  deityLabel,
+) {
+  ref.watch(contentRevisionProvider);
+  final normalized = deityLabel.trim().toLowerCase();
+  if (normalized.isEmpty) {
+    return const <Festival>[];
+  }
+
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final festivals = FestivalRepository.instance.festivals
+      .where((festival) => festival.deity.toLowerCase() == normalized)
+      .toList();
+
+  festivals.sort((a, b) {
+    final aPriority = a.isActiveOn(today)
+        ? 0
+        : (!a.date.isBefore(today) ? 1 : 2);
+    final bPriority = b.isActiveOn(today)
+        ? 0
+        : (!b.date.isBefore(today) ? 1 : 2);
+    final priorityCompare = aPriority.compareTo(bPriority);
+    if (priorityCompare != 0) {
+      return priorityCompare;
+    }
+    return a.date.compareTo(b.date);
+  });
+
+  return festivals;
 });
 
 // ─── User Name ──────────────────────────────────────────────────────────────

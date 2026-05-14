@@ -103,6 +103,30 @@ class AartiRepository {
         .toList();
   }
 
+  /// Get all devotional items matching a deity label (e.g. "Shiva").
+  List<AartiItem> getAartisForDeity(String deity) {
+    if (deity.isEmpty) return const [];
+    final lower = deity.toLowerCase();
+    return _aartis.where((a) => a.deity.toLowerCase() == lower).toList();
+  }
+
+  /// Returns the configured deity metadata entry by label.
+  Map<String, String>? getDeityByLabel(String label) {
+    if (label.isEmpty) {
+      return null;
+    }
+
+    final lower = label.toLowerCase();
+    for (final deity in _deities) {
+      final deityLabel = deity['label'];
+      if (deityLabel != null && deityLabel.toLowerCase() == lower) {
+        return deity;
+      }
+    }
+
+    return null;
+  }
+
   /// All unique festival tags across the catalog.
   List<String> get allFestivalTags {
     final tags = <String>{};

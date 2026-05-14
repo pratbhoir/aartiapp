@@ -66,7 +66,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/data/repositories/aarti_repository.dart` | `AartiRepository` singleton — loads bundled, cached, or remote `aarti_catalog.json`, tracks content version/source, and provides query accessors | 2026-05-01 |
+| `lib/data/repositories/aarti_repository.dart` | `AartiRepository` singleton — loads bundled, cached, or remote `aarti_catalog.json`, tracks content version/source, and provides deity, festival, and ID-based query accessors | 2026-05-02 |
 | `lib/data/repositories/bookmark_repository.dart` | `BookmarkRepository` — Hive-backed bookmark toggle/query | 2026-04-20 |
 | `lib/data/repositories/festival_repository.dart` | `FestivalRepository` singleton — loads bundled, cached, or remote Hindu calendar JSON (2026–2028), tracks content version/source, and returns up to 5 Discover festival tags in nearest current/upcoming order | 2026-05-01 |
 | `lib/data/repositories/puja_repository.dart` | `PujaRepository` — Hive-backed ordered puja list persistence | 2026-04-20 |
@@ -78,7 +78,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, analytics enablement, bookmarks, puja order, Discover filters, provider-owned user sync and analytics re-identify triggers, feedback service, and content sync state/revision invalidation | 2026-05-01 |
+| `lib/providers/app_providers.dart` | All Riverpod providers and `StateNotifier` classes — theme, language, notifications, analytics enablement, bookmarks, puja order, Discover filters, deity-detail computed families, provider-owned user sync and analytics re-identify triggers, feedback service, and content sync state/revision invalidation | 2026-05-02 |
 
 ## Navigation
 
@@ -96,6 +96,7 @@
 | `lib/shared/widgets/focus_mode_settings_sheet.dart` | Shared temporary focus-mode settings bottom sheet used by standalone focus mode and My Puja focus sessions, with language-only reading-surface buttons and a compact text-size control | 2026-04-27 |
 | `lib/shared/widgets/gradient_divider.dart` | `GradientDivider` — saffron-to-transparent horizontal divider | 2026-04-20 |
 | `lib/shared/widgets/section_label.dart` | `SectionLabel` — uppercase tracked section header text | 2026-04-20 |
+| `lib/shared/widgets/toggle_bar.dart` | `ToggleBar` — shared segmented control used by Aarti Detail and Deity Detail with theme-aware surfaces | 2026-05-02 |
 
 ## Shared / Utils
 
@@ -113,7 +114,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with mutually exclusive search, deity, and festival filters plus a script-aware aarti grid and discover interaction analytics, including bookmark saves | 2026-05-01 |
+| `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — prayer discovery screen with mutually exclusive search, festival filters, and a script-aware aarti grid, where non-`All` deity chips now open the dedicated deity page | 2026-05-02 |
 | `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, script-aware subtitle, duration, bookmark | 2026-04-26 |
 | `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
 | `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable Discover festival tag chips showing only actual festival entries | 2026-04-27 |
@@ -121,16 +122,23 @@
 | `lib/features/discover/widgets/search_bar.dart` | `AartiSearchBar` — text input with parent-controlled value support for Discover filter resets | 2026-04-27 |
 | `lib/features/discover/widgets/today_hero_card.dart` | `TodayHeroCard` — dark pulsing hero card for "Aarti of the Day" with script-aware subtitle preview | 2026-04-26 |
 
+## Features / Deity Detail
+
+| File Path | Purpose | Last Updated |
+|-----------|---------|--------------|
+| `lib/features/deity_detail/deity_detail_screen.dart` | `DeityDetailScreen` — dedicated deity destination with shared segmented tabs, a consistent hero backdrop, polished section framing, and deity-page analytics | 2026-05-02 |
+| `lib/features/deity_detail/widgets/deity_header.dart` | `DeityHeader` — deity hero surface with a fixed cross-deity backdrop, mantra emphasis, related-festival chips, and warm-material styling | 2026-05-02 |
+| `lib/features/deity_detail/widgets/deity_prayer_card.dart` | `DeityPrayerCard` — deity-page devotional list card using the Discover card language with a saffron top accent row, title-first compact layout, bottom-right audio chip, and simplified metadata row | 2026-05-02 |
+
 ## Features / Aarti Detail
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, temporary focus settings, and detailed interaction analytics including bookmark saves | 2026-05-01 |
+| `lib/features/aarti_detail/aarti_detail_screen.dart` | `AartiDetailScreen` — full detail view with script-aware lyrics, derived secondary-script tabs, shared segmented controls, theme-aware reader surfaces, audio player, bookmark, puja-aware next navigation, temporary focus settings, and detailed interaction analytics including bookmark saves | 2026-05-02 |
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with tap-zone navigation, derived secondary-script rendering, centered session-style header support, puja boundary handoff CTAs, and balanced line splits | 2026-04-27 |
 | `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, completion callback, and theme-aware modal chrome | 2026-05-01 |
-| `lib/features/aarti_detail/widgets/toggle_bar.dart` | `ToggleBar` — segmented control switching Lyrics / Transliteration / Meaning views with theme-aware surfaces | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, derived secondary-script lines, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-27 |
 
 ## Features / My Puja
@@ -196,12 +204,12 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-05-01 |
-| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions, and runtime integration guidance | 2026-05-01 |
+| `docs/FILE_REGISTRY.md` | This file — complete file inventory | 2026-05-02 |
+| `docs/ARCHITECTURE.md` | Folder structure, patterns, state management, conventions, and runtime integration guidance | 2026-05-02 |
 | `docs/THEME_AND_DESIGN.md` | Design tokens, colour palette, typography, spacing, and component feedback styling | 2026-05-01 |
-| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria, and feedback submission rules | 2026-05-01 |
-| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions for the implemented direct Umami event surface | 2026-05-01 |
-| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-05-01 |
+| `docs/FUNCTIONAL_SPEC.md` | Feature list, user flows, acceptance criteria, and feedback submission rules | 2026-05-02 |
+| `docs/ANALYTICS_EVENTS.md` | Analytics event registry and naming conventions for the implemented direct Umami event surface | 2026-05-02 |
+| `docs/CHANGELOG.md` | Chronological log of all changes | 2026-05-02 |
 
 ## Testing
 
@@ -209,6 +217,8 @@
 |-----------|---------|--------------|
 | `test/content_sync_service_test.dart` | Focused service tests for content refresh, stale-skip behavior, cache writes, and per-dataset partial success | 2026-05-01 |
 | `test/analytics_service_test.dart` | Focused service tests for Umami payload shaping, send gating, screen dedupe, and retry behavior | 2026-05-01 |
+| `test/aarti_repository_test.dart` | Focused repository tests for deity metadata lookup and deity-specific devotional filtering | 2026-05-02 |
+| `test/deity_detail_screen_test.dart` | Focused widget tests for Discover-to-deity navigation and deity tab behavior | 2026-05-02 |
 | `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
 | `test/feedback_service_test.dart` | Focused service tests for feedback payload generation, identity backfill, and failure semantics | 2026-05-01 |
 | `test/feedback_screen_test.dart` | Focused widget tests for feedback form validation and success-state behavior | 2026-05-01 |

@@ -72,7 +72,8 @@ lib/
 │   │   ├── aarti_app_bar.dart         # Reusable app bar with hamburger menu
 │   │   ├── focus_mode_settings_sheet.dart # Shared temporary focus-mode settings sheet
 │   │   ├── gradient_divider.dart      # Saffron gradient divider
-│   │   └── section_label.dart         # Uppercase tracked section label
+│   │   ├── section_label.dart         # Uppercase tracked section header text
+│   │   └── toggle_bar.dart            # Shared segmented control for compact tab/mode switching
 │   ├── painters/
 │   │   └── mala_painter.dart          # CustomPainter for Mala bead ring
 │   ├── utils/
@@ -83,9 +84,12 @@ lib/
 │   ├── discover/
 │   │   ├── discover_screen.dart
 │   │   └── widgets/                   # 6 feature-specific widgets
+│   ├── deity_detail/
+│   │   ├── deity_detail_screen.dart
+│   │   └── widgets/                   # hero + devotional list widgets
 │   ├── aarti_detail/
 │   │   ├── aarti_detail_screen.dart
-│   │   └── widgets/                   # 6 feature-specific widgets
+│   │   └── widgets/                   # 5 feature-specific widgets
 │   ├── my_puja/
 │   │   ├── my_puja_screen.dart
 │   │   ├── puja_focus_session_screen.dart
@@ -121,6 +125,8 @@ Devotional content now follows a cache-first bootstrap path. `main.dart` uses `C
 
 Screens are composed from small, focused widgets. Feature-specific widgets live in `features/<name>/widgets/`. Cross-feature reusable widgets live in `shared/widgets/`.
 
+The segmented `ToggleBar` now lives in `shared/widgets/toggle_bar.dart` and is reused by both `AartiDetailScreen` and `DeityDetailScreen` so compact mode/tab switching stays visually consistent across devotional reading surfaces.
+
 The focus-reading surface is intentionally reused across both `AartiDetailScreen` and `PujaFocusSessionScreen` through `features/aarti_detail/widgets/focus_mode_overlay.dart` so verse navigation, balancing, and completion CTA rules stay consistent.
 
 Temporary focus-mode controls that are shared across those flows live in `shared/widgets/focus_mode_settings_sheet.dart`, which keeps the modal chrome and script/text-size override behavior aligned while leaving the actual focus-session state in the owning screen.
@@ -149,6 +155,8 @@ Transient in-app feedback is centralized in `core/utils/snackbar_helper.dart`. F
 | `Provider<T>` (computed) | Derived/filtered data | `filteredAartisProvider` |
 
 Discover filtering is coordinated through a dedicated `DiscoverFilterNotifier` instead of three independent mutable providers. This keeps search, deity, and festival selection mutually exclusive, ensures the default deity `All` state behaves as the clear-filter state, and lets cross-screen entry points such as Home preselect Discover state without leaving stale search text behind.
+
+The dedicated deity page uses computed `Provider.family` values rather than another mutable notifier because its content is fully derived from the selected catalog deity, the singleton repositories, and the shared bookmark/script state. This keeps deity-page state focused on rendering and interaction while reusing the existing repository-backed content model.
 
 User reading preferences are split into two persisted provider-backed settings:
 - `scriptModeProvider` controls the script used for lyric surfaces: Devanagari, English, or Gujarati.
@@ -225,6 +233,8 @@ The `HomeShell` widget acts as a shell around the 5 top-level screens (Home, Dis
 Analytics pageview tracking follows that same structure: the shell emits pageviews for the five primary tabs, and pushed pages emit their own pageviews directly when mounted.
 
 No declarative router (e.g., `go_router`) is currently used. Consider adopting one if deep linking or web navigation is needed.
+
+Discover now uses that imperative model to push a nested `DeityDetailScreen` for non-`All` deity chips, keeping deity browsing as a Discover-owned subflow instead of introducing a new primary navigation destination.
 
 ---
 

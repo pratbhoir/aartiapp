@@ -11,6 +11,7 @@
 | Discover — browse & search Aartis | ✅ Done | v1.0 | `DiscoverScreen` |
 | Aarti of the Day (day → deity mapping) | ✅ Done | v1.0 | `TodayHeroCard` |
 | Deity filter chips | ✅ Done | v1.0 | `DiscoverScreen` |
+| Deity Detail — dedicated browse page with devotional tabs | ✅ Done | v2.8 | `DeityDetailScreen` |
 | Full-text search (title, deity, devanagari, tags) | ✅ Done | v1.0 | `SearchEngine` |
 | Aarti Detail — lyrics with Devanagari / Transliteration / Meaning | ✅ Done | v1.0 | `AartiDetailScreen` |
 | Bookmark toggle | ✅ Done | v1.0 | `AartiDetailScreen`, `AartiCard` |
@@ -75,8 +76,20 @@
 5. Selecting a deity clears the search text and any selected festival filter.
 6. Selecting a festival clears the search text and resets deity selection to `All`.
 7. The deity `All` chip is selected by default and acts as the clear-filter state.
-8. Festival filter chips show only the next 5 current or upcoming festivals, ordered by nearest date.
-9. User taps an Aarti card → navigates to `AartiDetailScreen`.
+8. Tapping a non-`All` deity chip opens `DeityDetailScreen` for that deity.
+9. Festival filter chips show only the next 5 current or upcoming festivals, ordered by nearest date.
+10. User taps an Aarti card → navigates to `AartiDetailScreen`.
+
+### 2.2.1 Deity Detail
+
+1. User enters the page from a non-`All` deity chip in Discover.
+2. User sees a deity hero with emoji identity, devotional count, related festival context when available, and a consistent shared background treatment across all deity pages.
+3. The page groups devotional content into `Aartis`, `Shlokas`, and `Chalisas` tabs using the same segmented control styling as Aarti Detail.
+4. The `Shlokas` tab may also include other reading-first devotional types such as stotras, mantras, chants, vandanas, abhangs, and bhajans until a richer taxonomy is introduced.
+5. User can switch tabs without losing access to bookmark state or script-aware title rendering.
+6. Deity-page devotional cards use the same compact visual language as Discover: saffron top accent, simplified bookmark affordance, optional audio chip, and a footer metadata row for time, verses, and type.
+7. User taps a devotional item → navigates to `AartiDetailScreen`.
+8. User can bookmark directly from the deity page and the existing bookmark-to-puja sync rule still applies.
 
 ### 2.3 Aarti Detail
 
@@ -186,6 +199,8 @@
 | Festival calendar | Pre-calculated dates for 2026–2028. Supports single-day and multi-day ranges. |
 | Discover filter exclusivity | Discover applies only one filter mode at a time. Search clears deity and festival state, deity clears search and festival state, and festival clears search while resetting deity to `All`. |
 | Discover clear state | The deity `All` chip is the default Discover selection and returns the full catalog when selected. |
+| Deity chip destination | Discover deity chips keep `All` as the local clear state, while non-`All` chips open the nested deity detail destination. |
+| Deity page devotional grouping | `DeityDetailScreen` shows `Aartis`, `Shlokas`, and `Chalisas`; the `Shlokas` tab temporarily absorbs reading-first devotional types such as stotra, mantra, chant, vandana, abhang, and bhajan until the catalog gains a richer surfaced taxonomy. |
 | Discover festival filter ordering | Festival chips show only the next 5 current or upcoming festivals, ordered by nearest date, with duplicate yearly tags collapsed to one chip. |
 | Audio default | All aartis share a default audio URL if no specific URL is provided. |
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |

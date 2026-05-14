@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/haptics.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -9,6 +10,7 @@ import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
 import '../../shared/widgets/section_label.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
+import '../deity_detail/deity_detail_screen.dart';
 import 'widgets/search_bar.dart' as app;
 import 'widgets/deity_chip.dart';
 import 'widgets/aarti_card.dart';
@@ -33,10 +35,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // AnalyticsService.trackEvent('discover_screen_viewed', path: '/discover');
-      AnalyticsService.trackScreen(
-        '/discover',
-        title: 'Discover',
-      );
+      AnalyticsService.trackScreen('/discover', title: 'Discover');
     });
   }
 
@@ -105,29 +104,46 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                             itemCount: deities.length,
                             separatorBuilder: (_, __) =>
                                 const SizedBox(width: 10),
-                            itemBuilder: (_, i) => DeityChip(
-                              emoji: deities[i]['emoji']!,
-                              label: deities[i]['label']!,
-                              isActive: i == 0
-                                  ? discoverFilter.mode ==
-                                        DiscoverFilterMode.none
-                                  : discoverFilter.mode ==
-                                            DiscoverFilterMode.deity &&
-                                        discoverFilter.activeDeityIndex == i,
-                              onTap: () {
-                                AnalyticsService.trackEvent(
-                                  'discover_deity_filter_tapped',
-                                  data: <String, Object>{
-                                    'deity_name': deities[i]['label']!,
-                                    'index': i,
-                                  },
-                                  path: '/discover',
-                                );
-                                ref
-                                    .read(discoverFilterProvider.notifier)
-                                    .selectDeity(i);
-                              },
-                            ),
+                            itemBuilder: (_, i) {
+                              final deityLabel = deities[i]['label']!;
+                              return DeityChip(
+                                emoji: deities[i]['emoji']!,
+                                label: deityLabel,
+                                isActive: i == 0
+                                    ? discoverFilter.mode ==
+                                          DiscoverFilterMode.none
+                                    : discoverFilter.mode ==
+                                              DiscoverFilterMode.deity &&
+                                          discoverFilter.activeDeityIndex == i,
+                                onTap: () {
+                                  AnalyticsService.trackEvent(
+                                    'discover_deity_filter_tapped',
+                                    data: <String, Object>{
+                                      'deity_name': deityLabel,
+                                      'index': i,
+                                    },
+                                    path: '/discover',
+                                  );
+
+                                  if (i == 0) {
+                                    ref
+                                        .read(discoverFilterProvider.notifier)
+                                        .selectDeity(i);
+                                    return;
+                                  }
+
+                                  AppHaptics.pageTransition();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => DeityDetailScreen(
+                                        deityLabel: deityLabel,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -251,7 +267,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                                     'source': 'discover_screen',
                                     'aarti_id': aarti.id,
                                     'deity_name': aarti.deity,
-                                    'is_bookmarked': !bookmarks.contains(aarti.id),
+                                    'is_bookmarked': !bookmarks.contains(
+                                      aarti.id,
+                                    ),
                                   },
                                 );
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/theme_aware_colors.dart';
-import '../../../core/theme/app_typography.dart';
 
+import '../../core/theme/app_typography.dart';
+import '../../core/theme/theme_aware_colors.dart';
+
+/// Shared segmented control used for compact mode and tab switching.
 class ToggleBar extends StatelessWidget {
   final List<String> labels;
   final int activeIndex;
@@ -37,14 +39,14 @@ class ToggleBar extends StatelessWidget {
                   color: isActive ? context.surface : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: isActive
-                      ? [
+                      ? <BoxShadow>[
                           BoxShadow(
                             color: Colors.black.withValues(
                               alpha: isDark ? 0.18 : 0.08,
                             ),
                             blurRadius: 4,
                             offset: const Offset(0, 1),
-                          )
+                          ),
                         ]
                       : null,
                 ),

@@ -14,11 +14,11 @@ import '../../providers/app_providers.dart';
 import '../../shared/utils/aarti_language_resolver.dart';
 import '../../shared/widgets/focus_mode_settings_sheet.dart';
 import 'widgets/action_chip.dart' as app;
-import 'widgets/toggle_bar.dart';
 import 'widgets/verse_block.dart';
 import 'widgets/audio_player_widget.dart';
 import 'widgets/focus_mode_overlay.dart';
 import 'widgets/mantra_counter_overlay.dart';
+import '../../shared/widgets/toggle_bar.dart';
 
 class AartiDetailScreen extends ConsumerStatefulWidget {
   final AartiItem aarti;
@@ -420,7 +420,8 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                               data: <String, Object>{
                                                 'source': 'detail_screen',
                                                 'aarti_id': widget.aarti.id,
-                                                'deity_name': widget.aarti.deity,
+                                                'deity_name':
+                                                    widget.aarti.deity,
                                                 'is_bookmarked': !isBookmarked,
                                               },
                                             );
@@ -880,17 +881,6 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
         ),
       ),
     );
-  }
-}
-
-int _contentModeIndex(AartiDetailContentMode mode) {
-  switch (mode) {
-    case AartiDetailContentMode.lyrics:
-      return 0;
-    case AartiDetailContentMode.transliteration:
-      return 1;
-    case AartiDetailContentMode.meaning:
-      return 2;
   }
 }
 

@@ -1,3 +1,53 @@
+## [2026-05-02] — Deity Prayer Card Consistency
+
+### Modified
+- `lib/features/deity_detail/widgets/deity_prayer_card.dart` — Rebuilt the deity devotional card to follow the Discover card language, then tightened it further with the bookmark aligned to the top accent row, the redundant deity label removed, and the audio chip moved to the bottom-right footer.
+- `docs/FILE_REGISTRY.md` — Updated the deity prayer card file purpose to reflect the new discover-aligned layout.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the discover-consistent deity card presentation on the deity detail page.
+
+## [2026-05-02] — Deity UI Consistency
+
+### Added
+- `lib/shared/widgets/toggle_bar.dart` — Extracted the shared segmented control so deity tabs and aarti detail mode switching use the same component.
+
+### Modified
+- `lib/features/deity_detail/deity_detail_screen.dart` — Replaced the deity-specific tab chrome with the shared segmented control styling and aligned the tab spacing with the aarti detail surface.
+- `lib/features/deity_detail/widgets/deity_header.dart` — Removed deity-specific hero gradient variance so all deity pages share the same backdrop treatment while keeping local accent details.
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Switched the detail screen to the shared ToggleBar import after the control was extracted.
+- `docs/FILE_REGISTRY.md` — Registered the shared ToggleBar and refreshed touched deity-detail file metadata.
+- `docs/ARCHITECTURE.md` — Documented the shared ToggleBar location and cross-feature reuse.
+- `docs/THEME_AND_DESIGN.md` — Added the shared segmented control styling guidance.
+- `docs/FUNCTIONAL_SPEC.md` — Documented the consistent deity hero background and shared segmented tab treatment.
+
+### Removed
+- `lib/features/aarti_detail/widgets/toggle_bar.dart` — Removed the feature-local ToggleBar after extracting it to `shared/widgets`.
+
+## [2026-05-02] — Deity Detail UI Polish
+
+### Modified
+- `lib/features/deity_detail/deity_detail_screen.dart` — Refreshed the deity page shell with a warmer app-bar transition, more consistent tab styling, and tighter section spacing so devotionals remain visible sooner.
+- `lib/features/deity_detail/widgets/deity_header.dart` — Restyled the deity hero to match the app palette with a softer gradient, surfaced mantra card, and theme-aware metadata chips.
+- `lib/features/deity_detail/widgets/deity_prayer_card.dart` — Reworked prayer cards with material tap feedback and theme-aware badge and metadata surfaces.
+- `docs/FILE_REGISTRY.md` — Refreshed deity-detail file purposes after the UI polish pass.
+
+## [2026-05-02] — Dedicated Deity Detail Page
+
+### Added
+- `lib/features/deity_detail/deity_detail_screen.dart` — Added a dedicated deity browse destination with hero context, devotional tabs, and deity-page analytics.
+- `lib/features/deity_detail/widgets/deity_header.dart` — Added a themed hero/header widget for deity identity, summary, and related festival chips.
+- `lib/features/deity_detail/widgets/deity_prayer_card.dart` — Added a deity-page devotional list card with type badges, script-aware subtitles, and bookmark controls.
+- `test/aarti_repository_test.dart` — Added focused coverage for deity metadata lookup and deity-based devotional queries.
+- `test/deity_detail_screen_test.dart` — Added focused widget coverage for Discover-to-deity navigation and deity tab switching.
+
+### Modified
+- `lib/data/repositories/aarti_repository.dart` — Added deity-specific metadata and devotional accessors used by the new page.
+- `lib/providers/app_providers.dart` — Added computed provider families for deity metadata, deity devotionals, and related festivals.
+- `lib/features/discover/discover_screen.dart` — Changed non-`All` deity chips to open the dedicated deity page while preserving `All` as Discover’s clear state.
+- `docs/FILE_REGISTRY.md` — Registered the new deity feature files and refreshed touched metadata.
+- `docs/ARCHITECTURE.md` — Documented the new deity feature folder, provider-family approach, and nested Discover navigation flow.
+- `docs/FUNCTIONAL_SPEC.md` — Added the deity detail feature, user flow, and grouping rules.
+- `docs/ANALYTICS_EVENTS.md` — Registered deity-page view, tab, item-tap, and bookmark analytics events.
+
 ## [2026-05-01] — Direct Umami Analytics
 
 ### Added
