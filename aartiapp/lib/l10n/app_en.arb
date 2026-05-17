@@ -75,9 +75,93 @@
   "deityShiva": "Shiva",
   "deityHanuman": "Hanuman",
   "deityGanesha": "Ganesha",
+  "deityKrishna": "Krishna",
+  "deityLakshmi": "Lakshmi",
+  "deitySai": "Sai",
   "deityVishnu": "Vishnu",
   "deityDurga": "Durga",
   "deityRama": "Rama",
+  "deityDetailBackToDiscover": "Back to Discover",
+  "deityDetailTabAartis": "Aartis",
+  "deityDetailTabShlokas": "Shlokas",
+  "deityDetailTabChalisas": "Chalisas",
+  "deityDetailSummaryEmpty": "No devotionals are available for {deityLabel} yet.",
+  "@deityDetailSummaryEmpty": {
+    "placeholders": {
+      "deityLabel": {}
+    }
+  },
+  "deityDetailSummaryWithFestivals": "{itemCount} devotionals and {festivalCount} related festivals for {deityLabel}.",
+  "@deityDetailSummaryWithFestivals": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      },
+      "festivalCount": {
+        "type": "int"
+      },
+      "deityLabel": {}
+    }
+  },
+  "deityDetailSummaryDefault": "{itemCount} devotionals gathered for prayer, reading, and listening.",
+  "@deityDetailSummaryDefault": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "deityDetailTaglineGanesha": "Remover of Obstacles · Lord of Beginnings",
+  "deityDetailTaglineShiva": "The Auspicious One · Keeper of Stillness",
+  "deityDetailTaglineLakshmi": "Goddess of Prosperity · Radiance and Grace",
+  "deityDetailTaglineDurga": "Protector of Dharma · Fierce Compassion",
+  "deityDetailTaglineSai": "Compassion, Surrender, and Grace",
+  "deityDetailTaglineHanuman": "Strength, Devotion, and Fearlessness",
+  "deityDetailTaglineKrishna": "Divine Love · Joy, Wisdom, and Playfulness",
+  "deityDetailTaglineRama": "Maryada, Courage, and Devotion",
+  "deityDetailFallbackTagline": "Daily prayer, listening, and reflection",
+  "deityDetailFallbackMantra": "Sacred verses and daily devotion",
+  "deityDetailEveryDay": "Every day",
+  "deityDetailDailyMantraLabel": "Daily mantra",
+  "deityDetailDevotionalCount": "{count, plural, =1{1 devotional} other{{count} devotionals}}",
+  "@deityDetailDevotionalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deityDetailMergedTypesNotice": "This tab also includes stotras, mantras, chants, and other reading-first devotionals.",
+  "deityDetailPopularSection": "Popular",
+  "deityDetailPopularCaption": "{count} picks for {deityLabel}",
+  "@deityDetailPopularCaption": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "deityLabel": {}
+    }
+  },
+  "deityDetailMoreAartis": "More Aartis",
+  "deityDetailMoreSection": "More {sectionLabel}",
+  "@deityDetailMoreSection": {
+    "placeholders": {
+      "sectionLabel": {}
+    }
+  },
+  "deityDetailMoreCaption": "Continue your prayer with the full collection",
+  "deityDetailEmptyTitle": "No {tabLabel} yet",
+  "@deityDetailEmptyTitle": {
+    "placeholders": {
+      "tabLabel": {}
+    }
+  },
+  "deityDetailEmptyDescription": "{deityLabel} does not have items in this section yet.",
+  "@deityDetailEmptyDescription": {
+    "placeholders": {
+      "deityLabel": {}
+    }
+  },
   "discoverBrowseByDeity": "Browse by Deity",
   "discoverFilterByFestival": "Filter by Festival",
   "discoverPopularAartis": "Popular Aartis",
@@ -115,6 +199,18 @@
   },
   "aartiDetailFocusMode": "Focus Mode",
   "aartiDetailMantraCounter": "Mantra Counter",
+  "mantraCounterOverlayTapHint": "Tap to count · {totalCount} chants",
+  "@mantraCounterOverlayTapHint": {
+    "placeholders": {
+      "totalCount": {
+        "type": "int"
+      }
+    }
+  },
+  "mantraCounterOverlayComplete": "🪷 Mala Complete · Jai Ho!",
+  "mantraCounterOverlayButtonTap": "॥ Tap to Chant ॥",
+  "mantraCounterOverlayButtonCompleted": "॥ Complete! ॥",
+  "mantraCounterOverlayReset": "Reset counter",
   "aartiDetailShare": "Share",
   "aartiDetailVerseDataComingSoon": "Verse data coming soon for this Aarti.",
   "aartiDetailFocusModeHeader": "AARTI FOCUS MODE",
@@ -158,6 +254,157 @@
       }
     }
   },
+  "myPujaTitle": "My Daily Puja",
+  "myPujaSummary": "{count, plural, =1{1 aarti} other{{count} aartis}} · Est. {minutes} min",
+  "@myPujaSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "myPujaPlayAartis": "Play Aartis",
+  "myPujaReadAartis": "Read Aartis",
+  "myPujaAutoPlayOn": "Auto-play on",
+  "myPujaAutoPlayOff": "Auto-play off",
+  "myPujaRepeatOn": "Repeat on",
+  "myPujaRepeatOff": "Repeat off",
+  "myPujaCrossfadeChip": "Crossfade {seconds}s",
+  "@myPujaCrossfadeChip": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "myPujaEmptyTitle": "Your daily puja is empty",
+  "myPujaEmptyDescription": "Bookmark Aartis from the {tabName} tab\nto build your daily puja list.",
+  "@myPujaEmptyDescription": {
+    "placeholders": {
+      "tabName": {}
+    }
+  },
+  "pujaSessionHeader": "PUJA SESSION",
+  "pujaSessionRepeatChip": "Repeat",
+  "pujaSessionSettingsTitle": "Session Settings",
+  "pujaSessionAutoPlayNextLabel": "Auto-play next",
+  "pujaSessionAutoPlayNextSubtitle": "Play next aarti automatically",
+  "pujaSessionRepeatCurrentLabel": "Repeat current",
+  "pujaSessionRepeatCurrentSubtitle": "Loop the current aarti",
+  "pujaSessionCrossfadeLabel": "Crossfade",
+  "pujaSessionCrossfadeSubtitle": "{seconds}s gap between aartis",
+  "@pujaSessionCrossfadeSubtitle": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "pujaSessionCrossfadeOption": "{seconds}s",
+  "@pujaSessionCrossfadeOption": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "pujaSessionNoAudio": "Audio unavailable for this aarti.",
+  "contributeAppBarTitle": "My Collection",
+  "contributeSectionLabel": "My Collection",
+  "contributeTitle": "Personal Collection",
+  "contributeSavedSummary": "{count, plural, =1{1 saved · Private to you} other{{count} saved · Private to you}}",
+  "@contributeSavedSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contributeAddNewAarti": "Add New Aarti",
+  "contributeEditingAarti": "Editing Aarti",
+  "contributeDeityNameLabel": "Deity Name",
+  "contributeDeityNameHint": "e.g. Ganesha, Shiva, Lakshmi…",
+  "contributeAartiTitleEnglishLabel": "Aarti Title (English)",
+  "contributeAartiTitleEnglishHint": "e.g. Jai Ganesh Deva",
+  "contributeTitleDevanagariLabel": "Title in Devanagari",
+  "contributeTitleDevanagariHint": "e.g. जय गणेश देव",
+  "contributeLyricsDevanagariLabel": "Lyrics (Devanagari)",
+  "contributeLyricsDevanagariHint": "ॐ जय जगदीश हरे…\n\n(separate verses with a blank line)",
+  "contributeTransliterationLabel": "Transliteration (Roman)",
+  "contributeTransliterationHint": "Om Jai Jagdish Hare…\n\n(match verse structure above)",
+  "contributeGujaratiLabel": "Gujarati Script (Optional)",
+  "contributeGujaratiHint": "ૐ જય જગદીશ હરે…\n\n(match verse structure above)",
+  "contributeFestivalTagsLabel": "Festival Tags (comma separated)",
+  "contributeFestivalTagsHint": "e.g. Diwali, Navratri, Ganesh Chaturthi",
+  "contributeUpdateAarti": "Update Aarti",
+  "contributeSaveToCollection": "Save to My Collection",
+  "contributeEmptyTitle": "No saved Aartis yet",
+  "contributeEmptyDescription": "Tap \"{ctaLabel}\" to create your\nfirst personal prayer.",
+  "@contributeEmptyDescription": {
+    "placeholders": {
+      "ctaLabel": {}
+    }
+  },
+  "contributeSavedAartisHeading": "Saved Aartis",
+  "contributeValidationDeityTitle": "Please fill in at least Deity and Title.",
+  "contributeSuccessUpdated": "Aarti updated! 🙏",
+  "contributeSuccessSaved": "Aarti saved to your collection! 🙏",
+  "contributeDhruvaPad": "Dhruva Pad",
+  "contributeVerseLabel": "Verse {index}",
+  "@contributeVerseLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "contributeVersesLabel": "{count, plural, =1{1 verse} other{{count} verses}}",
+  "@contributeVersesLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackScreenTitle": "Send Feedback",
+  "feedbackGuidance": "Use this form for devotional content corrections, app issues, and ideas that can improve the reading experience.",
+  "feedbackCategoryLabel": "Category",
+  "feedbackTypeIncorrectLyrics": "Incorrect Lyrics",
+  "feedbackTypeTranslationIssue": "Translation Issue",
+  "feedbackTypeFeatureRequest": "Feature Request",
+  "feedbackTypeBugReport": "Bug Report",
+  "feedbackTypeGeneralFeedback": "General Feedback",
+  "feedbackEmailLabel": "Contact Email (optional)",
+  "feedbackEmailHint": "name@example.com",
+  "feedbackMessageLabel": "Message",
+  "feedbackMessageHint": "Describe the issue, correction, or suggestion in detail.",
+  "feedbackSubmitButton": "Send Feedback",
+  "feedbackValidationEmail": "Enter a valid email address.",
+  "feedbackValidationMessageRequired": "Please enter your feedback.",
+  "feedbackValidationMessageTooLong": "Feedback must stay under {maxLength} characters.",
+  "@feedbackValidationMessageTooLong": {
+    "placeholders": {
+      "maxLength": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackSuccessTitle": "Feedback received",
+  "feedbackSuccessDescription": "Thank you. Your note has been sent for review and will help improve the app and its devotional content.",
+  "feedbackSuccessResetButton": "Send Another Response",
+  "feedbackErrorServer": "Feedback submission failed with status {statusCode}.",
+  "@feedbackErrorServer": {
+    "placeholders": {
+      "statusCode": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackErrorTimeout": "Feedback submission timed out. Please try again.",
+  "feedbackErrorGeneric": "Unable to send feedback right now. Please try again.",
   "pujaFocusSettingsDescription": "Adjust how the current aarti is shown in focus session.",
   "pujaFocusSettingsFooterContinue": "Reach the final verse to continue to the next aarti in your puja order.",
   "pujaFocusSettingsFooterComplete": "Reach the final verse to finish this focus session.",

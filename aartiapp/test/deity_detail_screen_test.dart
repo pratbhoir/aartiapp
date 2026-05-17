@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:aartiapp/core/l10n/app_locale.dart';
 import 'package:aartiapp/data/repositories/aarti_repository.dart';
 import 'package:aartiapp/data/repositories/bookmark_repository.dart';
 import 'package:aartiapp/data/repositories/festival_repository.dart';
@@ -10,6 +12,7 @@ import 'package:aartiapp/data/repositories/puja_repository.dart';
 import 'package:aartiapp/data/repositories/recently_played_repository.dart';
 import 'package:aartiapp/features/deity_detail/deity_detail_screen.dart';
 import 'package:aartiapp/features/discover/discover_screen.dart';
+import 'package:aartiapp/l10n/app_localizations.dart';
 import 'package:aartiapp/providers/app_providers.dart';
 
 void main() {
@@ -55,9 +58,43 @@ void main() {
       findsNothing,
     );
   });
+
+  testWidgets('deity page renders localized tabs and section copy in Hindi', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      await _buildDeityHarness(locale: const Locale('hi')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('गणेश'), findsWidgets);
+    expect(find.text('आरतियाँ'), findsOneWidget);
+    expect(find.text('श्लोक'), findsOneWidget);
+    expect(find.text('चालीसा'), findsOneWidget);
+    expect(find.text('लोकप्रिय'), findsOneWidget);
+    expect(find.text('गणेश के लिए 1 चयन'), findsOneWidget);
+    expect(find.text('दैनिक मंत्र'), findsOneWidget);
+  });
+
+  testWidgets('deity page uses localized fallback profile and empty state in Hindi', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      await _buildDeityHarness(
+        deityLabel: 'Vishnu',
+        locale: const Locale('hi'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('विष्णु'), findsWidgets);
+    expect(find.text('दैनिक प्रार्थना, श्रवण और मनन'), findsOneWidget);
+    expect(find.text('विष्णु के लिए अभी कोई भक्ति-पाठ उपलब्ध नहीं है।'), findsOneWidget);
+    expect(find.text('अभी तक कोई आरतियाँ नहीं'), findsOneWidget);
+  });
 }
 
-Future<Widget> _buildDiscoverHarness() async {
+Future<Widget> _buildDiscoverHarness({Locale locale = const Locale('en')}) async {
   final prefs = await SharedPreferences.getInstance();
   return ProviderScope(
     overrides: <Override>[
@@ -69,12 +106,23 @@ Future<Widget> _buildDiscoverHarness() async {
       ),
     ],
     child: MaterialApp(
+      locale: locale,
+      supportedLocales: AppLocale.supportedLocales,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: Scaffold(body: DiscoverScreen(onOpenDrawer: () {})),
     ),
   );
 }
 
-Future<Widget> _buildDeityHarness() async {
+Future<Widget> _buildDeityHarness({
+  String deityLabel = 'Ganesha',
+  Locale locale = const Locale('en'),
+}) async {
   final prefs = await SharedPreferences.getInstance();
   return ProviderScope(
     overrides: <Override>[
@@ -85,7 +133,17 @@ Future<Widget> _buildDeityHarness() async {
         _FakeRecentlyPlayedRepository(),
       ),
     ],
-    child: const MaterialApp(home: DeityDetailScreen(deityLabel: 'Ganesha')),
+    child: MaterialApp(
+      locale: locale,
+      supportedLocales: AppLocale.supportedLocales,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: DeityDetailScreen(deityLabel: deityLabel),
+    ),
   );
 }
 

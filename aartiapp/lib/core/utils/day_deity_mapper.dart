@@ -80,6 +80,11 @@ class DayDeityMapper {
     );
   }
 
+  /// Localizes a deity label when it is displayed as app UI.
+  static String localizedDeityName(AppLocalizations l10n, String deity) {
+    return _localizedDeityName(l10n, deity);
+  }
+
   static String _localizedWeekdayName(AppLocalizations l10n, int weekday) {
     switch (weekday) {
       case DateTime.monday:
@@ -106,6 +111,12 @@ class DayDeityMapper {
         return l10n.deityHanuman;
       case 'ganesha':
         return l10n.deityGanesha;
+      case 'krishna':
+        return l10n.deityKrishna;
+      case 'lakshmi':
+        return l10n.deityLakshmi;
+      case 'sai':
+        return l10n.deitySai;
       case 'vishnu':
         return l10n.deityVishnu;
       case 'durga':
@@ -113,8 +124,9 @@ class DayDeityMapper {
       case 'rama':
         return l10n.deityRama;
       case 'shiva':
-      default:
         return l10n.deityShiva;
+      default:
+        return deity;
     }
   }
 }

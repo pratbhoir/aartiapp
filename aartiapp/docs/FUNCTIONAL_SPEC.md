@@ -23,7 +23,7 @@
 | Dark / Light / System theme | ✅ Done | v1.0 | `SettingsScreen` |
 | Script language setting (Devanagari / English / Gujarati) | ✅ Done | v1.0 | `SettingsScreen` |
 | Derived secondary script surface | ✅ Done | v2.4 | `SettingsScreen`, `AartiDetailScreen`, `FocusModeOverlay` |
-| App language setting (English / Hindi / Gujarati) | 🚧 In Progress | v3.0 | `AartiSangrahApp`, `OnboardingScreen`, `HomeShell`, `HomeScreen`, `DiscoverScreen`, `SettingsScreen` |
+| App language setting (English / Hindi / Gujarati) | 🚧 In Progress | v3.0 | `AartiSangrahApp`, `OnboardingScreen`, `HomeShell`, `HomeScreen`, `DiscoverScreen`, `DeityDetailScreen`, `AartiDetailScreen`, `MantraCounterOverlay`, `MyPujaScreen`, `PujaSessionScreen`, `ContributeScreen`, `FeedbackScreen`, `SettingsScreen` |
 | Verse progress indicator | ✅ Done | v1.0 | `AartiDetailScreen` |
 | Haptic feedback (scoped) | ✅ Done | v1.0 | `AppHaptics` |
 | Onboarding flow (name, language, notification) | ✅ Done | v2.0 | `OnboardingScreen` |
@@ -94,6 +94,7 @@
 6. Deity-page devotional cards use the same compact visual language as Discover: saffron top accent, simplified bookmark affordance, optional audio chip, and a footer metadata row for time, verses, and type.
 7. User taps a devotional item → navigates to `AartiDetailScreen`.
 8. User can bookmark directly from the deity page and the existing bookmark-to-puja sync rule still applies.
+9. Deity tabs, summaries, section headings, fallback profile copy, and weekday-based auspicious-day labels follow the selected app language immediately while devotional mantra content remains canonical data.
 
 ### 2.3 Aarti Detail
 
@@ -114,6 +115,7 @@
 9. Tapping "Next" opens the next Aarti detail screen in the user's current My Daily Puja order.
 10. In Focus Mode, reaching the last verse shows a dark-mode-consistent "Next Aarti" CTA only when the current Aarti has a following item in the user's My Daily Puja order.
 11. Standalone Focus Mode uses the same centered header chrome as My Daily Puja Focus Session, including a temporary settings sheet with language-only reading-surface buttons for the active primary and derived secondary scripts plus a compact text-size control that resets when Focus Mode is reopened.
+12. The Mantra Counter overlay follows the selected app language for its helper text, completion state, tap CTA, and reset action while keeping the counting behavior and haptic feedback unchanged.
 
 ### 2.4 My Daily Puja
 
@@ -211,7 +213,7 @@
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
 | Script language default | First-run script language defaults to Devanagari. |
 | App language default | First-run app language seeds from the first supported device locale and falls back to English when the device locale is unsupported. |
-| Localization rollout scope | Generated UI localization currently covers the app root, onboarding, bottom navigation, home screen, Discover, Settings, and the Aarti Detail reading/focus surfaces while the remaining My Puja, form, and feedback screens continue migrating. |
+| Localization rollout scope | Generated UI localization now covers the app root, onboarding, bottom navigation, home screen, Discover, Deity Detail, Aarti Detail, the Mantra Counter overlay, My Puja surfaces, Collection, Feedback, and Settings; devotional meaning datasets and other content metadata still follow their own data-source availability. |
 | User sync debounce | Settings-driven sync uses a trailing debounce of 5 seconds. |
 | User sync startup refresh | Returning users trigger a forced sync on app launch after onboarding is already complete. |
 | User sync privacy boundary | Sync exports lightweight profile and setting state only; it excludes aarti content and personal devotional collections. |

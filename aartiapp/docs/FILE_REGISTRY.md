@@ -57,7 +57,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/core/utils/device_info_helper.dart` | `DeviceInfoHelper` — normalized cross-platform device snapshot builder for outbound sync payloads | 2026-05-01 |
-| `lib/core/utils/day_deity_mapper.dart` | `DayDeityMapper` — maps weekday → deity for "Aarti of the Day" and exposes localized home subtitle and day-special helpers | 2026-05-17 |
+| `lib/core/utils/day_deity_mapper.dart` | `DayDeityMapper` — maps weekday → deity for "Aarti of the Day" and exposes localized weekday, deity-name, home subtitle, and day-special helpers reused by deity-detail UI surfaces | 2026-05-17 |
 | `lib/core/utils/search_engine.dart` | `SearchEngine` — full-text local search + deity/festival filtering | 2026-04-20 |
 | `lib/core/utils/snackbar_helper.dart` | `SnackBarHelper` — centralized semantic snackbar utility with replace-current behavior and theme-aligned severity mapping | 2026-05-01 |
 
@@ -133,8 +133,8 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/deity_detail/deity_detail_screen.dart` | `DeityDetailScreen` — dedicated deity destination with shared segmented tabs, a consistent hero backdrop, polished section framing, and deity-page analytics | 2026-05-02 |
-| `lib/features/deity_detail/widgets/deity_header.dart` | `DeityHeader` — deity hero surface with a fixed cross-deity backdrop, mantra emphasis, related-festival chips, and warm-material styling | 2026-05-02 |
+| `lib/features/deity_detail/deity_detail_screen.dart` | `DeityDetailScreen` — localized deity destination with stable analytics tab IDs, shared segmented tabs, localized summaries and empty states, and a consistent hero backdrop | 2026-05-17 |
+| `lib/features/deity_detail/widgets/deity_header.dart` | `DeityHeader` — deity hero surface with localized mantra-card labels, devotional-count chips, localized auspicious-day display, related-festival chips, and warm-material styling | 2026-05-17 |
 | `lib/features/deity_detail/widgets/deity_prayer_card.dart` | `DeityPrayerCard` — deity-page devotional list card using the Discover card language with a saffron top accent row, title-first compact layout, bottom-right audio chip, and simplified metadata row | 2026-05-02 |
 
 ## Features / Aarti Detail
@@ -145,7 +145,7 @@
 | `lib/features/aarti_detail/widgets/action_chip.dart` | `ActionChip` — tappable chip button for Focus Mode, Share, etc., with theme-aware neutral styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/audio_player_widget.dart` | `AudioPlayerWidget` — sticky bottom audio player with scrub, play/pause, skip, repeat, and theme-aware glass styling | 2026-04-26 |
 | `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` | `FocusModeOverlay` — reusable full-screen dark reading surface with localized footer instructions, puja boundary handoff CTAs, derived secondary-script rendering, centered session-style header support, and balanced line splits | 2026-05-17 |
-| `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — modal Japa Mala counter with haptics, configurable count, completion callback, and theme-aware modal chrome | 2026-05-01 |
+| `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` | `MantraCounterOverlay` — localized modal Japa Mala counter with haptics, configurable count, completion callback, and theme-aware modal chrome | 2026-05-17 |
 | `lib/features/aarti_detail/widgets/verse_block.dart` | `VerseBlock` — renders lyrics, derived secondary-script lines, and meaning using the shared resolver with theme-aware reading contrast | 2026-04-27 |
 
 ## Features / My Puja
@@ -179,9 +179,9 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/l10n/app_en.arb` | English source-of-truth UI string catalog for the generated localization layer | 2026-05-14 |
-| `lib/l10n/app_hi.arb` | Hindi UI string catalog for the generated localization layer | 2026-05-14 |
-| `lib/l10n/app_gu.arb` | Gujarati UI string catalog for the generated localization layer | 2026-05-14 |
+| `lib/l10n/app_en.arb` | English source-of-truth UI string catalog for the generated localization layer, including final deity-detail and mantra-counter keys | 2026-05-17 |
+| `lib/l10n/app_hi.arb` | Hindi UI string catalog for the generated localization layer, including final deity-detail and mantra-counter keys | 2026-05-17 |
+| `lib/l10n/app_gu.arb` | Gujarati UI string catalog for the generated localization layer, including final deity-detail and mantra-counter keys | 2026-05-17 |
 
 ## Features / Settings
 
@@ -233,8 +233,8 @@
 | `test/content_sync_service_test.dart` | Focused service tests for content refresh, stale-skip behavior, cache writes, and per-dataset partial success | 2026-05-01 |
 | `test/analytics_service_test.dart` | Focused service tests for Umami payload shaping, send gating, screen dedupe, and retry behavior | 2026-05-01 |
 | `test/aarti_repository_test.dart` | Focused repository tests for deity metadata lookup and deity-specific devotional filtering | 2026-05-02 |
-| `test/aarti_detail_screen_test.dart` | Focused widget test for localized Aarti Detail labels, focus overlay, and focus settings sheet | 2026-05-17 |
-| `test/deity_detail_screen_test.dart` | Focused widget tests for Discover-to-deity navigation and deity tab behavior | 2026-05-02 |
+| `test/aarti_detail_screen_test.dart` | Focused widget test for localized Aarti Detail labels, mantra-counter overlay copy, focus overlay, and focus settings sheet | 2026-05-17 |
+| `test/deity_detail_screen_test.dart` | Focused widget tests for Discover-to-deity navigation plus localized deity tabs, section copy, and fallback-profile behavior | 2026-05-17 |
 | `test/discover_filter_provider_test.dart` | Focused provider tests for Discover filter exclusivity, clear-state behavior, and derived result lists | 2026-04-27 |
 | `test/discover_screen_test.dart` | Focused widget tests for localized Discover labels, result count, and empty-state behavior | 2026-05-17 |
 | `test/feedback_service_test.dart` | Focused service tests for feedback payload generation, identity backfill, and failure semantics | 2026-05-01 |

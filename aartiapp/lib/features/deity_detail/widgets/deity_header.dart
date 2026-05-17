@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_localizations_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
@@ -36,6 +37,7 @@ class DeityHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final heroOpacity = (1 - heroProgress).clamp(0.0, 1.0);
     final surface = context.surface;
     final primaryText = context.textPrimary;
@@ -258,7 +260,7 @@ class DeityHeader extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          'Daily mantra',
+                                          l10n.deityDetailDailyMantraLabel,
                                           style: AppTypography.label(
                                             size: 9,
                                             color: captionText,
@@ -289,7 +291,9 @@ class DeityHeader extends StatelessWidget {
                               runSpacing: AppSpacing.sm,
                               children: <Widget>[
                                 _DeityHeaderChip(
-                                  label: '$devotionalCount devotionals',
+                                  label: l10n.deityDetailDevotionalCount(
+                                    devotionalCount,
+                                  ),
                                   accentColor: accentColor,
                                   foregroundColor: primaryText,
                                   backgroundColor: surface.withValues(

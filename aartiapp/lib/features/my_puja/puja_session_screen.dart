@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -206,6 +207,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final autoPlay = ref.watch(autoPlayProvider);
     final repeatCurrent = ref.watch(repeatCurrentProvider);
     final crossfade = ref.watch(crossfadeProvider);
@@ -256,14 +258,17 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                   Column(
                     children: [
                       Text(
-                        'PUJA SESSION',
+                        l10n.pujaSessionHeader,
                         style: AppTypography.label(
                           size: 10,
                           color: AppColors.saffronLight,
                         ),
                       ),
                       Text(
-                        '${_currentIndex + 1} of ${widget.pujaAartis.length}',
+                        l10n.pujaSessionProgress(
+                          _currentIndex + 1,
+                          widget.pujaAartis.length,
+                        ),
                         style: AppTypography.body(
                           size: 12,
                           color: AppColors.white.withValues(alpha: 0.5),
@@ -427,7 +432,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                             const SizedBox(width: 12),
                             _SessionChip(
                               icon: Icons.repeat_one,
-                              label: 'Repeat',
+                              label: l10n.pujaSessionRepeatChip,
                               isActive: true,
                             ),
                           ],
@@ -581,7 +586,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                       children: [
                         Expanded(
                           child: Text(
-                            'Audio unavailable for this aarti.',
+                            l10n.pujaSessionNoAudio,
                             style: AppTypography.body(
                               size: 12,
                               color: AppColors.white.withValues(alpha: 0.6),
@@ -625,6 +630,7 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
   }
 
   void _showSessionSettings(BuildContext context) {
+    final l10n = context.l10n;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -643,101 +649,103 @@ class _PujaSessionScreenState extends ConsumerState<PujaSessionScreen>
                 ),
                 border: Border.all(color: AppColors.darkBorder),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: AppColors.darkBorder,
-                      borderRadius: BorderRadius.circular(2),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBorder,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Session Settings',
-                    style: AppTypography.serifBody(
-                      size: 18,
-                      color: AppColors.white,
+                    const SizedBox(height: 20),
+                    Text(
+                      l10n.pujaSessionSettingsTitle,
+                      style: AppTypography.serifBody(
+                        size: 18,
+                        color: AppColors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                  _SessionSettingRow(
-                    label: 'Auto-play next',
-                    subtitle: 'Play next aarti automatically',
-                    trailing: Switch.adaptive(
-                      value: autoPlay,
-                      activeTrackColor: AppColors.saffron,
-                      onChanged: (v) {
-                        ref.read(autoPlayProvider.notifier).set(v);
-                        setSheetState(() {});
-                      },
+                    _SessionSettingRow(
+                      label: l10n.pujaSessionAutoPlayNextLabel,
+                      subtitle: l10n.pujaSessionAutoPlayNextSubtitle,
+                      trailing: Switch.adaptive(
+                        value: autoPlay,
+                        activeTrackColor: AppColors.saffron,
+                        onChanged: (v) {
+                          ref.read(autoPlayProvider.notifier).set(v);
+                          setSheetState(() {});
+                        },
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-                  _SessionSettingRow(
-                    label: 'Repeat current',
-                    subtitle: 'Loop the current aarti',
-                    trailing: Switch.adaptive(
-                      value: repeat,
-                      activeTrackColor: AppColors.saffron,
-                      onChanged: (_) {
-                        ref.read(repeatCurrentProvider.notifier).toggle();
-                        setSheetState(() {});
-                      },
+                    _SessionSettingRow(
+                      label: l10n.pujaSessionRepeatCurrentLabel,
+                      subtitle: l10n.pujaSessionRepeatCurrentSubtitle,
+                      trailing: Switch.adaptive(
+                        value: repeat,
+                        activeTrackColor: AppColors.saffron,
+                        onChanged: (_) {
+                          ref.read(repeatCurrentProvider.notifier).toggle();
+                          setSheetState(() {});
+                        },
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-                  _SessionSettingRow(
-                    label: 'Crossfade',
-                    subtitle: '${crossfade}s gap between aartis',
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(4, (i) {
-                        final isActive = crossfade == i;
-                        return GestureDetector(
-                          onTap: () {
-                            ref.read(crossfadeProvider.notifier).set(i);
-                            setSheetState(() {});
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            width: 36,
-                            height: 32,
-                            margin: const EdgeInsets.only(left: 4),
-                            decoration: BoxDecoration(
-                              color: isActive
-                                  ? AppColors.saffronGlow
-                                  : AppColors.darkBg,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
+                    _SessionSettingRow(
+                      label: l10n.pujaSessionCrossfadeLabel,
+                      subtitle: l10n.pujaSessionCrossfadeSubtitle(crossfade),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(4, (i) {
+                          final isActive = crossfade == i;
+                          return GestureDetector(
+                            onTap: () {
+                              ref.read(crossfadeProvider.notifier).set(i);
+                              setSheetState(() {});
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: 36,
+                              height: 32,
+                              margin: const EdgeInsets.only(left: 4),
+                              decoration: BoxDecoration(
                                 color: isActive
-                                    ? AppColors.saffron
-                                    : AppColors.darkBorder,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${i}s',
-                                style: AppTypography.body(
-                                  size: 11,
+                                    ? AppColors.saffronGlow
+                                    : AppColors.darkBg,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
                                   color: isActive
                                       ? AppColors.saffron
-                                      : AppColors.ink3,
+                                      : AppColors.darkBorder,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  l10n.pujaSessionCrossfadeOption(i),
+                                  style: AppTypography.body(
+                                    size: 11,
+                                    color: isActive
+                                        ? AppColors.saffron
+                                        : AppColors.ink3,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
             );
           },

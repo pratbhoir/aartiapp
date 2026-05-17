@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/services/feedback_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -11,6 +12,13 @@ import '../../core/utils/snackbar_helper.dart';
 import '../../providers/app_providers.dart';
 
 /// Feedback form for devotional content issues, bugs, and suggestions.
+const int _feedbackMessageMaxLength = 1000;
+const String _feedbackTypeIncorrectLyrics = 'Incorrect Lyrics';
+const String _feedbackTypeTranslationIssue = 'Translation Issue';
+const String _feedbackTypeFeatureRequest = 'Feature Request';
+const String _feedbackTypeBugReport = 'Bug Report';
+const String _feedbackTypeGeneralFeedback = 'General Feedback';
+
 class FeedbackScreen extends ConsumerStatefulWidget {
   /// Creates the feedback screen.
   const FeedbackScreen({super.key});
@@ -21,11 +29,11 @@ class FeedbackScreen extends ConsumerStatefulWidget {
 
 class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
   static const List<String> _feedbackTypes = <String>[
-    'Incorrect Lyrics',
-    'Translation Issue',
-    'Feature Request',
-    'Bug Report',
-    'General Feedback',
+    _feedbackTypeIncorrectLyrics,
+    _feedbackTypeTranslationIssue,
+    _feedbackTypeFeatureRequest,
+    _feedbackTypeBugReport,
+    _feedbackTypeGeneralFeedback,
   ];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -40,7 +48,10 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      AnalyticsService.trackScreen('/feedback', title: 'Feedback');
+      AnalyticsService.trackScreen(
+        '/feedback',
+        title: context.l10n.feedbackScreenTitle,
+      );
       //AnalyticsService.trackEvent('feedback_screen_viewed', path: '/feedback');
     });
   }
@@ -54,6 +65,9 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> feedbackTypeLabels = <String, String>{
+      for (final String type in _feedbackTypes) type: _feedbackTypeLabel(context, type),
+    };
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final double keyboardInset = mediaQuery.viewInsets.bottom;
     final double screenBodyHeight =
@@ -89,7 +103,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: Text(
-                      'Send Feedback',
+                      context.l10n.feedbackScreenTitle,
                       style: AppTypography.serifBody(
                         size: 24,
                         color: context.textPrimary,
@@ -109,7 +123,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                         emailController: _emailController,
                         messageController: _messageController,
                         isSubmitting: _isSubmitting,
-                        feedbackTypes: _feedbackTypes,
+                        feedbackTypeLabels: feedbackTypeLabels,
                         onTypeSelected: (String value) {
                           if (value != _selectedType) {
                             AnalyticsService.trackEvent(
@@ -161,7 +175,17 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
       }
 
       setState(() => _isSubmitting = false);
-      SnackBarHelper.showError(context, error.message);
+      SnackBarHelper.showError(
+        context,
+        _localizedSubmissionError(context, error.message),
+      );
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() => _isSubmitting = false);
+      SnackBarHelper.showError(context, context.l10n.feedbackErrorGeneric);
     }
   }
 
@@ -175,6 +199,43 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
       _isSubmitting = false;
     });
   }
+
+  String _feedbackTypeLabel(BuildContext context, String type) {
+    final l10n = context.l10n;
+    switch (type) {
+      case _feedbackTypeTranslationIssue:
+        return l10n.feedbackTypeTranslationIssue;
+      case _feedbackTypeFeatureRequest:
+        return l10n.feedbackTypeFeatureRequest;
+      case _feedbackTypeBugReport:
+        return l10n.feedbackTypeBugReport;
+      case _feedbackTypeGeneralFeedback:
+        return l10n.feedbackTypeGeneralFeedback;
+      case _feedbackTypeIncorrectLyrics:
+      default:
+        return l10n.feedbackTypeIncorrectLyrics;
+    }
+  }
+
+  String _localizedSubmissionError(BuildContext context, String rawMessage) {
+    final l10n = context.l10n;
+    final String normalized = rawMessage.toLowerCase();
+    if (normalized.contains('timed out')) {
+      return l10n.feedbackErrorTimeout;
+    }
+
+    final RegExpMatch? statusMatch = RegExp(r'status\s+(\d+)').firstMatch(
+      rawMessage,
+    );
+    if (statusMatch != null) {
+      final int? statusCode = int.tryParse(statusMatch.group(1) ?? '');
+      if (statusCode != null) {
+        return l10n.feedbackErrorServer(statusCode);
+      }
+    }
+
+    return l10n.feedbackErrorGeneric;
+  }
 }
 
 class _FeedbackFormCard extends StatelessWidget {
@@ -184,7 +245,7 @@ class _FeedbackFormCard extends StatelessWidget {
     required this.emailController,
     required this.messageController,
     required this.isSubmitting,
-    required this.feedbackTypes,
+    required this.feedbackTypeLabels,
     required this.onTypeSelected,
     required this.onSubmit,
   });
@@ -194,12 +255,13 @@ class _FeedbackFormCard extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController messageController;
   final bool isSubmitting;
-  final List<String> feedbackTypes;
+  final Map<String, String> feedbackTypeLabels;
   final ValueChanged<String> onTypeSelected;
   final Future<void> Function() onSubmit;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Form(
       key: formKey,
       child: Container(
@@ -222,22 +284,23 @@ class _FeedbackFormCard extends StatelessWidget {
             // ),
             // const SizedBox(height: AppSpacing.sm),
             Text(
-              'Use this form for devotional content corrections, app issues, and ideas that can improve the reading experience.',
+              l10n.feedbackGuidance,
               style: AppTypography.body(size: 14, color: context.textSecondary),
             ),
             const SizedBox(height: AppSpacing.xl),
             Text(
-              'Category',
+              l10n.feedbackCategoryLabel,
               style: AppTypography.label(color: context.textCaption),
             ),
             const SizedBox(height: AppSpacing.md),
             Wrap(
               spacing: AppSpacing.sm,
               runSpacing: AppSpacing.sm,
-              children: feedbackTypes.map((String type) {
+              children: feedbackTypeLabels.entries.map((entry) {
+                final String type = entry.key;
                 final bool isSelected = type == selectedType;
                 return _FeedbackTypeChip(
-                  label: type,
+                  label: entry.value,
                   isSelected: isSelected,
                   onTap: () => onTypeSelected(type),
                 );
@@ -249,8 +312,8 @@ class _FeedbackFormCard extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               style: AppTypography.body(size: 14, color: context.textPrimary),
               decoration: InputDecoration(
-                labelText: 'Contact Email (optional)',
-                hintText: 'name@example.com',
+                labelText: l10n.feedbackEmailLabel,
+                hintText: l10n.feedbackEmailHint,
                 hintStyle: AppTypography.body(
                   size: 14,
                   color: context.textCaption,
@@ -265,7 +328,7 @@ class _FeedbackFormCard extends StatelessWidget {
                   color: context.textSecondary,
                 ),
               ),
-              validator: _validateEmail,
+              validator: (value) => _validateEmail(context, value),
             ),
             const SizedBox(height: AppSpacing.lg),
             Expanded(
@@ -274,13 +337,12 @@ class _FeedbackFormCard extends StatelessWidget {
                 expands: true,
                 minLines: null,
                 maxLines: null,
-                maxLength: 1000,
+                maxLength: _feedbackMessageMaxLength,
                 textAlignVertical: TextAlignVertical.top,
                 style: AppTypography.body(size: 14, color: context.textPrimary),
                 decoration: InputDecoration(
-                  labelText: 'Message',
-                  hintText:
-                      'Describe the issue, correction, or suggestion in detail.',
+                  labelText: l10n.feedbackMessageLabel,
+                  hintText: l10n.feedbackMessageHint,
                   alignLabelWithHint: true,
                   hintStyle: AppTypography.body(
                     size: 14,
@@ -302,7 +364,7 @@ class _FeedbackFormCard extends StatelessWidget {
                     AppSpacing.md,
                   ),
                 ),
-                validator: _validateMessage,
+                validator: (value) => _validateMessage(context, value),
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -337,7 +399,7 @@ class _FeedbackFormCard extends StatelessWidget {
                         ),
                       )
                     : Text(
-                        'Send Feedback',
+                        l10n.feedbackSubmitButton,
                         style: AppTypography.body(
                           size: 14,
                           color: AppColors.white,
@@ -352,7 +414,7 @@ class _FeedbackFormCard extends StatelessWidget {
     );
   }
 
-  String? _validateEmail(String? value) {
+  String? _validateEmail(BuildContext context, String? value) {
     final String trimmed = value?.trim() ?? '';
     if (trimmed.isEmpty) {
       return null;
@@ -360,18 +422,20 @@ class _FeedbackFormCard extends StatelessWidget {
 
     final RegExp emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
     if (!emailPattern.hasMatch(trimmed)) {
-      return 'Enter a valid email address.';
+      return context.l10n.feedbackValidationEmail;
     }
     return null;
   }
 
-  String? _validateMessage(String? value) {
+  String? _validateMessage(BuildContext context, String? value) {
     final String trimmed = value?.trim() ?? '';
     if (trimmed.isEmpty) {
-      return 'Please enter your feedback.';
+      return context.l10n.feedbackValidationMessageRequired;
     }
-    if (trimmed.length > 1000) {
-      return 'Feedback must stay under 1000 characters.';
+    if (trimmed.length > _feedbackMessageMaxLength) {
+      return context.l10n.feedbackValidationMessageTooLong(
+        _feedbackMessageMaxLength,
+      );
     }
     return null;
   }
@@ -384,6 +448,7 @@ class _FeedbackSuccessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -414,7 +479,7 @@ class _FeedbackSuccessCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'Feedback received',
+            l10n.feedbackSuccessTitle,
             textAlign: TextAlign.center,
             style: AppTypography.serifBody(
               size: 20,
@@ -423,7 +488,7 @@ class _FeedbackSuccessCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Thank you. Your note has been sent for review and will help improve the app and its devotional content.',
+            l10n.feedbackSuccessDescription,
             textAlign: TextAlign.center,
             style: AppTypography.body(size: 14, color: context.textSecondary),
           ),
@@ -434,7 +499,7 @@ class _FeedbackSuccessCard extends StatelessWidget {
             child: OutlinedButton(
               onPressed: onReset,
               child: Text(
-                'Send Another Response',
+                l10n.feedbackSuccessResetButton,
                 style: AppTypography.body(
                   size: 14,
                   color: context.textPrimary,
@@ -502,7 +567,7 @@ class _BackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Back',
+      label: context.l10n.commonBack,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

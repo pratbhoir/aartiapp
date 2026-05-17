@@ -1,3 +1,19 @@
+## [2026-05-17] — Localization Phase 3C: Final Detail Surfaces
+
+### Modified
+- `lib/features/aarti_detail/widgets/mantra_counter_overlay.dart` — Localized the mantra-counter overlay title, helper text, completion state, chanting CTA, and reset action.
+- `lib/features/deity_detail/deity_detail_screen.dart` — Localized deity tab labels, summaries, section headings, empty states, fallback profile copy, back semantics, and stable internal tab analytics IDs.
+- `lib/features/deity_detail/widgets/deity_header.dart` — Localized the deity header’s mantra-card label, devotional-count chip, and localized weekday display.
+- `lib/core/utils/day_deity_mapper.dart` — Exposed a reusable localized deity-name helper for UI surfaces and extended deity-name coverage for Krishna, Lakshmi, and Sai.
+- `lib/l10n/app_en.arb` — Added mantra-counter and deity-detail localization keys in English.
+- `lib/l10n/app_hi.arb` — Added mantra-counter and deity-detail localization keys in Hindi.
+- `lib/l10n/app_gu.arb` — Added mantra-counter and deity-detail localization keys in Gujarati.
+- `test/aarti_detail_screen_test.dart` — Extended localized Aarti Detail coverage to assert mantra-counter overlay copy.
+- `test/deity_detail_screen_test.dart` — Extended deity-page coverage to assert localized tabs, section copy, and fallback-profile behavior.
+- `docs/FILE_REGISTRY.md` — Registered the final localized deity-detail and mantra-counter surfaces.
+- `docs/ARCHITECTURE.md` — Documented the final localization coverage for mantra-counter and deity-detail UI surfaces.
+- `docs/FUNCTIONAL_SPEC.md` — Updated feature coverage and business rules for the final localization surfaces.
+
 ## [2026-05-17] — Localization Phase 3B: Reading Flow Foundations
 
 ### Added

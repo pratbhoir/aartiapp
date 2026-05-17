@@ -1,17 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:aartiapp/core/l10n/app_locale.dart';
 import 'package:aartiapp/core/services/feedback_service.dart';
 import 'package:aartiapp/core/theme/app_theme.dart';
 import 'package:aartiapp/core/utils/device_info_helper.dart';
 import 'package:aartiapp/data/repositories/settings_repository.dart';
 import 'package:aartiapp/features/settings/feedback_screen.dart';
+import 'package:aartiapp/l10n/app_localizations.dart';
 import 'package:aartiapp/providers/app_providers.dart';
 
 void main() {
@@ -36,13 +39,16 @@ void main() {
 
       final Finder submitButton = find.widgetWithText(
         ElevatedButton,
-        'Send Feedback',
+        'प्रतिक्रिया भेजें',
       );
+
+      expect(find.text('श्रेणी'), findsOneWidget);
+      expect(find.text('गलत गीत'), findsOneWidget);
 
       await tester.tap(submitButton);
       await tester.pumpAndSettle();
 
-      expect(find.text('Please enter your feedback.'), findsOneWidget);
+      expect(find.text('कृपया अपनी प्रतिक्रिया दर्ज करें।'), findsOneWidget);
       expect(submitCount, 0);
 
       await tester.enterText(find.byType(TextFormField).at(0), 'invalid-email');
@@ -53,7 +59,7 @@ void main() {
       await tester.tap(submitButton);
       await tester.pumpAndSettle();
 
-      expect(find.text('Enter a valid email address.'), findsOneWidget);
+      expect(find.text('मान्य ईमेल पता दर्ज करें।'), findsOneWidget);
       expect(submitCount, 0);
     });
 
@@ -85,7 +91,7 @@ void main() {
       );
       final Finder submitButton = find.widgetWithText(
         ElevatedButton,
-        'Send Feedback',
+        'प्रतिक्रिया भेजें',
       );
       await tester.tap(submitButton);
       await tester.pump();
@@ -98,8 +104,37 @@ void main() {
         'Please add a bookmark filter for festival aartis.',
       );
       expect(lastPayload?['email'], 'bhakt@example.com');
-      expect(find.text('Feedback received'), findsOneWidget);
-      expect(find.text('Send Another Response'), findsOneWidget);
+      expect(find.text('प्रतिक्रिया प्राप्त हुई'), findsOneWidget);
+      expect(find.text('एक और प्रतिक्रिया भेजें'), findsOneWidget);
+    });
+
+    testWidgets('maps submission failures to localized UI copy', (
+      WidgetTester tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final FeedbackService service = await _buildService(
+        onRequest: (Map<String, dynamic> payload) async {
+          return http.Response('{"ok":false}', 500);
+        },
+      );
+
+      await tester.pumpWidget(_buildTestApp(service: service));
+
+      await tester.enterText(
+        find.byType(TextFormField).at(1),
+        'Lyrics on the Krishna page need correction.',
+      );
+      final Finder submitButton = find.widgetWithText(
+        ElevatedButton,
+        'प्रतिक्रिया भेजें',
+      );
+      await tester.tap(submitButton);
+      await tester.pump();
+      await tester.pumpAndSettle();
+
+      expect(find.text('प्रतिक्रिया भेजी नहीं जा सकी (स्थिति 500)।'), findsOneWidget);
     });
   });
 }
@@ -109,7 +144,18 @@ Widget _buildTestApp({required FeedbackService service}) {
     overrides: <Override>[
       feedbackServiceProvider.overrideWith((Ref ref) => service),
     ],
-    child: MaterialApp(theme: AppTheme.light(), home: const FeedbackScreen()),
+    child: MaterialApp(
+      locale: const Locale('hi'),
+      supportedLocales: AppLocale.supportedLocales,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      theme: AppTheme.light(),
+      home: const FeedbackScreen(),
+    ),
   );
 }
 

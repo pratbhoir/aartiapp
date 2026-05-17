@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/haptics.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../data/models/festival.dart';
 import '../../providers/app_providers.dart';
@@ -30,9 +32,9 @@ class DeityDetailScreen extends ConsumerStatefulWidget {
 class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
     with SingleTickerProviderStateMixin {
   static const List<_DeityTabDefinition> _tabs = <_DeityTabDefinition>[
-    _DeityTabDefinition(label: 'Aartis', types: <String>{'aarti'}),
+    _DeityTabDefinition(id: 'aartis', types: <String>{'aarti'}),
     _DeityTabDefinition(
-      label: 'Shlokas',
+      id: 'shlokas',
       types: <String>{
         'shloka',
         'stotra',
@@ -43,7 +45,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
         'bhajan',
       },
     ),
-    _DeityTabDefinition(label: 'Chalisas', types: <String>{'chalisa'}),
+    _DeityTabDefinition(id: 'chalisas', types: <String>{'chalisa'}),
   ];
 
   static const Map<String, _DeityProfile> _profiles = <String, _DeityProfile>{
@@ -173,7 +175,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
       'deity_tab_changed',
       data: <String, Object>{
         'deity_name': widget.deityLabel,
-        'tab_name': _tabs[nextIndex].label.toLowerCase(),
+        'tab_name': _tabs[nextIndex].analyticsName,
       },
       path: _path,
     );
@@ -186,7 +188,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
       data: <String, Object>{
         'aarti_id': aarti.id,
         'deity_name': aarti.deity,
-        'tab_name': _tabs[_tabController.index].label.toLowerCase(),
+        'tab_name': _tabs[_tabController.index].analyticsName,
       },
       path: _path,
     );
@@ -220,9 +222,13 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
     final bookmarks = ref.watch(bookmarkProvider);
     final scriptMode = ref.watch(scriptModeProvider);
 
-    final deityLabel = deityMetadata?['label'] ?? widget.deityLabel;
+    final rawDeityLabel = deityMetadata?['label'] ?? widget.deityLabel;
+    final deityLabel = DayDeityMapper.localizedDeityName(
+      context.l10n,
+      rawDeityLabel,
+    );
     final deityEmoji = deityMetadata?['emoji'] ?? '🕉️';
-    final profile = _resolveProfile(deityLabel, deityFestivals);
+    final profile = _resolveProfile(context, rawDeityLabel);
     final tabStates = _tabs
         .map(
           (tab) =>
@@ -230,6 +236,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
         )
         .toList();
     final summary = _buildSummary(
+      context,
       deityLabel: deityLabel,
       itemCount: deityItems.length,
       festivalCount: deityFestivals.length,
@@ -276,7 +283,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
             leading: Padding(
               padding: const EdgeInsets.only(left: AppSpacing.lg),
               child: Semantics(
-                label: 'Back to Discover',
+                label: context.l10n.deityDetailBackToDiscover,
                 button: true,
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
@@ -334,7 +341,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
                 devotionalCount: deityItems.length,
                 festivalNames: deityFestivals
                     .take(3)
-                    .map((festival) => festival.name)
+                  .map((festival) => _localizedFestivalName(context, festival))
                     .toList(),
                 heroProgress: _heroProgress,
               ),
@@ -355,7 +362,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
             for (final tabState in tabStates)
               _DeityTabList(
                 key: PageStorageKey<String>(
-                  '${widget.deityLabel}-${tabState.definition.label}',
+                  '${widget.deityLabel}-${tabState.definition.id}',
                 ),
                 deityLabel: deityLabel,
                 tab: tabState.definition,
@@ -371,42 +378,106 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
     );
   }
 
-  static String _buildSummary({
+  static String _buildSummary(
+    BuildContext context, {
     required String deityLabel,
     required int itemCount,
     required int festivalCount,
   }) {
+    final l10n = context.l10n;
     if (itemCount == 0) {
-      return 'No devotionals are available for $deityLabel yet.';
+      return l10n.deityDetailSummaryEmpty(deityLabel);
     }
 
     if (festivalCount > 0) {
-      return '$itemCount devotionals and $festivalCount related festivals for $deityLabel.';
+      return l10n.deityDetailSummaryWithFestivals(
+        itemCount,
+        festivalCount,
+        deityLabel,
+      );
     }
 
-    return '$itemCount devotionals gathered for prayer, reading, and listening.';
+    return l10n.deityDetailSummaryDefault(itemCount);
   }
 
-  _DeityProfile _resolveProfile(String deityLabel, List<Festival> festivals) {
+  _DeityProfile _resolveProfile(BuildContext context, String deityLabel) {
+    final l10n = context.l10n;
     final baseProfile =
         _profiles[deityLabel] ??
         const _DeityProfile(
           devanagariName: 'आरती',
-          tagline: 'Daily prayer, listening, and reflection',
-          mantra: 'Sacred verses and daily devotion',
+          tagline: '',
+          mantra: '',
           auspiciousDay: 'Every day',
           accentColor: AppColors.saffron,
         );
-    if (festivals.isEmpty) {
-      return baseProfile;
+
+    if (!_profiles.containsKey(deityLabel)) {
+      return baseProfile.copyWith(
+        tagline: l10n.deityDetailFallbackTagline,
+        mantra: l10n.deityDetailFallbackMantra,
+        auspiciousDay: l10n.deityDetailEveryDay,
+      );
     }
 
-    final primaryFestival = festivals.first;
     return baseProfile.copyWith(
-      tagline: primaryFestival.description.isNotEmpty
-          ? primaryFestival.description
-          : baseProfile.tagline,
+      tagline: _localizedTagline(context, deityLabel),
+      auspiciousDay: _localizedWeekday(context, baseProfile.auspiciousDay),
     );
+  }
+
+  String _localizedTagline(BuildContext context, String deityLabel) {
+    final l10n = context.l10n;
+    switch (deityLabel.toLowerCase()) {
+      case 'ganesha':
+        return l10n.deityDetailTaglineGanesha;
+      case 'shiva':
+        return l10n.deityDetailTaglineShiva;
+      case 'lakshmi':
+        return l10n.deityDetailTaglineLakshmi;
+      case 'durga':
+        return l10n.deityDetailTaglineDurga;
+      case 'sai':
+        return l10n.deityDetailTaglineSai;
+      case 'hanuman':
+        return l10n.deityDetailTaglineHanuman;
+      case 'krishna':
+        return l10n.deityDetailTaglineKrishna;
+      case 'rama':
+        return l10n.deityDetailTaglineRama;
+      default:
+        return l10n.deityDetailFallbackTagline;
+    }
+  }
+
+  String _localizedWeekday(BuildContext context, String weekday) {
+    final l10n = context.l10n;
+    switch (weekday.toLowerCase()) {
+      case 'monday':
+        return l10n.weekdayMonday;
+      case 'tuesday':
+        return l10n.weekdayTuesday;
+      case 'wednesday':
+        return l10n.weekdayWednesday;
+      case 'thursday':
+        return l10n.weekdayThursday;
+      case 'friday':
+        return l10n.weekdayFriday;
+      case 'saturday':
+        return l10n.weekdaySaturday;
+      case 'sunday':
+        return l10n.weekdaySunday;
+      default:
+        return l10n.deityDetailEveryDay;
+    }
+  }
+
+  static String _localizedFestivalName(BuildContext context, Festival festival) {
+    final languageCode = Localizations.localeOf(context).languageCode;
+    if (languageCode == 'hi' && festival.nameDevanagari.trim().isNotEmpty) {
+      return festival.nameDevanagari;
+    }
+    return festival.name;
   }
 }
 
@@ -432,7 +503,9 @@ class _DeityTabBar extends StatelessWidget {
         AppSpacing.lg,
       ),
       child: ToggleBar(
-        labels: tabs.map((tab) => tab.definition.label).toList(growable: false),
+        labels: tabs
+            .map((tab) => tab.definition.localizedLabel(context))
+            .toList(growable: false),
         activeIndex: activeIndex,
         onSelect: controller.animateTo,
       ),
@@ -462,14 +535,19 @@ class _DeityTabList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final localizedTabLabel = tab.localizedLabel(context);
     final showMergedTypesNotice =
-        tab.label == 'Shlokas' &&
+        tab.id == 'shlokas' &&
         items.any((item) => item.type.toLowerCase() != 'shloka');
     final popularItems = items.take(items.length > 3 ? 2 : 1).toList();
     final remainingItems = items.skip(popularItems.length).toList();
 
     if (items.isEmpty) {
-      return _DeityEmptyState(tabLabel: tab.label, deityLabel: deityLabel);
+      return _DeityEmptyState(
+        tabLabel: localizedTabLabel,
+        deityLabel: deityLabel,
+      );
     }
 
     return ListView(
@@ -498,7 +576,7 @@ class _DeityTabList extends StatelessWidget {
               ],
             ),
             child: Text(
-              'This tab also includes stotras, mantras, chants, and other reading-first devotionals.',
+              l10n.deityDetailMergedTypesNotice,
               style: AppTypography.body(
                 size: 12,
                 color: context.textSecondary,
@@ -507,16 +585,21 @@ class _DeityTabList extends StatelessWidget {
             ),
           ),
         _DeitySectionHeader(
-          title: 'Popular',
-          caption: '${popularItems.length} picks for $deityLabel',
+          title: l10n.deityDetailPopularSection,
+          caption: l10n.deityDetailPopularCaption(
+            popularItems.length,
+            deityLabel,
+          ),
         ),
         const SizedBox(height: AppSpacing.md),
         ..._buildCards(popularItems),
         if (remainingItems.isNotEmpty) ...<Widget>[
           const SizedBox(height: AppSpacing.xl),
           _DeitySectionHeader(
-            title: tab.label == 'Aartis' ? 'More Aartis' : 'More ${tab.label}',
-            caption: 'Continue your prayer with the full collection',
+            title: tab.id == 'aartis'
+                ? l10n.deityDetailMoreAartis
+                : l10n.deityDetailMoreSection(localizedTabLabel),
+            caption: l10n.deityDetailMoreCaption,
           ),
           const SizedBox(height: AppSpacing.md),
           ..._buildCards(remainingItems),
@@ -600,6 +683,7 @@ class _DeityEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
@@ -622,13 +706,13 @@ class _DeityEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'No $tabLabel yet',
+              l10n.deityDetailEmptyTitle(tabLabel),
               style: AppTypography.scriptTitle(context).copyWith(fontSize: 22),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              '$deityLabel does not have items in this section yet.',
+              l10n.deityDetailEmptyDescription(deityLabel),
               style: AppTypography.body(
                 size: 13,
                 color: context.textSecondary,
@@ -644,10 +728,25 @@ class _DeityEmptyState extends StatelessWidget {
 }
 
 class _DeityTabDefinition {
-  const _DeityTabDefinition({required this.label, required this.types});
+  const _DeityTabDefinition({required this.id, required this.types});
 
-  final String label;
+  final String id;
   final Set<String> types;
+
+  String get analyticsName => id;
+
+  String localizedLabel(BuildContext context) {
+    final l10n = context.l10n;
+    switch (id) {
+      case 'shlokas':
+        return l10n.deityDetailTabShlokas;
+      case 'chalisas':
+        return l10n.deityDetailTabChalisas;
+      case 'aartis':
+      default:
+        return l10n.deityDetailTabAartis;
+    }
+  }
 
   List<AartiItem> filter(List<AartiItem> items) {
     return items
@@ -678,12 +777,16 @@ class _DeityProfile {
   final String auspiciousDay;
   final Color accentColor;
 
-  _DeityProfile copyWith({String? tagline}) {
+  _DeityProfile copyWith({
+    String? tagline,
+    String? mantra,
+    String? auspiciousDay,
+  }) {
     return _DeityProfile(
       devanagariName: devanagariName,
       tagline: tagline ?? this.tagline,
-      mantra: mantra,
-      auspiciousDay: auspiciousDay,
+      mantra: mantra ?? this.mantra,
+      auspiciousDay: auspiciousDay ?? this.auspiciousDay,
       accentColor: accentColor,
     );
   }

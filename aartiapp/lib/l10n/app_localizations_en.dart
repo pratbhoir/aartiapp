@@ -176,6 +176,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deityGanesha => 'Ganesha';
 
   @override
+  String get deityKrishna => 'Krishna';
+
+  @override
+  String get deityLakshmi => 'Lakshmi';
+
+  @override
+  String get deitySai => 'Sai';
+
+  @override
   String get deityVishnu => 'Vishnu';
 
   @override
@@ -183,6 +192,112 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deityRama => 'Rama';
+
+  @override
+  String get deityDetailBackToDiscover => 'Back to Discover';
+
+  @override
+  String get deityDetailTabAartis => 'Aartis';
+
+  @override
+  String get deityDetailTabShlokas => 'Shlokas';
+
+  @override
+  String get deityDetailTabChalisas => 'Chalisas';
+
+  @override
+  String deityDetailSummaryEmpty(Object deityLabel) {
+    return 'No devotionals are available for $deityLabel yet.';
+  }
+
+  @override
+  String deityDetailSummaryWithFestivals(int itemCount, int festivalCount, Object deityLabel) {
+    return '$itemCount devotionals and $festivalCount related festivals for $deityLabel.';
+  }
+
+  @override
+  String deityDetailSummaryDefault(int itemCount) {
+    return '$itemCount devotionals gathered for prayer, reading, and listening.';
+  }
+
+  @override
+  String get deityDetailTaglineGanesha => 'Remover of Obstacles · Lord of Beginnings';
+
+  @override
+  String get deityDetailTaglineShiva => 'The Auspicious One · Keeper of Stillness';
+
+  @override
+  String get deityDetailTaglineLakshmi => 'Goddess of Prosperity · Radiance and Grace';
+
+  @override
+  String get deityDetailTaglineDurga => 'Protector of Dharma · Fierce Compassion';
+
+  @override
+  String get deityDetailTaglineSai => 'Compassion, Surrender, and Grace';
+
+  @override
+  String get deityDetailTaglineHanuman => 'Strength, Devotion, and Fearlessness';
+
+  @override
+  String get deityDetailTaglineKrishna => 'Divine Love · Joy, Wisdom, and Playfulness';
+
+  @override
+  String get deityDetailTaglineRama => 'Maryada, Courage, and Devotion';
+
+  @override
+  String get deityDetailFallbackTagline => 'Daily prayer, listening, and reflection';
+
+  @override
+  String get deityDetailFallbackMantra => 'Sacred verses and daily devotion';
+
+  @override
+  String get deityDetailEveryDay => 'Every day';
+
+  @override
+  String get deityDetailDailyMantraLabel => 'Daily mantra';
+
+  @override
+  String deityDetailDevotionalCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count devotionals',
+      one: '1 devotional',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deityDetailMergedTypesNotice => 'This tab also includes stotras, mantras, chants, and other reading-first devotionals.';
+
+  @override
+  String get deityDetailPopularSection => 'Popular';
+
+  @override
+  String deityDetailPopularCaption(int count, Object deityLabel) {
+    return '$count picks for $deityLabel';
+  }
+
+  @override
+  String get deityDetailMoreAartis => 'More Aartis';
+
+  @override
+  String deityDetailMoreSection(Object sectionLabel) {
+    return 'More $sectionLabel';
+  }
+
+  @override
+  String get deityDetailMoreCaption => 'Continue your prayer with the full collection';
+
+  @override
+  String deityDetailEmptyTitle(Object tabLabel) {
+    return 'No $tabLabel yet';
+  }
+
+  @override
+  String deityDetailEmptyDescription(Object deityLabel) {
+    return '$deityLabel does not have items in this section yet.';
+  }
 
   @override
   String get discoverBrowseByDeity => 'Browse by Deity';
@@ -234,6 +349,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aartiDetailMantraCounter => 'Mantra Counter';
+
+  @override
+  String mantraCounterOverlayTapHint(int totalCount) {
+    return 'Tap to count · $totalCount chants';
+  }
+
+  @override
+  String get mantraCounterOverlayComplete => '🪷 Mala Complete · Jai Ho!';
+
+  @override
+  String get mantraCounterOverlayButtonTap => '॥ Tap to Chant ॥';
+
+  @override
+  String get mantraCounterOverlayButtonCompleted => '॥ Complete! ॥';
+
+  @override
+  String get mantraCounterOverlayReset => 'Reset counter';
 
   @override
   String get aartiDetailShare => 'Share';
@@ -309,6 +441,271 @@ class AppLocalizationsEn extends AppLocalizations {
   String pujaSessionProgress(int current, int total) {
     return '$current of $total';
   }
+
+  @override
+  String get myPujaTitle => 'My Daily Puja';
+
+  @override
+  String myPujaSummary(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aartis',
+      one: '1 aarti',
+    );
+    return '$_temp0 · Est. $minutes min';
+  }
+
+  @override
+  String get myPujaPlayAartis => 'Play Aartis';
+
+  @override
+  String get myPujaReadAartis => 'Read Aartis';
+
+  @override
+  String get myPujaAutoPlayOn => 'Auto-play on';
+
+  @override
+  String get myPujaAutoPlayOff => 'Auto-play off';
+
+  @override
+  String get myPujaRepeatOn => 'Repeat on';
+
+  @override
+  String get myPujaRepeatOff => 'Repeat off';
+
+  @override
+  String myPujaCrossfadeChip(int seconds) {
+    return 'Crossfade ${seconds}s';
+  }
+
+  @override
+  String get myPujaEmptyTitle => 'Your daily puja is empty';
+
+  @override
+  String myPujaEmptyDescription(Object tabName) {
+    return 'Bookmark Aartis from the $tabName tab\nto build your daily puja list.';
+  }
+
+  @override
+  String get pujaSessionHeader => 'PUJA SESSION';
+
+  @override
+  String get pujaSessionRepeatChip => 'Repeat';
+
+  @override
+  String get pujaSessionSettingsTitle => 'Session Settings';
+
+  @override
+  String get pujaSessionAutoPlayNextLabel => 'Auto-play next';
+
+  @override
+  String get pujaSessionAutoPlayNextSubtitle => 'Play next aarti automatically';
+
+  @override
+  String get pujaSessionRepeatCurrentLabel => 'Repeat current';
+
+  @override
+  String get pujaSessionRepeatCurrentSubtitle => 'Loop the current aarti';
+
+  @override
+  String get pujaSessionCrossfadeLabel => 'Crossfade';
+
+  @override
+  String pujaSessionCrossfadeSubtitle(int seconds) {
+    return '${seconds}s gap between aartis';
+  }
+
+  @override
+  String pujaSessionCrossfadeOption(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get pujaSessionNoAudio => 'Audio unavailable for this aarti.';
+
+  @override
+  String get contributeAppBarTitle => 'My Collection';
+
+  @override
+  String get contributeSectionLabel => 'My Collection';
+
+  @override
+  String get contributeTitle => 'Personal Collection';
+
+  @override
+  String contributeSavedSummary(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count saved · Private to you',
+      one: '1 saved · Private to you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get contributeAddNewAarti => 'Add New Aarti';
+
+  @override
+  String get contributeEditingAarti => 'Editing Aarti';
+
+  @override
+  String get contributeDeityNameLabel => 'Deity Name';
+
+  @override
+  String get contributeDeityNameHint => 'e.g. Ganesha, Shiva, Lakshmi…';
+
+  @override
+  String get contributeAartiTitleEnglishLabel => 'Aarti Title (English)';
+
+  @override
+  String get contributeAartiTitleEnglishHint => 'e.g. Jai Ganesh Deva';
+
+  @override
+  String get contributeTitleDevanagariLabel => 'Title in Devanagari';
+
+  @override
+  String get contributeTitleDevanagariHint => 'e.g. जय गणेश देव';
+
+  @override
+  String get contributeLyricsDevanagariLabel => 'Lyrics (Devanagari)';
+
+  @override
+  String get contributeLyricsDevanagariHint => 'ॐ जय जगदीश हरे…\n\n(separate verses with a blank line)';
+
+  @override
+  String get contributeTransliterationLabel => 'Transliteration (Roman)';
+
+  @override
+  String get contributeTransliterationHint => 'Om Jai Jagdish Hare…\n\n(match verse structure above)';
+
+  @override
+  String get contributeGujaratiLabel => 'Gujarati Script (Optional)';
+
+  @override
+  String get contributeGujaratiHint => 'ૐ જય જગદીશ હરે…\n\n(match verse structure above)';
+
+  @override
+  String get contributeFestivalTagsLabel => 'Festival Tags (comma separated)';
+
+  @override
+  String get contributeFestivalTagsHint => 'e.g. Diwali, Navratri, Ganesh Chaturthi';
+
+  @override
+  String get contributeUpdateAarti => 'Update Aarti';
+
+  @override
+  String get contributeSaveToCollection => 'Save to My Collection';
+
+  @override
+  String get contributeEmptyTitle => 'No saved Aartis yet';
+
+  @override
+  String contributeEmptyDescription(Object ctaLabel) {
+    return 'Tap \"$ctaLabel\" to create your\nfirst personal prayer.';
+  }
+
+  @override
+  String get contributeSavedAartisHeading => 'Saved Aartis';
+
+  @override
+  String get contributeValidationDeityTitle => 'Please fill in at least Deity and Title.';
+
+  @override
+  String get contributeSuccessUpdated => 'Aarti updated! 🙏';
+
+  @override
+  String get contributeSuccessSaved => 'Aarti saved to your collection! 🙏';
+
+  @override
+  String get contributeDhruvaPad => 'Dhruva Pad';
+
+  @override
+  String contributeVerseLabel(int index) {
+    return 'Verse $index';
+  }
+
+  @override
+  String contributeVersesLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count verses',
+      one: '1 verse',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get feedbackScreenTitle => 'Send Feedback';
+
+  @override
+  String get feedbackGuidance => 'Use this form for devotional content corrections, app issues, and ideas that can improve the reading experience.';
+
+  @override
+  String get feedbackCategoryLabel => 'Category';
+
+  @override
+  String get feedbackTypeIncorrectLyrics => 'Incorrect Lyrics';
+
+  @override
+  String get feedbackTypeTranslationIssue => 'Translation Issue';
+
+  @override
+  String get feedbackTypeFeatureRequest => 'Feature Request';
+
+  @override
+  String get feedbackTypeBugReport => 'Bug Report';
+
+  @override
+  String get feedbackTypeGeneralFeedback => 'General Feedback';
+
+  @override
+  String get feedbackEmailLabel => 'Contact Email (optional)';
+
+  @override
+  String get feedbackEmailHint => 'name@example.com';
+
+  @override
+  String get feedbackMessageLabel => 'Message';
+
+  @override
+  String get feedbackMessageHint => 'Describe the issue, correction, or suggestion in detail.';
+
+  @override
+  String get feedbackSubmitButton => 'Send Feedback';
+
+  @override
+  String get feedbackValidationEmail => 'Enter a valid email address.';
+
+  @override
+  String get feedbackValidationMessageRequired => 'Please enter your feedback.';
+
+  @override
+  String feedbackValidationMessageTooLong(int maxLength) {
+    return 'Feedback must stay under $maxLength characters.';
+  }
+
+  @override
+  String get feedbackSuccessTitle => 'Feedback received';
+
+  @override
+  String get feedbackSuccessDescription => 'Thank you. Your note has been sent for review and will help improve the app and its devotional content.';
+
+  @override
+  String get feedbackSuccessResetButton => 'Send Another Response';
+
+  @override
+  String feedbackErrorServer(int statusCode) {
+    return 'Feedback submission failed with status $statusCode.';
+  }
+
+  @override
+  String get feedbackErrorTimeout => 'Feedback submission timed out. Please try again.';
+
+  @override
+  String get feedbackErrorGeneric => 'Unable to send feedback right now. Please try again.';
 
   @override
   String get pujaFocusSettingsDescription => 'Adjust how the current aarti is shown in focus session.';

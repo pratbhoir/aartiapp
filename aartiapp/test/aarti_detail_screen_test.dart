@@ -55,6 +55,16 @@ void main() {
       expect(find.text('मंत्र काउंटर'), findsOneWidget);
       expect(find.text('साझा करें'), findsOneWidget);
 
+      await tester.tap(find.text('मंत्र काउंटर'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('गिनने के लिए टैप करें · 108 जप'), findsOneWidget);
+      expect(find.text('॥ जप के लिए टैप करें ॥'), findsOneWidget);
+      expect(find.text('काउंटर रीसेट करें'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+
       await tester.tap(find.text('ध्यान मोड'));
       await tester.pumpAndSettle();
 

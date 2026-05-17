@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../core/l10n/app_localizations_ext.dart';
 import '../../../core/constants/haptics.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_aware_colors.dart';
@@ -65,6 +66,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final accentTextColor = isDark
         ? AppColors.saffronLight
@@ -99,7 +101,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                     children: [
                       const SizedBox(width: 32),
                       Text(
-                        'Mantra Counter',
+                        l10n.aartiDetailMantraCounter,
                         style: AppTypography.serifBody(
                           size: 20,
                           color: context.textPrimary,
@@ -125,7 +127,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Tap to count · $_total chants',
+                    l10n.mantraCounterOverlayTapHint(_total),
                     style: AppTypography.body(
                       size: 12,
                       color: context.textCaption,
@@ -233,7 +235,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          '🪷 Mala Complete · Jai Ho!',
+                          l10n.mantraCounterOverlayComplete,
                           style: AppTypography.body(
                             size: 13,
                             color: accentTextColor,
@@ -258,7 +260,9 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
-                          _completed ? '॥ Complete! ॥' : '॥ Tap to Chant ॥',
+                          _completed
+                              ? l10n.mantraCounterOverlayButtonCompleted
+                              : l10n.mantraCounterOverlayButtonTap,
                           textAlign: TextAlign.center,
                           style: AppTypography.serifBody(
                             size: 20,
@@ -275,7 +279,7 @@ class _MantraCounterOverlayState extends State<MantraCounterOverlay>
                       _completed = false;
                     }),
                     child: Text(
-                      'Reset counter',
+                      l10n.mantraCounterOverlayReset,
                       style: AppTypography.body(
                         size: 12,
                         color: context.textCaption,

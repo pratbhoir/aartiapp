@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -41,6 +42,7 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final pujaIds = ref.watch(pujaOrderProvider);
     final userAartis = ref.watch(userAartiProvider);
     final scriptMode = ref.watch(scriptModeProvider);
@@ -64,7 +66,7 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
             onMenuTap: widget.onOpenDrawer,
             showMenu: false,
             showLogoTitle: true,
-            title: 'My Daily Puja',
+            title: l10n.myPujaTitle,
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
@@ -75,26 +77,15 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          style: AppTypography.displayLarge(
-                            context,
-                          ).copyWith(fontSize: 34),
-                          children: const [
-                            TextSpan(text: 'My Daily '),
-                            TextSpan(
-                              text: 'Puja',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: AppColors.saffron,
-                              ),
-                            ),
-                          ],
-                        ),
+                      Text(
+                        l10n.myPujaTitle,
+                        style: AppTypography.displayLarge(
+                          context,
+                        ).copyWith(fontSize: 34),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${pujaAartis.length} aartis · Est. $totalMinutes min',
+                        l10n.myPujaSummary(pujaAartis.length, totalMinutes),
                         style: AppTypography.body(
                           size: 13,
                           color: AppColors.ink3,
@@ -128,7 +119,7 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
                                 Icons.play_arrow_rounded,
                                 size: 16,
                               ),
-                              label: const Text('Play Aartis'),
+                              label: Text(l10n.myPujaPlayAartis),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.ink,
                                 foregroundColor: AppColors.white,
@@ -168,7 +159,7 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
                                 Icons.fullscreen_outlined,
                                 size: 16,
                               ),
-                              label: const Text('Read Aartis'),
+                              label: Text(l10n.myPujaReadAartis),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.ink,
                                 foregroundColor: AppColors.white,
@@ -247,7 +238,9 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
                       onTap: () => ref.read(autoPlayProvider.notifier).toggle(),
                       child: _SettingChip(
                         icon: Icons.play_circle_outline,
-                        label: autoPlay ? 'Auto-play on' : 'Auto-play off',
+                        label: autoPlay
+                            ? l10n.myPujaAutoPlayOn
+                            : l10n.myPujaAutoPlayOff,
                         isActive: autoPlay,
                       ),
                     ),
@@ -256,13 +249,15 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
                           ref.read(repeatCurrentProvider.notifier).toggle(),
                       child: _SettingChip(
                         icon: Icons.repeat,
-                        label: repeat ? 'Repeat on' : 'Repeat off',
+                        label: repeat
+                            ? l10n.myPujaRepeatOn
+                            : l10n.myPujaRepeatOff,
                         isActive: repeat,
                       ),
                     ),
                     _SettingChip(
                       icon: Icons.tune_outlined,
-                      label: 'Crossfade ${crossfade}s',
+                      label: l10n.myPujaCrossfadeChip(crossfade),
                     ),
                   ],
                 );
@@ -350,6 +345,7 @@ class _MyPujaScreenState extends ConsumerState<MyPujaScreen> {
 class _EmptyPujaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(48),
@@ -363,12 +359,12 @@ class _EmptyPujaView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Your daily puja is empty',
+              l10n.myPujaEmptyTitle,
               style: AppTypography.serifBody(size: 18, color: AppColors.ink),
             ),
             const SizedBox(height: 8),
             Text(
-              'Bookmark Aartis from the Discover tab\nto build your daily puja list.',
+              l10n.myPujaEmptyDescription(l10n.navigationDiscover),
               textAlign: TextAlign.center,
               style: AppTypography.body(size: 13, color: AppColors.ink3),
             ),

@@ -176,6 +176,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get deityGanesha => 'गणेश';
 
   @override
+  String get deityKrishna => 'कृष्ण';
+
+  @override
+  String get deityLakshmi => 'लक्ष्मी';
+
+  @override
+  String get deitySai => 'साईं';
+
+  @override
   String get deityVishnu => 'विष्णु';
 
   @override
@@ -183,6 +192,106 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get deityRama => 'राम';
+
+  @override
+  String get deityDetailBackToDiscover => 'डिस्कवर पर वापस';
+
+  @override
+  String get deityDetailTabAartis => 'आरतियाँ';
+
+  @override
+  String get deityDetailTabShlokas => 'श्लोक';
+
+  @override
+  String get deityDetailTabChalisas => 'चालीसा';
+
+  @override
+  String deityDetailSummaryEmpty(Object deityLabel) {
+    return '$deityLabel के लिए अभी कोई भक्ति-पाठ उपलब्ध नहीं है।';
+  }
+
+  @override
+  String deityDetailSummaryWithFestivals(int itemCount, int festivalCount, Object deityLabel) {
+    return '$deityLabel के लिए $itemCount भक्ति-पाठ और $festivalCount संबंधित पर्व हैं।';
+  }
+
+  @override
+  String deityDetailSummaryDefault(int itemCount) {
+    return 'प्रार्थना, पठन और श्रवण के लिए $itemCount भक्ति-पाठ एकत्र किए गए हैं।';
+  }
+
+  @override
+  String get deityDetailTaglineGanesha => 'विघ्नहर्ता · मंगलारंभ के देव';
+
+  @override
+  String get deityDetailTaglineShiva => 'मंगलमय स्वरूप · स्थिरता के अधिपति';
+
+  @override
+  String get deityDetailTaglineLakshmi => 'समृद्धि की देवी · आभा और कृपा';
+
+  @override
+  String get deityDetailTaglineDurga => 'धर्म की संरक्षिका · प्रखर करुणा';
+
+  @override
+  String get deityDetailTaglineSai => 'करुणा, समर्पण और कृपा';
+
+  @override
+  String get deityDetailTaglineHanuman => 'शक्ति, भक्ति और निर्भयता';
+
+  @override
+  String get deityDetailTaglineKrishna => 'दिव्य प्रेम · आनंद, ज्ञान और लीलामयता';
+
+  @override
+  String get deityDetailTaglineRama => 'मर्यादा, साहस और भक्ति';
+
+  @override
+  String get deityDetailFallbackTagline => 'दैनिक प्रार्थना, श्रवण और मनन';
+
+  @override
+  String get deityDetailFallbackMantra => 'पवित्र पद और दैनिक भक्ति';
+
+  @override
+  String get deityDetailEveryDay => 'हर दिन';
+
+  @override
+  String get deityDetailDailyMantraLabel => 'दैनिक मंत्र';
+
+  @override
+  String deityDetailDevotionalCount(int count) {
+    return '$count भक्ति-पाठ';
+  }
+
+  @override
+  String get deityDetailMergedTypesNotice => 'इस टैब में स्तोत्र, मंत्र, जप और अन्य पठन-प्रधान भक्ति-पाठ भी शामिल हैं।';
+
+  @override
+  String get deityDetailPopularSection => 'लोकप्रिय';
+
+  @override
+  String deityDetailPopularCaption(int count, Object deityLabel) {
+    return '$deityLabel के लिए $count चयन';
+  }
+
+  @override
+  String get deityDetailMoreAartis => 'और आरतियाँ';
+
+  @override
+  String deityDetailMoreSection(Object sectionLabel) {
+    return 'और $sectionLabel';
+  }
+
+  @override
+  String get deityDetailMoreCaption => 'पूर्ण संग्रह के साथ अपनी प्रार्थना जारी रखें';
+
+  @override
+  String deityDetailEmptyTitle(Object tabLabel) {
+    return 'अभी तक कोई $tabLabel नहीं';
+  }
+
+  @override
+  String deityDetailEmptyDescription(Object deityLabel) {
+    return '$deityLabel के लिए इस खंड में अभी सामग्री उपलब्ध नहीं है।';
+  }
 
   @override
   String get discoverBrowseByDeity => 'देवता के अनुसार देखें';
@@ -234,6 +343,23 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get aartiDetailMantraCounter => 'मंत्र काउंटर';
+
+  @override
+  String mantraCounterOverlayTapHint(int totalCount) {
+    return 'गिनने के लिए टैप करें · $totalCount जप';
+  }
+
+  @override
+  String get mantraCounterOverlayComplete => '🪷 माला पूर्ण · जय हो!';
+
+  @override
+  String get mantraCounterOverlayButtonTap => '॥ जप के लिए टैप करें ॥';
+
+  @override
+  String get mantraCounterOverlayButtonCompleted => '॥ पूर्ण! ॥';
+
+  @override
+  String get mantraCounterOverlayReset => 'काउंटर रीसेट करें';
 
   @override
   String get aartiDetailShare => 'साझा करें';
@@ -309,6 +435,253 @@ class AppLocalizationsHi extends AppLocalizations {
   String pujaSessionProgress(int current, int total) {
     return '$current में से $total';
   }
+
+  @override
+  String get myPujaTitle => 'मेरी दैनिक पूजा';
+
+  @override
+  String myPujaSummary(int count, int minutes) {
+    return '$count आरतियाँ · अनुमानित $minutes मिनट';
+  }
+
+  @override
+  String get myPujaPlayAartis => 'आरतियाँ चलाएँ';
+
+  @override
+  String get myPujaReadAartis => 'आरतियाँ पढ़ें';
+
+  @override
+  String get myPujaAutoPlayOn => 'ऑटो-प्ले चालू';
+
+  @override
+  String get myPujaAutoPlayOff => 'ऑटो-प्ले बंद';
+
+  @override
+  String get myPujaRepeatOn => 'दोहराव चालू';
+
+  @override
+  String get myPujaRepeatOff => 'दोहराव बंद';
+
+  @override
+  String myPujaCrossfadeChip(int seconds) {
+    return 'क्रॉसफेड $secondsसे';
+  }
+
+  @override
+  String get myPujaEmptyTitle => 'आपकी दैनिक पूजा खाली है';
+
+  @override
+  String myPujaEmptyDescription(Object tabName) {
+    return 'अपनी दैनिक पूजा सूची बनाने के लिए\n$tabName टैब से आरतियाँ बुकमार्क करें।';
+  }
+
+  @override
+  String get pujaSessionHeader => 'पूजा सत्र';
+
+  @override
+  String get pujaSessionRepeatChip => 'दोहराव';
+
+  @override
+  String get pujaSessionSettingsTitle => 'सत्र सेटिंग्स';
+
+  @override
+  String get pujaSessionAutoPlayNextLabel => 'अगली ऑटो-प्ले';
+
+  @override
+  String get pujaSessionAutoPlayNextSubtitle => 'अगली आरती अपने आप चलाएँ';
+
+  @override
+  String get pujaSessionRepeatCurrentLabel => 'वर्तमान दोहराएँ';
+
+  @override
+  String get pujaSessionRepeatCurrentSubtitle => 'वर्तमान आरती को लूप करें';
+
+  @override
+  String get pujaSessionCrossfadeLabel => 'क्रॉसफेड';
+
+  @override
+  String pujaSessionCrossfadeSubtitle(int seconds) {
+    return 'आरतियों के बीच $secondsसे का अंतर';
+  }
+
+  @override
+  String pujaSessionCrossfadeOption(int seconds) {
+    return '$secondsसे';
+  }
+
+  @override
+  String get pujaSessionNoAudio => 'इस आरती के लिए ऑडियो उपलब्ध नहीं है।';
+
+  @override
+  String get contributeAppBarTitle => 'मेरा संग्रह';
+
+  @override
+  String get contributeSectionLabel => 'मेरा संग्रह';
+
+  @override
+  String get contributeTitle => 'निजी संग्रह';
+
+  @override
+  String contributeSavedSummary(int count) {
+    return '$count सहेजे गए · केवल आपके लिए';
+  }
+
+  @override
+  String get contributeAddNewAarti => 'नई आरती जोड़ें';
+
+  @override
+  String get contributeEditingAarti => 'आरती संपादित हो रही है';
+
+  @override
+  String get contributeDeityNameLabel => 'देवता का नाम';
+
+  @override
+  String get contributeDeityNameHint => 'जैसे गणेश, शिव, लक्ष्मी…';
+
+  @override
+  String get contributeAartiTitleEnglishLabel => 'आरती शीर्षक (अंग्रेज़ी)';
+
+  @override
+  String get contributeAartiTitleEnglishHint => 'जैसे Jai Ganesh Deva';
+
+  @override
+  String get contributeTitleDevanagariLabel => 'देवनागरी में शीर्षक';
+
+  @override
+  String get contributeTitleDevanagariHint => 'जैसे जय गणेश देव';
+
+  @override
+  String get contributeLyricsDevanagariLabel => 'गीत (देवनागरी)';
+
+  @override
+  String get contributeLyricsDevanagariHint => 'ॐ जय जगदीश हरे…\n\n(अंतरों को खाली पंक्ति से अलग करें)';
+
+  @override
+  String get contributeTransliterationLabel => 'लिप्यंतरण (रोमन)';
+
+  @override
+  String get contributeTransliterationHint => 'Om Jai Jagdish Hare…\n\n(ऊपर जैसी ही पद संरचना रखें)';
+
+  @override
+  String get contributeGujaratiLabel => 'गुजराती लिपि (वैकल्पिक)';
+
+  @override
+  String get contributeGujaratiHint => 'ૐ જય જગદીશ હરે…\n\n(ऊपर जैसी ही पद संरचना रखें)';
+
+  @override
+  String get contributeFestivalTagsLabel => 'पर्व टैग (कॉमा से अलग)';
+
+  @override
+  String get contributeFestivalTagsHint => 'जैसे Diwali, Navratri, Ganesh Chaturthi';
+
+  @override
+  String get contributeUpdateAarti => 'आरती अपडेट करें';
+
+  @override
+  String get contributeSaveToCollection => 'मेरे संग्रह में सहेजें';
+
+  @override
+  String get contributeEmptyTitle => 'अभी तक कोई सहेजी गई आरती नहीं';
+
+  @override
+  String contributeEmptyDescription(Object ctaLabel) {
+    return 'अपनी पहली निजी प्रार्थना बनाने के लिए\n\"$ctaLabel\" पर टैप करें।';
+  }
+
+  @override
+  String get contributeSavedAartisHeading => 'सहेजी गई आरतियाँ';
+
+  @override
+  String get contributeValidationDeityTitle => 'कृपया कम से कम देवता और शीर्षक भरें।';
+
+  @override
+  String get contributeSuccessUpdated => 'आरती अपडेट हो गई! 🙏';
+
+  @override
+  String get contributeSuccessSaved => 'आरती आपके संग्रह में सहेज दी गई! 🙏';
+
+  @override
+  String get contributeDhruvaPad => 'ध्रुव पद';
+
+  @override
+  String contributeVerseLabel(int index) {
+    return 'श्लोक $index';
+  }
+
+  @override
+  String contributeVersesLabel(int count) {
+    return '$count श्लोक';
+  }
+
+  @override
+  String get feedbackScreenTitle => 'प्रतिक्रिया भेजें';
+
+  @override
+  String get feedbackGuidance => 'भक्ति सामग्री सुधार, ऐप समस्याओं और पढ़ने के अनुभव को बेहतर बनाने वाले विचारों के लिए इस फ़ॉर्म का उपयोग करें।';
+
+  @override
+  String get feedbackCategoryLabel => 'श्रेणी';
+
+  @override
+  String get feedbackTypeIncorrectLyrics => 'गलत गीत';
+
+  @override
+  String get feedbackTypeTranslationIssue => 'अनुवाद समस्या';
+
+  @override
+  String get feedbackTypeFeatureRequest => 'फ़ीचर अनुरोध';
+
+  @override
+  String get feedbackTypeBugReport => 'बग रिपोर्ट';
+
+  @override
+  String get feedbackTypeGeneralFeedback => 'सामान्य प्रतिक्रिया';
+
+  @override
+  String get feedbackEmailLabel => 'संपर्क ईमेल (वैकल्पिक)';
+
+  @override
+  String get feedbackEmailHint => 'name@example.com';
+
+  @override
+  String get feedbackMessageLabel => 'संदेश';
+
+  @override
+  String get feedbackMessageHint => 'समस्या, सुधार या सुझाव को विस्तार से लिखें।';
+
+  @override
+  String get feedbackSubmitButton => 'प्रतिक्रिया भेजें';
+
+  @override
+  String get feedbackValidationEmail => 'मान्य ईमेल पता दर्ज करें।';
+
+  @override
+  String get feedbackValidationMessageRequired => 'कृपया अपनी प्रतिक्रिया दर्ज करें।';
+
+  @override
+  String feedbackValidationMessageTooLong(int maxLength) {
+    return 'प्रतिक्रिया $maxLength अक्षरों के भीतर रखें।';
+  }
+
+  @override
+  String get feedbackSuccessTitle => 'प्रतिक्रिया प्राप्त हुई';
+
+  @override
+  String get feedbackSuccessDescription => 'धन्यवाद। आपका संदेश समीक्षा के लिए भेज दिया गया है और यह ऐप तथा इसकी भक्ति सामग्री को बेहतर बनाने में मदद करेगा।';
+
+  @override
+  String get feedbackSuccessResetButton => 'एक और प्रतिक्रिया भेजें';
+
+  @override
+  String feedbackErrorServer(int statusCode) {
+    return 'प्रतिक्रिया भेजी नहीं जा सकी (स्थिति $statusCode)।';
+  }
+
+  @override
+  String get feedbackErrorTimeout => 'प्रतिक्रिया भेजने में समय समाप्त हो गया। कृपया फिर से प्रयास करें।';
+
+  @override
+  String get feedbackErrorGeneric => 'अभी प्रतिक्रिया भेजी नहीं जा सकती। कृपया फिर से प्रयास करें।';
 
   @override
   String get pujaFocusSettingsDescription => 'फोकस सत्र में वर्तमान आरती कैसे दिखाई जाए, इसे समायोजित करें।';

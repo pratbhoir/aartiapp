@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -82,6 +83,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
   }
 
   Future<void> _saveAarti() async {
+    final l10n = context.l10n;
     final deity = _deityCtrl.text.trim();
     final title = _titleCtrl.text.trim();
     final devanagari = _devTitleCtrl.text.trim();
@@ -93,7 +95,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
     if (title.isEmpty || deity.isEmpty) {
       SnackBarHelper.showError(
         context,
-        'Please fill in at least Deity and Title.',
+        l10n.contributeValidationDeityTitle,
       );
       return;
     }
@@ -145,7 +147,9 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                 .toList()
           : <String>[];
       return VerseData(
-        label: e.key == 0 ? 'Dhruva Pad' : 'Verse ${e.key}',
+        label: e.key == 0
+            ? l10n.contributeDhruvaPad
+            : l10n.contributeVerseLabel(e.key),
         lines: lines,
         transliteration: tLines,
         meanings: const [],
@@ -159,7 +163,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
       devanagari: devanagari.isNotEmpty ? devanagari : title,
       deity: deity,
       duration: '—',
-      versesLabel: '${verses.length} verses',
+      versesLabel: l10n.contributeVersesLabel(verses.length),
       verses: verses,
       festivalTags: festivalTags,
     );
@@ -182,14 +186,15 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
       SnackBarHelper.showSuccess(
         context,
         previousEditingId != null
-            ? 'Aarti updated! 🙏'
-            : 'Aarti saved to your collection! 🙏',
+            ? l10n.contributeSuccessUpdated
+            : l10n.contributeSuccessSaved,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final savedAartis = ref.watch(userAartiProvider);
 
     return SafeArea(
@@ -199,7 +204,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
             onMenuTap: widget.onOpenDrawer,
             showMenu: false,
             showLogoTitle: true,
-            title: 'My Collection',
+            title: l10n.contributeAppBarTitle,
           ),
           Expanded(
             child: CustomScrollView(
@@ -213,33 +218,22 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'MY COLLECTION',
+                          l10n.contributeSectionLabel,
                           style: AppTypography.label(
                             size: 10,
                             color: AppColors.ink3,
                           ),
                         ),
                         const SizedBox(height: 6),
-                        RichText(
-                          text: TextSpan(
-                            style: AppTypography.displayLarge(
-                              context,
-                            ).copyWith(fontSize: 34),
-                            children: const [
-                              TextSpan(text: 'Personal '),
-                              TextSpan(
-                                text: 'Collection',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: AppColors.saffron,
-                                ),
-                              ),
-                            ],
-                          ),
+                        Text(
+                          l10n.contributeTitle,
+                          style: AppTypography.displayLarge(
+                            context,
+                          ).copyWith(fontSize: 34),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${savedAartis.length} saved · Private to you',
+                          l10n.contributeSavedSummary(savedAartis.length),
                           style: AppTypography.body(
                             size: 13,
                             color: AppColors.ink3,
@@ -267,10 +261,10 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                       ),
                       label: Text(
                         _showForm
-                            ? 'Cancel'
+                            ? l10n.commonCancel
                             : (_editingId != null
-                                  ? 'Editing Aarti'
-                                  : 'Add New Aarti'),
+                              ? l10n.contributeEditingAarti
+                              : l10n.contributeAddNewAarti),
                       ),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.saffron,
@@ -291,50 +285,47 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
                         _FormField(
-                          label: 'Deity Name',
-                          hint: 'e.g. Ganesha, Shiva, Lakshmi…',
+                          label: l10n.contributeDeityNameLabel,
+                          hint: l10n.contributeDeityNameHint,
                           controller: _deityCtrl,
                         ),
                         const SizedBox(height: 14),
                         _FormField(
-                          label: 'Aarti Title (English)',
-                          hint: 'e.g. Jai Ganesh Deva',
+                          label: l10n.contributeAartiTitleEnglishLabel,
+                          hint: l10n.contributeAartiTitleEnglishHint,
                           controller: _titleCtrl,
                         ),
                         const SizedBox(height: 14),
                         _FormField(
-                          label: 'Title in Devanagari',
-                          hint: 'e.g. जय गणेश देव',
+                          label: l10n.contributeTitleDevanagariLabel,
+                          hint: l10n.contributeTitleDevanagariHint,
                           controller: _devTitleCtrl,
                         ),
                         const SizedBox(height: 14),
                         _FormField(
-                          label: 'Lyrics (Devanagari)',
-                          hint:
-                              'ॐ जय जगदीश हरे…\n\n(separate verses with a blank line)',
+                          label: l10n.contributeLyricsDevanagariLabel,
+                          hint: l10n.contributeLyricsDevanagariHint,
                           maxLines: 6,
                           controller: _lyricsCtrl,
                         ),
                         const SizedBox(height: 14),
                         _FormField(
-                          label: 'Transliteration (Roman)',
-                          hint:
-                              'Om Jai Jagdish Hare…\n\n(match verse structure above)',
+                          label: l10n.contributeTransliterationLabel,
+                          hint: l10n.contributeTransliterationHint,
                           maxLines: 6,
                           controller: _translitCtrl,
                         ),
                         const SizedBox(height: 14),
                         _FormField(
-                          label: 'Gujarati Script (Optional)',
-                          hint:
-                              'ૐ જય જગદીશ હરે…\n\n(match verse structure above)',
+                          label: l10n.contributeGujaratiLabel,
+                          hint: l10n.contributeGujaratiHint,
                           maxLines: 6,
                           controller: _gujaratiCtrl,
                         ),
                         const SizedBox(height: 14),
                         _FormField(
-                          label: 'Festival Tags (comma separated)',
-                          hint: 'e.g. Diwali, Navratri, Ganesh Chaturthi',
+                          label: l10n.contributeFestivalTagsLabel,
+                          hint: l10n.contributeFestivalTagsHint,
                           controller: _festivalTagsCtrl,
                         ),
                         const SizedBox(height: 18),
@@ -348,8 +339,8 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                           ),
                           label: Text(
                             _editingId != null
-                                ? 'Update Aarti'
-                                : 'Save to My Collection',
+                                ? l10n.contributeUpdateAarti
+                                : l10n.contributeSaveToCollection,
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.ink,
@@ -383,7 +374,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'No saved Aartis yet',
+                            l10n.contributeEmptyTitle,
                             style: AppTypography.serifBody(
                               size: 18,
                               color: context.textPrimary,
@@ -391,7 +382,9 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Tap "Add New Aarti" to create your\nfirst personal prayer.',
+                            l10n.contributeEmptyDescription(
+                              l10n.contributeAddNewAarti,
+                            ),
                             textAlign: TextAlign.center,
                             style: AppTypography.body(
                               size: 13,
@@ -408,7 +401,7 @@ class _ContributeScreenState extends ConsumerState<ContributeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
                       child: Text(
-                        'SAVED AARTIS',
+                        l10n.contributeSavedAartisHeading,
                         style: AppTypography.label(
                           size: 10,
                           color: AppColors.ink3,

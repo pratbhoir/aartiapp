@@ -75,9 +75,93 @@
   "deityShiva": "शिव",
   "deityHanuman": "हनुमान",
   "deityGanesha": "गणेश",
+  "deityKrishna": "कृष्ण",
+  "deityLakshmi": "लक्ष्मी",
+  "deitySai": "साईं",
   "deityVishnu": "विष्णु",
   "deityDurga": "दुर्गा",
   "deityRama": "राम",
+  "deityDetailBackToDiscover": "डिस्कवर पर वापस",
+  "deityDetailTabAartis": "आरतियाँ",
+  "deityDetailTabShlokas": "श्लोक",
+  "deityDetailTabChalisas": "चालीसा",
+  "deityDetailSummaryEmpty": "{deityLabel} के लिए अभी कोई भक्ति-पाठ उपलब्ध नहीं है।",
+  "@deityDetailSummaryEmpty": {
+    "placeholders": {
+      "deityLabel": {}
+    }
+  },
+  "deityDetailSummaryWithFestivals": "{deityLabel} के लिए {itemCount} भक्ति-पाठ और {festivalCount} संबंधित पर्व हैं।",
+  "@deityDetailSummaryWithFestivals": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      },
+      "festivalCount": {
+        "type": "int"
+      },
+      "deityLabel": {}
+    }
+  },
+  "deityDetailSummaryDefault": "प्रार्थना, पठन और श्रवण के लिए {itemCount} भक्ति-पाठ एकत्र किए गए हैं।",
+  "@deityDetailSummaryDefault": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "deityDetailTaglineGanesha": "विघ्नहर्ता · मंगलारंभ के देव",
+  "deityDetailTaglineShiva": "मंगलमय स्वरूप · स्थिरता के अधिपति",
+  "deityDetailTaglineLakshmi": "समृद्धि की देवी · आभा और कृपा",
+  "deityDetailTaglineDurga": "धर्म की संरक्षिका · प्रखर करुणा",
+  "deityDetailTaglineSai": "करुणा, समर्पण और कृपा",
+  "deityDetailTaglineHanuman": "शक्ति, भक्ति और निर्भयता",
+  "deityDetailTaglineKrishna": "दिव्य प्रेम · आनंद, ज्ञान और लीलामयता",
+  "deityDetailTaglineRama": "मर्यादा, साहस और भक्ति",
+  "deityDetailFallbackTagline": "दैनिक प्रार्थना, श्रवण और मनन",
+  "deityDetailFallbackMantra": "पवित्र पद और दैनिक भक्ति",
+  "deityDetailEveryDay": "हर दिन",
+  "deityDetailDailyMantraLabel": "दैनिक मंत्र",
+  "deityDetailDevotionalCount": "{count} भक्ति-पाठ",
+  "@deityDetailDevotionalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deityDetailMergedTypesNotice": "इस टैब में स्तोत्र, मंत्र, जप और अन्य पठन-प्रधान भक्ति-पाठ भी शामिल हैं।",
+  "deityDetailPopularSection": "लोकप्रिय",
+  "deityDetailPopularCaption": "{deityLabel} के लिए {count} चयन",
+  "@deityDetailPopularCaption": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "deityLabel": {}
+    }
+  },
+  "deityDetailMoreAartis": "और आरतियाँ",
+  "deityDetailMoreSection": "और {sectionLabel}",
+  "@deityDetailMoreSection": {
+    "placeholders": {
+      "sectionLabel": {}
+    }
+  },
+  "deityDetailMoreCaption": "पूर्ण संग्रह के साथ अपनी प्रार्थना जारी रखें",
+  "deityDetailEmptyTitle": "अभी तक कोई {tabLabel} नहीं",
+  "@deityDetailEmptyTitle": {
+    "placeholders": {
+      "tabLabel": {}
+    }
+  },
+  "deityDetailEmptyDescription": "{deityLabel} के लिए इस खंड में अभी सामग्री उपलब्ध नहीं है।",
+  "@deityDetailEmptyDescription": {
+    "placeholders": {
+      "deityLabel": {}
+    }
+  },
   "discoverBrowseByDeity": "देवता के अनुसार देखें",
   "discoverFilterByFestival": "पर्व के अनुसार फ़िल्टर करें",
   "discoverPopularAartis": "लोकप्रिय आरतियाँ",
@@ -115,6 +199,18 @@
   },
   "aartiDetailFocusMode": "ध्यान मोड",
   "aartiDetailMantraCounter": "मंत्र काउंटर",
+  "mantraCounterOverlayTapHint": "गिनने के लिए टैप करें · {totalCount} जप",
+  "@mantraCounterOverlayTapHint": {
+    "placeholders": {
+      "totalCount": {
+        "type": "int"
+      }
+    }
+  },
+  "mantraCounterOverlayComplete": "🪷 माला पूर्ण · जय हो!",
+  "mantraCounterOverlayButtonTap": "॥ जप के लिए टैप करें ॥",
+  "mantraCounterOverlayButtonCompleted": "॥ पूर्ण! ॥",
+  "mantraCounterOverlayReset": "काउंटर रीसेट करें",
   "aartiDetailShare": "साझा करें",
   "aartiDetailVerseDataComingSoon": "इस आरती के लिए श्लोक सामग्री जल्द आएगी।",
   "aartiDetailFocusModeHeader": "आरती ध्यान मोड",
@@ -158,6 +254,157 @@
       }
     }
   },
+  "myPujaTitle": "मेरी दैनिक पूजा",
+  "myPujaSummary": "{count} आरतियाँ · अनुमानित {minutes} मिनट",
+  "@myPujaSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "myPujaPlayAartis": "आरतियाँ चलाएँ",
+  "myPujaReadAartis": "आरतियाँ पढ़ें",
+  "myPujaAutoPlayOn": "ऑटो-प्ले चालू",
+  "myPujaAutoPlayOff": "ऑटो-प्ले बंद",
+  "myPujaRepeatOn": "दोहराव चालू",
+  "myPujaRepeatOff": "दोहराव बंद",
+  "myPujaCrossfadeChip": "क्रॉसफेड {seconds}से",
+  "@myPujaCrossfadeChip": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "myPujaEmptyTitle": "आपकी दैनिक पूजा खाली है",
+  "myPujaEmptyDescription": "अपनी दैनिक पूजा सूची बनाने के लिए\n{tabName} टैब से आरतियाँ बुकमार्क करें।",
+  "@myPujaEmptyDescription": {
+    "placeholders": {
+      "tabName": {}
+    }
+  },
+  "pujaSessionHeader": "पूजा सत्र",
+  "pujaSessionRepeatChip": "दोहराव",
+  "pujaSessionSettingsTitle": "सत्र सेटिंग्स",
+  "pujaSessionAutoPlayNextLabel": "अगली ऑटो-प्ले",
+  "pujaSessionAutoPlayNextSubtitle": "अगली आरती अपने आप चलाएँ",
+  "pujaSessionRepeatCurrentLabel": "वर्तमान दोहराएँ",
+  "pujaSessionRepeatCurrentSubtitle": "वर्तमान आरती को लूप करें",
+  "pujaSessionCrossfadeLabel": "क्रॉसफेड",
+  "pujaSessionCrossfadeSubtitle": "आरतियों के बीच {seconds}से का अंतर",
+  "@pujaSessionCrossfadeSubtitle": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "pujaSessionCrossfadeOption": "{seconds}से",
+  "@pujaSessionCrossfadeOption": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "pujaSessionNoAudio": "इस आरती के लिए ऑडियो उपलब्ध नहीं है।",
+  "contributeAppBarTitle": "मेरा संग्रह",
+  "contributeSectionLabel": "मेरा संग्रह",
+  "contributeTitle": "निजी संग्रह",
+  "contributeSavedSummary": "{count} सहेजे गए · केवल आपके लिए",
+  "@contributeSavedSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contributeAddNewAarti": "नई आरती जोड़ें",
+  "contributeEditingAarti": "आरती संपादित हो रही है",
+  "contributeDeityNameLabel": "देवता का नाम",
+  "contributeDeityNameHint": "जैसे गणेश, शिव, लक्ष्मी…",
+  "contributeAartiTitleEnglishLabel": "आरती शीर्षक (अंग्रेज़ी)",
+  "contributeAartiTitleEnglishHint": "जैसे Jai Ganesh Deva",
+  "contributeTitleDevanagariLabel": "देवनागरी में शीर्षक",
+  "contributeTitleDevanagariHint": "जैसे जय गणेश देव",
+  "contributeLyricsDevanagariLabel": "गीत (देवनागरी)",
+  "contributeLyricsDevanagariHint": "ॐ जय जगदीश हरे…\n\n(अंतरों को खाली पंक्ति से अलग करें)",
+  "contributeTransliterationLabel": "लिप्यंतरण (रोमन)",
+  "contributeTransliterationHint": "Om Jai Jagdish Hare…\n\n(ऊपर जैसी ही पद संरचना रखें)",
+  "contributeGujaratiLabel": "गुजराती लिपि (वैकल्पिक)",
+  "contributeGujaratiHint": "ૐ જય જગદીશ હરે…\n\n(ऊपर जैसी ही पद संरचना रखें)",
+  "contributeFestivalTagsLabel": "पर्व टैग (कॉमा से अलग)",
+  "contributeFestivalTagsHint": "जैसे Diwali, Navratri, Ganesh Chaturthi",
+  "contributeUpdateAarti": "आरती अपडेट करें",
+  "contributeSaveToCollection": "मेरे संग्रह में सहेजें",
+  "contributeEmptyTitle": "अभी तक कोई सहेजी गई आरती नहीं",
+  "contributeEmptyDescription": "अपनी पहली निजी प्रार्थना बनाने के लिए\n\"{ctaLabel}\" पर टैप करें।",
+  "@contributeEmptyDescription": {
+    "placeholders": {
+      "ctaLabel": {}
+    }
+  },
+  "contributeSavedAartisHeading": "सहेजी गई आरतियाँ",
+  "contributeValidationDeityTitle": "कृपया कम से कम देवता और शीर्षक भरें।",
+  "contributeSuccessUpdated": "आरती अपडेट हो गई! 🙏",
+  "contributeSuccessSaved": "आरती आपके संग्रह में सहेज दी गई! 🙏",
+  "contributeDhruvaPad": "ध्रुव पद",
+  "contributeVerseLabel": "श्लोक {index}",
+  "@contributeVerseLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "contributeVersesLabel": "{count} श्लोक",
+  "@contributeVersesLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackScreenTitle": "प्रतिक्रिया भेजें",
+  "feedbackGuidance": "भक्ति सामग्री सुधार, ऐप समस्याओं और पढ़ने के अनुभव को बेहतर बनाने वाले विचारों के लिए इस फ़ॉर्म का उपयोग करें।",
+  "feedbackCategoryLabel": "श्रेणी",
+  "feedbackTypeIncorrectLyrics": "गलत गीत",
+  "feedbackTypeTranslationIssue": "अनुवाद समस्या",
+  "feedbackTypeFeatureRequest": "फ़ीचर अनुरोध",
+  "feedbackTypeBugReport": "बग रिपोर्ट",
+  "feedbackTypeGeneralFeedback": "सामान्य प्रतिक्रिया",
+  "feedbackEmailLabel": "संपर्क ईमेल (वैकल्पिक)",
+  "feedbackEmailHint": "name@example.com",
+  "feedbackMessageLabel": "संदेश",
+  "feedbackMessageHint": "समस्या, सुधार या सुझाव को विस्तार से लिखें।",
+  "feedbackSubmitButton": "प्रतिक्रिया भेजें",
+  "feedbackValidationEmail": "मान्य ईमेल पता दर्ज करें।",
+  "feedbackValidationMessageRequired": "कृपया अपनी प्रतिक्रिया दर्ज करें।",
+  "feedbackValidationMessageTooLong": "प्रतिक्रिया {maxLength} अक्षरों के भीतर रखें।",
+  "@feedbackValidationMessageTooLong": {
+    "placeholders": {
+      "maxLength": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackSuccessTitle": "प्रतिक्रिया प्राप्त हुई",
+  "feedbackSuccessDescription": "धन्यवाद। आपका संदेश समीक्षा के लिए भेज दिया गया है और यह ऐप तथा इसकी भक्ति सामग्री को बेहतर बनाने में मदद करेगा।",
+  "feedbackSuccessResetButton": "एक और प्रतिक्रिया भेजें",
+  "feedbackErrorServer": "प्रतिक्रिया भेजी नहीं जा सकी (स्थिति {statusCode})।",
+  "@feedbackErrorServer": {
+    "placeholders": {
+      "statusCode": {
+        "type": "int"
+      }
+    }
+  },
+  "feedbackErrorTimeout": "प्रतिक्रिया भेजने में समय समाप्त हो गया। कृपया फिर से प्रयास करें।",
+  "feedbackErrorGeneric": "अभी प्रतिक्रिया भेजी नहीं जा सकती। कृपया फिर से प्रयास करें।",
   "pujaFocusSettingsDescription": "फोकस सत्र में वर्तमान आरती कैसे दिखाई जाए, इसे समायोजित करें।",
   "pujaFocusSettingsFooterContinue": "अगली आरती पर जाने के लिए अंतिम श्लोक तक पहुँचें।",
   "pujaFocusSettingsFooterComplete": "इस फोकस सत्र को पूरा करने के लिए अंतिम श्लोक तक पहुँचें।",

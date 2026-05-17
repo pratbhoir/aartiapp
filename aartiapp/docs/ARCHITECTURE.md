@@ -150,7 +150,9 @@ This localization layer is intentionally separate from devotional script renderi
 
 The rollout now covers Discover’s visible chrome as well: app-bar title, section labels, search placeholder, result count, empty state, festival status badges, and the shared day-special label used by the home hero card all resolve through ARB-backed generated strings instead of English-only literals.
 
-The localized reading rollout now also covers the Aarti Detail surface and the shared focus-mode controls it owns. Action chips, verse progress, share-sheet labels, focus-mode footer instructions, focus settings labels, and the Puja Focus Session caller labels now resolve through the same generated localization layer, while the remaining My Puja shell and audio-session screens still need migration.
+The localized reading rollout now covers the Aarti Detail surface, its mantra-counter overlay, and the shared focus-mode controls it owns. Action chips, verse progress, share-sheet labels, mantra-counter helper text and action states, focus-mode footer instructions, and focus settings labels all resolve through the generated localization layer.
+
+The same localization rules now extend to the dedicated deity destination. `DeityDetailScreen` keeps stable internal tab IDs for analytics while rendering localized tab labels, summaries, empty states, section headings, fallback profile copy, localized deity names, and localized weekday-based auspicious-day labels. Canonical devotional content such as deity mantras remains data-driven rather than ARB-backed UI copy.
 
 During bootstrap, `main.dart` asks `SettingsRepository` to seed `preferred_language` from the first supported device locale only when onboarding is incomplete and no explicit preferred-language key has been persisted yet. This ensures fresh installs on Hindi or Gujarati devices start in the matching supported locale without overriding later user choices.
 
