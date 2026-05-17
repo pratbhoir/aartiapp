@@ -49,6 +49,7 @@ Future<void> main() async {
       // Initialize repositories
       final prefs = await SharedPreferences.getInstance();
       final settingsRepository = SettingsRepository(prefs);
+        await settingsRepository.seedPreferredLanguageFromDeviceLocales();
       await settingsRepository.ensureUserIdentity();
       final analyticsSessionId = await settingsRepository
           .ensureAnalyticsSessionId();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -46,7 +47,7 @@ class HomeScreen extends ConsumerWidget {
             onMenuTap: onOpenDrawer,
             showMenu: false,
             showLogoTitle: true,
-            title: 'Home',
+            title: context.l10n.navigationHome,
           ),
           Expanded(
             child: CustomScrollView(
@@ -65,22 +66,20 @@ class HomeScreen extends ConsumerWidget {
                               context,
                             ).copyWith(fontSize: 34),
                             children: [
-                              const TextSpan(text: 'Jai '),
                               TextSpan(
-                                text: 'Shri Krishna, ',
+                                text: context.l10n.homeGreetingInvocation,
                                 style: const TextStyle(
                                   fontStyle: FontStyle.italic,
                                   color: AppColors.saffron,
                                 ),
                               ),
-                              // TextSpan(text: ' ${userName.split(' ').first}'),
                               TextSpan(text: '\n$userName'),
                             ],
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          DayDeityMapper.todaySubtitle(),
+                          DayDeityMapper.todaySubtitleLocalized(context.l10n),
                           style: AppTypography.body(
                             size: 13,
                             color: context.textCaption,
@@ -98,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SectionLabel('Aarti of the Day'),
+                        SectionLabel(context.l10n.homeAartiOfTheDay),
                         const SizedBox(height: 13),
                         TodayHeroCard(
                           aarti: aartis[todayIdx],
@@ -173,9 +172,11 @@ class HomeScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(right: 24),
-                              child: SectionLabel('Recently Visited'),
+                              child: SectionLabel(
+                                context.l10n.homeRecentlyVisited,
+                              ),
                             ),
                             const SizedBox(height: 12),
                             SizedBox(

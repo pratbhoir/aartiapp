@@ -23,7 +23,7 @@
 | Dark / Light / System theme | ✅ Done | v1.0 | `SettingsScreen` |
 | Script language setting (Devanagari / English / Gujarati) | ✅ Done | v1.0 | `SettingsScreen` |
 | Derived secondary script surface | ✅ Done | v2.4 | `SettingsScreen`, `AartiDetailScreen`, `FocusModeOverlay` |
-| App language setting (English / Hindi / Gujarati) | ✅ Done | v2.2 | `SettingsScreen` |
+| App language setting (English / Hindi / Gujarati) | 🚧 In Progress | v3.0 | `AartiSangrahApp`, `OnboardingScreen`, `HomeShell`, `HomeScreen`, `DiscoverScreen`, `SettingsScreen` |
 | Verse progress indicator | ✅ Done | v1.0 | `AartiDetailScreen` |
 | Haptic feedback (scoped) | ✅ Done | v1.0 | `AppHaptics` |
 | Onboarding flow (name, language, notification) | ✅ Done | v2.0 | `OnboardingScreen` |
@@ -56,6 +56,7 @@
 1. User navigates between Home, Discover, My Daily Puja, My Collection, and Settings via the bottom navigation dock.
 2. Active tab state is visually highlighted and preserved in `HomeShell`.
 3. Section transitions use shell-level fade + slight upward motion.
+4. In the current localization rollout, bottom-navigation labels follow the selected app language immediately when a supported locale is selected.
 
 ### 2.1 First Launch (Onboarding)
 
@@ -66,6 +67,8 @@
 5. **Step 4 — Notification:** User sets daily puja reminder time (optional).
 6. User can skip from any non-welcome step, which persists the current selections and finishes onboarding immediately.
 7. Onboarding marked complete → `HomeShell` displayed with Home tab active.
+8. The onboarding copy follows the selected app language through the generated localization layer.
+9. On first launch, the initial selected app language is seeded from a supported device locale when available, otherwise English is used.
 
 ### 2.2 Discover
 
@@ -77,6 +80,7 @@
 6. Selecting a festival clears the search text and resets deity selection to `All`.
 7. The deity `All` chip is selected by default and acts as the clear-filter state.
 8. Tapping a non-`All` deity chip opens `DeityDetailScreen` for that deity.
+9. Discover section labels, search placeholder, result count, and empty-state copy follow the selected app language through the generated localization layer.
 9. Festival filter chips show only the next 5 current or upcoming festivals, ordered by nearest date.
 10. User taps an Aarti card → navigates to `AartiDetailScreen`.
 
@@ -135,15 +139,16 @@
 2. Usage analytics toggle (enabled by default, opt-out persisted locally).
 2. Text scale (0.8×–1.6×).
 3. App language (English / Hindi / Gujarati).
-4. Primary script language (Devanagari / English / Gujarati).
-5. Derived secondary script preview driven by app language and primary script.
-6. Notification toggle + time picker.
-7. Crossfade duration (0–3s).
-8. User name edit.
-9. Support action opens a dedicated feedback form for devotional corrections, bugs, feature requests, and general feedback.
-10. Diagnostics actions: view Activity Log, share log export, and clear log.
-11. Content tile shows content counts/source metadata and triggers an immediate content refresh when tapped.
-12. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
+4. The Settings language surface itself is localized so users can change language without dropping back to English labels.
+5. Primary script language (Devanagari / English / Gujarati).
+6. Derived secondary script preview driven by app language and primary script.
+7. Notification toggle + time picker.
+8. Crossfade duration (0–3s).
+9. User name edit.
+10. Support action opens a dedicated feedback form for devotional corrections, bugs, feature requests, and general feedback.
+11. Diagnostics actions: view Activity Log, share log export, and clear log.
+12. Content tile shows content counts/source metadata and triggers an immediate content refresh when tapped.
+13. DevTools button opens a dedicated diagnostics page with the same Activity Log actions as Settings.
 
 ### 2.10 Analytics
 
@@ -205,7 +210,8 @@
 | Audio default | All aartis share a default audio URL if no specific URL is provided. |
 | Puja session auto-play | Plays next Aarti automatically after current finishes (configurable crossfade). |
 | Script language default | First-run script language defaults to Devanagari. |
-| App language default | First-run app language defaults to English. |
+| App language default | First-run app language seeds from the first supported device locale and falls back to English when the device locale is unsupported. |
+| Localization rollout scope | Generated UI localization currently covers the app root, onboarding, bottom navigation, home screen, Discover, Settings, and the Aarti Detail reading/focus surfaces while the remaining My Puja, form, and feedback screens continue migrating. |
 | User sync debounce | Settings-driven sync uses a trailing debounce of 5 seconds. |
 | User sync startup refresh | Returning users trigger a forced sync on app launch after onboarding is already complete. |
 | User sync privacy boundary | Sync exports lightweight profile and setting state only; it excludes aarti content and personal devotional collections. |

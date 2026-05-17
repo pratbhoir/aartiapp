@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/l10n/app_localizations_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/festival.dart';
@@ -17,6 +18,7 @@ class FestiveBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final isToday = festival.isActiveOn(DateTime.now());
     final daysLeft = festival.daysUntil();
 
@@ -74,9 +76,13 @@ class FestiveBanner extends StatelessWidget {
                             color: AppColors.saffron,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: Text('TODAY',
-                              style: AppTypography.label(
-                                  size: 8, color: AppColors.white)),
+                          child: Text(
+                            l10n.discoverFestivalToday,
+                            style: AppTypography.label(
+                              size: 8,
+                              color: AppColors.white,
+                            ),
+                          ),
                         )
                       else
                         Container(
@@ -92,9 +98,11 @@ class FestiveBanner extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            'IN $daysLeft DAY${daysLeft == 1 ? '' : 'S'}',
+                            l10n.discoverFestivalCountdown(daysLeft),
                             style: AppTypography.label(
-                                size: 8, color: AppColors.saffronDark),
+                              size: 8,
+                              color: AppColors.saffronDark,
+                            ),
                           ),
                         ),
                       Text(

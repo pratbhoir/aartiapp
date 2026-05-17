@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/constants/haptics.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -47,6 +48,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     ref.watch(contentRevisionProvider);
     ref.listen<DiscoverFilterState>(discoverFilterProvider, (_, next) {
       if (_searchController.text == next.searchQuery) {
@@ -77,7 +79,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             onMenuTap: widget.onOpenDrawer,
             showMenu: false,
             showLogoTitle: true,
-            title: 'Discover',
+            title: l10n.navigationDiscover,
           ),
           Expanded(
             child: CustomScrollView(
@@ -90,9 +92,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(right: 24),
-                          child: SectionLabel('Browse by Deity'),
+                          child: SectionLabel(l10n.discoverBrowseByDeity),
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
@@ -157,6 +159,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                     child: app.SearchBar(
                       controller: _searchController,
+                      hintText: l10n.discoverSearchPlaceholder,
                       onChanged: (query) {
                         final normalized = query.trim();
                         if (normalized.isNotEmpty) {
@@ -181,9 +184,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(right: 24),
-                          child: SectionLabel('Filter by Festival'),
+                          child: SectionLabel(l10n.discoverFilterByFestival),
                         ),
                         const SizedBox(height: 10),
                         FestivalFilterChips(
@@ -211,10 +214,10 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     padding: const EdgeInsets.fromLTRB(12, 28, 12, 12),
                     child: Row(
                       children: [
-                        const SectionLabel('Popular Aartis'),
+                        SectionLabel(l10n.discoverPopularAartis),
                         const Spacer(),
                         Text(
-                          '${filteredIndices.length} found',
+                          l10n.discoverResultCount(filteredIndices.length),
                           style: AppTypography.body(
                             size: 11,
                             color: AppColors.ink3,
@@ -239,7 +242,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                'No Aartis found',
+                                l10n.discoverNoAartisFound,
                                 style: AppTypography.body(
                                   size: 14,
                                   color: AppColors.ink3,

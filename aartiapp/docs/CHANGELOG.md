@@ -1,3 +1,80 @@
+## [2026-05-17] — Localization Phase 3B: Reading Flow Foundations
+
+### Added
+- `test/aarti_detail_screen_test.dart` — Added focused widget coverage for localized Aarti Detail labels, the focus overlay, and the shared focus settings sheet.
+
+### Modified
+- `lib/features/aarti_detail/aarti_detail_screen.dart` — Localized the detail-screen back control, bookmark semantics, verse progress labels, action chips, share sheet, focus-mode entry labels, and empty-state copy.
+- `lib/features/aarti_detail/widgets/focus_mode_overlay.dart` — Localized focus overlay content-mode labels, footer instructions, and previous/next or completion CTAs.
+- `lib/shared/widgets/focus_mode_settings_sheet.dart` — Localized the shared reading-settings sheet, switched script labels to resolver-backed localized names, and made the modal scroll-safe for longer translations.
+- `lib/features/my_puja/puja_focus_session_screen.dart` — Localized the shared focus-session header, progress label, completion CTA, and settings-sheet copy used by the My Puja focus flow.
+- `lib/l10n/app_en.arb` — Added Aarti Detail and shared focus-mode localization keys in English.
+- `lib/l10n/app_hi.arb` — Added Aarti Detail and shared focus-mode localization keys in Hindi.
+- `lib/l10n/app_gu.arb` — Added Aarti Detail and shared focus-mode localization keys in Gujarati.
+- `docs/FILE_REGISTRY.md` — Registered the localized reading-flow files and the new Aarti Detail widget test.
+- `docs/ARCHITECTURE.md` — Documented the localized reading-flow rollout across Aarti Detail and shared focus widgets.
+- `docs/FUNCTIONAL_SPEC.md` — Expanded the localization rollout scope to include the Aarti Detail reading and focus surfaces.
+
+## [2026-05-17] — Localization Phase 3A: Discover Surface Migration
+
+### Added
+- `test/discover_screen_test.dart` — Added focused widget coverage for localized Discover labels, result count, and empty-state behavior.
+
+### Modified
+- `lib/features/discover/discover_screen.dart` — Localized the Discover app-bar title, section labels, result count, and empty-state copy.
+- `lib/features/discover/widgets/search_bar.dart` — Localized the Discover search placeholder and wrapped the embedded `TextField` with a `Material` ancestor.
+- `lib/features/discover/widgets/festive_banner.dart` — Localized the festival status badge and countdown copy.
+- `lib/features/discover/widgets/today_hero_card.dart` — Switched the day-special badge to a generated localized label.
+- `lib/core/utils/day_deity_mapper.dart` — Added a localized day-special helper alongside the existing localized subtitle mapping.
+- `lib/l10n/app_en.arb` — Added Discover and shared day-special localization keys in English.
+- `lib/l10n/app_hi.arb` — Added Discover and shared day-special localization keys in Hindi.
+- `lib/l10n/app_gu.arb` — Added Discover and shared day-special localization keys in Gujarati.
+- `test/settings_screen_test.dart` — Aligned the localization import path with the generated in-package `AppLocalizations` output.
+- `docs/FILE_REGISTRY.md` — Registered the Discover localization updates and the new Discover widget test.
+- `docs/ARCHITECTURE.md` — Documented Discover as part of the generated localization rollout scope.
+- `docs/FUNCTIONAL_SPEC.md` — Expanded the localization rollout scope and Discover behavior notes to cover localized Discover chrome.
+
+## [2026-05-17] — Localization Phase 2: Settings And Bootstrap Seeding
+
+### Added
+- `test/settings_repository_test.dart` — Added focused repository coverage for first-launch preferred-language seeding from supported device locales.
+- `test/settings_screen_test.dart` — Added focused widget coverage for localized Settings labels.
+
+### Modified
+- `lib/features/settings/settings_screen.dart` — Localized Settings headers, tiles, dialogs, diagnostics copy, content refresh feedback, and dynamic subtitles.
+- `lib/shared/utils/aarti_language_resolver.dart` — Added localization-aware script and app-language label helpers for UI surfaces.
+- `lib/data/repositories/settings_repository.dart` — Added validated preferred-language persistence and one-time device-locale seeding for fresh installs.
+- `lib/main.dart` — Seeded preferred language from supported device locales before analytics bootstrap.
+- `lib/features/onboarding/onboarding_screen.dart` — Initialized onboarding language selection from persisted preferred language instead of always defaulting to English.
+- `lib/l10n/app_en.arb` — Added the Settings and bootstrap-seeding string catalog entries in English.
+- `lib/l10n/app_hi.arb` — Added the Settings and bootstrap-seeding string catalog entries in Hindi.
+- `lib/l10n/app_gu.arb` — Added the Settings and bootstrap-seeding string catalog entries in Gujarati.
+- `docs/FILE_REGISTRY.md` — Registered the Settings localization updates and new tests.
+- `docs/ARCHITECTURE.md` — Documented the one-time device-locale seeding rule and the localized Settings control surface.
+- `docs/FUNCTIONAL_SPEC.md` — Expanded localization rollout coverage to Settings and updated the first-launch app-language rule.
+
+## [2026-05-14] — Localization Infrastructure Phase 1
+
+### Added
+- `lib/core/l10n/app_locale.dart` — Added the supported-locale registry and persisted language-code to `Locale` mapping helper.
+- `lib/core/l10n/app_localizations_ext.dart` — Added a `BuildContext` extension for concise generated localization access.
+- `lib/l10n/app_en.arb` — Added the initial English UI string catalog for generated localizations.
+- `lib/l10n/app_hi.arb` — Added the initial Hindi UI string catalog for generated localizations.
+- `lib/l10n/app_gu.arb` — Added the initial Gujarati UI string catalog for generated localizations.
+
+### Modified
+- `pubspec.yaml` — Enabled Flutter localization code generation and added localization dependencies.
+- `lib/app.dart` — Bound `MaterialApp` locale, delegates, supported locales, and generated app title to the persisted app-language setting.
+- `lib/navigation/home_shell.dart` — Localized bottom-navigation labels while keeping analytics screen identifiers stable.
+- `lib/navigation/widgets/app_bottom_nav.dart` — Localized bottom-nav tab semantics labels.
+- `lib/features/onboarding/onboarding_screen.dart` — Replaced first-launch hardcoded strings with generated localized copy for English, Hindi, and Gujarati.
+- `lib/features/home/home_screen.dart` — Localized the Home app-bar title, greeting invocation, section labels, and day subtitle.
+- `lib/core/utils/day_deity_mapper.dart` — Added localized weekday and deity-name helpers for the Home subtitle without changing the underlying day-to-deity mapping.
+- `test/widget_test.dart` — Replaced the smoke test with focused coverage for persisted locale selection and runtime locale switching.
+- `docs/FILE_REGISTRY.md` — Registered the localization infrastructure and refreshed touched file metadata.
+- `docs/ARCHITECTURE.md` — Documented the generated localization layer and the separation between app language and script language.
+- `docs/FUNCTIONAL_SPEC.md` — Marked app-wide localization as in progress and documented the current rollout scope.
+
 ## [2026-05-02] — Deity Prayer Card Consistency
 
 ### Modified

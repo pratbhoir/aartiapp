@@ -1,0 +1,275 @@
+{
+  "@@locale": "en",
+  "appTitle": "Aarti Sangrah",
+  "appTagline": "Your complete collection of Hindu prayers and Aartis",
+  "navigationHome": "Home",
+  "navigationDiscover": "Discover",
+  "navigationMyPuja": "My Puja",
+  "navigationCollection": "Collection",
+  "navigationSettings": "Settings",
+  "navigationTabSemantics": "{label} tab",
+  "@navigationTabSemantics": {
+    "description": "Semantic label for a bottom navigation tab.",
+    "placeholders": {
+      "label": {}
+    }
+  },
+  "commonBack": "Back",
+  "commonNext": "Next",
+  "commonCancel": "Cancel",
+  "commonSave": "Save",
+  "commonSkip": "Skip",
+  "commonContinue": "Continue",
+  "commonDisabled": "Disabled",
+  "commonTapToChange": "Tap to change",
+  "languageEnglish": "English",
+  "languageHindi": "Hindi",
+  "languageGujarati": "Gujarati",
+  "onboardingGetStarted": "Get Started",
+  "onboardingWelcomeTitle": "Aarti Sangrah",
+  "onboardingWelcomeNativeTitle": "आरती संग्रह",
+  "onboardingNameTitle": "What should we\ncall you?",
+  "onboardingNameSubtitle": "We'll personalize your daily greeting.",
+  "onboardingNameHint": "Your name",
+  "onboardingScriptTitle": "Choose your\npreferred script",
+  "onboardingScriptSubtitle": "You can always change this later in Settings.",
+  "onboardingPreferredLanguage": "Preferred language",
+  "scriptDevanagari": "Devanagari",
+  "scriptEnglish": "English",
+  "scriptGujarati": "Gujarati",
+  "scriptRoman": "Roman script",
+  "onboardingReminderTitle": "Daily puja\nreminder",
+  "onboardingReminderSubtitle": "We'll gently remind you at your preferred time.",
+  "onboardingDailyReminder": "Daily Reminder",
+  "onboardingReminderAt": "Remind at {time}",
+  "@onboardingReminderAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "onboardingReminderTime": "Reminder Time",
+  "onboardingReminderBlessing": "Start each day with a moment of devotion and inner peace.",
+  "homeGreetingInvocation": "Jai Shri Krishna,",
+  "homeAartiOfTheDay": "Aarti of the Day",
+  "homeRecentlyVisited": "Recently Visited",
+  "homeTodaySpecialLabel": "{dayName} Special",
+  "@homeTodaySpecialLabel": {
+    "placeholders": {
+      "dayName": {}
+    }
+  },
+  "homeTodaySubtitle": "{dayName} · Begin with {deityName}",
+  "@homeTodaySubtitle": {
+    "placeholders": {
+      "dayName": {},
+      "deityName": {}
+    }
+  },
+  "weekdayMonday": "Monday",
+  "weekdayTuesday": "Tuesday",
+  "weekdayWednesday": "Wednesday",
+  "weekdayThursday": "Thursday",
+  "weekdayFriday": "Friday",
+  "weekdaySaturday": "Saturday",
+  "weekdaySunday": "Sunday",
+  "deityShiva": "Shiva",
+  "deityHanuman": "Hanuman",
+  "deityGanesha": "Ganesha",
+  "deityVishnu": "Vishnu",
+  "deityDurga": "Durga",
+  "deityRama": "Rama",
+  "discoverBrowseByDeity": "Browse by Deity",
+  "discoverFilterByFestival": "Filter by Festival",
+  "discoverPopularAartis": "Popular Aartis",
+  "discoverSearchPlaceholder": "Search deity, Aarti, or festival…",
+  "discoverResultCount": "{count} found",
+  "@discoverResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverNoAartisFound": "No Aartis found",
+  "discoverFestivalToday": "TODAY",
+  "discoverFestivalCountdown": "{days, plural, =1{IN 1 DAY} other{IN {days} DAYS}}",
+  "@discoverFestivalCountdown": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "aartiDetailAddBookmark": "Add bookmark",
+  "aartiDetailRemoveBookmark": "Remove bookmark",
+  "aartiDetailVerseProgress": "Verse {current} of {total}",
+  "@aartiDetailVerseProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "aartiDetailFocusMode": "Focus Mode",
+  "aartiDetailMantraCounter": "Mantra Counter",
+  "aartiDetailShare": "Share",
+  "aartiDetailVerseDataComingSoon": "Verse data coming soon for this Aarti.",
+  "aartiDetailFocusModeHeader": "AARTI FOCUS MODE",
+  "aartiDetailContentLyrics": "Lyrics",
+  "aartiDetailContentMeaning": "Meaning",
+  "focusModeSettingsTitle": "Reading Settings",
+  "focusModeSettingsReadingSurface": "Reading Surface",
+  "focusModeSettingsTextSize": "Text Size",
+  "aartiDetailFocusSettingsDescription": "Adjust this focus session without changing your saved app settings.",
+  "aartiDetailFocusSettingsFooterWithNext": "Reach the final verse to continue to the next aarti in your puja order. These changes stay only for this focus session.",
+  "aartiDetailFocusSettingsFooterReset": "These changes stay only for this focus session and reset when you reopen focus mode.",
+  "aartiDetailShareTitle": "Share Aarti",
+  "aartiDetailShareAsText": "As Text",
+  "aartiDetailShareAsImage": "As Image",
+  "focusModeOverlayNextAarti": "Next Aarti",
+  "focusModeOverlayNextNamed": "Next: {title}",
+  "@focusModeOverlayNextNamed": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "focusModeOverlayPreviousAarti": "Previous Aarti",
+  "focusModeOverlayPreviousNamed": "Previous: {title}",
+  "@focusModeOverlayPreviousNamed": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "focusModeOverlayCompleteSession": "Complete Session",
+  "focusModeOverlayInstructionAdvance": "Tap on or below the highlighted verse to advance",
+  "focusModeOverlayInstructionPreviousNext": "Tap above for previous, tap on or below the highlighted verse for next",
+  "pujaFocusSessionHeader": "PUJA FOCUS SESSION",
+  "pujaSessionProgress": "{current} of {total}",
+  "@pujaSessionProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pujaFocusSettingsDescription": "Adjust how the current aarti is shown in focus session.",
+  "pujaFocusSettingsFooterContinue": "Reach the final verse to continue to the next aarti in your puja order.",
+  "pujaFocusSettingsFooterComplete": "Reach the final verse to finish this focus session.",
+  "settingsTitleLeading": "App",
+  "settingsTitleTrailing": "Settings",
+  "settingsSectionProfile": "Profile",
+  "settingsSectionAppearance": "Appearance",
+  "settingsSectionLanguageAndScript": "Language & Script",
+  "settingsSectionNotifications": "Notifications",
+  "settingsSectionPujaSession": "Puja Session",
+  "settingsSectionPrivacy": "Privacy",
+  "settingsSectionSupport": "Support",
+  "settingsSectionDiagnostics": "Diagnostics",
+  "settingsSectionAbout": "About",
+  "settingsDisplayName": "Display Name",
+  "settingsTheme": "Theme",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsThemeSystem": "System",
+  "settingsTextSize": "Text Size",
+  "settingsAppLanguage": "App Language",
+  "settingsPrimaryScript": "Primary Script",
+  "settingsSecondaryScript": "Secondary Script",
+  "settingsDailyPujaReminder": "Daily Puja Reminder",
+  "settingsReminderTime": "Reminder Time",
+  "settingsReminderAt": "Reminder at {time}",
+  "@settingsReminderAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "settingsAutoPlay": "Auto-play",
+  "settingsAutoPlaySubtitle": "Play next aarti in puja session",
+  "settingsCrossfadeDuration": "Crossfade Duration",
+  "settingsCrossfadeSubtitle": "{seconds}s between aartis",
+  "@settingsCrossfadeSubtitle": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsUsageAnalytics": "Usage Analytics",
+  "settingsAnalyticsEnabledSubtitle": "Enabled for screen and feature insights",
+  "settingsAnalyticsDisabledSubtitle": "Disabled on this device",
+  "settingsSendFeedback": "Send Feedback",
+  "settingsFeedbackSubtitle": "Report issues, suggest improvements, or share devotional feedback",
+  "settingsDevTools": "DevTools",
+  "settingsDevToolsSubtitle": "Open full diagnostics page",
+  "settingsActivityLog": "Activity Log",
+  "settingsActivityLogSubtitle": "{count} entries · View runtime activity",
+  "@settingsActivityLogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsShareActivityLog": "Share Activity Log",
+  "settingsShareActivityLogSubtitle": "Export diagnostics file for troubleshooting",
+  "settingsContent": "Content",
+  "settingsAboutSubtitle": "Version {version} · Made with devotion",
+  "@settingsAboutSubtitle": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "settingsContentSummary": "{aartiCount} Aartis · {festivalCount} Festivals ·\n{syncStatus}",
+  "@settingsContentSummary": {
+    "placeholders": {
+      "aartiCount": {
+        "type": "int"
+      },
+      "festivalCount": {
+        "type": "int"
+      },
+      "syncStatus": {}
+    }
+  },
+  "settingsContentLastRefresh": "Last refresh {time}",
+  "@settingsContentLastRefresh": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "settingsContentSourceRemote": "Cached remote content",
+  "settingsContentSourceCached": "Cached offline content",
+  "settingsContentSourceBundled": "Bundled offline content",
+  "settingsContentRefreshSuccess": "Content refreshed.",
+  "settingsContentRefreshFailed": "Content refresh failed.",
+  "settingsSecondaryScriptFallback": "{scriptLabel} · Fallback when app and primary scripts match",
+  "@settingsSecondaryScriptFallback": {
+    "placeholders": {
+      "scriptLabel": {}
+    }
+  },
+  "settingsSecondaryScriptUsage": "{scriptLabel} · Used in secondary reading mode and focus mode",
+  "@settingsSecondaryScriptUsage": {
+    "placeholders": {
+      "scriptLabel": {}
+    }
+  },
+  "settingsNameDialogTitle": "Your Name",
+  "settingsNameHint": "Enter your name",
+  "settingsActivityLogTitle": "Activity Log ({count})",
+  "@settingsActivityLogTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsActivityLogEmpty": "No activity captured yet.",
+  "settingsActivityLogCleared": "Activity log cleared"
+}

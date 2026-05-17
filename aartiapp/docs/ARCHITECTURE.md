@@ -21,6 +21,9 @@ lib/
 ├── main.dart                          # App entry point, cache-first content bootstrap
 ├── app.dart                           # Root MaterialApp configuration + lifecycle refresh checks
 ├── core/
+│   ├── l10n/
+│   │   ├── app_locale.dart            # Supported locales + persisted language-code mapping
+│   │   └── app_localizations_ext.dart # BuildContext extension for generated localized strings
 │   ├── theme/
 │   │   ├── app_colors.dart            # All colour tokens (single source of truth)
 │   │   ├── app_typography.dart        # All text style factories (single source of truth)
@@ -103,6 +106,10 @@ lib/
 │       ├── settings_screen.dart
 │       ├── feedback_screen.dart
 │       └── dev_tools_screen.dart
+├── l10n/
+│   ├── app_en.arb                     # English UI string catalog
+│   ├── app_hi.arb                     # Hindi UI string catalog
+│   └── app_gu.arb                     # Gujarati UI string catalog
 ```
 
 ---
@@ -135,6 +142,18 @@ Temporary focus-mode controls that are shared across those flows live in `shared
 
 Script-language and app-language display rules are centralized in `shared/utils/aarti_language_resolver.dart`. Reading surfaces should resolve titles, lyric lines, derived secondary-script surfaces, and meaning fallbacks through that utility instead of duplicating `scriptMode` or `preferredLanguage` branching locally.
 
+### Generated UI Localization
+
+App-wide UI copy is now moving to Flutter's generated localization pipeline. `lib/l10n/app_*.arb` holds the UI string catalogs, `MaterialApp` binds `locale` from the persisted `preferredLanguageProvider`, and widgets use the `BuildContext` extension in `core/l10n/app_localizations_ext.dart` for concise access to generated strings.
+
+This localization layer is intentionally separate from devotional script rendering. `preferredLanguageProvider` now owns the UI locale for localized screens, while `scriptModeProvider` and `AartiLanguageResolver` continue to control how aarti titles, verses, and derived secondary-script surfaces are rendered.
+
+The rollout now covers Discover’s visible chrome as well: app-bar title, section labels, search placeholder, result count, empty state, festival status badges, and the shared day-special label used by the home hero card all resolve through ARB-backed generated strings instead of English-only literals.
+
+The localized reading rollout now also covers the Aarti Detail surface and the shared focus-mode controls it owns. Action chips, verse progress, share-sheet labels, focus-mode footer instructions, focus settings labels, and the Puja Focus Session caller labels now resolve through the same generated localization layer, while the remaining My Puja shell and audio-session screens still need migration.
+
+During bootstrap, `main.dart` asks `SettingsRepository` to seed `preferred_language` from the first supported device locale only when onboarding is incomplete and no explicit preferred-language key has been persisted yet. This ensures fresh installs on Hindi or Gujarati devices start in the matching supported locale without overriding later user choices.
+
 ### Shared UI Feedback
 
 Transient in-app feedback is centralized in `core/utils/snackbar_helper.dart`. Feature screens should choose semantic intent (`showSuccess`, `showError`, `showInfo`, `showWarning`) and message timing only; the helper owns severity-to-color/icon mapping, optional action styling, and the replace-current behavior so snackbars do not queue stale messages.
@@ -161,6 +180,8 @@ The dedicated deity page uses computed `Provider.family` values rather than anot
 User reading preferences are split into two persisted provider-backed settings:
 - `scriptModeProvider` controls the script used for lyric surfaces: Devanagari, English, or Gujarati.
 - `preferredLanguageProvider` controls the app language used for translated meaning surfaces and tab visibility decisions.
+
+At the app root, `preferredLanguageProvider` also drives `MaterialApp.locale` through the `AppLocale` helper so localized screens rebuild immediately when the app language changes.
 
 The app also derives a non-persisted secondary script from those two settings. Secondary-script surfaces use the app-language reading script by default, and fall back to Devanagari when the selected lyric script already matches that app-language script.
 

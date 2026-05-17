@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
@@ -92,11 +93,12 @@ class _BottomNavItem extends StatelessWidget {
     final iconData = isActive ? item.activeIcon : item.icon;
     final inactiveColor = context.textSecondary;
     final activeColor = AppColors.saffron;
+    final l10n = context.l10n;
 
     return Semantics(
       button: true,
       selected: isActive,
-      label: '${item.label} tab',
+      label: l10n.navigationTabSemantics(item.label),
       child: Material(
         color: Colors.transparent,
         child: InkWell(

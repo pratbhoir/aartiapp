@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/haptics.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/aarti_item.dart';
@@ -127,6 +128,7 @@ class _PujaFocusSessionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final appLanguageCode = ref.watch(preferredLanguageProvider);
     final bool canShowSecondaryScript =
         AartiLanguageResolver.shouldShowSecondaryScriptMode(
@@ -150,9 +152,12 @@ class _PujaFocusSessionScreenState
         textScale: _focusTextScale,
         appLanguageCode: appLanguageCode,
         contentMode: selectedMode,
-        headerLabel: 'PUJA FOCUS SESSION',
+        headerLabel: l10n.pujaFocusSessionHeader,
         useSessionHeaderLayout: true,
-        progressLabel: '${_currentIndex + 1} of ${widget.pujaAartis.length}',
+        progressLabel: l10n.pujaSessionProgress(
+          _currentIndex + 1,
+          widget.pujaAartis.length,
+        ),
         sessionIndex: _currentIndex,
         sessionCount: widget.pujaAartis.length,
         onOpenSettings: () => _showSessionSettings(
@@ -169,7 +174,7 @@ class _PujaFocusSessionScreenState
             ? widget.pujaAartis[_currentIndex + 1].title
             : null,
         onComplete: _completeSession,
-        completionLabel: 'Complete Session',
+        completionLabel: l10n.focusModeOverlayCompleteSession,
         onClose: _closeSession,
       ),
     );
@@ -214,10 +219,10 @@ class _PujaFocusSessionScreenState
           _focusTextScale = newScale;
         });
       },
-      description: 'Adjust how the current aarti is shown in focus session.',
+      description: context.l10n.pujaFocusSettingsDescription,
       footerNote: _hasNext
-          ? 'Reach the final verse to continue to the next aarti in your puja order.'
-          : 'Reach the final verse to finish this focus session.',
+          ? context.l10n.pujaFocusSettingsFooterContinue
+          : context.l10n.pujaFocusSettingsFooterComplete,
     );
   }
 }

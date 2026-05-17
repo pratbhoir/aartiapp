@@ -8,6 +8,7 @@ import '../../core/services/sharing_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/theme_aware_colors.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/utils/day_deity_mapper.dart';
 import '../../data/models/aarti_item.dart';
 import '../../providers/app_providers.dart';
@@ -255,6 +256,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final textScale = ref.watch(textScaleProvider);
     final scriptMode = ref.watch(scriptModeProvider);
     final appLanguageCode = ref.watch(preferredLanguageProvider);
@@ -326,11 +328,16 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   GestureDetector(
                                     onTap: () => Navigator.pop(context),
                                     child: Semantics(
-                                      label: 'Go back',
+                                      label: l10n.commonBack,
                                       button: true,
                                       child: Container(
-                                        width: 44,
-                                        height: 44,
+                                        constraints: const BoxConstraints(
+                                          minWidth: 44,
+                                          minHeight: 44,
+                                        ),
+                                        padding: const EdgeInsets.only(
+                                          right: 8,
+                                        ),
                                         alignment: Alignment.centerLeft,
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -342,7 +349,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              'Back',
+                                              l10n.commonBack,
                                               style: AppTypography.body(
                                                 size: 12,
                                                 color: context.textCaption,
@@ -409,8 +416,8 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                       // Bookmark button
                                       Semantics(
                                         label: isBookmarked
-                                            ? 'Remove bookmark'
-                                            : 'Add bookmark',
+                                            ? l10n.aartiDetailRemoveBookmark
+                                            : l10n.aartiDetailAddBookmark,
                                         button: true,
                                         child: GestureDetector(
                                           onTap: () {
@@ -473,7 +480,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                               const SizedBox(height: 20),
 
                               Text(
-                                '${widget.aarti.deity.toUpperCase()} · ${DayDeityMapper.todayHindiName().toUpperCase()}',
+                                '${widget.aarti.deity.toUpperCase()} · ${DayDeityMapper.todaySpecialLabelLocalized(l10n).toUpperCase()}',
                                 style: AppTypography.label(
                                   size: 10,
                                   color: accentTextColor,
@@ -513,7 +520,10 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
-                                    'Verse ${_currentVerse + 1} of $verseCount',
+                                    l10n.aartiDetailVerseProgress(
+                                      _currentVerse + 1,
+                                      verseCount,
+                                    ),
                                     style: AppTypography.body(
                                       size: 12,
                                       color: accentTextColor,
@@ -530,7 +540,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                   children: [
                                     app.ActionChip(
                                       icon: Icons.fullscreen_outlined,
-                                      label: 'Focus Mode',
+                                      label: l10n.aartiDetailFocusMode,
                                       isPrimary: true,
                                       onTap: () => _openFocusMode(
                                         scriptMode: scriptMode,
@@ -541,7 +551,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     const SizedBox(width: 8),
                                     app.ActionChip(
                                       icon: Icons.track_changes_outlined,
-                                      label: 'Mantra Counter',
+                                      label: l10n.aartiDetailMantraCounter,
                                       onTap: () {
                                         AnalyticsService.trackEvent(
                                           'detail_mantra_counter_opened',
@@ -556,7 +566,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                     const SizedBox(width: 8),
                                     app.ActionChip(
                                       icon: Icons.share_outlined,
-                                      label: 'Share',
+                                      label: l10n.aartiDetailShare,
                                       onTap: () => _showShareOptions(context),
                                     ),
                                   ],
@@ -597,7 +607,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                                 padding: const EdgeInsets.all(48),
                                 child: Center(
                                   child: Text(
-                                    'Verse data coming soon for this Aarti.',
+                                      l10n.aartiDetailVerseDataComingSoon,
                                     style: AppTypography.body(
                                       size: 14,
                                       color: context.textCaption,
@@ -658,7 +668,10 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                   _audioPlayer.seek(newPos);
                 },
                 verseLabel: verseCount > 0
-                    ? 'Verse ${_currentVerse + 1} of $verseCount'
+                    ? l10n.aartiDetailVerseProgress(
+                        _currentVerse + 1,
+                        verseCount,
+                      )
                     : null,
               ),
             ),
@@ -689,7 +702,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
               textScale: _focusTextScale,
               appLanguageCode: appLanguageCode,
               contentMode: _focusContentMode,
-              headerLabel: 'AARTI FOCUS MODE',
+              headerLabel: l10n.aartiDetailFocusModeHeader,
               useSessionHeaderLayout: true,
               onOpenSettings: () => _showFocusModeSettings(
                 context: context,
@@ -729,17 +742,18 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     required int scriptMode,
     required String appLanguageCode,
   }) {
+    final l10n = context.l10n;
     switch (mode) {
       case AartiDetailContentMode.lyrics:
-        return 'Lyrics';
+        return l10n.aartiDetailContentLyrics;
       case AartiDetailContentMode.transliteration:
-        // return AartiLanguageResolver.secondaryScriptLabel(
-        //   scriptMode: scriptMode,
-        //   appLanguageCode: appLanguageCode,
-        // );
-        return 'Transliteration';
+        return AartiLanguageResolver.localizedSecondaryScriptLabel(
+          context,
+          scriptMode: scriptMode,
+          appLanguageCode: appLanguageCode,
+        );
       case AartiDetailContentMode.meaning:
-        return 'Meaning';
+        return l10n.aartiDetailContentMeaning;
     }
   }
 
@@ -749,6 +763,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
     required bool canShowSecondaryScript,
     required bool hasNextAarti,
   }) {
+    final l10n = context.l10n;
     showFocusModeSettingsSheet(
       context: context,
       appLanguageCode: appLanguageCode,
@@ -773,11 +788,10 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
           _focusTextScale = newScale;
         });
       },
-      description:
-          'Adjust this focus session without changing your saved app settings.',
+      description: l10n.aartiDetailFocusSettingsDescription,
       footerNote: hasNextAarti
-          ? 'Reach the final verse to continue to the next aarti in your puja order. These changes stay only for this focus session.'
-          : 'These changes stay only for this focus session and reset when you reopen focus mode.',
+          ? l10n.aartiDetailFocusSettingsFooterWithNext
+          : l10n.aartiDetailFocusSettingsFooterReset,
     );
   }
 
@@ -823,7 +837,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
             ),
             const SizedBox(height: 20),
             Text(
-              'Share Aarti',
+              context.l10n.aartiDetailShareTitle,
               style: AppTypography.serifBody(
                 size: 18,
                 color: context.textPrimary,
@@ -840,7 +854,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                 Expanded(
                   child: _ShareOption(
                     icon: Icons.text_snippet_outlined,
-                    label: 'As Text',
+                    label: context.l10n.aartiDetailShareAsText,
                     onTap: () {
                       AnalyticsService.trackEvent(
                         'detail_share_tapped',
@@ -859,7 +873,7 @@ class _AartiDetailScreenState extends ConsumerState<AartiDetailScreen>
                 Expanded(
                   child: _ShareOption(
                     icon: Icons.image_outlined,
-                    label: 'As Image',
+                    label: context.l10n.aartiDetailShareAsImage,
                     onTap: () {
                       AnalyticsService.trackEvent(
                         'detail_share_tapped',
@@ -904,7 +918,7 @@ class _NextFab extends StatelessWidget {
         backgroundColor: isDark ? AppColors.saffronLight : AppColors.saffron,
         foregroundColor: isDark ? AppColors.darkBg : AppColors.white,
         icon: const Icon(Icons.skip_next_rounded, size: 20),
-        label: const Text('Next'),
+        label: Text(context.l10n.commonNext),
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),

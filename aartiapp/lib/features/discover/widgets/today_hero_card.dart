@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/l10n/app_localizations_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/utils/day_deity_mapper.dart';
@@ -109,7 +110,9 @@ class _TodayHeroCardState extends State<TodayHeroCard>
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            DayDeityMapper.todaySpecialLabel(),
+                            DayDeityMapper.todaySpecialLabelLocalized(
+                              context.l10n,
+                            ),
                             style: AppTypography.label(
                               size: 10,
                               color: AppColors.saffronLight,

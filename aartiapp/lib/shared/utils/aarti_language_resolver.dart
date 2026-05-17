@@ -1,5 +1,7 @@
 import '../../data/models/aarti_item.dart';
 import '../../data/models/verse_data.dart';
+import '../../core/l10n/app_localizations_ext.dart';
+import 'package:flutter/material.dart';
 
 /// Supported script choices for rendering aarti titles and lyrics.
 enum AppScriptLanguage { devanagari, english, gujarati }
@@ -231,6 +233,47 @@ class AartiLanguageResolver {
       case AppLanguage.hindi:
         return 'Hindi';
     }
+  }
+
+  /// Localized user-facing label for a script mode.
+  static String localizedScriptLabel(BuildContext context, int scriptMode) {
+    final l10n = context.l10n;
+    switch (scriptFromMode(scriptMode)) {
+      case AppScriptLanguage.english:
+        return l10n.scriptEnglish;
+      case AppScriptLanguage.gujarati:
+        return l10n.scriptGujarati;
+      case AppScriptLanguage.devanagari:
+        return l10n.scriptDevanagari;
+    }
+  }
+
+  /// Localized user-facing label for an application language code.
+  static String localizedAppLanguageLabel(BuildContext context, String code) {
+    final l10n = context.l10n;
+    switch (appLanguageFromCode(code)) {
+      case AppLanguage.english:
+        return l10n.languageEnglish;
+      case AppLanguage.gujarati:
+        return l10n.languageGujarati;
+      case AppLanguage.hindi:
+        return l10n.languageHindi;
+    }
+  }
+
+  /// Localized user-facing label for the derived secondary script.
+  static String localizedSecondaryScriptLabel(
+    BuildContext context, {
+    required int scriptMode,
+    required String appLanguageCode,
+  }) {
+    return localizedScriptLabel(
+      context,
+      resolveSecondaryScriptMode(
+        scriptMode: scriptMode,
+        appLanguageCode: appLanguageCode,
+      ),
+    );
   }
 
   static List<String> _resolveLinesForScript(

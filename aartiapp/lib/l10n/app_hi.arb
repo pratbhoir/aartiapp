@@ -1,0 +1,275 @@
+{
+  "@@locale": "hi",
+  "appTitle": "आरती संग्रह",
+  "appTagline": "हिंदू प्रार्थनाओं और आरतियों का आपका संपूर्ण संग्रह",
+  "navigationHome": "होम",
+  "navigationDiscover": "खोज",
+  "navigationMyPuja": "मेरी पूजा",
+  "navigationCollection": "संग्रह",
+  "navigationSettings": "सेटिंग्स",
+  "navigationTabSemantics": "{label} टैब",
+  "@navigationTabSemantics": {
+    "description": "Semantic label for a bottom navigation tab.",
+    "placeholders": {
+      "label": {}
+    }
+  },
+  "commonBack": "वापस",
+  "commonNext": "अगला",
+  "commonCancel": "रद्द करें",
+  "commonSave": "सहेजें",
+  "commonSkip": "छोड़ें",
+  "commonContinue": "जारी रखें",
+  "commonDisabled": "बंद",
+  "commonTapToChange": "बदलने के लिए टैप करें",
+  "languageEnglish": "अंग्रेज़ी",
+  "languageHindi": "हिन्दी",
+  "languageGujarati": "गुजराती",
+  "onboardingGetStarted": "शुरू करें",
+  "onboardingWelcomeTitle": "आरती संग्रह",
+  "onboardingWelcomeNativeTitle": "आरती संग्रह",
+  "onboardingNameTitle": "हम आपको\nक्या कहें?",
+  "onboardingNameSubtitle": "हम आपके दैनिक अभिवादन को व्यक्तिगत बनाएंगे।",
+  "onboardingNameHint": "आपका नाम",
+  "onboardingScriptTitle": "अपनी पसंदीदा\nलिपि चुनें",
+  "onboardingScriptSubtitle": "आप इसे बाद में सेटिंग्स में बदल सकते हैं।",
+  "onboardingPreferredLanguage": "पसंदीदा भाषा",
+  "scriptDevanagari": "देवनागरी",
+  "scriptEnglish": "अंग्रेज़ी",
+  "scriptGujarati": "गुजराती",
+  "scriptRoman": "रोमन लिपि",
+  "onboardingReminderTitle": "दैनिक पूजा\nस्मरण",
+  "onboardingReminderSubtitle": "हम आपको आपकी पसंद के समय पर विनम्र स्मरण दिलाएँगे।",
+  "onboardingDailyReminder": "दैनिक स्मरण",
+  "onboardingReminderAt": "स्मरण {time} पर",
+  "@onboardingReminderAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "onboardingReminderTime": "स्मरण समय",
+  "onboardingReminderBlessing": "हर दिन की शुरुआत भक्ति और आंतरिक शांति के क्षण से करें।",
+  "homeGreetingInvocation": "जय श्री कृष्ण,",
+  "homeAartiOfTheDay": "आज की आरती",
+  "homeRecentlyVisited": "हाल ही में देखी गई",
+  "homeTodaySpecialLabel": "{dayName} विशेष",
+  "@homeTodaySpecialLabel": {
+    "placeholders": {
+      "dayName": {}
+    }
+  },
+  "homeTodaySubtitle": "{dayName} · {deityName} से शुरुआत करें",
+  "@homeTodaySubtitle": {
+    "placeholders": {
+      "dayName": {},
+      "deityName": {}
+    }
+  },
+  "weekdayMonday": "सोमवार",
+  "weekdayTuesday": "मंगलवार",
+  "weekdayWednesday": "बुधवार",
+  "weekdayThursday": "गुरुवार",
+  "weekdayFriday": "शुक्रवार",
+  "weekdaySaturday": "शनिवार",
+  "weekdaySunday": "रविवार",
+  "deityShiva": "शिव",
+  "deityHanuman": "हनुमान",
+  "deityGanesha": "गणेश",
+  "deityVishnu": "विष्णु",
+  "deityDurga": "दुर्गा",
+  "deityRama": "राम",
+  "discoverBrowseByDeity": "देवता के अनुसार देखें",
+  "discoverFilterByFestival": "पर्व के अनुसार फ़िल्टर करें",
+  "discoverPopularAartis": "लोकप्रिय आरतियाँ",
+  "discoverSearchPlaceholder": "देवता, आरती या पर्व खोजें…",
+  "discoverResultCount": "{count} मिले",
+  "@discoverResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverNoAartisFound": "कोई आरती नहीं मिली",
+  "discoverFestivalToday": "आज",
+  "discoverFestivalCountdown": "{days, plural, =1{1 दिन में} other{{days} दिनों में}}",
+  "@discoverFestivalCountdown": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "aartiDetailAddBookmark": "बुकमार्क जोड़ें",
+  "aartiDetailRemoveBookmark": "बुकमार्क हटाएँ",
+  "aartiDetailVerseProgress": "श्लोक {current} में से {total}",
+  "@aartiDetailVerseProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "aartiDetailFocusMode": "ध्यान मोड",
+  "aartiDetailMantraCounter": "मंत्र काउंटर",
+  "aartiDetailShare": "साझा करें",
+  "aartiDetailVerseDataComingSoon": "इस आरती के लिए श्लोक सामग्री जल्द आएगी।",
+  "aartiDetailFocusModeHeader": "आरती ध्यान मोड",
+  "aartiDetailContentLyrics": "पाठ",
+  "aartiDetailContentMeaning": "अर्थ",
+  "focusModeSettingsTitle": "पठन सेटिंग्स",
+  "focusModeSettingsReadingSurface": "पठन सतह",
+  "focusModeSettingsTextSize": "पाठ आकार",
+  "aartiDetailFocusSettingsDescription": "अपनी सहेजी हुई ऐप सेटिंग्स बदले बिना इस ध्यान सत्र को समायोजित करें।",
+  "aartiDetailFocusSettingsFooterWithNext": "अगली आरती पर जाने के लिए अंतिम श्लोक तक पहुँचें। ये बदलाव केवल इस ध्यान सत्र तक रहेंगे।",
+  "aartiDetailFocusSettingsFooterReset": "ये बदलाव केवल इस ध्यान सत्र तक रहेंगे और ध्यान मोड फिर खोलने पर रीसेट हो जाएंगे।",
+  "aartiDetailShareTitle": "आरती साझा करें",
+  "aartiDetailShareAsText": "टेक्स्ट के रूप में",
+  "aartiDetailShareAsImage": "चित्र के रूप में",
+  "focusModeOverlayNextAarti": "अगली आरती",
+  "focusModeOverlayNextNamed": "अगली: {title}",
+  "@focusModeOverlayNextNamed": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "focusModeOverlayPreviousAarti": "पिछली आरती",
+  "focusModeOverlayPreviousNamed": "पिछली: {title}",
+  "@focusModeOverlayPreviousNamed": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "focusModeOverlayCompleteSession": "सत्र पूरा करें",
+  "focusModeOverlayInstructionAdvance": "आगे बढ़ने के लिए हाइलाइट किए गए श्लोक पर या उसके नीचे टैप करें",
+  "focusModeOverlayInstructionPreviousNext": "पिछले के लिए ऊपर टैप करें, अगले के लिए हाइलाइट किए गए श्लोक पर या उसके नीचे टैप करें",
+  "pujaFocusSessionHeader": "पूजा ध्यान सत्र",
+  "pujaSessionProgress": "{current} में से {total}",
+  "@pujaSessionProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pujaFocusSettingsDescription": "फोकस सत्र में वर्तमान आरती कैसे दिखाई जाए, इसे समायोजित करें।",
+  "pujaFocusSettingsFooterContinue": "अगली आरती पर जाने के लिए अंतिम श्लोक तक पहुँचें।",
+  "pujaFocusSettingsFooterComplete": "इस फोकस सत्र को पूरा करने के लिए अंतिम श्लोक तक पहुँचें।",
+  "settingsTitleLeading": "ऐप",
+  "settingsTitleTrailing": "सेटिंग्स",
+  "settingsSectionProfile": "प्रोफ़ाइल",
+  "settingsSectionAppearance": "दिखावट",
+  "settingsSectionLanguageAndScript": "भाषा और लिपि",
+  "settingsSectionNotifications": "सूचनाएं",
+  "settingsSectionPujaSession": "पूजा सत्र",
+  "settingsSectionPrivacy": "गोपनीयता",
+  "settingsSectionSupport": "सहायता",
+  "settingsSectionDiagnostics": "डायग्नॉस्टिक्स",
+  "settingsSectionAbout": "जानकारी",
+  "settingsDisplayName": "प्रदर्शित नाम",
+  "settingsTheme": "थीम",
+  "settingsThemeLight": "लाइट",
+  "settingsThemeDark": "डार्क",
+  "settingsThemeSystem": "सिस्टम",
+  "settingsTextSize": "टेक्स्ट आकार",
+  "settingsAppLanguage": "ऐप भाषा",
+  "settingsPrimaryScript": "मुख्य लिपि",
+  "settingsSecondaryScript": "द्वितीय लिपि",
+  "settingsDailyPujaReminder": "दैनिक पूजा स्मरण",
+  "settingsReminderTime": "स्मरण समय",
+  "settingsReminderAt": "{time} पर स्मरण",
+  "@settingsReminderAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "settingsAutoPlay": "ऑटो-प्ले",
+  "settingsAutoPlaySubtitle": "पूजा सत्र में अगली आरती स्वतः चलाएं",
+  "settingsCrossfadeDuration": "क्रॉसफेड अवधि",
+  "settingsCrossfadeSubtitle": "{seconds} सेकंड का अंतराल",
+  "@settingsCrossfadeSubtitle": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsUsageAnalytics": "उपयोग विश्लेषण",
+  "settingsAnalyticsEnabledSubtitle": "स्क्रीन और फीचर इनसाइट्स के लिए सक्षम",
+  "settingsAnalyticsDisabledSubtitle": "इस डिवाइस पर बंद",
+  "settingsSendFeedback": "प्रतिक्रिया भेजें",
+  "settingsFeedbackSubtitle": "समस्याएं बताएं, सुधार सुझाएं, या भक्तिपूर्ण प्रतिक्रिया साझा करें",
+  "settingsDevTools": "डेवटूल्स",
+  "settingsDevToolsSubtitle": "पूरा डायग्नॉस्टिक्स पेज खोलें",
+  "settingsActivityLog": "एक्टिविटी लॉग",
+  "settingsActivityLogSubtitle": "{count} प्रविष्टियां · रनटाइम गतिविधि देखें",
+  "@settingsActivityLogSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsShareActivityLog": "एक्टिविटी लॉग साझा करें",
+  "settingsShareActivityLogSubtitle": "समस्या-निवारण के लिए डायग्नॉस्टिक्स फ़ाइल निर्यात करें",
+  "settingsContent": "सामग्री",
+  "settingsAboutSubtitle": "संस्करण {version} · श्रद्धा से निर्मित",
+  "@settingsAboutSubtitle": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "settingsContentSummary": "{aartiCount} आरतियाँ · {festivalCount} पर्व ·\n{syncStatus}",
+  "@settingsContentSummary": {
+    "placeholders": {
+      "aartiCount": {
+        "type": "int"
+      },
+      "festivalCount": {
+        "type": "int"
+      },
+      "syncStatus": {}
+    }
+  },
+  "settingsContentLastRefresh": "अंतिम रिफ्रेश {time}",
+  "@settingsContentLastRefresh": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "settingsContentSourceRemote": "कैश की गई रिमोट सामग्री",
+  "settingsContentSourceCached": "कैश की गई ऑफ़लाइन सामग्री",
+  "settingsContentSourceBundled": "बंडल की गई ऑफ़लाइन सामग्री",
+  "settingsContentRefreshSuccess": "सामग्री रिफ्रेश हुई।",
+  "settingsContentRefreshFailed": "सामग्री रिफ्रेश नहीं हो सकी।",
+  "settingsSecondaryScriptFallback": "{scriptLabel} · जब ऐप और मुख्य लिपि एक जैसी हों तो बैकअप",
+  "@settingsSecondaryScriptFallback": {
+    "placeholders": {
+      "scriptLabel": {}
+    }
+  },
+  "settingsSecondaryScriptUsage": "{scriptLabel} · द्वितीय पाठ मोड और फोकस मोड में उपयोग",
+  "@settingsSecondaryScriptUsage": {
+    "placeholders": {
+      "scriptLabel": {}
+    }
+  },
+  "settingsNameDialogTitle": "आपका नाम",
+  "settingsNameHint": "अपना नाम दर्ज करें",
+  "settingsActivityLogTitle": "एक्टिविटी लॉग ({count})",
+  "@settingsActivityLogTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsActivityLogEmpty": "अभी कोई गतिविधि दर्ज नहीं हुई।",
+  "settingsActivityLogCleared": "एक्टिविटी लॉग साफ़ किया गया"
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/l10n/app_localizations_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
@@ -58,13 +59,19 @@ class FocusModeOverlay extends StatefulWidget {
 class _FocusModeOverlayState extends State<FocusModeOverlay> {
   int _currentVerseIdx = 0;
   late List<VerseData> _displayVerses;
+  bool _didInitializeDisplayVerses = false;
   final GlobalKey _contentAreaKey = GlobalKey();
   final GlobalKey _currentVerseKey = GlobalKey();
 
   @override
-  void initState() {
-    super.initState();
-    _displayVerses = _buildDisplayVerses();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didInitializeDisplayVerses) {
+      return;
+    }
+
+    _displayVerses = _buildDisplayVerses(context);
+    _didInitializeDisplayVerses = true;
   }
 
   @override
@@ -72,7 +79,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.aarti.id != widget.aarti.id) {
       setState(() {
-        _displayVerses = _buildDisplayVerses();
+        _displayVerses = _buildDisplayVerses(context);
         _currentVerseIdx = 0;
       });
       return;
@@ -82,7 +89,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
         oldWidget.scriptMode != widget.scriptMode ||
         oldWidget.appLanguageCode != widget.appLanguageCode) {
       setState(() {
-        _displayVerses = _buildDisplayVerses();
+        _displayVerses = _buildDisplayVerses(context);
         _currentVerseIdx = _currentVerseIdx.clamp(0, _displayVerses.length - 1);
       });
     }
@@ -102,7 +109,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
 
   bool get _isLastVerse => _currentVerseIdx >= _displayVerses.length - 1;
 
-  List<VerseData> _buildDisplayVerses() {
+  List<VerseData> _buildDisplayVerses(BuildContext context) {
     final List<VerseData> verses = widget.verses
         .where((verse) => _resolveDisplayLines(verse).isNotEmpty)
         .toList();
@@ -121,7 +128,7 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
     );
     return [
       VerseData(
-        label: _contentModeLabel(widget.contentMode),
+        label: _contentModeLabel(context, widget.contentMode),
         lines: fallbackLines.isEmpty ? [fallbackTitle] : fallbackLines,
         transliteration: [
           AartiLanguageResolver.resolveSecondaryAartiTitle(
@@ -161,17 +168,19 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
     }
   }
 
-  String _contentModeLabel(AartiDetailContentMode mode) {
+  String _contentModeLabel(BuildContext context, AartiDetailContentMode mode) {
+    final l10n = context.l10n;
     switch (mode) {
       case AartiDetailContentMode.lyrics:
-        return 'Lyrics';
+        return l10n.aartiDetailContentLyrics;
       case AartiDetailContentMode.transliteration:
-        return AartiLanguageResolver.secondaryScriptLabel(
+        return AartiLanguageResolver.localizedSecondaryScriptLabel(
+          context,
           scriptMode: widget.scriptMode,
           appLanguageCode: widget.appLanguageCode,
         );
       case AartiDetailContentMode.meaning:
-        return 'Meaning';
+        return l10n.aartiDetailContentMeaning;
     }
   }
 
@@ -482,20 +491,21 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
   }
 
   Widget _buildFooter() {
+    final l10n = context.l10n;
     if (_isLastVerse && widget.onNextAarti != null) {
       return _FocusModeNextButton(
         label:
             widget.nextAartiTitle == null ||
                 widget.nextAartiTitle!.trim().isEmpty
-            ? 'Next Aarti'
-            : 'Next: ${widget.nextAartiTitle!}',
+            ? l10n.focusModeOverlayNextAarti
+            : l10n.focusModeOverlayNextNamed(widget.nextAartiTitle!),
         onTap: widget.onNextAarti!,
       );
     }
 
     if (_isLastVerse && widget.onComplete != null) {
       return _FocusModeNextButton(
-        label: widget.completionLabel ?? 'Complete Session',
+        label: widget.completionLabel ?? l10n.focusModeOverlayCompleteSession,
         onTap: widget.onComplete!,
       );
     }
@@ -505,8 +515,8 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
         label:
             widget.previousAartiTitle == null ||
                 widget.previousAartiTitle!.trim().isEmpty
-            ? 'Previous Aarti'
-            : 'Previous: ${widget.previousAartiTitle!}',
+            ? l10n.focusModeOverlayPreviousAarti
+            : l10n.focusModeOverlayPreviousNamed(widget.previousAartiTitle!),
         onTap: widget.onPreviousAarti!,
         icon: Icons.skip_previous_rounded,
       );
@@ -514,8 +524,8 @@ class _FocusModeOverlayState extends State<FocusModeOverlay> {
 
     return Text(
       _currentVerseIdx > 0
-          ? 'Tap above for previous, tap on or below the highlighted verse for next'
-          : 'Tap on or below the highlighted verse to advance',
+          ? l10n.focusModeOverlayInstructionPreviousNext
+          : l10n.focusModeOverlayInstructionAdvance,
       style: AppTypography.body(
         size: 12,
         color: AppColors.white.withValues(alpha: 0.25),
@@ -832,7 +842,7 @@ class _FocusModeNextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Open next aarti in sequence',
+      label: label,
       button: true,
       child: GestureDetector(
         onTap: onTap,
@@ -888,7 +898,7 @@ class _FocusModeSecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Open previous aarti in sequence',
+      label: label,
       button: true,
       child: GestureDetector(
         onTap: onTap,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
@@ -23,6 +24,7 @@ Future<void> showFocusModeSettingsSheet({
 }) {
   double localTextScale = textScale;
   FocusModeScriptSurface localScriptSurface = activeScriptSurface;
+  final l10n = context.l10n;
 
   return showModalBottomSheet<void>(
     context: context,
@@ -30,11 +32,11 @@ Future<void> showFocusModeSettingsSheet({
     builder: (ctx) {
       return StatefulBuilder(
         builder: (ctx, setSheetState) {
-          final String primaryScriptLabel = AartiLanguageResolver.scriptLabel(
-            scriptMode,
-          );
+          final String primaryScriptLabel =
+              AartiLanguageResolver.localizedScriptLabel(context, scriptMode);
           final String secondaryScriptLabel =
-              AartiLanguageResolver.secondaryScriptLabel(
+              AartiLanguageResolver.localizedSecondaryScriptLabel(
+                context,
                 scriptMode: scriptMode,
                 appLanguageCode: appLanguageCode,
               );
@@ -48,149 +50,151 @@ Future<void> showFocusModeSettingsSheet({
               ),
               border: Border.all(color: AppColors.darkBorder),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: AppColors.darkBorder,
-                      borderRadius: BorderRadius.circular(2),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBorder,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.lgWide),
-                Text(
-                  'Reading Settings',
-                  style: AppTypography.serifBody(
-                    size: 18,
-                    color: AppColors.white,
+                  const SizedBox(height: AppSpacing.lgWide),
+                  Text(
+                    l10n.focusModeSettingsTitle,
+                    style: AppTypography.serifBody(
+                      size: 18,
+                      color: AppColors.white,
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  description,
-                  style: AppTypography.body(
-                    size: 12,
-                    color: AppColors.white.withValues(alpha: 0.55),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    description,
+                    style: AppTypography.body(
+                      size: 12,
+                      color: AppColors.white.withValues(alpha: 0.55),
+                    ),
                   ),
-                ),
-                if (canShowSecondaryScript) ...[
-                  const SizedBox(height: AppSpacing.xl),
-                  _FocusModeSettingSection(
-                    label: 'Reading Surface',
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              right: AppSpacing.sm,
+                  if (canShowSecondaryScript) ...[
+                    const SizedBox(height: AppSpacing.xl),
+                    _FocusModeSettingSection(
+                      label: l10n.focusModeSettingsReadingSurface,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: AppSpacing.sm,
+                              ),
+                              child: _ScriptSurfaceButton(
+                                label: primaryScriptLabel,
+                                isActive:
+                                    localScriptSurface ==
+                                    FocusModeScriptSurface.primary,
+                                onTap: () {
+                                  onScriptSurfaceChanged(
+                                    FocusModeScriptSurface.primary,
+                                  );
+                                  setSheetState(() {
+                                    localScriptSurface =
+                                        FocusModeScriptSurface.primary;
+                                  });
+                                },
+                              ),
                             ),
+                          ),
+                          Expanded(
                             child: _ScriptSurfaceButton(
-                              label: primaryScriptLabel,
+                              label: secondaryScriptLabel,
                               isActive:
                                   localScriptSurface ==
-                                  FocusModeScriptSurface.primary,
+                                  FocusModeScriptSurface.secondary,
                               onTap: () {
                                 onScriptSurfaceChanged(
-                                  FocusModeScriptSurface.primary,
+                                  FocusModeScriptSurface.secondary,
                                 );
                                 setSheetState(() {
                                   localScriptSurface =
-                                      FocusModeScriptSurface.primary;
+                                      FocusModeScriptSurface.secondary;
                                 });
                               },
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.lg),
+                  _FocusModeSettingSection(
+                    label: l10n.focusModeSettingsTextSize,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xs,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBg,
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.buttonRadius,
                         ),
-                        Expanded(
-                          child: _ScriptSurfaceButton(
-                            label: secondaryScriptLabel,
-                            isActive:
-                                localScriptSurface ==
-                                FocusModeScriptSurface.secondary,
+                        border: Border.all(color: AppColors.darkBorder),
+                      ),
+                      child: Row(
+                        children: [
+                          _TextScaleButton(
+                            label: 'A-',
                             onTap: () {
-                              onScriptSurfaceChanged(
-                                FocusModeScriptSurface.secondary,
-                              );
+                              final double nextScale = (localTextScale - 0.1)
+                                  .clamp(0.8, 1.6);
+                              onTextScaleChanged(nextScale);
                               setSheetState(() {
-                                localScriptSurface =
-                                    FocusModeScriptSurface.secondary;
+                                localTextScale = nextScale;
                               });
                             },
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-                const SizedBox(height: AppSpacing.lg),
-                _FocusModeSettingSection(
-                  label: 'Text Size',
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: AppSpacing.xs,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.darkBg,
-                      borderRadius: BorderRadius.circular(
-                        AppSpacing.buttonRadius,
-                      ),
-                      border: Border.all(color: AppColors.darkBorder),
-                    ),
-                    child: Row(
-                      children: [
-                        _TextScaleButton(
-                          label: 'A-',
-                          onTap: () {
-                            final double nextScale = (localTextScale - 0.1)
-                                .clamp(0.8, 1.6);
-                            onTextScaleChanged(nextScale);
-                            setSheetState(() {
-                              localTextScale = nextScale;
-                            });
-                          },
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              '${(localTextScale * 100).round()}%',
-                              style: AppTypography.body(
-                                size: 12,
-                                color: AppColors.white,
-                                weight: FontWeight.w500,
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                '${(localTextScale * 100).round()}%',
+                                style: AppTypography.body(
+                                  size: 12,
+                                  color: AppColors.white,
+                                  weight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        _TextScaleButton(
-                          label: 'A+',
-                          onTap: () {
-                            final double nextScale = (localTextScale + 0.1)
-                                .clamp(0.8, 1.6);
-                            onTextScaleChanged(nextScale);
-                            setSheetState(() {
-                              localTextScale = nextScale;
-                            });
-                          },
-                        ),
-                      ],
+                          _TextScaleButton(
+                            label: 'A+',
+                            onTap: () {
+                              final double nextScale = (localTextScale + 0.1)
+                                  .clamp(0.8, 1.6);
+                              onTextScaleChanged(nextScale);
+                              setSheetState(() {
+                                localTextScale = nextScale;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Text(
-                  footerNote,
-                  style: AppTypography.body(
-                    size: 11,
-                    color: AppColors.white.withValues(alpha: 0.45),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    footerNote,
+                    style: AppTypography.body(
+                      size: 11,
+                      color: AppColors.white.withValues(alpha: 0.45),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

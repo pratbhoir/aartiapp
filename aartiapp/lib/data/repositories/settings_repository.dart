@@ -5,6 +5,11 @@ import 'package:uuid/uuid.dart';
 /// Repository for persisting user settings via SharedPreferences.
 class SettingsRepository {
   static const Uuid _uuid = Uuid();
+  static const Set<String> _supportedLanguageCodes = <String>{
+    'en',
+    'hi',
+    'gu',
+  };
 
   static const _keyThemeMode = 'theme_mode';
   static const _keyTextScale = 'text_scale';
@@ -184,11 +189,52 @@ class SettingsRepository {
   }
 
   // --- Preferred Language ---
-  String getPreferredLanguage() =>
-      _prefs.getString(_keyPreferredLanguage) ?? 'en';
+  String getPreferredLanguage() {
+    final stored = _prefs.getString(_keyPreferredLanguage);
+    if (_supportedLanguageCodes.contains(stored)) {
+      return stored!;
+    }
+    return 'en';
+  }
 
   Future<void> setPreferredLanguage(String lang) =>
-      _prefs.setString(_keyPreferredLanguage, lang);
+      _prefs.setString(_keyPreferredLanguage, _normalizeLanguageCode(lang));
+
+  /// Seeds the preferred language from the first supported device locale.
+  ///
+  /// This only runs for installs that have not completed onboarding and do not
+  /// already have an explicit persisted preferred language choice.
+  Future<String> seedPreferredLanguageFromDeviceLocales({
+    List<Locale>? deviceLocales,
+  }) async {
+    if (getOnboardingCompleted() || _prefs.containsKey(_keyPreferredLanguage)) {
+      return getPreferredLanguage();
+    }
+
+    final String? seededCode = _firstSupportedLanguageCode(
+      deviceLocales ?? WidgetsBinding.instance.platformDispatcher.locales,
+    );
+    if (seededCode == null || seededCode == 'en') {
+      return getPreferredLanguage();
+    }
+
+    await _prefs.setString(_keyPreferredLanguage, seededCode);
+    return seededCode;
+  }
+
+  String _normalizeLanguageCode(String code) {
+    return _supportedLanguageCodes.contains(code) ? code : 'en';
+  }
+
+  String? _firstSupportedLanguageCode(List<Locale> locales) {
+    for (final Locale locale in locales) {
+      final String normalized = locale.languageCode.toLowerCase();
+      if (_supportedLanguageCodes.contains(normalized)) {
+        return normalized;
+      }
+    }
+    return null;
+  }
 
   /// Returns the last successful festival content sync time, if any.
   DateTime? getFestivalContentLastSync() =>

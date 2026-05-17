@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/analytics_service.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -29,6 +30,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedLang = ref.read(preferredLanguageProvider);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AnalyticsService.trackScreen('/onboarding', title: 'Onboarding');
       AnalyticsService.trackEvent('onboarding_started', path: '/onboarding');
@@ -177,7 +179,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         curve: Curves.easeOut,
                       ),
                       child: Text(
-                        'Back',
+                        context.l10n.commonBack,
                         style: AppTypography.body(
                           size: 14,
                           color: AppColors.ink3,
@@ -189,7 +191,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     TextButton(
                       onPressed: _skipOnboarding,
                       child: Text(
-                        'Skip',
+                        context.l10n.commonSkip,
                         style: AppTypography.body(
                           size: 14,
                           color: AppColors.ink3,
@@ -209,7 +211,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       elevation: 0,
                     ),
                     child: Text(
-                      _currentPage == 3 ? 'Get Started' : 'Continue',
+                      _currentPage == 3
+                          ? context.l10n.onboardingGetStarted
+                          : context.l10n.commonContinue,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -249,20 +253,20 @@ class _WelcomePage extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            'Aarti Sangrah',
+            context.l10n.onboardingWelcomeTitle,
             style: AppTypography.displayLarge(
               context,
             ).copyWith(fontSize: 36, letterSpacing: -0.5),
           ),
           const SizedBox(height: 12),
           Text(
-            'Your complete collection of\nHindu prayers and Aartis',
+            context.l10n.appTagline,
             textAlign: TextAlign.center,
             style: AppTypography.body(size: 16, color: AppColors.ink3),
           ),
           const SizedBox(height: 8),
           Text(
-            'आरती संग्रह',
+            context.l10n.onboardingWelcomeNativeTitle,
             style: AppTypography.devanagari(
               size: 22,
               color: AppColors.saffronDark,
@@ -290,14 +294,14 @@ class _NamePage extends StatelessWidget {
         children: [
           const SizedBox(height: 60),
           Text(
-            'What should we\ncall you?',
+            context.l10n.onboardingNameTitle,
             style: AppTypography.displayLarge(
               context,
             ).copyWith(fontSize: 32, letterSpacing: -0.5),
           ),
           const SizedBox(height: 8),
           Text(
-            "We'll personalize your daily greeting.",
+            context.l10n.onboardingNameSubtitle,
             style: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
           const SizedBox(height: 32),
@@ -309,7 +313,7 @@ class _NamePage extends StatelessWidget {
               color: context.textPrimary,
             ),
             decoration: InputDecoration(
-              hintText: 'Your name',
+              hintText: context.l10n.onboardingNameHint,
               hintStyle: AppTypography.serifBody(
                 size: 24,
                 color: AppColors.ink3.withValues(alpha: 0.4),
@@ -352,28 +356,28 @@ class _ScriptPage extends StatelessWidget {
         children: [
           const SizedBox(height: 60),
           Text(
-            'Choose your\npreferred script',
+            context.l10n.onboardingScriptTitle,
             style: AppTypography.displayLarge(
               context,
             ).copyWith(fontSize: 32, letterSpacing: -0.5),
           ),
           const SizedBox(height: 8),
           Text(
-            'You can always change this later in Settings.',
+            context.l10n.onboardingScriptSubtitle,
             style: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
           const SizedBox(height: 32),
           _ScriptOption(
             title: 'देवनागरी',
-            subtitle: 'Devanagari',
+            subtitle: context.l10n.scriptDevanagari,
             example: 'ॐ जय जगदीश हरे',
             isSelected: selectedScript == 0,
             onTap: () => onScriptChanged(0),
           ),
           const SizedBox(height: 12),
           _ScriptOption(
-            title: 'English',
-            subtitle: 'Roman Script',
+            title: context.l10n.scriptEnglish,
+            subtitle: context.l10n.scriptRoman,
             example: 'Om Jai Jagdish Hare',
             isSelected: selectedScript == 1,
             onTap: () => onScriptChanged(1),
@@ -381,14 +385,14 @@ class _ScriptPage extends StatelessWidget {
           const SizedBox(height: 12),
           _ScriptOption(
             title: 'ગુજરાતી',
-            subtitle: 'Gujarati',
+            subtitle: context.l10n.scriptGujarati,
             example: 'ૐ જય જગદીશ હરે',
             isSelected: selectedScript == 2,
             onTap: () => onScriptChanged(2),
           ),
           const SizedBox(height: 28),
           Text(
-            'PREFERRED LANGUAGE',
+            context.l10n.onboardingPreferredLanguage.toUpperCase(),
             style: AppTypography.label(size: 10, color: AppColors.ink3),
           ),
           const SizedBox(height: 12),
@@ -571,14 +575,14 @@ class _NotificationPage extends StatelessWidget {
         children: [
           const SizedBox(height: 60),
           Text(
-            'Daily puja\nreminder',
+            context.l10n.onboardingReminderTitle,
             style: AppTypography.displayLarge(
               context,
             ).copyWith(fontSize: 32, letterSpacing: -0.5),
           ),
           const SizedBox(height: 8),
           Text(
-            "We'll gently remind you at your preferred time.",
+            context.l10n.onboardingReminderSubtitle,
             style: AppTypography.body(size: 14, color: AppColors.ink3),
           ),
           const SizedBox(height: 40),
@@ -610,7 +614,7 @@ class _NotificationPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Daily Reminder',
+                        context.l10n.onboardingDailyReminder,
                         style: AppTypography.body(
                           size: 15,
                           color: context.textPrimary,
@@ -619,8 +623,10 @@ class _NotificationPage extends StatelessWidget {
                       ),
                       Text(
                         enabled
-                            ? 'Remind at ${time.format(context)}'
-                            : 'Disabled',
+                            ? context.l10n.onboardingReminderAt(
+                                time.format(context),
+                              )
+                            : context.l10n.commonDisabled,
                         style: AppTypography.body(
                           size: 12,
                           color: AppColors.ink3,
@@ -677,7 +683,7 @@ class _NotificationPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Reminder Time',
+                            context.l10n.onboardingReminderTime,
                             style: AppTypography.body(
                               size: 15,
                               color: context.textPrimary,
@@ -685,7 +691,7 @@ class _NotificationPage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Tap to change',
+                            context.l10n.commonTapToChange,
                             style: AppTypography.body(
                               size: 12,
                               color: AppColors.ink3,
@@ -719,7 +725,7 @@ class _NotificationPage extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Start each day with a moment of devotion and inner peace.',
+                    context.l10n.onboardingReminderBlessing,
                     style: AppTypography.body(
                       size: 13,
                       color: AppColors.saffronDark,

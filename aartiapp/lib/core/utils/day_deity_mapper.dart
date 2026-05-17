@@ -1,3 +1,5 @@
+import 'package:aartiapp/l10n/app_localizations.dart';
+
 import '../../data/repositories/aarti_repository.dart';
 
 /// Maps weekday (1=Mon..7=Sun) to a deity for "Aarti of the Day".
@@ -50,6 +52,14 @@ class DayDeityMapper {
   static String todaySubtitle() =>
       '${todayEnglishName()} · ${todayHindiName()} · Begin with ${todayDeity()}';
 
+  /// Returns a localized subtitle for the home hero area.
+  static String todaySubtitleLocalized(AppLocalizations l10n) {
+    return l10n.homeTodaySubtitle(
+      _localizedWeekdayName(l10n, DateTime.now().weekday),
+      _localizedDeityName(l10n, todayDeity()),
+    );
+  }
+
   /// Finds today's featured Aarti from the catalog.
   /// Falls back to first item if no match for today's deity.
   static int todayAartiIndex() {
@@ -62,4 +72,49 @@ class DayDeityMapper {
 
   /// Returns the special label, e.g. "Somvar Special"
   static String todaySpecialLabel() => '${todayHindiName()} Special';
+
+  /// Returns a localized special label for surfaces like the home hero card.
+  static String todaySpecialLabelLocalized(AppLocalizations l10n) {
+    return l10n.homeTodaySpecialLabel(
+      _localizedWeekdayName(l10n, DateTime.now().weekday),
+    );
+  }
+
+  static String _localizedWeekdayName(AppLocalizations l10n, int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return l10n.weekdayMonday;
+      case DateTime.tuesday:
+        return l10n.weekdayTuesday;
+      case DateTime.wednesday:
+        return l10n.weekdayWednesday;
+      case DateTime.thursday:
+        return l10n.weekdayThursday;
+      case DateTime.friday:
+        return l10n.weekdayFriday;
+      case DateTime.saturday:
+        return l10n.weekdaySaturday;
+      case DateTime.sunday:
+      default:
+        return l10n.weekdaySunday;
+    }
+  }
+
+  static String _localizedDeityName(AppLocalizations l10n, String deity) {
+    switch (deity.toLowerCase()) {
+      case 'hanuman':
+        return l10n.deityHanuman;
+      case 'ganesha':
+        return l10n.deityGanesha;
+      case 'vishnu':
+        return l10n.deityVishnu;
+      case 'durga':
+        return l10n.deityDurga;
+      case 'rama':
+        return l10n.deityRama;
+      case 'shiva':
+      default:
+        return l10n.deityShiva;
+    }
+  }
 }

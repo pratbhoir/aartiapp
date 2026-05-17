@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/services/analytics_service.dart';
 import '../core/constants/haptics.dart';
+import '../core/l10n/app_localizations_ext.dart';
 import '../core/theme/theme_aware_colors.dart';
 import '../features/home/home_screen.dart';
 import '../features/discover/discover_screen.dart';
@@ -28,29 +29,36 @@ class _HomeShellState extends State<HomeShell> {
     });
   }
 
-  final List<NavItem> _navItems = const [
-    NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-    NavItem(
-      icon: Icons.explore_outlined,
-      activeIcon: Icons.explore,
-      label: 'Discover',
-    ),
-    NavItem(
-      icon: Icons.auto_awesome_outlined,
-      activeIcon: Icons.auto_awesome,
-      label: 'My Puja',
-    ),
-    NavItem(
-      icon: Icons.add_circle_outline,
-      activeIcon: Icons.add_circle,
-      label: 'Collection',
-    ),
-    NavItem(
-      icon: Icons.settings_outlined,
-      activeIcon: Icons.settings,
-      label: 'Settings',
-    ),
-  ];
+  List<NavItem> _navItems(BuildContext context) {
+    final l10n = context.l10n;
+    return <NavItem>[
+      NavItem(
+        icon: Icons.home_outlined,
+        activeIcon: Icons.home,
+        label: l10n.navigationHome,
+      ),
+      NavItem(
+        icon: Icons.explore_outlined,
+        activeIcon: Icons.explore,
+        label: l10n.navigationDiscover,
+      ),
+      NavItem(
+        icon: Icons.auto_awesome_outlined,
+        activeIcon: Icons.auto_awesome,
+        label: l10n.navigationMyPuja,
+      ),
+      NavItem(
+        icon: Icons.add_circle_outline,
+        activeIcon: Icons.add_circle,
+        label: l10n.navigationCollection,
+      ),
+      NavItem(
+        icon: Icons.settings_outlined,
+        activeIcon: Icons.settings,
+        label: l10n.navigationSettings,
+      ),
+    ];
+  }
 
   void _openDrawer() {
     _selectTab(4);
@@ -137,7 +145,7 @@ class _HomeShellState extends State<HomeShell> {
       ),
       bottomNavigationBar: AppBottomNav(
         currentIndex: _currentIndex,
-        items: _navItems,
+        items: _navItems(context),
         onSelect: _selectTab,
       ),
     );

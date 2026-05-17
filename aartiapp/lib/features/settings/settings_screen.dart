@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/services/activity_log_service.dart';
 import '../../core/services/notification_service.dart';
@@ -34,6 +35,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final themeMode = ref.watch(themeModeProvider);
     final textScale = ref.watch(textScaleProvider);
     final scriptMode = ref.watch(scriptModeProvider);
@@ -56,7 +58,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onMenuTap: widget.onOpenDrawer,
               showMenu: false,
               showLogoTitle: true,
-              title: 'Settings',
+              title: l10n.navigationSettings,
             ),
           ),
           SliverToBoxAdapter(
@@ -66,7 +68,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'SETTINGS',
+                    l10n.navigationSettings.toUpperCase(),
                     style: AppTypography.label(
                       size: 10,
                       color: context.textCaption,
@@ -78,10 +80,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       style: AppTypography.displayLarge(
                         context,
                       ).copyWith(fontSize: 34),
-                      children: const [
-                        TextSpan(text: 'App '),
+                      children: <InlineSpan>[
+                        TextSpan(text: l10n.settingsTitleLeading),
+                        const TextSpan(text: ' '),
                         TextSpan(
-                          text: 'Settings',
+                          text: l10n.settingsTitleTrailing,
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             color: AppColors.saffron,
@@ -99,30 +102,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // --- User Name ---
-                _SectionHeader('Profile'),
+                _SectionHeader(l10n.settingsSectionProfile),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.person_outline,
-                  title: 'Display Name',
+                  title: l10n.settingsDisplayName,
                   subtitle: userName,
                   onTap: () => _showNameDialog(context, userName),
                 ),
                 const SizedBox(height: 24),
 
                 // --- Theme ---
-                _SectionHeader('Appearance'),
+                _SectionHeader(l10n.settingsSectionAppearance),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.palette_outlined,
-                  title: 'Theme',
-                  subtitle: _themeModeLabel(themeMode),
+                  title: l10n.settingsTheme,
+                  subtitle: _themeModeLabel(context, themeMode),
                   trailing: _ThemeToggle(
                     mode: themeMode,
                     onChanged: (mode) {
                       AnalyticsService.trackEvent(
                         'settings_theme_changed',
                         data: <String, Object>{
-                          'theme_mode': _themeModeLabel(mode).toLowerCase(),
+                          'theme_mode': _themeModeAnalyticsValue(mode),
                         },
                         path: '/settings',
                       );
@@ -135,7 +138,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 // --- Text Scale ---
                 _SettingsTile(
                   icon: Icons.text_fields_outlined,
-                  title: 'Text Size',
+                  title: l10n.settingsTextSize,
                   subtitle: '${(textScale * 100).round()}%',
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -186,12 +189,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // --- Script ---
-                _SectionHeader('Language & Script'),
+                _SectionHeader(l10n.settingsSectionLanguageAndScript),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.translate_outlined,
-                  title: 'App Language',
-                  subtitle: _appLanguageLabel(appLanguage),
+                  title: l10n.settingsAppLanguage,
+                  subtitle: _appLanguageLabel(context, appLanguage),
                   trailing: _AppLanguageSelector(
                     languageCode: appLanguage,
                     onChanged: (languageCode) {
@@ -209,8 +212,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.language_outlined,
-                  title: 'Primary Script',
-                  subtitle: _scriptModeLabel(scriptMode),
+                  title: l10n.settingsPrimaryScript,
+                  subtitle: _scriptModeLabel(context, scriptMode),
                   trailing: _ScriptModeSelector(
                     mode: scriptMode,
                     onChanged: (mode) {
@@ -226,8 +229,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.compare_arrows_outlined,
-                  title: 'Secondary Script',
+                  title: l10n.settingsSecondaryScript,
                   subtitle: _secondaryScriptSubtitle(
+                    context: context,
                     scriptMode: scriptMode,
                     secondaryScriptMode: secondaryScriptMode,
                     appLanguageCode: appLanguage,
@@ -236,20 +240,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // --- Notifications (v1.5) ---
-                _SectionHeader('Notifications'),
+                _SectionHeader(l10n.settingsSectionNotifications),
                 const SizedBox(height: 12),
                 Builder(
                   builder: (context) {
+                    final l10n = context.l10n;
                     final notifEnabled = ref.watch(notificationEnabledProvider);
                     final notifTime = ref.watch(notificationTimeProvider);
                     return Column(
                       children: [
                         _SettingsTile(
                           icon: Icons.notifications_outlined,
-                          title: 'Daily Puja Reminder',
+                          title: l10n.settingsDailyPujaReminder,
                           subtitle: notifEnabled
-                              ? 'Reminder at ${notifTime.format(context)}'
-                              : 'Disabled',
+                              ? l10n.settingsReminderAt(
+                                  notifTime.format(context),
+                                )
+                              : l10n.commonDisabled,
                           trailing: Switch.adaptive(
                             value: notifEnabled,
                             activeTrackColor: AppColors.saffron,
@@ -299,7 +306,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           const SizedBox(height: 12),
                           _SettingsTile(
                             icon: Icons.schedule_outlined,
-                            title: 'Reminder Time',
+                            title: l10n.settingsReminderTime,
                             subtitle: notifTime.format(context),
                             onTap: () async {
                               final picked = await showTimePicker(
@@ -331,18 +338,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // --- Puja Session (v1.5) ---
-                _SectionHeader('Puja Session'),
+                _SectionHeader(l10n.settingsSectionPujaSession),
                 const SizedBox(height: 12),
                 Builder(
                   builder: (context) {
+                    final l10n = context.l10n;
                     final crossfade = ref.watch(crossfadeProvider);
                     final autoPlay = ref.watch(autoPlayProvider);
                     return Column(
                       children: [
                         _SettingsTile(
                           icon: Icons.playlist_play_rounded,
-                          title: 'Auto-play',
-                          subtitle: 'Play next aarti in puja session',
+                          title: l10n.settingsAutoPlay,
+                          subtitle: l10n.settingsAutoPlaySubtitle,
                           trailing: Switch.adaptive(
                             value: autoPlay,
                             activeTrackColor: AppColors.saffron,
@@ -353,8 +361,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         const SizedBox(height: 12),
                         _SettingsTile(
                           icon: Icons.tune_outlined,
-                          title: 'Crossfade Duration',
-                          subtitle: '${crossfade}s between aartis',
+                          title: l10n.settingsCrossfadeDuration,
+                          subtitle: l10n.settingsCrossfadeSubtitle(crossfade),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: List.generate(4, (i) {
@@ -409,14 +417,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                _SectionHeader('Privacy'),
+                _SectionHeader(l10n.settingsSectionPrivacy),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.insights_outlined,
-                  title: 'Usage Analytics',
+                  title: l10n.settingsUsageAnalytics,
                   subtitle: analyticsEnabled
-                      ? 'Enabled for screen and feature insights'
-                      : 'Disabled on this device',
+                      ? l10n.settingsAnalyticsEnabledSubtitle
+                      : l10n.settingsAnalyticsDisabledSubtitle,
                   trailing: Switch.adaptive(
                     value: analyticsEnabled,
                     activeTrackColor: AppColors.saffron,
@@ -427,13 +435,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // --- Support ---
-                _SectionHeader('Support'),
+                _SectionHeader(l10n.settingsSectionSupport),
                 const SizedBox(height: AppSpacing.md),
                 _SettingsTile(
                   icon: Icons.rate_review_outlined,
-                  title: 'Send Feedback',
-                  subtitle:
-                      'Report issues, suggest improvements, or share devotional feedback',
+                  title: l10n.settingsSendFeedback,
+                  subtitle: l10n.settingsFeedbackSubtitle,
                   onTap: () {
                     AnalyticsService.trackEvent(
                       'settings_feedback_opened',
@@ -449,12 +456,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: AppSpacing.xl),
 
                 // --- Diagnostics ---
-                _SectionHeader('Diagnostics'),
+                _SectionHeader(l10n.settingsSectionDiagnostics),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.developer_mode_outlined,
-                  title: 'DevTools',
-                  subtitle: 'Open full diagnostics page',
+                  title: l10n.settingsDevTools,
+                  subtitle: l10n.settingsDevToolsSubtitle,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
@@ -466,9 +473,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.fact_check_outlined,
-                  title: 'Activity Log',
-                  subtitle:
-                      '${ActivityLogService.length} entries · View runtime activity',
+                  title: l10n.settingsActivityLog,
+                  subtitle: l10n.settingsActivityLogSubtitle(
+                    ActivityLogService.length,
+                  ),
                   onTap: () {
                     AnalyticsService.trackEvent(
                       'settings_activity_log_opened',
@@ -483,8 +491,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.ios_share_outlined,
-                  title: 'Share Activity Log',
-                  subtitle: 'Export diagnostics file for troubleshooting',
+                  title: l10n.settingsShareActivityLog,
+                  subtitle: l10n.settingsShareActivityLogSubtitle,
                   onTap: () async {
                     AnalyticsService.trackEvent(
                       'settings_activity_log_shared',
@@ -499,18 +507,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // --- About ---
-                _SectionHeader('About'),
+                _SectionHeader(l10n.settingsSectionAbout),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.info_outline,
-                  title: 'Aarti Sangrah',
-                  subtitle: 'Version 1.5.0 · Made with devotion',
+                  title: l10n.appTitle,
+                  subtitle: l10n.settingsAboutSubtitle('1.5.0'),
                 ),
                 const SizedBox(height: 12),
                 _SettingsTile(
                   icon: Icons.storage_outlined,
-                  title: 'Content',
-                  subtitle: _contentSubtitle(contentSync),
+                  title: l10n.settingsContent,
+                  subtitle: _contentSubtitle(context, contentSync),
                   trailing: contentSync.isRefreshing
                       ? SizedBox(
                           width: 18,
@@ -539,11 +547,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
                           final latestState = ref.read(contentSyncProvider);
                           final hasError = latestState.lastError != null;
-                          final message =
-                              latestState.statusMessage ??
-                              (hasError
-                                  ? 'Content refresh failed.'
-                                  : 'Content refreshed.');
+              final message = hasError
+                ? context.l10n.settingsContentRefreshFailed
+                : context.l10n.settingsContentRefreshSuccess;
 
                           if (hasError) {
                             SnackBarHelper.showError(context, message);
@@ -560,26 +566,39 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
-  String _themeModeLabel(ThemeMode mode) {
+  String _themeModeLabel(BuildContext context, ThemeMode mode) {
+    final l10n = context.l10n;
     switch (mode) {
       case ThemeMode.light:
-        return 'Light';
+        return l10n.settingsThemeLight;
       case ThemeMode.dark:
-        return 'Dark';
+        return l10n.settingsThemeDark;
       case ThemeMode.system:
-        return 'System';
+        return l10n.settingsThemeSystem;
     }
   }
 
-  String _scriptModeLabel(int mode) {
-    return AartiLanguageResolver.scriptLabel(mode);
+  String _themeModeAnalyticsValue(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.dark:
+        return 'dark';
+      case ThemeMode.system:
+        return 'system';
+    }
   }
 
-  String _appLanguageLabel(String code) {
-    return AartiLanguageResolver.appLanguageLabel(code);
+  String _scriptModeLabel(BuildContext context, int mode) {
+    return AartiLanguageResolver.localizedScriptLabel(context, mode);
+  }
+
+  String _appLanguageLabel(BuildContext context, String code) {
+    return AartiLanguageResolver.localizedAppLanguageLabel(context, code);
   }
 
   String _secondaryScriptSubtitle({
+    required BuildContext context,
     required int scriptMode,
     required int secondaryScriptMode,
     required String appLanguageCode,
@@ -588,31 +607,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final appLanguageScript = AartiLanguageResolver.preferredScriptForLanguage(
       AartiLanguageResolver.appLanguageFromCode(appLanguageCode),
     );
-    final secondaryLabel = _scriptModeLabel(secondaryScriptMode);
+    final secondaryLabel = _scriptModeLabel(context, secondaryScriptMode);
     if (selectedScript == appLanguageScript) {
-      return '$secondaryLabel · Fallback when app and primary scripts match';
+      return context.l10n.settingsSecondaryScriptFallback(secondaryLabel);
     }
-    return '$secondaryLabel · Used in secondary reading mode and focus mode';
+    return context.l10n.settingsSecondaryScriptUsage(secondaryLabel);
   }
 
-  String _contentSubtitle(ContentSyncState state) {
+  String _contentSubtitle(BuildContext context, ContentSyncState state) {
     final syncTime = _latestContentSync(state);
     final syncTimeLabel = syncTime == null
-        ? _contentSourceLabel(state)
-        : 'Last refresh ${_formatClock(syncTime)}';
+        ? _contentSourceLabel(context, state)
+        : context.l10n.settingsContentLastRefresh(_formatClock(context, syncTime));
 
-    return '${state.aartiCount} Aartis · ${state.festivalCount} Festivals · \n$syncTimeLabel';
+    return context.l10n.settingsContentSummary(
+      state.aartiCount,
+      state.festivalCount,
+      syncTimeLabel,
+    );
   }
 
-  String _contentSourceLabel(ContentSyncState state) {
+  String _contentSourceLabel(BuildContext context, ContentSyncState state) {
     final sources = <String>{state.aartiSource, state.festivalSource};
     if (sources.contains('remote')) {
-      return 'Cached remote content';
+      return context.l10n.settingsContentSourceRemote;
     }
     if (sources.contains('cache')) {
-      return 'Cached offline content';
+      return context.l10n.settingsContentSourceCached;
     }
-    return 'Bundled offline content';
+    return context.l10n.settingsContentSourceBundled;
   }
 
   DateTime? _latestContentSync(ContentSyncState state) {
@@ -628,11 +651,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return timestamps.last;
   }
 
-  String _formatClock(DateTime timestamp) {
+  String _formatClock(BuildContext context, DateTime timestamp) {
     final local = timestamp.toLocal();
-    final hour = local.hour.toString().padLeft(2, '0');
-    final minute = local.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
+    final timeOfDay = TimeOfDay.fromDateTime(local);
+    return MaterialLocalizations.of(context).formatTimeOfDay(
+      timeOfDay,
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
   }
 
   void _showNameDialog(BuildContext context, String current) {
@@ -643,21 +668,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: context.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Your Name',
+          ctx.l10n.settingsNameDialogTitle,
           style: AppTypography.serifBody(size: 18, color: context.textPrimary),
         ),
         content: TextField(
           controller: controller,
           autofocus: true,
           decoration: InputDecoration(
-            hintText: 'Enter your name',
+            hintText: ctx.l10n.settingsNameHint,
             hintStyle: AppTypography.body(size: 14, color: context.textCaption),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.commonCancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -667,7 +692,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               }
               Navigator.pop(ctx);
             },
-            child: const Text('Save'),
+            child: Text(ctx.l10n.commonSave),
           ),
         ],
       ),
@@ -712,7 +737,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Activity Log (${rows.length})',
+                            modalContext.l10n.settingsActivityLogTitle(
+                              rows.length,
+                            ),
                             style: AppTypography.serifBody(
                               size: 18,
                               color: modalContext.textPrimary,
@@ -755,7 +782,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             if (!modalContext.mounted) return;
                             SnackBarHelper.showSuccess(
                               modalContext,
-                              'Activity log cleared',
+                              modalContext.l10n.settingsActivityLogCleared,
                             );
                           },
                         ),
@@ -767,7 +794,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     child: rows.isEmpty
                         ? Center(
                             child: Text(
-                              'No activity captured yet.',
+                              modalContext.l10n.settingsActivityLogEmpty,
                               style: AppTypography.body(
                                 size: 14,
                                 color: modalContext.textCaption,
