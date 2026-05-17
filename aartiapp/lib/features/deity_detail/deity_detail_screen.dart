@@ -266,6 +266,9 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
       context.textPrimary,
       _heroProgress,
     )!;
+    const compactLeadingSize = 42.0;
+    const compactLeadingRadius = 12.0;
+    final compactLeadingWidth = AppSpacing.lg + compactLeadingSize;
 
     return Scaffold(
       backgroundColor: context.scaffoldBg,
@@ -279,54 +282,79 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
             backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             automaticallyImplyLeading: false,
+            centerTitle: true,
             elevation: 0,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: AppSpacing.lg),
-              child: Semantics(
-                label: context.l10n.deityDetailBackToDiscover,
-                button: true,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: AppSpacing.touchTarget,
-                    height: AppSpacing.touchTarget,
-                    decoration: BoxDecoration(
-                      color: leadingFill,
-                      borderRadius: BorderRadius.circular(
-                        AppSpacing.cardRadius,
+            leadingWidth: compactLeadingWidth,
+            leading: Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(left: AppSpacing.lg),
+                child: Semantics(
+                  label: context.l10n.deityDetailBackToDiscover,
+                  button: true,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: compactLeadingSize,
+                      height: compactLeadingSize,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: leadingFill,
+                        borderRadius: BorderRadius.circular(
+                          compactLeadingRadius,
+                        ),
+                        border: Border.all(color: leadingBorder),
                       ),
-                      border: Border.all(color: leadingBorder),
-                    ),
-                    child: Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 18,
-                      color: leadingIconColor,
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 16,
+                        color: leadingIconColor,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-            titleSpacing: 8,
+            titleSpacing: 0,
             title: AnimatedOpacity(
               opacity: _showCollapsedTitle ? 1 : 0,
               duration: const Duration(milliseconds: 180),
-              child: Row(
-                children: <Widget>[
-                  Text(deityEmoji, style: const TextStyle(fontSize: 18)),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      deityLabel,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.serifBody(
-                        size: 18,
-                        color: titleColor,
-                      ).copyWith(fontWeight: FontWeight.w600),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  final maxTitleWidth = constraints.maxWidth > 32
+                      ? constraints.maxWidth - 32
+                      : constraints.maxWidth;
+
+                  return Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          deityEmoji,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: maxTitleWidth),
+                          child: Text(
+                            deityLabel,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.serifBody(
+                              size: 18,
+                              color: titleColor,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
+            actions: <Widget>[
+              SizedBox(width: compactLeadingWidth),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.pin,
               background: DeityHeader(

@@ -169,53 +169,69 @@ class DeityHeader extends StatelessWidget {
                             //     color: AppColors.white.withValues(alpha: 0.84),
                             //   ).copyWith(height: 1.3),
                             // ),
-                            const SizedBox(height: AppSpacing.xs),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  emoji,
-                                  style: TextStyle(
-                                    fontSize: isCompact ? 24 : 28,
-                                  ),
-                                ),
-                                const SizedBox(width: AppSpacing.sm),
-                                Expanded(
-                                  child: Text(
-                                    title,
+                            SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  const SizedBox(height: AppSpacing.xs),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: '$emoji ',
+                                          style: TextStyle(
+                                            fontSize: isCompact ? 24 : 28,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: title,
+                                          style:
+                                              AppTypography.displayLarge(
+                                                context,
+                                              ).copyWith(
+                                                fontSize: titleSize,
+                                                color: AppColors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: AppTypography.displayLarge(context)
-                                        .copyWith(
-                                          fontSize: titleSize,
-                                          color: AppColors.white,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: AppSpacing.xs),
-                            Text(
-                              tagline,
-                              maxLines: isCompact ? 1 : 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.body(
-                                size: 13,
-                                color: AppColors.white.withValues(alpha: 0.76),
-                                weight: FontWeight.w400,
+                                  const SizedBox(height: AppSpacing.xs),
+                                  Text(
+                                    tagline,
+                                    maxLines: isCompact ? 1 : 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.body(
+                                      size: 13,
+                                      color: AppColors.white.withValues(
+                                        alpha: 0.76,
+                                      ),
+                                      weight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: sectionGap),
+                                  Text(
+                                    summary,
+                                    maxLines: isCompact ? 2 : 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.body(
+                                      size: 13,
+                                      color: AppColors.white.withValues(
+                                        alpha: 0.68,
+                                      ),
+                                      weight: FontWeight.w400,
+                                    ).copyWith(height: 1.45),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(height: sectionGap),
-                            Text(
-                              summary,
-                              maxLines: isCompact ? 2 : 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.body(
-                                size: 13,
-                                color: AppColors.white.withValues(alpha: 0.68),
-                                weight: FontWeight.w400,
-                              ).copyWith(height: 1.45),
                             ),
                             SizedBox(
                               height: isCompact ? AppSpacing.md : AppSpacing.lg,
