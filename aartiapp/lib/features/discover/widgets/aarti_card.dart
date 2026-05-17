@@ -28,6 +28,11 @@ class AartiCard extends StatelessWidget {
     final scriptTitle = AartiLanguageResolver.resolveAartiTitle(aarti, scriptMode);
     final showScriptTitle = scriptTitle.trim() != aarti.title.trim();
     final script = AartiLanguageResolver.scriptFromMode(scriptMode);
+    final hasAudio = aarti.audioUrl.trim().isNotEmpty;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentSurface = isDark
+      ? AppColors.white.withValues(alpha: 0.06)
+      : AppColors.stone2.withValues(alpha: 0.72);
     final subtitleStyle = script == AppScriptLanguage.english
         ? AppTypography.transliteration(size: 12, color: AppColors.ink3)
         : AppTypography.devanagari(size: 12, color: AppColors.ink3);
@@ -85,12 +90,25 @@ class AartiCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Icon(Icons.schedule_outlined,
-                    size: 12, color: AppColors.ink3),
-                const SizedBox(width: 4),
-                Text(aarti.duration,
-                    style: AppTypography.body(size: 12, color: AppColors.ink3)),
-                const Spacer(),
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      _MetaItem(
+                        icon: Icons.schedule_outlined,
+                        label: aarti.duration,
+                      ),
+                      if (hasAudio)
+                        _StatusChip(
+                          label: 'Audio',
+                          icon: Icons.headphones_rounded,
+                          backgroundColor: accentSurface,
+                        ),
+                    ],
+                  ),
+                ),
                 GestureDetector(
                   onTap: onBookmark,
                   child: AnimatedContainer(
@@ -120,6 +138,67 @@ class AartiCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  const _StatusChip({
+    required this.label,
+    required this.icon,
+    required this.backgroundColor,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: context.borderSubtle),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: context.textCaption),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: AppTypography.body(
+              size: 10,
+              color: context.textCaption,
+              weight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MetaItem extends StatelessWidget {
+  const _MetaItem({required this.label, required this.icon});
+
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 12, color: AppColors.ink3),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: AppTypography.body(size: 12, color: AppColors.ink3),
+        ),
+      ],
     );
   }
 }

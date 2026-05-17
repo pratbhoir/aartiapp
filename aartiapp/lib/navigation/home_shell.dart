@@ -122,31 +122,41 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.scaffoldBg,
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 320),
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeIn,
-        transitionBuilder: (child, anim) => FadeTransition(
-          opacity: anim,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.03),
-              end: Offset.zero,
-            ).animate(anim),
-            child: child,
+    return PopScope<void>(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop || _currentIndex == 0) {
+          return;
+        }
+
+        _selectTab(0);
+      },
+      child: Scaffold(
+        backgroundColor: context.scaffoldBg,
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 320),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          transitionBuilder: (child, anim) => FadeTransition(
+            opacity: anim,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 0.03),
+                end: Offset.zero,
+              ).animate(anim),
+              child: child,
+            ),
+          ),
+          child: KeyedSubtree(
+            key: ValueKey(_currentIndex),
+            child: _buildScreen(),
           ),
         ),
-        child: KeyedSubtree(
-          key: ValueKey(_currentIndex),
-          child: _buildScreen(),
+        bottomNavigationBar: AppBottomNav(
+          currentIndex: _currentIndex,
+          items: _navItems(context),
+          onSelect: _selectTab,
         ),
-      ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentIndex,
-        items: _navItems(context),
-        onSelect: _selectTab,
       ),
     );
   }

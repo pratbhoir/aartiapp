@@ -51,6 +51,7 @@ void main() {
     expect(find.text('देवता के अनुसार देखें'), findsOneWidget);
     expect(find.text('पर्व के अनुसार फ़िल्टर करें'), findsOneWidget);
     expect(find.text('4 मिले'), findsOneWidget);
+    expect(find.text('Audio'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'zzzz');
     await tester.pumpAndSettle();
@@ -113,6 +114,7 @@ const String _catalogFixture = '''
       "devanagari": "गणपति आरती",
       "deity": "Ganesha",
       "duration": "4:00",
+      "audioUrl": "https://example.com/ganpati-aarti.mp3",
       "tags": ["Ganpati"],
       "festivalTags": ["Ganesh Chaturthi"],
       "verses": []
