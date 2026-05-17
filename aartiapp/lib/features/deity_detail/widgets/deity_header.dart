@@ -77,7 +77,7 @@ class DeityHeader extends StatelessWidget {
                   colors: <Color>[overlayGlow, Colors.transparent],
                 ),
               ),
-              child: const SizedBox(width: 240, height: 240),
+              child: const SizedBox(width: 240, height: 200),
             ),
           ),
           Positioned(
@@ -93,7 +93,7 @@ class DeityHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              child: const SizedBox(width: 210, height: 210),
+              child: const SizedBox(width: 210, height: 170),
             ),
           ),
           Positioned(
@@ -111,7 +111,7 @@ class DeityHeader extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.xl,
-                62,
+                42,
                 AppSpacing.xl,
                 AppSpacing.lgWide,
               ),

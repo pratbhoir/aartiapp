@@ -278,7 +278,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
         headerSliverBuilder: (_, __) => <Widget>[
           SliverAppBar(
             pinned: true,
-            expandedHeight: 384,
+            expandedHeight: 344,
             backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             automaticallyImplyLeading: false,
@@ -331,7 +331,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
                       children: <Widget>[
                         Text(
                           deityEmoji,
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 28),
                         ),
                         const SizedBox(width: AppSpacing.sm),
                         ConstrainedBox(
@@ -341,7 +341,7 @@ class _DeityDetailScreenState extends ConsumerState<DeityDetailScreen>
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppTypography.serifBody(
-                              size: 18,
+                              size: 30,
                               color: titleColor,
                             ).copyWith(fontWeight: FontWeight.w600),
                           ),
