@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/constants/haptics.dart';
 import '../../core/l10n/app_localizations_ext.dart';
 import '../../core/services/analytics_service.dart';
 import '../../core/theme/app_colors.dart';
@@ -13,8 +14,10 @@ import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/utils/aarti_language_resolver.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
+import '../../shared/widgets/deity_chip.dart';
 import '../../shared/widgets/section_label.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
+import '../deity_detail/deity_detail_screen.dart';
 import '../discover/widgets/festive_banner.dart';
 import '../discover/widgets/today_hero_card.dart';
 
@@ -158,6 +161,80 @@ class HomeScreen extends ConsumerWidget {
                   },
                 ),
 
+                Builder(
+                  builder: (context) {
+                    if (deities.isEmpty) {
+                      return const SliverToBoxAdapter();
+                    }
+
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 24, 0, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 24),
+                              child: SectionLabel(
+                                context.l10n.discoverBrowseByDeity,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              height: 96,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.only(right: 24),
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: deities.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(width: 10),
+                                itemBuilder: (_, i) {
+                                  final deityLabel = deities[i]['label']!;
+                                  return DeityChip(
+                                    emoji: deities[i]['emoji']!,
+                                    label: deityLabel,
+                                    isActive: i == 0,
+                                    onTap: () {
+                                      final action = i == 0
+                                          ? 'open_discover'
+                                          : 'open_deity_detail';
+                                      AnalyticsService.trackEvent(
+                                        'home_deity_chip_tapped',
+                                        data: <String, Object>{
+                                          'deity_name': deityLabel,
+                                          'index': i,
+                                          'action': action,
+                                        },
+                                        path: '/home',
+                                      );
+
+                                      if (i == 0) {
+                                        onOpenDiscover?.call();
+                                        return;
+                                      }
+
+                                      AppHaptics.pageTransition();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => DeityDetailScreen(
+                                            deityLabel: deityLabel,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
                 // Recently played
                 Builder(
                   builder: (context) {
@@ -168,7 +245,7 @@ class HomeScreen extends ConsumerWidget {
                     if (recentAartis.isEmpty) return const SliverToBoxAdapter();
                     return SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 24, 15, 40),
+                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 40),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -180,7 +257,7 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 12),
                             SizedBox(
-                              height: 100,
+                              height: 108,
                               child: ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 padding: const EdgeInsets.only(right: 24),
@@ -215,6 +292,7 @@ class HomeScreen extends ConsumerWidget {
                     );
                   },
                 ),
+
               ],
             ),
           ),

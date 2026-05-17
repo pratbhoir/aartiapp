@@ -1,3 +1,18 @@
+## [2026-05-17] — Home Browse By Deity
+
+### Added
+- `lib/shared/widgets/deity_chip.dart` — Promoted the emoji deity chip into a shared widget so Home and Discover use the same interaction and visual treatment.
+- `test/home_screen_test.dart` — Added focused Home coverage for the browse-by-deity row, including the `All` Discover handoff and deity-detail navigation.
+
+### Modified
+- `lib/features/home/home_screen.dart` — Added a localized Browse by Deity section after Recently Visited, wired `All` to open Discover with no filter, routed named deity chips to `DeityDetailScreen`, and tracked the new Home chip analytics event.
+- `lib/features/discover/discover_screen.dart` — Switched Discover to the shared deity-chip widget without changing filter behavior.
+- `docs/ANALYTICS_EVENTS.md` — Registered the new `home_deity_chip_tapped` event.
+- `docs/FILE_REGISTRY.md` — Updated widget ownership after moving `DeityChip` into the shared layer.
+
+### Removed
+- `lib/features/discover/widgets/deity_chip.dart` — Removed the feature-local chip after extracting the shared widget.
+
 ## [2026-05-17] — Localization Phase 3C: Final Detail Surfaces
 
 ### Modified

@@ -18,6 +18,12 @@
 
 ## 2. Event Registry
 
+### Home
+
+| Event Name | Trigger | Parameters | Screen |
+|------------|---------|------------|--------|
+| `home_deity_chip_tapped` | User taps a Home browse-by-deity chip | `deity_name`, `index`, `action` (`open_discover`/`open_deity_detail`) | Home |
+
 ### Discover
 
 | Event Name | Trigger | Parameters | Screen |

@@ -100,6 +100,7 @@
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
 | `lib/shared/widgets/aarti_app_bar.dart` | `AartiAppBar` — reusable app bar with optional menu affordance and trailing action area | 2026-04-25 |
+| `lib/shared/widgets/deity_chip.dart` | `DeityChip` — shared emoji deity chip used by Home browse and Discover filters with the same active-state glow treatment | 2026-05-17 |
 | `lib/shared/widgets/focus_mode_settings_sheet.dart` | Shared temporary focus-mode settings bottom sheet used by standalone focus mode and My Puja focus sessions, now localized with resolved script labels, scroll-safe modal content, and a compact text-size control | 2026-05-17 |
 | `lib/shared/widgets/gradient_divider.dart` | `GradientDivider` — saffron-to-transparent horizontal divider | 2026-04-20 |
 | `lib/shared/widgets/section_label.dart` | `SectionLabel` — uppercase tracked section header text | 2026-04-20 |
@@ -123,7 +124,6 @@
 |-----------|---------|--------------|
 | `lib/features/discover/discover_screen.dart` | `DiscoverScreen` — localized prayer discovery screen with mutually exclusive search, festival filters, localized section chrome, and a script-aware aarti grid, where non-`All` deity chips now open the dedicated deity page | 2026-05-17 |
 | `lib/features/discover/widgets/aarti_card.dart` | `AartiCard` — grid card showing deity, title, script-aware subtitle, duration, bookmark | 2026-04-26 |
-| `lib/features/discover/widgets/deity_chip.dart` | `DeityChip` — emoji deity filter chip with active-state glow | 2026-04-20 |
 | `lib/features/discover/widgets/festival_filter_chips.dart` | `FestivalFilterChips` — horizontal scrollable Discover festival tag chips showing only actual festival entries | 2026-04-27 |
 | `lib/features/discover/widgets/festive_banner.dart` | `FestiveBanner` — seasonal festival banner card with emoji plus localized today and countdown badges | 2026-05-17 |
 | `lib/features/discover/widgets/search_bar.dart` | `AartiSearchBar` — localized text input with parent-controlled value support for Discover filter resets and an embedded Material ancestor | 2026-05-17 |
@@ -167,7 +167,7 @@
 
 | File Path | Purpose | Last Updated |
 |-----------|---------|--------------|
-| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with localized greeting and section copy, Aarti of the Day, festive banner, Discover handoff, and hero-card analytics | 2026-05-14 |
+| `lib/features/home/home_screen.dart` | `HomeScreen` — devotional home with localized greeting and section copy, Aarti of the Day, festive banner, Recently Visited, a browse-by-deity row that hands off to Discover or Deity Detail, and Home chip analytics | 2026-05-17 |
 
 ## Features / Onboarding
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/theme_aware_colors.dart';
+
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_typography.dart';
+import '../../core/theme/theme_aware_colors.dart';
 
 class DeityChip extends StatelessWidget {
   final String emoji;
@@ -43,7 +44,7 @@ class DeityChip extends StatelessWidget {
                           color: AppColors.saffron.withValues(alpha: 0.15),
                           blurRadius: 8,
                           spreadRadius: 1,
-                        )
+                        ),
                       ]
                     : null,
               ),

@@ -9,11 +9,11 @@ import '../../data/repositories/aarti_repository.dart';
 import '../../data/repositories/festival_repository.dart';
 import '../../providers/app_providers.dart';
 import '../../shared/widgets/aarti_app_bar.dart';
+import '../../shared/widgets/deity_chip.dart';
 import '../../shared/widgets/section_label.dart';
 import '../aarti_detail/aarti_detail_screen.dart';
 import '../deity_detail/deity_detail_screen.dart';
 import 'widgets/search_bar.dart' as app;
-import 'widgets/deity_chip.dart';
 import 'widgets/aarti_card.dart';
 import 'widgets/festival_filter_chips.dart';
 
