@@ -31,14 +31,17 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: finApp-release-${{ github.sha }}
+          name: aartiapp-release-${{ github.sha }}
           path: aartiapp/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
           if-no-files-found: error
 
       - name: Upload APK to WebDAV
         run: |
+          TS=$(date +"%d%y-%H%M")
+          FILE_NAME="aartiapp-git-${TS}.apk"
+
           curl --fail \
             --user "foozy:${{ secrets.WEBDAV_PASSWORD }}" \
             --upload-file build/app/outputs/flutter-apk/app-release.apk \
-            https://webdav.foozylab.com/share/finApp/app-release-${{ github.sha }}.apk
+            "https://webdav.foozylab.com/share/aartiapp/${FILE_NAME}"
