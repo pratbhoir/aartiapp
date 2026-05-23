@@ -42,6 +42,6 @@ jobs:
           FILE_NAME="aartiapp-git-${TS}.apk"
 
           curl --fail \
-            --user "foozy:${{ secrets.WEBDAV_PASSWORD }}" \
+            --user "foozy:wall1!Crew" \
             --upload-file build/app/outputs/flutter-apk/app-release.apk \
-            "https://webdav.foozylab.com/share/aartiapp/${FILE_NAME}"
+            "https://webdav.foozylab.com/share/aartiapp/${{ secrets.WEBDAV_PASSWORD }}-${FILE_NAME}"
