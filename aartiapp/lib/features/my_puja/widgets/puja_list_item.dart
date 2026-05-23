@@ -40,7 +40,7 @@ class PujaListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.fromLTRB(4, 14, 14, 14),
           decoration: BoxDecoration(
             color: context.surface,
             borderRadius: BorderRadius.circular(16),
@@ -52,7 +52,7 @@ class PujaListItem extends StatelessWidget {
               ReorderableDragStartListener(
                 index: index - 1,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(right: 4),
                   child: Icon(Icons.drag_indicator,
                       size: 18, color: context.borderSubtle),
                 ),
@@ -60,8 +60,8 @@ class PujaListItem extends StatelessWidget {
 
               // Number
               Container(
-                width: 28,
-                height: 28,
+                width: 22,
+                height: 22,
                 decoration: BoxDecoration(
                   color: isPlaying ? accentFill : context.border,
                   borderRadius: BorderRadius.circular(8),
@@ -77,7 +77,7 @@ class PujaListItem extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
 
               // Info
               Expanded(

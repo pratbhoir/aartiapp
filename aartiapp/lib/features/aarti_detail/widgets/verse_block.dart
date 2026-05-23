@@ -108,29 +108,37 @@ class VerseBlock extends StatelessWidget {
                 children: [
                   if (contentMode == AartiDetailContentMode.lyrics)
                     Container(
-                      padding: isHighlighted
-                          ? const EdgeInsets.only(left: 12)
-                          : EdgeInsets.zero,
-                      decoration: isHighlighted
-                          ? BoxDecoration(
-                              border: Border(
-                                left: BorderSide(color: accentColor, width: 2),
-                              ),
-                            )
-                          : null,
+                      padding: EdgeInsets.zero,
+                      decoration: null,
                       child: Text(
                         lyricLine,
-                        style: isHighlighted
-                            ? highlightedLyricsTextStyle
-                            : lyricsTextStyle,
+                        style: highlightedLyricsTextStyle,
                       ),
                     ),
+                    // Container(
+                    //   padding: isHighlighted
+                    //       ? const EdgeInsets.only(left: 12)
+                    //       : EdgeInsets.zero,
+                    //   decoration: isHighlighted
+                    //       ? BoxDecoration(
+                    //           border: Border(
+                    //             left: BorderSide(color: accentColor, width: 2),
+                    //           ),
+                    //         )
+                    //       : null,
+                    //   child: Text(
+                    //     lyricLine,
+                    //     style: isHighlighted
+                    //         ? highlightedLyricsTextStyle
+                    //         : lyricsTextStyle,
+                    //   ),
+                    // ),
 
                   if (contentMode == AartiDetailContentMode.transliteration)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(lyricLine, style: lyricsTextStyle),
+                        Text(lyricLine, style: highlightedLyricsTextStyle),
                         if (showSecondaryLine)
                           Text(secondaryLine, style: secondaryTextStyle),
                       ],
@@ -140,7 +148,7 @@ class VerseBlock extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(lyricLine, style: lyricsTextStyle),
+                        Text(lyricLine, style: highlightedLyricsTextStyle),
                         if (meaningLine.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Container(
