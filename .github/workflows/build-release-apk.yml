@@ -38,10 +38,10 @@ jobs:
 
       - name: Upload APK to WebDAV
         run: |
-          TS=$(date +"%d%y-%H%M")
+          TS=$(date +"%d%m-%H%M")
           FILE_NAME="aartiapp-git-${TS}.apk"
 
           curl --fail --digest \
-            --user "foozy:wall1!Crew" \
+            --user "foozy:${{ secrets.WEBDAV_PASSWORD }}" \
             --upload-file build/app/outputs/flutter-apk/app-release.apk \
-            "https://webdav.foozylab.com/share/aartiapp/${{ secrets.WEBDAV_PASSWORD }}-${FILE_NAME}"
+            "https://webdav.foozylab.com/share/aartiapp/${FILE_NAME}"
