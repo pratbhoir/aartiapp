@@ -41,7 +41,7 @@ jobs:
           TS=$(date +"%d%y-%H%M")
           FILE_NAME="aartiapp-git-${TS}.apk"
 
-          curl --fail \
+          curl --fail --digest \
             --user "foozy:wall1!Crew" \
             --upload-file build/app/outputs/flutter-apk/app-release.apk \
             "https://webdav.foozylab.com/share/aartiapp/${{ secrets.WEBDAV_PASSWORD }}-${FILE_NAME}"
